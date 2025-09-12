@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Gaming Table & Chair- V’Best Luxury Interiors</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #000;
+    }
+    h1 {
+      text-align: center;
+      color: #fff;
+      padding: 15px 0;
+      margin: 0;
+    }
+    #count {
+      text-align: center;
+      font-size: 16px;
+      font-weight: bold;
+      color: #27ae60;
+      margin-bottom: 10px;
+    }
+
+    /* ✅ 2-column grid with small gap */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      margin: 0;
+      padding: 0;
+      background: #000;
+    }
+    .product-card {
+      background: #111;
+      padding: 5px;
+      cursor: pointer;
+    }
+    .product-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 5px;
+      display: block;
+    }
+    .product-card h3 {
+      color: #fff;
+      font-size: 14px;
+      margin: 6px 0 2px;
+    }
+    .product-card p {
+      color: #27ae60;
+      font-size: 13px;
+      margin: 2px 0;
+    }
+    .whatsapp-btn {
+      display: inline-block;
+      padding: 6px 10px;
+      background: #25d366;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-top: 4px;
+    }
+
+    a.back {
+      display: block;
+      text-align: center;
+      margin: 15px 0;
+      text-decoration: none;
+      color: #27ae60;
+      font-weight: bold;
+    }
+
+    /* ✅ Fullscreen Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.95);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 55%;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    .lightbox h3 {
+      color: #fff;
+      margin: 10px 0 5px;
+      font-size: 18px;
+    }
+    .lightbox p {
+      color: #27ae60;
+      font-size: 16px;
+      margin: 5px 0 15px;
+    }
+    .lightbox .whatsapp-btn {
+      font-size: 14px;
+      padding: 10px 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1> Gaming Table & Chair</h1>
+  <div id="count">Loading...</div>
+  <div id="products" class="product-grid"></div>
+
+  <a href="sofa.html" class="back">⬅ Back to  Categories</a>
+
+  <!-- ✅ Lightbox -->
+  <div id="lightbox" class="lightbox">
+    <img id="lightbox-img" src="">
+    <h3 id="lightbox-name"></h3>
+    <p id="lightbox-price"></p>
+    <a id="whatsapp-link" class="whatsapp-btn" target="_blank">📩 Inquiry on WhatsApp</a>
+  </div>
+
+  <script>
+    const lightbox = document.getElementById("lightbox");
+    let lightboxOpen = false;
+
+    fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4YXFvxl_w447wVuWRrHv8EInZFg1lSIX2_KwxZQJL9n8YHEzIP5WmfBep4yBgfN7EbArsjPPHOzOh/pub?output=csv")
+      .then(res => res.text())
+      .then(data => {
+        const rows = data.split("\n").slice(1);
+        const container = document.getElementById("products");
+        let count = 0;
+
+        rows.forEach(row => {
+          const cols = row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
+          if (!cols || cols.length < 5) return;
+
+          const category = cols[0].replace(/"/g, "").trim();
+          const name = cols[1].replace(/"/g, "").trim();
+          const price = cols[2].replace(/"/g, "").trim();
+          const image = cols[3].replace(/"/g, "").trim();
+          const origin = cols[4].replace(/"/g, "").trim();
+
+          if (category.toLowerCase() === "gaming" && origin.toLowerCase() === "gaming") {
+            count++;
+            const card = `
+              <div class="product-card" onclick="openLightbox('${image}','${name}','${price}','${origin}')">
+                <img src="${image}" alt="${name}">
+                <h3>${name}</h3>
+                <p>${price}</p>
+                <a class="whatsapp-btn" 
+                   href="https://wa.me/2347080535579?text=Hello, I'm interested in ${encodeURIComponent(name)} (${origin}) priced at ${encodeURIComponent(price)}" 
+                   target="_blank">📩 Inquiry</a>
+              </div>
+            `;
+            container.innerHTML += card;
+          }
+        });
+
+        document.getElementById("count").textContent = `Total Gaming Table & Chair Available: ${count}`;
+      });
+
+    function openLightbox(img, name, price, origin) {
+      document.getElementById("lightbox-img").src = img;
+      document.getElementById("lightbox-name").textContent = name;
+      document.getElementById("lightbox-price").textContent = price;
+      document.getElementById("whatsapp-link").href = 
+        `https://wa.me/2347080535579?text=Hello, I'm interested in ${encodeURIComponent(name)} (${origin}) priced at ${encodeURIComponent(price)}`;
+      lightbox.style.display = "flex";
+      lightboxOpen = true;
+      history.pushState({ lightbox: true }, ""); 
+    }
+
+    function closeLightbox() {
+      lightbox.style.display = "none";
+      lightboxOpen = false;
+    }
+
+    lightbox.addEventListener("click", function(e) {
+      if (e.target === lightbox) {
+        closeLightbox();
+        history.back();
+      }
+    });
+
+    window.addEventListener("popstate", function() {
+      if (lightboxOpen) {
+        closeLightbox();
+      }
+    });
+  </script>
+
+</body>
+</html>

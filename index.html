@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>V'Best Luxury Interiors</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #000;
+      text-align: center;
+    }
+
+    header {
+      background: linear-gradient(90deg, #1a1a1a, #333);
+      color: white;
+      padding: 40px 20px 20px;
+      position: relative;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: bold;
+      line-height: 1.4;
+      padding-top: 110px;
+    }
+    header p {
+      margin: 8px 0 0;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+.logo {
+  position: relative;
+  width: 100%;
+  overflow: hidden; /* makes sure it doesn’t overflow */
+}
+
+.logo img {
+  width: 100%;       /* covers full width */
+  max-height: 400px; /* adjust this height to control how tall it shows */
+  object-fit: cover; /* keeps it wide without looking stretched */
+  display: block;
+}
+
+    .search-bar {
+      margin: 20px auto;
+      max-width: 500px;
+      padding: 0 15px;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 6px;
+      border: none;
+      font-size: 16px;
+      outline: none;
+      background: #fff;
+      color: #000;
+    }
+    .search-bar input::placeholder {
+      color: #555;
+    }
+
+    .categories {
+      margin: 20px auto;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3px;
+      max-width: 900px;
+      padding: 0;
+    }
+
+    .category-box {
+      background: #111;
+      border-radius: 6px;
+      padding: 5px;
+    }
+
+    .category-box img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 4px;
+      display: block;
+    }
+
+    .categories a {
+      display: block;
+      padding: 8px 10px;
+      margin-top: 6px;
+      background: #fff;
+      color: #000;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 13px;
+    }
+    .categories a:hover {
+      background: #ddd;
+    }
+
+    /* search results styling (keeps page look) */
+    #searchResults {
+      max-width: 900px;
+      margin: 10px auto 20px;
+      text-align: left;
+    }
+    #searchResults .result {
+      background: #111;
+      color: #fff;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    #searchResults .result img {
+      width: 140px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+    #searchResults .meta { flex: 1; }
+    #searchResults .meta strong { display:block; margin-bottom:6px; font-size:16px; }
+    #searchResults .wa {
+      display:inline-block;
+      margin-top:8px;
+      padding:8px 10px;
+      background:#25d366;
+      color:#fff;
+      text-decoration:none;
+      border-radius:5px;
+      font-weight:700;
+    }
+
+    footer {
+      background: #111;
+      padding: 20px;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #eee;
+      line-height: 1.6;
+    }
+    footer a {
+      color: #25d366;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <img src="https://i.postimg.cc/X7mNqGh5/IMG-20250822-WA0058.jpg" alt="V'Best Logo">
+    </div>
+
+    <p>📍 <b>Location:</b> Lagos, Nigeria</p>
+    <p>🚚 <b>Delivery:</b> Available nationwide | Pay on Delivery within Lagos</p>
+    <p>🏬 <b>Showroom:</b> 156 Olojo Drive, Ojo Alaba International Market, Lagos</p>
+    <p>We specialize in importing high-quality pieces from <b>Egypt, Turkey, and China</b>, ensuring timeless style, durability, and comfort for your home.</p>
+  </header>
+
+  <section class="search-bar">
+    <input type="text" id="searchInput" placeholder="🔎 Search for what you want...">
+  </section>
+
+  <!-- Google Sheet results appear here -->
+  <section id="searchResults"></section>
+
+  <section class="categories" id="categoryList">
+    <div class="category-box">
+      <img src="https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg" alt="Sofa">
+      <a href="sofa.html">🛋 All Sofas</a>
+    </div>
+
+    <div class="category-box">
+      <img src="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg" alt="Bed">
+      <a href="bed.html">🛏 All Beds</a>
+    </div>
+  
+    <div class="category-box">
+      <img src="https://i.postimg.cc/GhBhTtX7/Magshion-Adjustable-Height-Gaming-Chair-with-Retractable-Footrest-and-Computer-Desk-Purple-2e356ae6.png" alt="Chair">
+      <a href="game.html">🎮 Gaming Chair & Table</a>
+    </div>
+  
+    <div class="category-box">
+      <img src="https://i.postimg.cc/7LbWQCnH/807531125-321-1024x1024.jpg" alt="Chair">
+      <a href="snooker.html">all Snooker & Pool 🎱</a> 
+    </div>
+    
+    <div class="category-box">
+      <img src="https://i.postimg.cc/J01rXcj7/Wine-Bar-1.webp" alt="Chair">
+      <a href="winbar.html"> All Wine Bar 🍷🥂🍾</a> 
+    </div>
+    
+    <div class="category-box">
+      <img src="https://i.postimg.cc/vBybRLq7/Workstation-348.png" alt="Chair">
+      <a href="office.html">All Office furniture🪑🖥️</a> 
+    </div>
+    
+    <div class="category-box">
+      <img src="https://i.postimg.cc/yxGGYGDw/Ag-ACkq-HWp-Pyzt-HZ89-Sp-Vx-Y.jpg" alt="Chair">
+      <a href="outdoor.html">🪑 All Outdoors & Patio</a> 
+    </div>
+   
+    <div class="category-box">
+      <img src="https://i.postimg.cc/7LsSR4Pb/1756750824783.jpg" alt="Chair">
+      <a href="chair.html">🪑 All Chairs</a>
+    </div>
+
+    <div class="category-box">
+      <img src="https://i.postimg.cc/Sxm8NRJJ/1756750928967.jpg" alt="Dining">
+      <a href="dining.html">🍽 Dining 2–8 Seaters</a>
+    </div>
+
+    <div class="category-box">
+      <img src="https://i.postimg.cc/Px5XJLDr/IMG-20250822-WA0064.jpg" alt="Center Table">
+      <a href="centertable.html">🪞 All Center Tables</a>
+    </div>
+
+    <div class="category-box">
+      <img src="https://i.postimg.cc/d3HMkLJw/c6dcbbe659c10b00e4126e14dcd4021c.jpg" alt="Console">
+      <a href="console.html">📺 All TV Consoles</a>
+    </div>
+
+    <div class="category-box">
+      <img src="https://i.postimg.cc/Sxrz34QC/ec8f0881dd3292db1a7655c79506473c.jpg" alt="Side Stools">
+      <a href="sidestool.html">🪑 All Side Stools</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>If you don’t see the exact furniture you’re looking for, kindly reach out on WhatsApp.</p>
+    <p><a href="https://wa.me/2347080535579" target="_blank">💬 Chat with us on WhatsApp</a></p>
+    <p>💫 Your dream home starts here with V’Best Luxury Interiors.</p>
+  </footer>
+
+  <script>
+    const searchInput = document.getElementById("searchInput");
+    const categoryList = document.getElementById("categoryList").getElementsByClassName("category-box");
+    const searchResults = document.getElementById("searchResults");
+    let fetchTimeout = null;
+
+    // helper: normalize keys (remove spaces/underscores, lowercase) to match headers
+    function normalizeKey(k){ return String(k || '').toLowerCase().replace(/[\s_\-\.]/g,''); }
+
+    function findField(item, candidates){
+      // candidates is array of normalized names to search for
+      for (const key in item) {
+        if (candidates.includes(normalizeKey(key))) return item[key];
+      }
+      return "";
+    }
+
+    // show/hide the category tiles on the page
+    function filterCategories(query) {
+      let found = false;
+      for (let i = 0; i < categoryList.length; i++) {
+        const box = categoryList[i];
+        const text = box.innerText.toLowerCase();
+        if (text.includes(query)) {
+          box.style.display = "";
+          found = true;
+        } else {
+          box.style.display = "none";
+        }
+      }
+      return found;
+    }
+
+    // fetch and search your published Google Sheet via opensheet (returns JSON)
+    async function fetchFromSheet(query) {
+      try {
+        const sheetUrl = "https://opensheet.elk.sh/1FA4s21Je3ebeFXUXGu_xvqdo4gbM1v9Q9jOHt6LAH6Y/Sheet1";
+        const res = await fetch(sheetUrl);
+        const data = await res.json();
+
+        const lowerQuery = query.toLowerCase();
+        const results = data.filter(item => {
+          // check all values in row for a match
+          return Object.values(item).some(v => v && v.toString().toLowerCase().includes(lowerQuery));
+        });
+
+        // render results
+        searchResults.innerHTML = "";
+        if (results.length === 0) {
+          const p = document.createElement('p');
+          p.style.color = "#25d366";
+          p.textContent = "❌ No matches found in catalog.";
+          searchResults.appendChild(p);
+          return;
+        }
+
+        results.forEach(item => {
+          const name = findField(item, ['productname','productname','product','productname','productname','productname']) || findField(item,['name']) || item['Product Name'] || item['Product'] || item['product name'] || "";
+          const category = findField(item, ['category']) || item['Category'] || "";
+          const price = findField(item, ['price','cost']) || item['Price'] || "";
+          const region = findField(item, ['region','origin']) || item['region'] || "";
+          const image = findField(item, ['imagelink','image','imageurl','image_link']) || item['Image Link'] || item['Image'] || "";
+          const whatsapp = findField(item, ['whatsapplink','whatsapplink','whatsapp','wa']) || item['WhatsApp Link'] || item['WhatsApp'] || "";
+
+          const div = document.createElement('div');
+          div.className = 'result';
+
+          let imgHtml = "";
+          if (image && image.trim() !== "") {
+            imgHtml = `<img src="${image}" alt="${name}">`;
+          }
+
+          // whatsapp link fallback - if the sheet provides a full link use it. If not, create a wa.me message to your number.
+          let waHref = "";
+          if (whatsapp && whatsapp.trim() !== "") {
+            waHref = whatsapp;
+            // if whatsapp column contains just a phone number, build wa.me
+            if (!waHref.startsWith('http')) {
+              const num = waHref.replace(/\D/g,'');
+              waHref = `https://wa.me/${num}?text=${encodeURIComponent('Hello, I\'m interested in ' + (name || 'this product'))}`;
+            }
+          } else {
+            waHref = `https://wa.me/2347080535579?text=${encodeURIComponent('Hello, I\'m interested in ' + (name || 'this product'))}`;
+          }
+
+          div.innerHTML = `
+            ${imgHtml}
+            <div class="meta">
+              <strong>${name || 'Unnamed product'}</strong>
+              ${category ? `🛋 <b>Category:</b> ${category}<br>` : ''}
+              ${price ? `💵 <b>Price:</b> ${price}<br>` : ''}
+              ${region ? `🌍 <b>Region:</b> ${region}<br>` : ''}
+              <a class="wa" href="${waHref}" target="_blank">💬 Inquiry on WhatsApp</a>
+            </div>
+          `;
+          searchResults.appendChild(div);
+        });
+      } catch (err) {
+        console.error("Error fetching sheet:", err);
+        searchResults.innerHTML = `<p style="color:#ffcc00">Error reading catalog — check sheet publish settings.</p>`;
+      }
+    }
+
+    // main listener (debounced)
+    searchInput.addEventListener("input", function() {
+      const queryRaw = searchInput.value || "";
+      const query = queryRaw.trim().toLowerCase();
+      searchResults.innerHTML = "";
+
+      // reset categories if empty
+      if (query.length === 0) {
+        for (let i = 0; i < categoryList.length; i++) categoryList[i].style.display = "";
+        return;
+      }
+
+      // filter the category tiles (so user sees matched tiles)
+      const foundInTiles = filterCategories(query);
+
+      // debounce sheet fetch so you don't spam requests while typing
+      if (fetchTimeout) clearTimeout(fetchTimeout);
+      fetchTimeout = setTimeout(() => {
+        fetchFromSheet(query);
+      }, 300);
+    });
+  </script>
+</body>
+</html>
