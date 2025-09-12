@@ -31,16 +31,18 @@
       line-height: 1.5;
     }
 .logo {
-  position: relative;
-  width: 100%;
-  overflow: hidden; /* makes sure it doesn’t overflow */
+  text-align: center;   /* keeps logo centered */
+  margin: 15px auto;
 }
 
 .logo img {
-  width: 100%;       /* covers full width */
-  max-height: 400px; /* adjust this height to control how tall it shows */
-  object-fit: cover; /* keeps it wide without looking stretched */
+  max-width: 100%;      /* logo shrinks with screen size */
+  height: auto;         /* keeps natural aspect ratio */
+  max-height: 400px;    /* limit height so it doesn’t cover header */
+  border-radius: 6px;
   display: block;
+  margin: 0 auto;
+  object-fit: contain;  /* ensures full image is always visible */
 }
 
     .search-bar {
