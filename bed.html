@@ -151,7 +151,7 @@
           const image = cols[3].replace(/"/g, "").trim();
           const origin = cols[4].replace(/"/g, "").trim();
 
-          if (category.toLowerCase() === "bed" && origin.toLowerCase() === "Bed") {
+          if (category.toLowerCase() === "bed" && origin.toLowerCase() === "bed") {
             count++;
             const card = `
               <div class="product-card" onclick="openLightbox('${image}','${name}','${price}','${origin}')">
