@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>🛒 Your Cart - V’Best Luxury Interiors</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #000;
+      color: #fff;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      margin-bottom: 15px;
+    }
+    .cart-container {
+      max-width: 600px;
+      margin: auto;
+      background: #111;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px;
+      border-bottom: 1px solid #333;
+    }
+    .cart-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+    .cart-details {
+      text-align: left;
+      flex: 1;
+      margin-left: 10px;
+    }
+    .cart-details h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+    .cart-details p {
+      margin: 3px 0;
+      font-size: 14px;
+      color: #27ae60;
+    }
+    .remove-btn {
+      background: #e74c3c;
+      border: none;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .remove-btn:hover {
+      background: #c0392b;
+    }
+    .total {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 15px 0;
+      color: #27ae60;
+    }
+    .checkout-btn {
+      padding: 10px 15px;
+      background: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .checkout-btn:hover {
+      background: #0056b3;
+    }
+    a.back {
+      display: block;
+      margin-top: 20px;
+      color: #27ae60;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🛒 Your Cart</h1>
+  <div class="cart-container" id="cart-container"></div>
+  <div class="total" id="total">Total: ₦0</div>
+  <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+  <a href="index.html" class="back">⬅ Back to Shop</a>
+
+  <script src="cart.js"></script>
+</body>
+</html>
