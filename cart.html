@@ -2,102 +2,164 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>🛒 Your Cart - V’Best Luxury Interiors</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart - V’Best Luxury Interiors</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
       background: #000;
       color: #fff;
-      text-align: center;
+      margin: 0;
       padding: 20px;
     }
-    h1 {
-      margin-bottom: 15px;
+    h1 { text-align: center; margin-bottom: 20px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
     }
-    .cart-container {
-      max-width: 600px;
-      margin: auto;
-      background: #111;
-      padding: 15px;
-      border-radius: 10px;
-    }
-    .cart-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    th, td {
       padding: 10px;
-      border-bottom: 1px solid #333;
+      border-bottom: 1px solid #444;
+      text-align: center;
     }
-    .cart-item img {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
+    th { background: #111; }
+    img { width: 80px; height: auto; border-radius: 5px; }
+    input, button {
+      padding: 10px;
+      margin: 5px 0;
+      width: 100%;
       border-radius: 6px;
-    }
-    .cart-details {
-      text-align: left;
-      flex: 1;
-      margin-left: 10px;
-    }
-    .cart-details h3 {
-      margin: 0;
-      font-size: 16px;
-    }
-    .cart-details p {
-      margin: 3px 0;
-      font-size: 14px;
-      color: #27ae60;
-    }
-    .remove-btn {
-      background: #e74c3c;
       border: none;
+    }
+    input { background: #222; color: #fff; }
+    .checkout-btn {
+      background: #27ae60;
       color: white;
-      padding: 6px 10px;
-      border-radius: 6px;
+      font-weight: bold;
       cursor: pointer;
-      font-size: 13px;
     }
-    .remove-btn:hover {
-      background: #c0392b;
-    }
-    .total {
+    .checkout-btn:hover { background: #1e8449; }
+
+    .summary {
+      text-align: center;
+      margin-bottom: 20px;
       font-size: 18px;
       font-weight: bold;
-      margin: 15px 0;
-      color: #27ae60;
     }
-    .checkout-btn {
-      padding: 10px 15px;
-      background: #007BFF;
+
+    button.remove-btn {
+      background: #c0392b;
       color: white;
-      border: none;
-      border-radius: 8px;
+      padding: 5px 10px;
+      border-radius: 5px;
       cursor: pointer;
-      font-size: 16px;
-      font-weight: bold;
     }
-    .checkout-btn:hover {
-      background: #0056b3;
-    }
-    a.back {
-      display: block;
-      margin-top: 20px;
-      color: #27ae60;
-      text-decoration: none;
-      font-weight: bold;
+    button.remove-btn:hover {
+      background: #e74c3c;
     }
   </style>
 </head>
 <body>
 
   <h1>🛒 Your Cart</h1>
-  <div class="cart-container" id="cart-container"></div>
-  <div class="total" id="total">Total: ₦0</div>
-  <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
-  <a href="index.html" class="back">⬅ Back to Shop</a>
 
-  <script src="cart.js"></script>
+  <table id="cart-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Product</th>
+        <th>Price (₦)</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div class="summary" id="total-amount">Total Amount: ₦0</div>
+
+  <h2>Customer Details</h2>
+  <form id="checkout-form">
+    <input type="text" id="name" placeholder="Full Name" required>
+    <input type="text" id="phone" placeholder="Phone Number" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="text" id="address" placeholder="Delivery Address" required>
+    <button type="button" class="checkout-btn" onclick="payWithPaystack()">Checkout</button>
+  </form>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const tbody = document.querySelector("#cart-table tbody");
+    const totalAmountEl = document.getElementById("total-amount");
+
+    function renderCart() {
+      tbody.innerHTML = "";
+      let totalAmount = 0;
+
+      cart.forEach((item, index) => {
+        const price = parseFloat(item.price.replace(/[^0-9.]/g, "")) || 0;
+        totalAmount += price;
+
+        tbody.innerHTML += `
+          <tr>
+            <td>${index + 1}</td>
+            <td><img src="${item.image}" alt="${item.name}"></td>
+            <td>₦${price.toLocaleString()}</td>
+            <td><button class="remove-btn" onclick="removeProduct(${index})">Remove</button></td>
+          </tr>
+        `;
+      });
+
+      totalAmountEl.textContent = "Total Amount: ₦" + totalAmount.toLocaleString();
+    }
+
+    function removeProduct(index) {
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    renderCart();
+
+    // ✅ Modified checkout function
+    async function payWithPaystack() {
+      const name = document.getElementById("name").value;
+      const phone = document.getElementById("phone").value;
+      const email = document.getElementById("email").value;
+      const address = document.getElementById("address").value;
+
+      if (!name || !phone || !email || !address) {
+        alert("Please fill all details before checkout!");
+        return;
+      }
+
+      const orderData = {
+        customer: { name, phone, email, address },
+        cart: cart,
+        totalAmount: cart.reduce((sum, item) => sum + (parseFloat(item.price.replace(/[^0-9.]/g, "")) || 0), 0),
+        status: "pending"
+      };
+
+      try {
+        const res = await fetch("/.netlify/functions/saveOrder", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(orderData)
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          localStorage.removeItem("cart");
+          window.location.href = "thankyou.html";
+        } else {
+          alert("Failed to submit order: " + data.message);
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Error submitting order.");
+      }
+    }
+  </script>
 </body>
 </html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Orders</title>
+  <style>
+    body { font-family: Arial; padding: 20px; background: #f9f9f9; }
+    h1 { text-align: center; margin-bottom: 30px; }
+    .order { background: #fff; border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 5px; }
+    .order h3 { margin: 0; font-size: 1.2em; }
+    .approve-btn { padding: 5px 10px; background: green; color: white; border: none; border-radius: 3px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Pending Orders</h1>
+  <div id="orders-container">Loading orders...</div>
+
+  <script>
+    async function loadOrders() {
+      const container = document.getElementById("orders-container");
+      container.innerHTML = "";
+
+      try {
+        const res = await fetch("/.netlify/functions/saveOrder");
+        const data = await res.json();
+
+        if (data.success && data.orders && data.orders.length > 0) {
+          data.orders.forEach((order, index) => {
+            const div = document.createElement("div");
+            div.classList.add("order");
+
+            let itemsHTML = order.items.map(i => `<li>${i.name} - ${i.price}</li>`).join("");
+
+            div.innerHTML = `
+              <h3>Order #${index + 1} by: ${order.email}</h3>
+              <p>Total: ₦${order.total.toLocaleString()}</p>
+              <ul>${itemsHTML}</ul>
+              <p>Status: ${order.status}</p>
+              <button class="approve-btn" onclick="approveOrder(${index})">Approve</button>
+            `;
+            container.appendChild(div);
+          });
+        } else {
+          container.innerHTML = "<p>No pending orders.</p>";
+        }
+
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = "<p>Error loading orders.</p>";
+      }
+    }
+
+    function approveOrder(index) {
+      fetch("/.netlify/functions/saveOrder")
+        .then(res => res.json())
+        .then(data => {
+          data.orders[index].status = "Approved"; // Update status locally
+          alert(`Order #${index + 1} approved!`);
+          loadOrders();
+        });
+    }
+
+    loadOrders();
+  </script>
+</body>
+</html>
