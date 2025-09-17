@@ -2,70 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Cart - V’Best Luxury Interiors</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #000;
-      color: #fff;
-      margin: 0;
-      padding: 20px;
-    }
-    h1 { text-align: center; margin-bottom: 20px; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
-    }
-    th, td {
-      padding: 10px;
-      border-bottom: 1px solid #444;
-      text-align: center;
-      vertical-align: middle;
-    }
-    th { background: #111; }
-    img { width: 80px; height: auto; border-radius: 5px; object-fit: cover; }
-    input, button {
-      padding: 10px;
-      margin: 5px 0;
-      width: 100%;
-      border-radius: 6px;
-      border: none;
-      box-sizing: border-box;
-    }
-    input { background: #222; color: #fff; }
-    .checkout-btn {
-      background: #27ae60;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .checkout-btn[disabled] {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-    .checkout-btn:hover { background: #1e8449; }
-
-    .summary {
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    button.remove-btn {
-      background: #c0392b;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button.remove-btn:hover {
-      background: #e74c3c;
-    }
-
-    .small-muted { font-size: 0.9rem; color: #bbb; text-align:center; margin-top:8px; }
+    body { font-family: Arial, sans-serif; background:#000; color:#fff; margin:0; padding:20px; }
+    h1 { text-align:center; margin-bottom:20px; }
+    table { width:100%; border-collapse:collapse; margin-bottom:20px; }
+    th, td { padding:10px; border-bottom:1px solid #444; text-align:center; vertical-align:middle; }
+    th { background:#111; }
+    img { width:80px; height:auto; border-radius:5px; object-fit:cover; }
+    input, button { padding:10px; margin:5px 0; width:100%; border-radius:6px; border:none; box-sizing:border-box; }
+    input { background:#222; color:#fff; }
+    .checkout-btn { background:#27ae60; color:white; font-weight:bold; cursor:pointer; }
+    .checkout-btn[disabled] { opacity:0.6; cursor:not-allowed; }
+    .summary { text-align:center; margin-bottom:20px; font-size:18px; font-weight:bold; }
+    button.remove-btn { background:#c0392b; color:white; padding:5px 10px; border-radius:5px; cursor:pointer; }
+    .small-muted { font-size:0.9rem; color:#bbb; text-align:center; margin-top:8px; }
   </style>
 </head>
 <body>
@@ -98,19 +50,11 @@
 
   <div class="small-muted" id="status-msg"></div>
 
-  <!-- ========== Firebase module script (Realtime Database) ========== -->
+  <!-- Firebase module helper (exposes saveOrderToRealtime) -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-analytics.js";
-    import {
-      getDatabase,
-      ref,
-      push,
-      set,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+    import { getDatabase, ref, push, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
-    // <-- YOUR firebaseConfig (you pasted earlier) -->
     const firebaseConfig = {
       apiKey: "AIzaSyAF_Fy32TmyNOAYebcRCcOLhgcKn82Xavs",
       authDomain: "v-best-luxury-interiors.firebaseapp.com",
@@ -123,24 +67,19 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    try { getAnalytics(app); } catch(e){ /* analytics optional */ }
-
     const db = getDatabase(app);
 
-    // Expose global helper to save orders to Realtime Database
+    // Expose helper to save orders to Realtime DB
     window.saveOrderToRealtime = async function(orderData) {
-      // Attach server timestamp sentinel (Realtime DB uses serverTimestamp())
+      // Attach server timestamp sentinel
       orderData.createdAt = serverTimestamp();
-      // Push a new child under /orders
       const newRef = push(ref(db, "orders"));
       await set(newRef, orderData);
       return { key: newRef.key };
     };
 
-    // signal ready
     window.__firebase_ready = true;
   </script>
-  <!-- ===================================================================== -->
 
   <script>
     // ---------- Utilities ----------
@@ -151,20 +90,19 @@
       });
     }
 
+    // Wait helper
     function waitFor(conditionFn, timeout = 5000, interval = 150) {
       const start = Date.now();
       return new Promise((resolve) => {
         (function check() {
-          try {
-            if (conditionFn()) return resolve(true);
-          } catch (e) {}
+          try { if (conditionFn()) return resolve(true); } catch(e){}
           if (Date.now() - start >= timeout) return resolve(false);
           setTimeout(check, interval);
         })();
       });
     }
 
-    // ---------- Cart loader + normalizer ----------
+    // ---------- Cart parsing (supports several localStorage keys) ----------
     const possibleKeys = ["cart", "cartItems", "myCart", "items", "vbCart"];
 
     function parseStoredCart() {
@@ -174,21 +112,16 @@
         try {
           const parsed = JSON.parse(raw);
           if (!parsed) continue;
-          if (Array.isArray(parsed)) {
-            return { items: normalizeItems(parsed), key };
-          }
+          if (Array.isArray(parsed)) return { items: normalizeItems(parsed), key };
           if (typeof parsed === "object") {
             const values = Object.values(parsed);
-            if (values.length > 0 && typeof values[0] === "object") {
-              return { items: normalizeItems(values), key };
-            }
+            if (values.length > 0 && typeof values[0] === "object") return { items: normalizeItems(values), key };
             return { items: normalizeItems([parsed]), key };
           }
         } catch (e) {
           console.warn("Could not parse localStorage key", key, e);
         }
       }
-      // Try direct 'cart' fallback even if empty
       const raw = localStorage.getItem("cart");
       if (raw) {
         try {
@@ -258,7 +191,7 @@
       totalAmountEl.textContent = "Total Amount: ₦" + totalAmount.toLocaleString();
     }
 
-    // ---------- Remove product (global) ----------
+    // Remove product
     window.removeProduct = function(index) {
       if (!Array.isArray(cart)) return;
       cart.splice(index, 1);
@@ -272,7 +205,7 @@
       return ready;
     }
 
-    // ---------- Checkout function (global) ----------
+    // ---------- Checkout function ----------
     window.payWithPaystack = async function() {
       const name = document.getElementById("name").value.trim();
       const phone = document.getElementById("phone").value.trim();
@@ -291,11 +224,20 @@
 
       const totalAmount = cart.reduce((sum, it) => sum + ((it.price || 0) * (it.quantity || 1)), 0);
 
+      // IMPORTANT: attach per-item status = 'pending' so admin can approve/decline each item
+      const cartWithStatus = (cart || []).map(it => ({
+        name: it.name,
+        image: it.image || "",
+        price: Number(it.price || 0),
+        quantity: Number(it.quantity || 1),
+        status: "pending"
+      }));
+
       const orderData = {
         customer: { name, phone, email, address },
-        cart,
+        cart: cartWithStatus,
         totalAmount,
-        status: "pending"
+        status: "pending",
       };
 
       // Wait for realtime helper
@@ -312,14 +254,16 @@
         const res = await window.saveOrderToRealtime(orderData); // { key: '...' }
         console.log("Order saved, key:", res.key);
 
+        // Remove cart then redirect to thankyou page with key so customer can watch approval/payment
         localStorage.removeItem(cartKey);
         statusMsg.textContent = "";
 
-        // redirect to thank you page if exists, otherwise alert
+        // <-- critical: store key and redirect with key so thankyou page can listen live
         try {
-          window.location.href = "thankyou.html";
+          localStorage.setItem("lastOrderKey", res.key);
+          window.location.href = "thankyou.html?key=" + encodeURIComponent(res.key);
         } catch (e) {
-          alert("Order saved! Thank you.");
+          alert("Order saved! Reference: " + res.key);
         }
       } catch (err) {
         console.error("Error saving order to Realtime DB:", err);
@@ -337,7 +281,7 @@
       }
     });
 
-    // Re-render if storage changes in another tab
+    // Re-render on storage change
     window.addEventListener("storage", function (e) {
       if (possibleKeys.includes(e.key)) renderCart();
     });

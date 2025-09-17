@@ -3,71 +3,286 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Thank You - V’Best Luxury Interiors</title>
+  <title>Thank you — V’Best Luxury Interiors</title>
   <style>
-    :root{
-      --bg:#000;
-      --panel:#111;
-      --accent:#27ae60;
-      --muted:#bbb;
-      --danger:#ff3b30;
-    }
+    :root{--bg:#000;--panel:#111;--muted:#bbb;--accent:#27ae60;--danger:#ff3b30}
     html,body{height:100%;margin:0;background:var(--bg);color:#fff;font-family:Arial,Helvetica,sans-serif}
-    .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box}
-    .card{width:100%;max-width:760px;background:var(--panel);border-radius:10px;padding:28px;text-align:center;box-sizing:border-box}
-    .ok{font-size:64px;margin:0 0 8px}
-    h1{margin:0 0 6px;font-size:22px}
-    p.lead{color:var(--muted);margin:8px 0 18px;font-size:15px}
-    .ref{background:#0b0b0b;color:var(--accent);display:inline-block;padding:8px 12px;border-radius:6px;font-weight:700;margin-top:10px}
-    .actions{display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap}
-    .btn{padding:10px 16px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
-    .btn-primary{background:var(--accent);color:#fff;text-decoration:none}
-    .btn-secondary{background:#222;color:#fff;text-decoration:none}
-    .whatsapp{background:#25D366;color:#000;font-weight:800}
-    .muted{color:var(--muted);font-size:13px;margin-top:14px}
-    @media (max-width:420px){ .card{padding:18px} .ok{font-size:48px} }
+    .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box}
+    .card{width:100%;max-width:880px;background:var(--panel);border-radius:10px;padding:22px;text-align:center}
+    h1{margin:0 0 6px;color:var(--accent)}
+    .muted{color:var(--muted);margin-bottom:12px}
+    .ref{display:inline-block;background:#0b0b0b;color:var(--accent);padding:8px 12px;border-radius:8px;margin:8px 0;font-weight:700}
+    .status-pill{display:inline-block;padding:8px 12px;border-radius:999px;margin:8px;font-weight:800}
+    .s-pending{background:#ffd54d;color:#000}
+    .s-approved{background:var(--accent);color:#000}
+    .s-declined{background:var(--danger);color:#fff}
+    .s-paid{background:#009688;color:#fff}
+    .details{margin-top:14px;text-align:left;color:#ddd;padding:12px;background:#0a0a0a;border-radius:8px}
+    .details .line{margin:6px 0}
+    .items-grid{display:flex;flex-direction:column;gap:10px}
+    .item-row{display:flex;gap:12px;align-items:center;background:#0d0d0d;padding:10px;border-radius:8px}
+    .item-thumb{width:84px;height:84px;border-radius:8px;object-fit:cover;background:#111;flex-shrink:0}
+    .item-info{flex:1;text-align:left}
+    .item-info h4{margin:0 0 6px;font-size:16px}
+    .item-meta{font-size:13px;color:var(--muted)}
+    .approved-total{margin-top:12px;font-weight:800;color:var(--accent)}
+    .btn{display:inline-block;padding:10px 14px;border-radius:8px;border:none;font-weight:800;cursor:pointer;margin:8px}
+    .btn-primary{background:var(--accent);color:#000;text-decoration:none}
+    .btn-secondary{background:#222;color:#fff}
+    .input, input {padding:10px;border-radius:8px;border:1px solid #333;background:#111;color:#fff;width:100%;box-sizing:border-box;margin-top:8px}
+    .small{font-size:13px;color:var(--muted)}
+    .hidden{display:none}
+    .search-box{max-width:600px;margin:14px auto 0}
+    a.wa {display:inline-block;margin-top:6px;color:#25D366;font-weight:800;text-decoration:none}
+    @media (max-width:520px){ .card{padding:16px} .item-row{flex-direction:column;align-items:flex-start} .item-thumb{width:100%;height:180px} }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="card" role="region" aria-labelledby="thanks-title">
-      <div class="ok" aria-hidden="true">✅</div>
-      <h1 id="thanks-title">Thank you — your order is received</h1>
-      <p class="lead">We've saved your order and it's now <strong>pending approval</strong>. We'll review items and contact you with payment details or any changes.</p>
+    <div class="card" role="main" aria-live="polite">
+      <h1>✅ Order received</h1>
+      <div id="intro" class="muted">We saved your order and it is pending approval. When approved you'll see details and any payment info here.</div>
 
-      <div id="order-ref" style="margin-top:6px;">
-        <!-- filled by script if ?key=... present -->
+      <div id="order-ref" class="ref hidden" aria-hidden="true"></div>
+
+      <div id="status-pill" class="status-pill s-pending hidden" aria-hidden="true">PENDING</div>
+
+      <div id="details" class="details hidden" aria-hidden="true">
+        <div id="customer-line" class="line"></div>
+
+        <div id="items-line" class="line">
+          <div class="items-grid" id="items-grid"></div>
+        </div>
+
+        <div id="total-line" class="line"></div>
+        <div id="approved-line" class="line approved-total"></div>
+        <div id="payment-link-line" class="line"></div>
       </div>
 
-      <div class="actions" style="margin-top:18px;">
-        <a class="btn btn-primary" href="index.html" id="back-shop">⬅ Back to Shop</a>
-        <a class="btn whatsapp" id="contact-wa" href="https://wa.me/2347080535579" target="_blank" rel="noopener">💬 Contact via WhatsApp</a>
+      <div id="actions" class="hidden" aria-hidden="true">
+        <a id="pay-now" class="btn btn-primary hidden" href="#" target="_blank" rel="noopener">Pay Now</a>
+        <a id="contact-wa" class="wa" href="#" target="_blank" rel="noopener">💬 Contact us on WhatsApp</a>
       </div>
 
-      <div class="muted">You will be contacted on the phone or email you provided during checkout.</div>
+      <div id="no-key" class="search-box">
+        <div class="small">If you were not redirected, enter your email (or paste your order key) to find your order:</div>
+        <input id="lookup-email" type="email" class="input" placeholder="Email used at checkout (or paste order key)">
+        <input id="lookup-phone" type="text" class="input" placeholder="Phone number (optional for more accurate search)">
+        <button id="btn-find" class="btn btn-secondary">Find my order</button>
+        <div id="lookup-result" class="small" style="margin-top:10px"></div>
+      </div>
+
+      <div id="idle" class="small" style="margin-top:14px">You will see updates here as soon as your order is updated by the store.</div>
     </div>
   </div>
 
-  <script>
-    // show order key if present in URL (e.g. thankyou.html?key=abcd1234)
-    (function() {
-      function qs(name) {
-        const params = new URLSearchParams(location.search);
-        return params.get(name);
-      }
-      const key = qs('key') || qs('order') || '';
-      const refWrap = document.getElementById('order-ref');
-      if (key) {
-        const safe = String(key).replace(/[^a-zA-Z0-9-_]/g, '');
-        refWrap.innerHTML = '<div class="ref">Order reference: ' + safe + '</div>';
-        // update WhatsApp link to include order ref text
-        const wa = document.getElementById('contact-wa');
-        const message = encodeURIComponent('Hello, I placed an order. My order reference is: ' + safe);
-        wa.href = 'https://wa.me/2347080535579?text=' + message;
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getDatabase, ref, onValue, get, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
+    // Keep your firebaseConfig exactly as before
+    const firebaseConfig = {
+      apiKey: "AIzaSyAF_Fy32TmyNOAYebcRCcOLhgcKn82Xavs",
+      authDomain: "v-best-luxury-interiors.firebaseapp.com",
+      databaseURL: "https://v-best-luxury-interiors-default-rtdb.firebaseio.com",
+      projectId: "v-best-luxury-interiors",
+      storageBucket: "v-best-luxury-interiors.firebasestorage.app",
+      messagingSenderId: "331900870737",
+      appId: "1:331900870737:web:c100c6a2987345eb955870",
+      measurementId: "G-NP94R6352Q"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // UI handles
+    const orderRefEl = document.getElementById('order-ref');
+    const statusPill = document.getElementById('status-pill');
+    const details = document.getElementById('details');
+    const customerLine = document.getElementById('customer-line');
+    const itemsGrid = document.getElementById('items-grid');
+    const totalLine = document.getElementById('total-line');
+    const approvedLine = document.getElementById('approved-line');
+    const paymentLinkLine = document.getElementById('payment-link-line');
+    const payNow = document.getElementById('pay-now');
+    const contactWA = document.getElementById('contact-wa');
+    const actions = document.getElementById('actions');
+    const noKeyBox = document.getElementById('no-key');
+    const idle = document.getElementById('idle');
+    const intro = document.getElementById('intro');
+    const btnFind = document.getElementById('btn-find');
+    const lookupEmail = document.getElementById('lookup-email');
+    const lookupPhone = document.getElementById('lookup-phone');
+    const lookupResult = document.getElementById('lookup-result');
+
+    // Helpers
+    function qs(name) { return new URLSearchParams(location.search).get(name); }
+    function show(el, yes=true){ if(yes) el.classList.remove('hidden'); else el.classList.add('hidden'); }
+    function fmtN(n){ try { return '₦'+Number(n).toLocaleString(); } catch(e){ return n; } }
+    function escapeHtml(s){ if(!s) return ''; return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]); }
+
+    // get key from URL or localStorage
+    let orderKey = qs('key') || qs('order') || localStorage.getItem('lastOrderKey') || '';
+
+    // Keep reference to current listener (not removing in this simple pattern; if you need multiple binds we can detach)
+    function bindOrderKey(key){
+      if (!key) return;
+      orderKey = key;
+      // show order ref
+      orderRefEl.textContent = 'Order reference: ' + key;
+      show(orderRefEl, true);
+      show(noKeyBox, false);
+
+      const r = ref(db, 'orders/' + key);
+      onValue(r, (snap) => {
+        const o = snap.val();
+        if (!o) {
+          statusPill.textContent = 'NOT FOUND';
+          statusPill.className = 'status-pill s-declined';
+          show(statusPill, true);
+          show(details, false);
+          return;
+        }
+        updateOrderUI(o, key);
+      });
+    }
+
+    function updateOrderUI(o, key){
+      show(statusPill, true);
+      const status = (o.status || 'pending').toLowerCase();
+      statusPill.textContent = status.toUpperCase();
+      statusPill.className = 'status-pill ' + (status === 'pending' ? 's-pending' : status === 'approved' ? 's-approved' : status === 'declined' ? 's-declined' : status === 'paid' ? 's-paid' : 's-pending');
+
+      // details
+      show(details, true);
+      const cust = o.customer || {};
+      customerLine.innerHTML = `<strong>Customer:</strong> ${escapeHtml(cust.name || '')} • ${escapeHtml(cust.phone || '')} • ${escapeHtml(cust.email || '')}`;
+
+      // items rendering with images and status badges
+      itemsGrid.innerHTML = '';
+      let approvedTotal = 0;
+      if (Array.isArray(o.cart) && o.cart.length) {
+        o.cart.forEach(it => {
+          const nm = escapeHtml(it.name || it.product || 'Product');
+          const qty = it.quantity || 1;
+          const pr = Number(it.price || it.amount || 0) || 0;
+          const st = (it.status || 'pending').toLowerCase();
+          if (st === 'approved') approvedTotal += pr * qty;
+
+          // status badge text + class
+          const badgeText = st === 'approved' ? 'APPROVED' : st === 'declined' ? 'DECLINED' : (st === 'paid' ? 'PAID' : 'PENDING');
+          const badgeClass = st === 'approved' ? 's-approved' : st === 'declined' ? 's-declined' : st === 'paid' ? 's-paid' : 's-pending';
+
+          // build item block (image on left)
+          const imgSrc = it.image ? escapeHtml(it.image) : '';
+          const itemHtml = `
+            <div class="item-row" role="group" aria-label="${nm}">
+              ${ imgSrc ? `<img class="item-thumb" src="${imgSrc}" alt="${nm}">` : `<div class="item-thumb" aria-hidden="true"></div>` }
+              <div class="item-info">
+                <h4>${nm}</h4>
+                <div class="item-meta">Qty: ${qty} • ${fmtN(pr)}</div>
+              </div>
+              <div style="text-align:right;min-width:110px">
+                <div class="status-pill ${badgeClass}" style="padding:6px 8px;font-weight:800">${badgeText}</div>
+              </div>
+            </div>
+          `;
+          itemsGrid.insertAdjacentHTML('beforeend', itemHtml);
+        });
       } else {
-        refWrap.innerHTML = '';
+        itemsGrid.innerHTML = '<div class="small">No items found in this order.</div>';
       }
-    })();
+
+      totalLine.innerHTML = `<strong>Total (original):</strong> ${fmtN(o.totalAmount ?? o.total ?? 0)}`;
+      approvedLine.innerHTML = `<strong>Approved total:</strong> ${fmtN(approvedTotal)}`;
+
+      // payment link
+      if (o.paymentLink && String(o.paymentLink).trim() !== '') {
+        paymentLinkLine.innerHTML = `<strong>Payment link:</strong> <a href="${escapeHtml(o.paymentLink)}" target="_blank" style="color:#9fd">${escapeHtml(o.paymentLink)}</a>`;
+        payNow.href = o.paymentLink;
+        show(actions, true);
+        show(payNow, true);
+      } else {
+        paymentLinkLine.innerHTML = `<strong>Payment link:</strong> (not provided yet)`;
+        show(actions, true);
+        show(payNow, false);
+      }
+
+      // contact WA: default to merchant contact message + order key (customer number uses provided phone)
+      const phone = (cust.phone || '').replace(/\D/g, '') || '';
+      const waNumber = phone.length ? (phone.length === 10 && phone.startsWith('0') ? '234'+phone.slice(1) : phone) : '2347080535579';
+      const waMsg = encodeURIComponent(`Hello, I placed order ${key}. Status: ${status}. Please advise.`);
+      contactWA.href = `https://wa.me/${waNumber}?text=${waMsg}`;
+
+      // small messages for statuses
+      if (status === 'declined') {
+        intro.textContent = 'Your order was declined. Contact us for details.';
+        idle.classList.add('hidden');
+      } else if (status === 'paid') {
+        intro.textContent = 'Payment received. Thank you — we will deliver/process your order.';
+        idle.classList.add('hidden');
+      } else {
+        intro.textContent = 'We saved your order and it is pending approval. You will see the Pay button if we add a payment link.';
+        idle.classList.remove('hidden');
+      }
+    }
+
+    // FIND by email (fallback search)
+    async function findByEmail(email, phone) {
+      lookupResult.textContent = 'Looking for orders...';
+      try {
+        const q = query(ref(db, 'orders'), orderByChild('customer/email'), equalTo(email));
+        const snap = await get(q);
+        const data = snap.val() || {};
+        const keys = Object.keys(data || {});
+        if (keys.length === 0) { lookupResult.textContent = 'No orders found for this email.'; return null; }
+        // choose latest by createdAt
+        keys.sort((a,b) => (data[b].createdAt||0) - (data[a].createdAt||0));
+        if (phone) {
+          const normPhone = phone.replace(/\D/g,'');
+          const byPhone = keys.find(k => {
+            const p = (data[k].customer?.phone || '').replace(/\D/g,'');
+            return normPhone && p && p.endsWith(normPhone.slice(-6));
+          });
+          if (byPhone) return { key: byPhone, order: data[byPhone] };
+        }
+        const key = keys[0];
+        return { key, order: data[key] };
+      } catch (err) {
+        console.error(err);
+        lookupResult.textContent = 'Error while searching. Try again.';
+        return null;
+      }
+    }
+
+    // find button handler
+    btnFind.addEventListener('click', async () => {
+      const em = lookupEmail.value.trim();
+      const ph = lookupPhone.value.trim();
+      lookupResult.textContent = '';
+      if (!em) { lookupResult.textContent = 'Enter the email used at checkout (or paste an order key).'; return; }
+      // if input looks like a key -> bind directly
+      if (em.length > 6 && /^[A-Za-z0-9-_]+$/.test(em) && !em.includes('@')) {
+        bindOrderKey(em);
+        lookupResult.textContent = 'Looking up order by key...';
+        return;
+      }
+      const found = await findByEmail(em, ph);
+      if (!found) return;
+      lookupResult.textContent = 'Found order: ' + found.key;
+      localStorage.setItem('lastOrderKey', found.key);
+      bindOrderKey(found.key);
+    });
+
+    // initial bind if we already have a key
+    if (orderKey) {
+      bindOrderKey(orderKey);
+      show(noKeyBox, false);
+    } else {
+      show(noKeyBox, true);
+      show(details, false);
+      show(actions, false);
+    }
   </script>
 </body>
 </html>
