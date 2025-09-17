@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Dashboard - Orders</title>
+  <style>
+    :root{
+      --bg:#000;
+      --panel:#111;
+      --muted:#bbb;
+      --accent:#27ae60;
+      --danger:#ff3b30;
+      --card:#1a1a1a;
+    }
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#fff}
+    header{padding:18px;display:flex;align-items:center;gap:12px;justify-content:space-between;background:var(--panel)}
+    header h1{margin:0;font-size:18px}
+    .top-actions{display:flex;gap:8px;align-items:center}
+    button, input, select, textarea{font-family:inherit}
+    .btn{background:var(--accent);color:#000;padding:8px 10px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
+    .btn.secondary{background:#333;color:#fff}
+    .btn.danger{background:var(--danger);color:#fff}
+    .container{padding:16px;max-width:1100px;margin:18px auto}
+    .controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+    .controls input[type="text"]{padding:8px;border-radius:8px;border:1px solid #333;background:#111;color:#fff}
+    .orders{display:grid;grid-template-columns:1fr;gap:12px}
+    .order{background:var(--card);padding:12px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.5);display:flex;flex-direction:column;gap:8px}
+    .order-head{display:flex;justify-content:space-between;gap:8px;align-items:center}
+    .meta{color:var(--muted);font-size:13px}
+    .items{background:#0f0f0f;padding:8px;border-radius:6px;display:flex;flex-direction:column;gap:6px;font-size:14px}
+    .items .item-row{display:flex;gap:8px;align-items:center}
+    .items img{width:64px;height:64px;object-fit:cover;border-radius:6px;cursor:pointer}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .small{font-size:13px;color:var(--muted)}
+    label{font-size:13px;color:var(--muted);display:block;margin-top:6px}
+    .status-pill{padding:6px 8px;border-radius:999px;font-weight:700}
+    .status-pending{background:#ffd54d;color:#000}
+    .status-approved{background:#27ae60;color:#fff}
+    .status-declined{background:#e74c3c;color:#fff}
+    .status-paid{background:#009688;color:#fff}
+    .flex-row{display:flex;gap:8px;align-items:center}
+    footer{padding:12px;text-align:center;color:var(--muted)}
+    @media (min-width:880px){ .orders{grid-template-columns:1fr 1fr} }
+
+    /* Lightbox styles (admin) */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .lightbox-inner {
+      max-width: 1100px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .lightbox img {
+      max-width: 100%;
+      max-height: 78vh;
+      border-radius: 8px;
+      object-fit: contain;
+      box-shadow: 0 6px 30px rgba(0,0,0,0.6);
+    }
+    .lightbox .caption {
+      color: #fff;
+      font-size: 16px;
+      text-align: center;
+      word-break: break-word;
+      max-width: 100%;
+    }
+    .lightbox .close-hint {
+      font-size: 13px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Admin — Orders</h1>
+    <div class="top-actions">
+      <div id="pendingCount" class="small">Pending: 0</div>
+      <button id="btn-refresh" class="btn secondary">Refresh</button>
+      <button id="btn-logout" class="btn secondary">Logout</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="controls">
+      <input type="text" id="search" placeholder="Search by customer, product or order key">
+      <select id="filter">
+        <option value="all">All</option>
+        <option value="pending">Pending</option>
+        <option value="approved">Approved</option>
+        <option value="declined">Declined</option>
+        <option value="paid">Paid</option>
+      </select>
+      <button id="toggleNotify" class="btn">Enable Notifications</button>
+    </div>
+
+    <div id="orders" class="orders" aria-live="polite"></div>
+
+    <footer>
+      Tip: Approve items, paste a payment link (or create one) and use "Send Payment Request" to message the customer on WhatsApp.
+    </footer>
+  </div>
+
+  <!-- Admin lightbox -->
+  <div id="admin-lightbox" class="lightbox" aria-hidden="true">
+    <div class="lightbox-inner" role="dialog" aria-modal="true">
+      <img id="admin-lightbox-img" src="" alt="">
+      <div id="admin-lightbox-caption" class="caption"></div>
+      <div class="close-hint">Click outside the image or press Esc to close</div>
+    </div>
+  </div>
+
+  <script type="module">
+    /*************** CONFIG - change ADMIN_PASSWORD before use ****************/
+    const ADMIN_PASSWORD = "change_this_password"; // <<-- change this to something only you know
+    /*************************************************************************/
+
+    // --- Firebase imports (v12.x) ---
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getDatabase, ref, onValue, update, set, push, off } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
+    // Firebase config (same as cart page)
+    const firebaseConfig = {
+      apiKey: "AIzaSyAF_Fy32TmyNOAYebcRCcOLhgcKn82Xavs",
+      authDomain: "v-best-luxury-interiors.firebaseapp.com",
+      databaseURL: "https://v-best-luxury-interiors-default-rtdb.firebaseio.com",
+      projectId: "v-best-luxury-interiors",
+      storageBucket: "v-best-luxury-interiors.firebasestorage.app",
+      messagingSenderId: "331900870737",
+      appId: "1:331900870737:web:c100c6a2987345eb955870",
+      measurementId: "G-NP94R6352Q"
+    };
+
+    // initialize
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const ordersRef = ref(db, 'orders');
+
+    // UI refs
+    const ordersEl = document.getElementById('orders');
+    const searchEl = document.getElementById('search');
+    const filterEl = document.getElementById('filter');
+    const pendingCountEl = document.getElementById('pendingCount');
+    const notifyBtn = document.getElementById('toggleNotify');
+    const refreshBtn = document.getElementById('btn-refresh');
+    const logoutBtn = document.getElementById('btn-logout');
+
+    // state
+    let allOrders = {}; // keyed by orderKey
+    let seenKeys = new Set();
+    let notificationsEnabled = false;
+    let adminLoggedIn = false;
+    let firstLoad = true;
+
+    // small beep using Web Audio
+    function beep() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = "sine";
+        o.frequency.value = 880;
+        o.connect(g);
+        g.connect(ctx.destination);
+        g.gain.value = 0.04;
+        o.start();
+        setTimeout(()=>{ o.stop(); ctx.close(); }, 180);
+      } catch(e) {}
+    }
+
+    // request notification permission
+    async function requestNotifications() {
+      if (!("Notification" in window)) return false;
+      if (Notification.permission === "granted") return true;
+      const perm = await Notification.requestPermission();
+      return perm === "granted";
+    }
+
+    function notify(title, body) {
+      if (!notificationsEnabled) return;
+      if (Notification.permission === "granted") {
+        new Notification(title, { body, icon: "" });
+      }
+      beep();
+    }
+
+    // small helper to sanitize phone for wa.me (remove non-digits). If starts with '0', prefix 234
+    function formatPhoneForWa(raw) {
+      if (!raw) return "";
+      const digits = raw.replace(/\D/g, "");
+      if (!digits) return "";
+      if (digits.length === 10 && digits.startsWith("0")) return "234" + digits.slice(1);
+      return digits; // assume includes country code
+    }
+
+    // Expose lightbox functions globally so inline onclick on images works
+    window.openLightbox = function(src, name) {
+      const lb = document.getElementById('admin-lightbox');
+      const img = document.getElementById('admin-lightbox-img');
+      const cap = document.getElementById('admin-lightbox-caption');
+      if (!src) return;
+      img.src = src;
+      img.alt = name || "";
+      cap.textContent = name || "";
+      lb.style.display = "flex";
+      lb.setAttribute('aria-hidden','false');
+      // prevent page scroll while open
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.closeLightbox = function() {
+      const lb = document.getElementById('admin-lightbox');
+      if (!lb) return;
+      lb.style.display = "none";
+      lb.setAttribute('aria-hidden','true');
+      document.getElementById('admin-lightbox-img').src = '';
+      document.getElementById('admin-lightbox-caption').textContent = '';
+      document.body.style.overflow = '';
+    };
+
+    // close if clicking outside inner content
+    (function(){
+      const lb = document.getElementById('admin-lightbox');
+      lb.addEventListener('click', function(e){
+        if (e.target === lb) closeLightbox();
+      });
+      // close on escape
+      document.addEventListener('keydown', function(e){
+        if (e.key === 'Escape') closeLightbox();
+      });
+    })();
+
+    // render helper
+    function render() {
+      const q = (searchEl.value || "").trim().toLowerCase();
+      const filter = filterEl.value;
+      ordersEl.innerHTML = "";
+
+      const keys = Object.keys(allOrders).sort((a,b) => {
+        const at = allOrders[a]?.createdAt || 0;
+        const bt = allOrders[b]?.createdAt || 0;
+        return bt - at;
+      });
+
+      let pendingCount = 0;
+
+      for (const key of keys) {
+        const order = allOrders[key];
+        if (!order) continue;
+        const status = (order.status || "pending").toLowerCase();
+        if (status === "pending") pendingCount++;
+
+        // filter
+        if (filter !== "all" && filter !== status) continue;
+
+        // search
+        const hay = (key + " " + (order.customer?.name||"") + " " + (order.customer?.phone||"") + " " + JSON.stringify(order.cart || [])).toLowerCase();
+        if (q && !hay.includes(q)) continue;
+
+        // build order card
+        const created = order.createdAt ? new Date(order.createdAt) : null;
+        const createdStr = created ? created.toLocaleString() : (order.createdAt || "");
+        const statusClass = status === "pending" ? "status-pending" : status === "approved" ? "status-approved" : status === "declined" ? "status-declined" : status === "paid" ? "status-paid" : "status-pending";
+
+        const totalDisplay = (order.totalAmount !== undefined) ? ("₦" + Number(order.totalAmount).toLocaleString()) : (order.total || "");
+
+        // items HTML
+        let itemsHtml = "";
+        if (Array.isArray(order.cart)) {
+          for (const it of order.cart) {
+            const nm = escapeHtml(it.name || it.product || "Product");
+            const qty = it.quantity || 1;
+            const pr = (it.price || it.amount || 0);
+            const img = it.image ? `<img src="${escapeHtml(it.image)}" alt="${nm}" data-name="${nm}" onclick="openLightbox(this.getAttribute('src'), this.getAttribute('data-name'))">` : '';
+            itemsHtml += `<div class="item-row">${img}<div style="flex:1;text-align:left"><strong>${nm}</strong><div class="small">Qty: ${qty} • ₦${(Number(pr) || 0).toLocaleString()}</div></div></div>`;
+          }
+        }
+
+        const paymentLink = order.paymentLink ? `<div class="small">Payment link: <a href="${escapeHtml(order.paymentLink)}" target="_blank" style="color:#9fd">${escapeHtml(order.paymentLink)}</a></div>` : "";
+
+        const card = document.createElement('div');
+        card.className = 'order';
+        card.innerHTML = `
+          <div class="order-head">
+            <div>
+              <div style="font-weight:800">Order <span class="small" style="opacity:0.8">${escapeHtml(key)}</span></div>
+              <div class="meta small">${escapeHtml(order.customer?.name || "Customer")} • ${escapeHtml(order.customer?.phone || "")} • ${escapeHtml(order.customer?.email || "")}</div>
+              <div class="meta small">${createdStr}</div>
+            </div>
+            <div style="text-align:right">
+              <div class="status-pill ${statusClass}">${status.toUpperCase()}</div>
+              <div style="margin-top:8px;font-weight:700">${totalDisplay}</div>
+            </div>
+          </div>
+
+          <div class="items">${itemsHtml || '<div class="small">No items</div>'}</div>
+
+          ${paymentLink}
+
+          <div class="actions">
+            <button class="btn" data-action="approve" data-key="${escapeHtml(key)}">✅ Approve</button>
+            <button class="btn secondary" data-action="decline" data-key="${escapeHtml(key)}">❌ Decline</button>
+            <button class="btn secondary" data-action="sendwa" data-key="${escapeHtml(key)}">💬 Send Payment Request</button>
+            <button class="btn secondary" data-action="markpaid" data-key="${escapeHtml(key)}">💳 Mark Paid</button>
+            <div style="display:flex;gap:6px;align-items:center">
+              <input type="text" placeholder="paste payment link" data-input-for="${escapeHtml(key)}" style="min-width:220px;padding:6px;border-radius:6px;border:1px solid #333;background:#111;color:#fff">
+              <button class="btn" data-action="setlink" data-key="${escapeHtml(key)}">Save Link</button>
+            </div>
+          </div>
+        `;
+        // attach handlers
+        card.querySelectorAll('button[data-action]').forEach(btn=>{
+          btn.addEventListener('click', onActionClick);
+        });
+        ordersEl.appendChild(card);
+      } // end for
+
+      pendingCountEl.textContent = `Pending: ${pendingCount}`;
+    }
+
+    // action handlers
+    async function onActionClick(e) {
+      const act = e.currentTarget.getAttribute('data-action');
+      const key = e.currentTarget.getAttribute('data-key');
+      if (!key) return;
+      if (act === 'approve') {
+        if (!confirm('Approve this order?')) return;
+        await update(ref(db, 'orders/' + key), { status: 'approved', approvedAt: Date.now() });
+        alert('Order approved. You can now send the payment link.');
+      } else if (act === 'decline') {
+        const reason = prompt('Optional: add decline reason (sent to customer):') || '';
+        await update(ref(db, 'orders/' + key), { status: 'declined', declinedAt: Date.now(), declineReason: reason });
+        alert('Order declined.');
+      } else if (act === 'sendwa') {
+        const order = allOrders[key];
+        if (!order) return alert('Order not loaded');
+        const phone = formatPhoneForWa(order.customer?.phone || '');
+        const itemsText = (order.cart || []).map(it => `${it.name} x${it.quantity||1} (₦${Number(it.price||0).toLocaleString()})`).join('\n');
+        const link = order.paymentLink || '';
+        let message = `Hello ${order.customer?.name || ''}, your order (${key}) has been approved.\n\nItems:\n${itemsText}\n\nTotal: ₦${Number(order.totalAmount||order.total||0).toLocaleString()}\n`;
+        if (link) message += `\nPay here: ${link}\n`;
+        message += `\nReply if you have questions.`;
+        if (!phone) {
+          alert('Customer phone missing or invalid.');
+          return;
+        }
+        const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+        window.open(waUrl, '_blank');
+        await update(ref(db, 'orders/' + key), { paymentRequestedAt: Date.now() });
+      } else if (act === 'markpaid') {
+        if (!confirm('Mark this order as PAID?')) return;
+        await update(ref(db, 'orders/' + key), { status: 'paid', paidAt: Date.now() });
+        alert('Order marked as paid.');
+      } else if (act === 'setlink') {
+        const input = document.querySelector(`input[data-input-for="${key}"]`);
+        if (!input) return alert('Input not found.');
+        const url = input.value.trim();
+        if (!url) return alert('Paste a payment link first.');
+        await update(ref(db, 'orders/' + key), { paymentLink: url, paymentLinkSetAt: Date.now() });
+        alert('Payment link saved to order.');
+      }
+    }
+
+    // onValue listener (real-time)
+    function startListening() {
+      onValue(ordersRef, (snap) => {
+        const data = snap.val() || {};
+        const prevKeys = new Set(Object.keys(allOrders || {}));
+        allOrders = data;
+        const currentKeys = Object.keys(data || {});
+        // if not first load, detect new keys that are pending
+        if (!firstLoad) {
+          for (const k of currentKeys) {
+            if (!prevKeys.has(k)) {
+              const o = data[k];
+              if (o && (o.status||'pending').toLowerCase() === 'pending') {
+                notify('New order', `Order ${k} from ${o.customer?.name || 'customer'}`);
+                seenKeys.add(k);
+              }
+            }
+          }
+        } else {
+          for (const k of currentKeys) seenKeys.add(k);
+        }
+        firstLoad = false;
+        render();
+      });
+    }
+
+    // small utils
+    function escapeHtml(s) {
+      if (!s) return '';
+      return String(s).replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);
+    }
+
+    // login flow (client side gate)
+    async function login() {
+      let ok = false;
+      try {
+        const pw = prompt('Enter admin password:');
+        if (!pw) return false;
+        if (pw === ADMIN_PASSWORD) ok = true;
+      } catch (e) {}
+      if (!ok) {
+        alert('Wrong password.');
+        return false;
+      }
+      adminLoggedIn = true;
+      const allowed = await requestNotifications();
+      notificationsEnabled = allowed;
+      notifyBtn.textContent = allowed ? 'Notifications: ON' : 'Enable Notifications';
+      startListening();
+      return true;
+    }
+
+    // wire controls
+    notifyBtn.addEventListener('click', async () => {
+      const allowed = await requestNotifications();
+      notificationsEnabled = allowed;
+      notifyBtn.textContent = allowed ? 'Notifications: ON' : 'Enable Notifications';
+      alert('Notifications: ' + (allowed ? 'enabled' : 'blocked/unsupported'));
+    });
+
+    refreshBtn.addEventListener('click', () => { render(); });
+
+    logoutBtn.addEventListener('click', () => {
+      if (confirm('Log out admin view?')) {
+        location.reload();
+      }
+    });
+
+    searchEl.addEventListener('input', () => render());
+    filterEl.addEventListener('change', () => render());
+
+    // start
+    (async () => {
+      const ok = await login();
+      if (!ok) {
+        document.body.innerHTML = '<div style="padding:40px;text-align:center">Not authorized. Reload to try again.</div>';
+      }
+    })();
+
+  </script>
+</body>
+</html>

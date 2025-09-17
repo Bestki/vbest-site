@@ -1,30 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Thank You - V’Best Luxury Interiors</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #000;
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
+    :root{
+      --bg:#000;
+      --panel:#111;
+      --accent:#27ae60;
+      --muted:#bbb;
+      --danger:#ff3b30;
     }
-    h1 { font-size: 36px; margin-bottom: 20px; }
-    p { font-size: 18px; }
-    a { color: #27ae60; text-decoration: none; font-weight: bold; }
+    html,body{height:100%;margin:0;background:var(--bg);color:#fff;font-family:Arial,Helvetica,sans-serif}
+    .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box}
+    .card{width:100%;max-width:760px;background:var(--panel);border-radius:10px;padding:28px;text-align:center;box-sizing:border-box}
+    .ok{font-size:64px;margin:0 0 8px}
+    h1{margin:0 0 6px;font-size:22px}
+    p.lead{color:var(--muted);margin:8px 0 18px;font-size:15px}
+    .ref{background:#0b0b0b;color:var(--accent);display:inline-block;padding:8px 12px;border-radius:6px;font-weight:700;margin-top:10px}
+    .actions{display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap}
+    .btn{padding:10px 16px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
+    .btn-primary{background:var(--accent);color:#fff;text-decoration:none}
+    .btn-secondary{background:#222;color:#fff;text-decoration:none}
+    .whatsapp{background:#25D366;color:#000;font-weight:800}
+    .muted{color:var(--muted);font-size:13px;margin-top:14px}
+    @media (max-width:420px){ .card{padding:18px} .ok{font-size:48px} }
   </style>
 </head>
 <body>
-  <div>
-    <h1>✅ Thank You!</h1>
-    <p>Your order has been submitted. We will review it and contact you shortly.</p>
-    <p><a href="index.html">Back to Home</a></p>
+  <div class="wrap">
+    <div class="card" role="region" aria-labelledby="thanks-title">
+      <div class="ok" aria-hidden="true">✅</div>
+      <h1 id="thanks-title">Thank you — your order is received</h1>
+      <p class="lead">We've saved your order and it's now <strong>pending approval</strong>. We'll review items and contact you with payment details or any changes.</p>
+
+      <div id="order-ref" style="margin-top:6px;">
+        <!-- filled by script if ?key=... present -->
+      </div>
+
+      <div class="actions" style="margin-top:18px;">
+        <a class="btn btn-primary" href="index.html" id="back-shop">⬅ Back to Shop</a>
+        <a class="btn whatsapp" id="contact-wa" href="https://wa.me/2347080535579" target="_blank" rel="noopener">💬 Contact via WhatsApp</a>
+      </div>
+
+      <div class="muted">You will be contacted on the phone or email you provided during checkout.</div>
+    </div>
   </div>
+
+  <script>
+    // show order key if present in URL (e.g. thankyou.html?key=abcd1234)
+    (function() {
+      function qs(name) {
+        const params = new URLSearchParams(location.search);
+        return params.get(name);
+      }
+      const key = qs('key') || qs('order') || '';
+      const refWrap = document.getElementById('order-ref');
+      if (key) {
+        const safe = String(key).replace(/[^a-zA-Z0-9-_]/g, '');
+        refWrap.innerHTML = '<div class="ref">Order reference: ' + safe + '</div>';
+        // update WhatsApp link to include order ref text
+        const wa = document.getElementById('contact-wa');
+        const message = encodeURIComponent('Hello, I placed an order. My order reference is: ' + safe);
+        wa.href = 'https://wa.me/2347080535579?text=' + message;
+      } else {
+        refWrap.innerHTML = '';
+      }
+    })();
+  </script>
 </body>
 </html>

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cart - V’Best Luxury Interiors</title>
   <style>
     body {
@@ -22,15 +22,17 @@
       padding: 10px;
       border-bottom: 1px solid #444;
       text-align: center;
+      vertical-align: middle;
     }
     th { background: #111; }
-    img { width: 80px; height: auto; border-radius: 5px; }
+    img { width: 80px; height: auto; border-radius: 5px; object-fit: cover; }
     input, button {
       padding: 10px;
       margin: 5px 0;
       width: 100%;
       border-radius: 6px;
       border: none;
+      box-sizing: border-box;
     }
     input { background: #222; color: #fff; }
     .checkout-btn {
@@ -38,6 +40,10 @@
       color: white;
       font-weight: bold;
       cursor: pointer;
+    }
+    .checkout-btn[disabled] {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
     .checkout-btn:hover { background: #1e8449; }
 
@@ -58,17 +64,20 @@
     button.remove-btn:hover {
       background: #e74c3c;
     }
+
+    .small-muted { font-size: 0.9rem; color: #bbb; text-align:center; margin-top:8px; }
   </style>
 </head>
 <body>
 
   <h1>🛒 Your Cart</h1>
 
-  <table id="cart-table">
+  <table id="cart-table" aria-live="polite">
     <thead>
       <tr>
         <th>#</th>
         <th>Product</th>
+        <th>Image</th>
         <th>Price (₦)</th>
         <th>Action</th>
       </tr>
@@ -79,87 +88,259 @@
   <div class="summary" id="total-amount">Total Amount: ₦0</div>
 
   <h2>Customer Details</h2>
-  <form id="checkout-form">
+  <form id="checkout-form" onsubmit="return false;">
     <input type="text" id="name" placeholder="Full Name" required>
     <input type="text" id="phone" placeholder="Phone Number" required>
     <input type="email" id="email" placeholder="Email" required>
     <input type="text" id="address" placeholder="Delivery Address" required>
-    <button type="button" class="checkout-btn" onclick="payWithPaystack()">Checkout</button>
+    <button type="button" class="checkout-btn" id="checkoutBtn">Checkout</button>
   </form>
 
+  <div class="small-muted" id="status-msg"></div>
+
+  <!-- ========== Firebase module script (Realtime Database) ========== -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-analytics.js";
+    import {
+      getDatabase,
+      ref,
+      push,
+      set,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
+    // <-- YOUR firebaseConfig (you pasted earlier) -->
+    const firebaseConfig = {
+      apiKey: "AIzaSyAF_Fy32TmyNOAYebcRCcOLhgcKn82Xavs",
+      authDomain: "v-best-luxury-interiors.firebaseapp.com",
+      databaseURL: "https://v-best-luxury-interiors-default-rtdb.firebaseio.com",
+      projectId: "v-best-luxury-interiors",
+      storageBucket: "v-best-luxury-interiors.firebasestorage.app",
+      messagingSenderId: "331900870737",
+      appId: "1:331900870737:web:c100c6a2987345eb955870",
+      measurementId: "G-NP94R6352Q"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    try { getAnalytics(app); } catch(e){ /* analytics optional */ }
+
+    const db = getDatabase(app);
+
+    // Expose global helper to save orders to Realtime Database
+    window.saveOrderToRealtime = async function(orderData) {
+      // Attach server timestamp sentinel (Realtime DB uses serverTimestamp())
+      orderData.createdAt = serverTimestamp();
+      // Push a new child under /orders
+      const newRef = push(ref(db, "orders"));
+      await set(newRef, orderData);
+      return { key: newRef.key };
+    };
+
+    // signal ready
+    window.__firebase_ready = true;
+  </script>
+  <!-- ===================================================================== -->
+
   <script>
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    // ---------- Utilities ----------
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return "";
+      return String(str).replace(/[&<>"']/g, function (m) {
+        return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
+      });
+    }
+
+    function waitFor(conditionFn, timeout = 5000, interval = 150) {
+      const start = Date.now();
+      return new Promise((resolve) => {
+        (function check() {
+          try {
+            if (conditionFn()) return resolve(true);
+          } catch (e) {}
+          if (Date.now() - start >= timeout) return resolve(false);
+          setTimeout(check, interval);
+        })();
+      });
+    }
+
+    // ---------- Cart loader + normalizer ----------
+    const possibleKeys = ["cart", "cartItems", "myCart", "items", "vbCart"];
+
+    function parseStoredCart() {
+      for (const key of possibleKeys) {
+        const raw = localStorage.getItem(key);
+        if (!raw) continue;
+        try {
+          const parsed = JSON.parse(raw);
+          if (!parsed) continue;
+          if (Array.isArray(parsed)) {
+            return { items: normalizeItems(parsed), key };
+          }
+          if (typeof parsed === "object") {
+            const values = Object.values(parsed);
+            if (values.length > 0 && typeof values[0] === "object") {
+              return { items: normalizeItems(values), key };
+            }
+            return { items: normalizeItems([parsed]), key };
+          }
+        } catch (e) {
+          console.warn("Could not parse localStorage key", key, e);
+        }
+      }
+      // Try direct 'cart' fallback even if empty
+      const raw = localStorage.getItem("cart");
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) return { items: normalizeItems(parsed), key: "cart" };
+        } catch (e) {}
+      }
+      return { items: [], key: "cart" };
+    }
+
+    function normalizeItems(arr) {
+      return arr.map(rawItem => {
+        if (typeof rawItem === "string") {
+          try { rawItem = JSON.parse(rawItem); } catch (e) { return { name: rawItem, image: "", price: 0, quantity: 1 }; }
+        }
+        const name = rawItem.name || rawItem.title || rawItem.product || rawItem.label || "Product";
+        const image = rawItem.image || rawItem.img || rawItem.picture || rawItem.src || "";
+        let priceRaw = rawItem.price ?? rawItem.amount ?? rawItem.cost ?? rawItem.priceText ?? 0;
+        if (typeof priceRaw === "string") priceRaw = priceRaw.replace(/[^0-9.]/g, "");
+        const price = parseFloat(priceRaw) || 0;
+        const quantity = Math.max(1, parseInt(rawItem.quantity) || 1);
+        return { name: String(name), image: String(image), price, quantity };
+      });
+    }
+
+    // ---------- Rendering ----------
+    let cart = [];
+    let cartKey = "cart";
+
     const tbody = document.querySelector("#cart-table tbody");
     const totalAmountEl = document.getElementById("total-amount");
+    const statusMsg = document.getElementById("status-msg");
+    const checkoutBtn = document.getElementById("checkoutBtn");
 
     function renderCart() {
+      const stored = parseStoredCart();
+      cart = stored.items || [];
+      cartKey = stored.key || "cart";
+
       tbody.innerHTML = "";
+      if (!cart.length) {
+        tbody.innerHTML = `<tr><td colspan="5">Your cart is empty.</td></tr>`;
+        totalAmountEl.textContent = "Total Amount: ₦0";
+        return;
+      }
+
       let totalAmount = 0;
-
       cart.forEach((item, index) => {
-        const price = parseFloat(item.price.replace(/[^0-9.]/g, "")) || 0;
-        totalAmount += price;
+        const itemTotal = (item.price || 0) * (item.quantity || 1);
+        totalAmount += itemTotal;
 
-        tbody.innerHTML += `
+        const nameSafe = escapeHtml(item.name);
+        const imgSrc = escapeHtml(item.image || "");
+        const priceDisplay = "₦" + itemTotal.toLocaleString();
+
+        tbody.insertAdjacentHTML("beforeend", `
           <tr>
             <td>${index + 1}</td>
-            <td><img src="${item.image}" alt="${item.name}"></td>
-            <td>₦${price.toLocaleString()}</td>
+            <td style="max-width:200px; white-space:normal; text-align:left;">${nameSafe}</td>
+            <td>${imgSrc ? `<img src="${imgSrc}" alt="${nameSafe}">` : ""}</td>
+            <td>${priceDisplay}</td>
             <td><button class="remove-btn" onclick="removeProduct(${index})">Remove</button></td>
           </tr>
-        `;
+        `);
       });
 
       totalAmountEl.textContent = "Total Amount: ₦" + totalAmount.toLocaleString();
     }
 
-    function removeProduct(index) {
+    // ---------- Remove product (global) ----------
+    window.removeProduct = function(index) {
+      if (!Array.isArray(cart)) return;
       cart.splice(index, 1);
-      localStorage.setItem("cart", JSON.stringify(cart));
+      localStorage.setItem(cartKey, JSON.stringify(cart));
       renderCart();
+    };
+
+    // ---------- Firebase helper ready check ----------
+    async function ensureRealtimeHelperReady(timeoutMs = 5000) {
+      const ready = await waitFor(() => typeof window.saveOrderToRealtime === "function", timeoutMs);
+      return ready;
     }
 
-    renderCart();
-
-    // ✅ Modified checkout function
-    async function payWithPaystack() {
-      const name = document.getElementById("name").value;
-      const phone = document.getElementById("phone").value;
-      const email = document.getElementById("email").value;
-      const address = document.getElementById("address").value;
+    // ---------- Checkout function (global) ----------
+    window.payWithPaystack = async function() {
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const address = document.getElementById("address").value.trim();
 
       if (!name || !phone || !email || !address) {
         alert("Please fill all details before checkout!");
         return;
       }
 
+      if (!cart || cart.length === 0) {
+        alert("Your cart is empty.");
+        return;
+      }
+
+      const totalAmount = cart.reduce((sum, it) => sum + ((it.price || 0) * (it.quantity || 1)), 0);
+
       const orderData = {
         customer: { name, phone, email, address },
-        cart: cart,
-        totalAmount: cart.reduce((sum, item) => sum + (parseFloat(item.price.replace(/[^0-9.]/g, "")) || 0), 0),
+        cart,
+        totalAmount,
         status: "pending"
       };
 
+      // Wait for realtime helper
+      statusMsg.textContent = "Connecting to database...";
+      const ready = await ensureRealtimeHelperReady(6000);
+      if (!ready) {
+        statusMsg.textContent = "Could not connect to Firebase Realtime Database. Try refreshing.";
+        alert("Firebase helper not ready. Refresh the page and try again.");
+        return;
+      }
+
       try {
-        const res = await fetch("/.netlify/functions/saveOrder", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(orderData)
-        });
+        statusMsg.textContent = "Saving order...";
+        const res = await window.saveOrderToRealtime(orderData); // { key: '...' }
+        console.log("Order saved, key:", res.key);
 
-        const data = await res.json();
+        localStorage.removeItem(cartKey);
+        statusMsg.textContent = "";
 
-        if (data.success) {
-          localStorage.removeItem("cart");
+        // redirect to thank you page if exists, otherwise alert
+        try {
           window.location.href = "thankyou.html";
-        } else {
-          alert("Failed to submit order: " + data.message);
+        } catch (e) {
+          alert("Order saved! Thank you.");
         }
       } catch (err) {
-        console.error(err);
-        alert("Error submitting order.");
+        console.error("Error saving order to Realtime DB:", err);
+        statusMsg.textContent = "Error saving order. Check console.";
+        alert("Error saving order. See console for details.");
       }
-    }
+    };
+
+    // Bind button and render on DOM ready
+    document.addEventListener("DOMContentLoaded", function () {
+      renderCart();
+      const btn = document.getElementById("checkoutBtn");
+      if (btn) {
+        btn.addEventListener("click", () => { if (typeof window.payWithPaystack === "function") window.payWithPaystack(); });
+      }
+    });
+
+    // Re-render if storage changes in another tab
+    window.addEventListener("storage", function (e) {
+      if (possibleKeys.includes(e.key)) renderCart();
+    });
   </script>
 </body>
 </html>
