@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Office Chairs - V’Best Luxury Interiors</title>
+  <title>sideboard - V’Best Luxury Interiors</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -175,11 +175,11 @@
 </head>
 <body>
 
-  <h1>🪑 Office Chairs</h1>
+  <h1>D+C+D=Mirror</h1>
   <div id="count">Loading...</div>
   <div id="products" class="product-grid"></div>
 
-  <a href="chair.html" class="back">⬅ Back to Chair Categories</a>
+  <a href="chair.html" class="back">⬅ Back to Categories</a>
 
   <!-- 🛒 Cart Icon -->
   <div class="cart-icon" onclick="window.location.href='cart.html'">
@@ -227,7 +227,7 @@
           const catNorm = (category||"").trim().toLowerCase().replace(/\s+/g,'');
           const typeNorm = (type||"").trim().toLowerCase().replace(/\s+/g,'');
 
-          if (catNorm === "officechair" && typeNorm === "officechair") {
+          if (catNorm === "sideboard" && typeNorm === "sideboard") {
             count++;
 
             // treat empty/whitespace or literal "sold" (case-insensitive) as sold
@@ -270,13 +270,13 @@
 
             // inquiry href fallback logic (same behavior as before)
             const whatsappTrim = (whatsapp||"").trim();
-            let inquiryHref = `https://wa.me/2347080535579?text=${encodeURIComponent("Hello, I'm interested in " + name + " (Office Chair) priced at " + price)}`;
+            let inquiryHref = `https://wa.me/2347080535579?text=${encodeURIComponent("Hello, I'm interested in " + name + " (sideboard) priced at " + price)}`;
             if (whatsappTrim !== "") {
               if (whatsappTrim.startsWith("http") || whatsappTrim.startsWith("wa.me") || whatsappTrim.startsWith("https://") || whatsappTrim.startsWith("http://")) {
                 inquiryHref = whatsappTrim;
               } else if (whatsappTrim.startsWith("+") || whatsappTrim.match(/^\d+$/)) {
                 const number = whatsappTrim.replace(/\D/g, "");
-                if (number) inquiryHref = `https://wa.me/${number}?text=${encodeURIComponent("Hello, I'm interested in " + name + " (Office Chair) priced at " + price)}`;
+                if (number) inquiryHref = `https://wa.me/${number}?text=${encodeURIComponent("Hello, I'm interested in " + name + " (sideboard) priced at " + price)}`;
               } else {
                 inquiryHref = `https://wa.me/2347080535579?text=${encodeURIComponent(whatsappTrim)}`;
               }
@@ -302,7 +302,7 @@
           }
         });
 
-        document.getElementById("count").textContent = `Office Chairs Available: ${count}`;
+        document.getElementById("count").textContent = `Total D+C+D=mirrors Available: ${count}`;
         updateCartCount();
       });
 

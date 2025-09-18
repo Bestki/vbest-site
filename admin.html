@@ -50,6 +50,7 @@
     <div class="top-actions">
       <div id="pendingCount" class="small">Pending: 0</div>
       <button id="btn-refresh" class="btn secondary">Refresh</button>
+      <button id="btn-clear" class="btn danger">Clear All</button>
       <button id="btn-logout" class="btn secondary">Logout</button>
     </div>
   </header>
@@ -83,12 +84,12 @@
   </div>
 
   <script type="module">
-    /*************** CONFIG - CHANGE ADMIN_PASSWORD BEFORE USE ****************/
+    /*************** CONFIG - your admin password (DO NOT change unless you want to) ****************/
     const ADMIN_PASSWORD = "best22**22";
-    /*************************************************************************/
+    /***********************************************************************************************/
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-    import { getDatabase, ref, onValue, update, get } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+    import { getDatabase, ref, onValue, update, get, remove } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAF_Fy32TmyNOAYebcRCcOLhgcKn82Xavs",
@@ -113,7 +114,9 @@
     const notifyBtn = document.getElementById('toggleNotify');
     const refreshBtn = document.getElementById('btn-refresh');
     const logoutBtn = document.getElementById('btn-logout');
+    const clearBtn = document.getElementById('btn-clear');
 
+    // state
     let allOrders = {};
     let notificationsEnabled = false;
     let firstLoad = true;
@@ -160,7 +163,7 @@
       return String(s).replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]);
     }
 
-    // render orders
+    // ---------- Render ----------
     function render() {
       const q = (searchEl.value || '').trim().toLowerCase();
       const filter = filterEl.value;
@@ -175,7 +178,11 @@
       for (const key of keys) {
         const order = allOrders[key];
         if (!order) continue;
-        const status = (order.status || 'pending').toLowerCase();
+
+        // treat missing or null status as 'pending' (display-wise)
+        const rawStatus = (order.status === undefined || order.status === null) ? 'pending' : String(order.status);
+        const status = rawStatus.toLowerCase();
+
         if (status === 'pending') pendingCount++;
 
         if (filter !== 'all' && filter !== status) continue;
@@ -196,9 +203,9 @@
             const nm = escapeHtml(it.name || it.product || 'Product');
             const qty = it.quantity || 1;
             const pr = Number(it.price || it.amount || 0) || 0;
-            if ((it.status || 'pending') === 'approved') approvedTotal += pr * qty;
-            const img = it.image ? `<img src="${escapeHtml(it.image)}" alt="${nm}" onclick="openImage('${escapeHtml(it.image)}','${nm}')">` : '';
-            const itemStatus = (it.status || 'pending').toLowerCase();
+            if ((it.status || 'pending').toString().toLowerCase() === 'approved') approvedTotal += pr * qty;
+            const img = it.image ? `<img src="${escapeHtml(it.image)}" alt="${nm}" onclick="openImage('${escapeHtml(it.image)}','${nm}')">` : `<div style="width:64px;height:64px;background:#111;border-radius:6px;"></div>`;
+            const itemStatus = (it.status || 'pending').toString().toLowerCase();
             const pill = itemStatus === 'approved' ? '<span style="color:#000;background:#27ae60;padding:4px 8px;border-radius:999px;font-weight:700">APPROVED</span>' : itemStatus === 'declined' ? '<span style="color:#fff;background:#e74c3c;padding:4px 8px;border-radius:999px;font-weight:700">DECLINED</span>' : '<span style="color:#000;background:#ffd54d;padding:4px 8px;border-radius:999px;font-weight:700">PENDING</span>';
             itemsHtml += `<div class="item-row">
               <div style="display:flex;gap:8px;align-items:center">
@@ -249,6 +256,7 @@
               <button class="btn" data-action="setlink" data-key="${escapeHtml(key)}">Save Link</button>
               <button class="btn secondary" data-action="sendwa" data-key="${escapeHtml(key)}">Send Payment Request (WA)</button>
               <button class="btn secondary" data-action="markpaid" data-key="${escapeHtml(key)}">Mark Paid</button>
+              <button class="btn" data-action="approve-all" data-key="${escapeHtml(key)}">Approve All</button>
               <button class="btn danger" data-action="delete" data-key="${escapeHtml(key)}">Delete (remove)</button>
             </div>
           </div>
@@ -260,72 +268,128 @@
       pendingCountEl.textContent = `Pending: ${pendingCount}`;
     }
 
-    // action handlers
+    // ---------- Actions ----------
     async function onActionClick(e) {
       const act = e.currentTarget.getAttribute('data-action');
       const key = e.currentTarget.getAttribute('data-key');
       if (!key) return;
-      if (act === 'approve-item' || act === 'decline-item') {
-        const idx = Number(e.currentTarget.getAttribute('data-idx'));
-        if (isNaN(idx)) return;
-        const conf = confirm(`${act === 'approve-item' ? 'Approve' : 'Decline'} this item?`);
-        if (!conf) return;
-        // load current order snapshot
-        const snap = await get(ref(db, 'orders/' + key));
-        const order = snap.val();
-        if (!order) return alert('Order not found.');
-        let newCart = Array.isArray(order.cart) ? order.cart.slice() : (order.cart ? Object.values(order.cart) : []);
-        if (!newCart[idx]) return alert('Item not found.');
-        newCart[idx].status = (act === 'approve-item') ? 'approved' : 'declined';
-        newCart[idx].updatedAt = Date.now();
-        // determine overall order status
-        const statuses = newCart.map(it => (it.status || 'pending').toLowerCase());
-        let overall = 'pending';
-        if (statuses.every(s => s === 'approved')) overall = 'approved';
-        else if (statuses.every(s => s === 'declined')) overall = 'declined';
-        else if (statuses.some(s => s === 'approved')) overall = 'partially_approved';
-        // compute approved total
-        const approvedTotal = newCart.reduce((sum,it)=> sum + ((it.status === 'approved') ? (Number(it.price||0) * Number(it.quantity||1)) : 0), 0);
-        await update(ref(db, 'orders/' + key), { cart: newCart, status: overall, approvedTotal, updatedAt: Date.now() });
-        alert('Item updated.');
-      } else if (act === 'setlink') {
-        const input = document.querySelector(`input[data-input-for="${key}"]`);
-        if (!input) return alert('Input not found.');
-        const url = input.value.trim();
-        if (!url) return alert('Paste a payment link first.');
-        await update(ref(db, 'orders/' + key), { paymentLink: url, paymentLinkSetAt: Date.now() });
-        alert('Payment link saved to order.');
-      } else if (act === 'sendwa') {
-        const snap = await get(ref(db, 'orders/' + key));
-        const order = snap.val();
-        if (!order) return alert('Order not found');
-        const phone = formatPhoneForWa(order.customer?.phone || '');
-        const approvedItems = (order.cart || []).filter(i => (i.status || 'pending') === 'approved');
-        if (approvedItems.length === 0) {
-          if (!confirm('No approved items found. Do you still want to send a message?')) return;
+      try {
+        if (act === 'approve-item' || act === 'decline-item') {
+          const idx = Number(e.currentTarget.getAttribute('data-idx'));
+          if (isNaN(idx)) return;
+          const conf = true; // no confirmation (user requested instant)
+          if (!conf) return;
+          const snap = await get(ref(db, 'orders/' + key));
+          const order = snap.val();
+          if (!order) return alert('Order not found.');
+          let newCart = Array.isArray(order.cart) ? order.cart.slice() : (order.cart ? Object.values(order.cart) : []);
+          if (!newCart[idx]) return alert('Item not found.');
+          newCart[idx].status = (act === 'approve-item') ? 'approved' : 'declined';
+          newCart[idx].updatedAt = Date.now();
+          const statuses = newCart.map(it => (it.status || 'pending').toLowerCase());
+          let overall = 'pending';
+          if (statuses.every(s => s === 'approved')) overall = 'approved';
+          else if (statuses.every(s => s === 'declined')) overall = 'declined';
+          else if (statuses.some(s => s === 'approved')) overall = 'partially_approved';
+          const approvedTotal = newCart.reduce((sum,it)=> sum + ((it.status === 'approved') ? (Number(it.price||0) * Number(it.quantity||1)) : 0), 0);
+          await update(ref(db, 'orders/' + key), { cart: newCart, status: overall, approvedTotal, updatedAt: Date.now() });
+          alert('Item updated.');
+        } else if (act === 'approve-all') {
+          // Approve all pending items in this order, skip declined ones, leave approved ones
+          const snap = await get(ref(db, 'orders/' + key));
+          const order = snap.val();
+          if (!order) return alert('Order not found.');
+          let newCart = Array.isArray(order.cart) ? order.cart.slice() : (order.cart ? Object.values(order.cart) : []);
+          if (!newCart.length) return alert('No items to approve.');
+          let changed = 0;
+          for (let i = 0; i < newCart.length; i++) {
+            const cur = (newCart[i].status || 'pending').toString().toLowerCase();
+            if (cur === 'pending') {
+              newCart[i].status = 'approved';
+              newCart[i].updatedAt = Date.now();
+              changed++;
+            }
+            // skip 'declined' and leave 'approved' as-is
+          }
+          const statuses = newCart.map(it => (it.status || 'pending').toLowerCase());
+          let overall = 'pending';
+          if (statuses.every(s => s === 'approved')) overall = 'approved';
+          else if (statuses.every(s => s === 'declined')) overall = 'declined';
+          else if (statuses.some(s => s === 'approved')) overall = 'partially_approved';
+          const approvedTotal = newCart.reduce((sum,it)=> sum + ((it.status === 'approved') ? (Number(it.price||0) * Number(it.quantity||1)) : 0), 0);
+          await update(ref(db, 'orders/' + key), { cart: newCart, status: overall, approvedTotal, updatedAt: Date.now() });
+          alert(`Approved ${changed} pending item(s) in this order.`);
+        } else if (act === 'setlink') {
+          const input = document.querySelector(`input[data-input-for="${key}"]`);
+          if (!input) return alert('Input not found.');
+          const url = input.value.trim();
+          if (!url) return alert('Paste a payment link first.');
+          await update(ref(db, 'orders/' + key), { paymentLink: url, paymentLinkSetAt: Date.now() });
+          alert('Payment link saved to order.');
+        } else if (act === 'sendwa') {
+          const snap = await get(ref(db, 'orders/' + key));
+          const order = snap.val();
+          if (!order) return alert('Order not found');
+          const phone = formatPhoneForWa(order.customer?.phone || '');
+          const approvedItems = (order.cart || []).filter(i => (i.status || 'pending').toString().toLowerCase() === 'approved');
+          if (approvedItems.length === 0) {
+            if (!confirm('No approved items found. Do you still want to send a message?')) return;
+          }
+          let itemsText = approvedItems.map(it => `${it.name} x${it.quantity||1} (₦${Number(it.price||0).toLocaleString()})`).join('\n');
+          const link = order.paymentLink || '';
+          let message = `Hello ${order.customer?.name || ''}, your order ${key}:\n\n${itemsText}\n\nApproved total: ₦${Number(order.approvedTotal||0).toLocaleString()}\n`;
+          if (link) message += `\nPay here: ${link}\n`;
+          message += `\nReply if you have questions.`;
+          if (!phone) return alert('Customer phone missing or invalid.');
+          const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+          window.open(waUrl,'_blank');
+          await update(ref(db, 'orders/' + key), { paymentRequestedAt: Date.now() });
+        } else if (act === 'markpaid') {
+          if (!confirm('Mark this order as PAID?')) return;
+          await update(ref(db, 'orders/' + key), { status: 'paid', paidAt: Date.now() });
+          alert('Order marked as paid.');
+        } else if (act === 'delete') {
+          if (!confirm('Delete this order from database? This cannot be undone.')) return;
+          await remove(ref(db, 'orders/' + key));
+          alert('Order deleted.');
         }
-        let itemsText = approvedItems.map(it => `${it.name} x${it.quantity||1} (₦${Number(it.price||0).toLocaleString()})`).join('\n');
-        const link = order.paymentLink || '';
-        let message = `Hello ${order.customer?.name || ''}, your order ${key}:\n\n${itemsText}\n\nApproved total: ₦${Number(order.approvedTotal||0).toLocaleString()}\n`;
-        if (link) message += `\nPay here: ${link}\n`;
-        message += `\nReply if you have questions.`;
-        if (!phone) return alert('Customer phone missing or invalid.');
-        const waUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-        window.open(waUrl,'_blank');
-        await update(ref(db, 'orders/' + key), { paymentRequestedAt: Date.now() });
-      } else if (act === 'markpaid') {
-        if (!confirm('Mark this order as PAID?')) return;
-        await update(ref(db, 'orders/' + key), { status: 'paid', paidAt: Date.now() });
-        alert('Order marked as paid.');
-      } else if (act === 'delete') {
-        if (!confirm('Delete this order from database? This cannot be undone.')) return;
-        // remove by setting null
-        await update(ref(db, 'orders/' + key), null);
-        alert('Order deleted.');
+      } catch (err) {
+        console.error('Action error', err);
+        alert('Operation failed. See console for details.');
       }
     }
 
-    // real-time listener
+    // ---------- Clear processed orders ----------
+    async function clearAllProcessed() {
+      if (!confirm('Clear all processed orders? This will permanently delete all orders that are NOT PENDING (approved, declined, paid, partially_approved). Proceed?')) return;
+      clearBtn.disabled = true;
+      clearBtn.textContent = 'Clearing...';
+      try {
+        const keys = Object.keys(allOrders || {});
+        const toDelete = keys.filter(k => {
+          // treat missing/null status as 'pending' (keep them)
+          const raw = (allOrders[k] && (allOrders[k].status === undefined || allOrders[k].status === null)) ? 'pending' : (allOrders[k] && allOrders[k].status) || '';
+          const s = String(raw).toLowerCase();
+          return s !== 'pending';
+        });
+        if (toDelete.length === 0) {
+          alert('No processed orders to clear.');
+          return;
+        }
+        const promises = toDelete.map(k => remove(ref(db, 'orders/' + k)).then(()=>k).catch(err => { console.error('delete failed', k, err); return null; }));
+        const results = await Promise.all(promises);
+        const deleted = results.filter(r => r).length;
+        alert(`Cleared ${deleted} processed order(s).`);
+      } catch (err) {
+        console.error('clearAll error', err);
+        alert('Error clearing orders. See console.');
+      } finally {
+        clearBtn.disabled = false;
+        clearBtn.textContent = 'Clear All';
+      }
+    }
+
+    // ---------- Real-time listening ----------
     function startListening() {
       onValue(ordersRef, (snap) => {
         const data = snap.val() || {};
@@ -336,7 +400,9 @@
           for (const k of currentKeys) {
             if (!prevKeys.has(k)) {
               const o = data[k];
-              if (o && (o.status || 'pending') === 'pending') notify('New order', `Order ${k} from ${o.customer?.name || 'customer'}`);
+              // notify only for new pending orders (treat missing status as pending)
+              const st = ((o && (o.status === undefined || o.status === null)) ? 'pending' : (o && o.status) || '').toString().toLowerCase();
+              if (st === 'pending') notify('New order', `Order ${k} from ${o.customer?.name || 'customer'}`);
             }
           }
         }
@@ -345,7 +411,7 @@
       });
     }
 
-    // login gate
+    // ---------- Login gate ----------
     async function login() {
       try {
         const pw = prompt('Enter admin password:');
@@ -359,6 +425,7 @@
       return true;
     }
 
+    // ---------- UI bindings ----------
     notifyBtn.addEventListener('click', async () => {
       const allowed = await requestNotifications();
       notificationsEnabled = allowed;
@@ -368,6 +435,7 @@
 
     refreshBtn.addEventListener('click', () => render());
     logoutBtn.addEventListener('click', () => { if (confirm('Log out admin view?')) location.reload(); });
+    clearBtn.addEventListener('click', clearAllProcessed);
 
     searchEl.addEventListener('input', () => render());
     filterEl.addEventListener('change', () => render());
