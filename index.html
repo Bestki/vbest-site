@@ -51,7 +51,7 @@
     .search-bar input::placeholder { color:#555; }
 
     /* Categories - FORCE 2 columns on every device */
-       .categories {
+    .categories {
       margin: 20px auto;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -88,10 +88,10 @@
 
     /* ================= Reviews (placed under logo) ================= */
     .vbest-highrev { margin-top: 8px; padding: 12px; background: var(--bg); color: var(--text); box-sizing:border-box; }
-    .vbest-highlights { display:flex; justify-content:space-between; gap:12px; align-items:center; max-width:1160px; margin: 6px auto 14px; flex-wrap:wrap; }
-    .vbest-hi { display:flex; align-items:center; gap:10px; flex:1 1 0; min-width:150px; text-align:left; }
-    .vbest-icon { width:44px; height:44px; border-radius:10px; background:rgba(255,255,255,0.02); display:flex; align-items:center; justify-content:center; font-size:40px; color:var(--accent); }
-    .vbest-hi-text { font-weight:700; font-size:25px; color:var(--text); }
+    .vbest-highlights { display:flex; justify-content:space-between; gap:12px; align-items:center; max-width:1160px; margin: 6px auto 14px; flex-wrap:nowrap; }
+    .vbest-hi { display:flex; align-items:center; gap:10px; flex:1 1 0; min-width:120px; text-align:left; }
+    .vbest-icon { width:44px; height:44px; border-radius:10px; background:rgba(255,255,255,0.02); display:flex; align-items:center; justify-content:center; font-size:22px; color:var(--accent); }
+    .vbest-hi-text { font-weight:700; font-size:14px; color:var(--text); }
 
     /* Reviews layout */
     .vbest-reviews { max-width:1160px; margin: 6px auto 0; padding: 0 6px 0; box-sizing:border-box; text-align:left; }
@@ -175,6 +175,110 @@
       .vbest-review-text { font-size:15px; }
     }
     /* no media rule to collapse categories; they stay 2 columns always as requested */
+
+    /* ---------------------- ADDED: force desktop-like look on phones ---------------------- */
+    html, body {
+      -webkit-text-size-adjust: 100%; /* prevent automatic phone text inflation */
+      -ms-text-size-adjust: 100%;
+    }
+
+    /* On small screens override the clamp() responsive sizes to fixed desktop sizes */
+    @media (max-width: 900px) {
+      /* Keep header spacing same as desktop */
+      header { padding: 40px 20px 10px !important; }
+      .logo img { max-height: 250px !important; }
+
+      /* Force featured text sizes to desktop values */
+      .rewrite-side h3 { font-size: 22px !important; }
+      .rewrite-side h2 { font-size: 34px !important; }
+      .rewrite-side p { font-size: 18px !important; }
+
+      /* Search bar consistent */
+      .search-bar { max-width: 900px !important; margin: 20px auto !important; }
+      .search-bar input { padding: 12px 15px !important; font-size: 16px !important; }
+
+      /* Keep categories two columns and the same image height */
+      .categories { max-width: 900px !important; grid-template-columns: repeat(2, 1fr) !important; gap: 6px !important; padding: 0 6px !important; margin: 20px auto !important; }
+      .category-box img { height: 180px !important; object-fit: cover !important; }
+
+      /* Reviews - make text and avatars match desktop */
+      .vbest-score-number { font-size: 26px !important; }
+      .vbest-stars { font-size: 16px !important; }
+      .vbest-count { font-size: 13px !important; }
+      .vbest-avatar { width:56px !important; height:56px !important; font-size:20px !important; flex:0 0 56px !important; }
+      .vbest-review-text { font-size:16px !important; line-height:1.6 !important; }
+      .vbest-review { padding:14px 12px !important; }
+
+      /* Keep review form width similar to desktop */
+      .vbest-review-form-container { width: 520px !important; max-width: 96% !important; left: 50% !important; transform: translateX(-50%) !important; }
+
+      /* Search result images: keep desktop sizing */
+      #searchResults .result img { width: 140px !important; height: 90px !important; }
+
+      /* Footer: keep the desktop spacing */
+      .shilpi-footer { padding: 40px 20px !important; }
+
+      /* Minor UI sanity */
+      .vbest-list, #searchResults { max-width: 900px !important; margin: 10px auto !important; }
+
+      /* Prevent buttons or elements from shrinking below desktop size */
+      button, input, select, textarea {
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+      }
+    }
+    /* ---------------------- END ADDED OVERRIDES ---------------------- */
+
+    /* ---------------------- NEW: force the three highlights (under logo) to left/center/right ---------------------- */
+    /* This is the requested change: aligns the three .vbest-hi boxes exactly left / center / right */
+    .vbest-highlights {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      max-width: 1160px;
+      margin: 6px auto 14px;
+      gap: 12px;
+      flex-wrap: nowrap;
+    }
+    .vbest-highlights .vbest-hi {
+      flex: 1 1 0;
+      display: flex;
+      align-items: center;
+      min-width: 90px;
+    }
+    .vbest-highlights .vbest-hi:first-child  { justify-content: flex-start; text-align:left; padding-left:6px; }
+    .vbest-highlights .vbest-hi:nth-child(2) { justify-content: center; text-align:center; }
+    .vbest-highlights .vbest-hi:last-child   { justify-content: flex-end; text-align:right; padding-right:6px; }
+
+    /* Responsive fallback: on very narrow screens, stack but keep a similar visual order */
+    @media (max-width: 420px) {
+      .vbest-highlights { flex-wrap: wrap; }
+      .vbest-highlights .vbest-hi { flex: 1 1 100%; justify-content: center !important; text-align: center !important; padding: 6px 0 !important; }
+    }
+
+    /* ---------------------- NEW: footer bottom columns align left / center / right ---------------------- */
+    .footer-bottom {
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: flex-start;
+      gap: 20px;
+      max-width: 1150px;
+      margin: 20px auto 0;
+      padding: 0 12px;
+      box-sizing: border-box;
+    }
+    .footer-bottom .footer-col { flex: 1 1 0; min-width: 160px; }
+    .footer-bottom .footer-col:first-child  { text-align: left; }
+    .footer-bottom .footer-col:nth-child(2) { text-align: center; }
+    .footer-bottom .footer-col:last-child   { text-align: right; }
+
+    /* On small screens stack footer columns centered */
+    @media (max-width: 820px) {
+      .footer-bottom { flex-direction: column; align-items: center; gap: 12px; }
+      .footer-bottom .footer-col { text-align: center !important; min-width: unset; width: 100%; max-width: 800px; }
+    }
+    /* ---------------------- END footer alignment ---------------------- */
+
   </style>
 </head>
 <body>
