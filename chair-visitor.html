@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>sofa - V’Best Luxury Interiors</title>
+  <title> Chairs - V’Best Luxury Interiors</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -175,7 +175,7 @@
 </head>
 <body>
 
-  <h1>Egypt Sofa</h1>
+  <h1>plastic & Visitor Chairs</h1>
   <div id="count">Loading...</div>
   <div id="products" class="product-grid"></div>
 
@@ -227,7 +227,7 @@
           const catNorm = (category||"").trim().toLowerCase().replace(/\s+/g,'');
           const typeNorm = (type||"").trim().toLowerCase().replace(/\s+/g,'');
 
-          if (catNorm === "egypt" && typeNorm === "egypt") {
+          if (catNorm === "visitors" && typeNorm === "visitors") {
             count++;
 
             // treat empty/whitespace or literal "sold" (case-insensitive) as sold
@@ -270,13 +270,13 @@
 
             // inquiry href fallback logic (same behavior as before)
             const whatsappTrim = (whatsapp||"").trim();
-            let inquiryHref = `https://wa.me/2347080535579?text=${encodeURIComponent("Hello, I'm interested in " + name + " (Egypt Sofa) priced at " + price)}`;
+            let inquiryHref = `https://wa.me/2347080535579?text=${encodeURIComponent("Hello, I'm interested in " + name + " (chair) priced at " + price)}`;
             if (whatsappTrim !== "") {
               if (whatsappTrim.startsWith("http") || whatsappTrim.startsWith("wa.me") || whatsappTrim.startsWith("https://") || whatsappTrim.startsWith("http://")) {
                 inquiryHref = whatsappTrim;
               } else if (whatsappTrim.startsWith("+") || whatsappTrim.match(/^\d+$/)) {
                 const number = whatsappTrim.replace(/\D/g, "");
-                if (number) inquiryHref = `https://wa.me/${number}?text=${encodeURIComponent("Hello, I'm interested in " + name + " (Egypt sofa) priced at " + price)}`;
+                if (number) inquiryHref = `https://wa.me/${number}?text=${encodeURIComponent("Hello, I'm interested in " + name + " (chair) priced at " + price)}`;
               } else {
                 inquiryHref = `https://wa.me/2347080535579?text=${encodeURIComponent(whatsappTrim)}`;
               }
@@ -294,7 +294,7 @@
                 ${starsHtml}
                 <div class="btn-row">
                   <a class="inquiry-btn" href="${escapeAttr(inquiryHref)}" target="_blank">📩 Inquiry</a>
-                  <button class="buy-btn" ${addDisabled} onclick="addToCart('${escJS(name)}','${escJS((discount && discount.trim() !== "") ? discount : price)}','${imageArgForAdd}')">🛒 Add to cart</button>
+                  <button class="buy-btn" ${addDisabled} onclick="addToCart('${escJS(name)}','${escJS((discount && discount.trim() !== "") ? discount : price)}','${imageArgForAdd}')">🛒 Add</button>
                 </div>
               </div>
             `;
@@ -302,7 +302,7 @@
           }
         });
 
-        document.getElementById("count").textContent = `Total Egypt Sofa Available: ${count}`;
+        document.getElementById("count").textContent = `Total Chairs Available: ${count}`;
         updateCartCount();
       });
 
