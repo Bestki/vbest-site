@@ -1,276 +1,400 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>V'Best Luxury Interiors</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
+    /* ================= Base (very black theme) ================= */
+    :root {
+      --bg: #000;
+      --panel: #111;
+      --muted: #bcdfe6;
+      --accent: #25d366;
+      --text: #e8fbf6;
+    }
+    html,body { height:100%; }
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background: #000;
+      background: var(--bg);
+      color: var(--text);
       text-align: center;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
     }
 
+    /* Header */
     header {
-      background: linear-gradient(90deg, #1a1a1a, #333);
-      color: white;
-      padding: 40px 20px 20px;
+      background: var(--bg);
+      color: var(--text);
+      padding: 40px 20px 10px;
       position: relative;
     }
-    header h1 {
-      margin: 0;
-      font-size: 28px;
-      font-weight: bold;
-      line-height: 1.4;
-      padding-top: 110px;
-    }
-    header p {
-      margin: 8px 0 0;
-      font-size: 16px;
-      line-height: 1.5;
-    }
-.logo {
-  text-align: center;   /* keeps logo centered */
-  margin: 15px auto;
-}
+    .logo { text-align:center; margin: 12px auto; }
+    .logo img { max-width:100%; height:auto; max-height:250px; border-radius:6px; object-fit:contain; display:block; margin:0 auto; }
 
-.logo img {
-  max-width: 100%;      /* logo shrinks with screen size */
-  height: auto;         /* keeps natural aspect ratio */
-  max-height: 250px;    /* limit height so it doesn’t cover header */
-  border-radius: 6px;
-  display: block;
-  margin: 0 auto;
-  object-fit: contain;  /* ensures full image is always visible */
-}
+    /* Featured / rewrite area (make large & consistent) */
+    .rewrite-side { text-align:center; margin: 26px 0; }
+    .rewrite-side h3 { font-size: clamp(18px, 3.2vw, 22px); color: #00aaff; margin: 6px 0 2px; font-weight:700; }
+    .rewrite-side h2 { font-size: clamp(22px, 4.2vw, 34px); margin: 0 0 6px; font-weight:800; }
+    .rewrite-side p { font-size: clamp(16px, 2.2vw, 18px); color: #18a93b; margin: 0; }
 
-    .search-bar {
-      margin: 20px auto;
-      max-width: 500px;
-      padding: 0 15px;
-    }
-    .search-bar input {
-      width: 100%;
-      padding: 12px 15px;
-      border-radius: 6px;
-      border: none;
-      font-size: 16px;
-      outline: none;
-      background: #fff;
-      color: #000;
-    }
-    .search-bar input::placeholder {
-      color: #555;
-    }
+    /* Search bar */
+    .search-bar { margin: 20px auto; max-width: 500px; padding: 0 15px; }
+    .search-bar input { width:100%; padding:12px 15px; border-radius:6px; border:none; font-size:16px; outline:none; background:#fff; color:#000; }
+    .search-bar input::placeholder { color:#555; }
 
+    /* Categories - FORCE 2 columns on every device */
     .categories {
       margin: 20px auto;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 3px;
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important; /* always two columns */
+      gap: 8px;
       max-width: 900px;
       padding: 0;
+      box-sizing: border-box;
     }
-
     .category-box {
-      background: #111;
-      border-radius: 6px;
-      padding: 5px;
+      background: var(--panel);
+      border-radius:6px;
+      overflow:hidden;
+      display:block;
+      text-decoration:none;
+      color:inherit;
+      width:100%;
     }
-
-    .category-box img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 4px;
-      display: block;
-    }
-
-    .categories a {
-      display: block;
-      padding: 8px 10px;
-      margin-top: 6px;
-      background: #fff;
-      color: #000;
-      text-decoration: none;
-      border-radius: 6px;
-      font-weight: bold;
-      font-size: 13px;
-    }
-    .categories a:hover {
-      background: #ddd;
-    }
+    .category-box img { width:100%; height:180px; object-fit:cover; display:block; }
+    .category-box span { display:block; padding:8px 10px; margin-top:6px; background:#fff; color:#000; border-radius:0 0 6px 6px; font-weight:700; font-size:13px; text-align:center; }
 
     /* search results styling (keeps page look) */
-    #searchResults {
-      max-width: 900px;
-      margin: 10px auto 20px;
-      text-align: left;
-    }
+    #searchResults { max-width:900px; margin:10px auto 20px; text-align:left; }
     #searchResults .result {
-      background: #111;
+      background: var(--panel);
       color: #fff;
-      padding: 12px;
-      margin-bottom: 10px;
-      border-radius: 6px;
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
+      padding:12px;
+      margin-bottom:10px;
+      border-radius:6px;
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
     }
-    #searchResults .result img {
-      width: 140px;
-      height: 90px;
-      object-fit: cover;
-      border-radius: 4px;
-    }
-    #searchResults .meta { flex: 1; }
-    #searchResults .meta strong { display:block; margin-bottom:6px; font-size:16px; }
+    #searchResults .result img { width:140px; height:90px; object-fit:cover; border-radius:4px; }
+    #searchResults .meta { flex:1; }
     #searchResults .wa {
-      display:inline-block;
-      margin-top:8px;
-      padding:8px 10px;
-      background:#25d366;
-      color:#fff;
-      text-decoration:none;
-      border-radius:5px;
-      font-weight:700;
+      display:inline-block; margin-top:8px; padding:8px 10px; background:var(--accent); color:#fff; text-decoration:none; border-radius:5px; font-weight:700;
     }
 
-    footer {
+    /* ================= Reviews (placed under logo) ================= */
+    .vbest-highrev { margin-top: 8px; padding: 12px; background: var(--bg); color: var(--text); box-sizing:border-box; }
+    .vbest-highlights { display:flex; justify-content:space-between; gap:12px; align-items:center; max-width:1160px; margin: 6px auto 14px; flex-wrap:wrap; }
+    .vbest-hi { display:flex; align-items:center; gap:10px; flex:1 1 0; min-width:150px; text-align:left; }
+    .vbest-icon { width:44px; height:44px; border-radius:10px; background:rgba(255,255,255,0.02); display:flex; align-items:center; justify-content:center; font-size:40px; color:var(--accent); }
+    .vbest-hi-text { font-weight:700; font-size:25px; color:var(--text); }
+
+    /* Reviews layout */
+    .vbest-reviews { max-width:1160px; margin: 6px auto 0; padding: 0 6px 0; box-sizing:border-box; text-align:left; }
+    .vbest-summary { text-align:center; margin-bottom:12px; }
+    .vbest-score-number { font-size:26px; font-weight:800; color:#fff; line-height:1; }
+    .vbest-stars { color:#ffd54a; font-size:16px; margin:4px 0; }
+    .vbest-count { color:var(--muted); font-size:13px; margin-bottom:8px; }
+
+    .vbest-bars { max-width:520px; margin:0 auto 8px; text-align:left; }
+    .vbest-bar-row { display:flex; align-items:center; gap:10px; margin:6px 0; }
+    .vbest-bar-label { width:18px; color:#cfeff6; font-weight:700; }
+    .vbest-bar { flex:1; height:10px; background:rgba(255,255,255,0.04); border-radius:6px; overflow:hidden; }
+    .vbest-bar-fill { height:100%; background:linear-gradient(90deg,var(--accent),#1fbf59); border-radius:6px; width:0%; }
+    .vbest-bar-num { width:36px; text-align:right; color:#9fd2d4; font-size:13px; }
+
+    .vbest-write-btn { margin-top:8px; padding:8px 14px; background:var(--bg); color:#fff; border:2px solid #fff; border-radius:8px; cursor:pointer; font-weight:700; }
+    .vbest-write-btn:hover { background:#111; }
+
+    .vbest-list { max-width:900px; margin:12px auto 0; }
+    .vbest-review { display:flex; gap:12px; padding:14px 12px; border-bottom:1px solid rgba(255,255,255,0.03); align-items:flex-start; background: rgba(255,255,255,0.01); border-radius:8px; margin-bottom:10px; }
+    .vbest-avatar { width:56px; height:56px; border-radius:50%; background:#ffd54a; color:#111; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:20px; flex:0 0 56px; }
+    .vbest-review-body { flex:1; }
+    .vbest-review-meta { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:8px; }
+    .vbest-review-meta strong { color:#fff; font-size:15px; }
+    .vbest-verified { color:var(--accent); font-size:14px; }
+    .vbest-date { color:#9fd2d4; font-size:12px; margin-left:6px; }
+    .vbest-review-stars { color:#ffd54a; margin-left:auto; font-size:14px; }
+    .vbest-review-text { color:#cfeff6; margin:6px 0 0; font-size:16px; line-height:1.6; } /* larger text for clarity */
+
+    .vbest-list-actions { text-align:center; margin-top:12px; }
+    .vbest-see-btn { padding:9px 16px; background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--text); border-radius:8px; cursor:pointer; }
+    .vbest-see-btn:hover { background:rgba(255,255,255,0.02); }
+
+    /* Floating review form (larger, clearer) */
+    .vbest-review-form-container {
+      position:fixed; display:none; z-index:4000; left:50%; transform:translateX(-50%); bottom:22px; width:520px; max-width:96%;
+      background:#07121a; border:1px solid rgba(255,255,255,0.06); padding:16px; border-radius:10px; box-shadow:0 12px 30px rgba(0,0,0,0.6);
+      color:var(--text); box-sizing:border-box;
+    }
+    .vbest-form-row { margin-bottom:10px; text-align:left; }
+    .vbest-form-row label { display:block; font-size:13px; color:#b8dfe6; margin-bottom:6px; }
+    .vbest-form-row input[type="text"], .vbest-form-row select, .vbest-form-row textarea {
+      width:100%; padding:10px 12px; border-radius:6px; border:1px solid rgba(255,255,255,0.06); background:#07121a; color:var(--text); font-size:15px; box-sizing:border-box;
+    }
+    .vbest-form-row textarea { resize:vertical; min-height:96px; }
+    .vbest-form-actions { display:flex; gap:8px; justify-content:flex-end; align-items:center; margin-top:6px; }
+    .vbest-submit-btn { background:var(--accent); border:0; color:#052016; padding:10px 14px; border-radius:6px; font-weight:700; cursor:pointer; }
+    .vbest-cancel-btn { background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--text); padding:8px 10px; border-radius:6px; cursor:pointer; }
+    .vbest-form-msg { margin-top:8px; font-size:14px; color:#bfe9de; }
+
+    /* Footer (kept very black) */
+    .shilpi-footer {
       background: #111;
-      padding: 20px;
-      margin-top: 20px;
-      font-size: 14px;
       color: #eee;
-      line-height: 1.6;
+      padding: 40px 20px;
+      font-family: Arial, sans-serif;
+      text-align: center;
     }
-    footer a {
-      color: #25d366;
-      text-decoration: none;
-      font-weight: bold;
+    .shilpi-footer .about h2 { font-size:22px; font-weight:bold; color:#fff; margin-bottom:6px; }
+    .shilpi-footer .tagline { font-size:14px; color:#bbb; }
+    .shilpi-footer .about-text { font-size:13px; max-width:600px; margin:0 auto 15px; line-height:1.6; }
+    .social-icons { display:flex; justify-content:center; gap:15px; margin-top:10px; }
+    .social-icons a { color:var(--accent); font-size:16px; text-decoration:none; transition:0.3s; }
+    .social-icons a:hover { color:#fff; }
+    .footer-bottom { display:flex; flex-wrap:wrap; justify-content:space-between; margin-top:20px; text-align:left; gap:20px; max-width:1150px; margin-left:auto; margin-right:auto; }
+    .footer-col { flex:1; min-width:200px; }
+    .footer-col h3 { font-size:16px; margin-bottom:10px; color:#fff; }
+    .footer-col ul { list-style:none; padding:0; margin:0; }
+    .footer-col ul li { font-size:14px; margin:4px 0; }
+    .accordion-btn { background:none; border:none; font-size:14px; font-weight:bold; color:var(--accent); cursor:pointer; padding:6px 0; text-align:left; width:100%; }
+    .accordion-content { display:none; font-size:13px; margin-bottom:10px; line-height:1.5; }
+
+    .footer-extra { margin-top:25px; font-size:14px; line-height:1.6; }
+    .footer-extra a { color:var(--accent); font-weight:bold; text-decoration:none; }
+    .footer-extra a:hover { color:#fff; }
+
+    /* Responsive tweaks - we still keep categories 2 columns */
+    @media (max-width: 820px) {
+      .vbest-review-form-container { width:94%; left:3%; transform:none; bottom:10px; }
+      .vbest-avatar { width:48px; height:48px; font-size:18px; }
+      .vbest-review-text { font-size:15px; }
     }
+    /* no media rule to collapse categories; they stay 2 columns always as requested */
   </style>
 </head>
 <body>
 
+  <!-- ================= Header with logo ================= -->
   <header>
     <div class="logo">
       <img src="https://i.postimg.cc/X7mNqGh5/IMG-20250822-WA0058.jpg" alt="V'Best Logo">
     </div>
-<div style="text-align: center; margin: 30px 0;">
-  <h3 style="color: blue; font-weight: bold;">Featured Collection</h3>
-  <h2 style="font-weight: bold;">Curated Favorites</h2>
-  <p style="color: green;">
-    Explore our top picks, chosen for their outstanding quality and timeless design
-  </p>
-</div>
-    <p>We import carefully selected products from reputable suppliers around the world, ensuring stylish, durable, and comfortable solutions for homes, offices, schools, and places of worship.</p>
+
+    <!-- ===== Highlights + Reviews (placed directly under logo) ===== -->
+    <div class="vbest-highrev" aria-label="Highlights and reviews">
+      <!-- Highlights -->
+      <div class="vbest-highlights" role="group" aria-label="Site highlights">
+        <div class="vbest-hi">
+          <div class="vbest-icon"><i class="fa-solid fa-certificate" aria-hidden="true"></i></div>
+          <div class="vbest-hi-text">100% Authentic Products</div>
+        </div>
+
+        <div class="vbest-hi">
+          <div class="vbest-icon"><i class="fa-solid fa-truck-fast" aria-hidden="true"></i></div>
+          <div class="vbest-hi-text">Fast Delivery</div>
+        </div>
+
+        <div class="vbest-hi">
+          <div class="vbest-icon"><i class="fa-solid fa-headset" aria-hidden="true"></i></div>
+          <div class="vbest-hi-text">Quick Customer Support</div>
+        </div>
+      </div>
+
+      <!-- Reviews: summary + 2 visible reviews + see more + write button -->
+      <div class="vbest-reviews" aria-label="Customer reviews">
+        <div class="vbest-summary" role="region" aria-live="polite">
+          <div class="vbest-score">
+            <div class="vbest-score-number" id="vbest-score-number">4.89</div>
+            <div class="vbest-stars" aria-hidden="true">★★★★★</div>
+            <div class="vbest-count" id="vbest-count">9 reviews</div>
+          </div>
+
+          <div class="vbest-bars" aria-hidden="true">
+            <div class="vbest-bar-row"><span class="vbest-bar-label">5</span>
+              <div class="vbest-bar"><div class="vbest-bar-fill" id="vbest-bar-5" style="width:89%"></div></div>
+              <span class="vbest-bar-num" id="vbest-num-5">(8)</span>
+            </div>
+            <div class="vbest-bar-row"><span class="vbest-bar-label">4</span>
+              <div class="vbest-bar"><div class="vbest-bar-fill" id="vbest-bar-4" style="width:11%"></div></div>
+              <span class="vbest-bar-num" id="vbest-num-4">(1)</span>
+            </div>
+            <div class="vbest-bar-row"><span class="vbest-bar-label">3</span>
+              <div class="vbest-bar"><div class="vbest-bar-fill" id="vbest-bar-3" style="width:0%"></div></div>
+              <span class="vbest-bar-num" id="vbest-num-3">(0)</span>
+            </div>
+            <div class="vbest-bar-row"><span class="vbest-bar-label">2</span>
+              <div class="vbest-bar"><div class="vbest-bar-fill" id="vbest-bar-2" style="width:0%"></div></div>
+              <span class="vbest-bar-num" id="vbest-num-2">(0)</span>
+            </div>
+            <div class="vbest-bar-row"><span class="vbest-bar-label">1</span>
+              <div class="vbest-bar"><div class="vbest-bar-fill" id="vbest-bar-1" style="width:0%"></div></div>
+              <span class="vbest-bar-num" id="vbest-num-1">(0)</span>
+            </div>
+          </div>
+
+          <button class="vbest-write-btn" id="vbestWriteReview" type="button">Write a Review</button>
+        </div>
+
+        <div class="vbest-list" aria-live="polite">
+          <!-- Default placeholder reviews (shown if DB empty or fewer than needed) -->
+          <article class="vbest-review" id="vbest-default-review-1">
+            <div class="vbest-avatar">E</div>
+            <div class="vbest-review-body">
+              <div class="vbest-review-meta">
+                <strong>mrs blessing</strong>
+                <span class="vbest-verified" title="Verified buyer">✔️</span>
+                <small class="vbest-date">2025-06-12</small>
+                <div class="vbest-review-stars">★★★★★</div>
+              </div>
+              <p class="vbest-review-text">V’Best Luxury Interiors delivers nothing but the best! Their products are top quality, negotiable, and I was amazed by how fast my order arrived. Highly recommend!</p>
+            </div>
+          </article>
+
+          <article class="vbest-review" id="vbest-default-review-2">
+            <div class="vbest-avatar">J</div>
+            <div class="vbest-review-body">
+              <div class="vbest-review-meta">
+                <strong>John idow</strong>
+                <span class="vbest-date">2025-01-08</span>
+                <div class="vbest-review-stars">★★★★★</div>
+              </div>
+              <p class="vbest-review-text">Beautiful finish and prompt delivery. The sofa fits perfectly in my living room.</p>
+            </div>
+          </article>
+
+          <!-- Approved reviews container (JS will populate up to 2 visible + the rest hidden) -->
+          <div id="vbest-approved-visible"></div>
+          <div id="vbest-approved-hidden" style="display:none;"></div>
+
+          <div class="vbest-list-actions">
+            <button id="vbestSeeMore" class="vbest-see-btn" type="button" style="display:none;">See More Reviews</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ===== End highlights + reviews ===== -->
+
+    <!-- Featured text area (rewrite-side) -->
+    <div class="rewrite-side">
+      <h3>Featured Collection</h3>
+      <h2>₦/$</h2>
+      <p>Explore our top picks, chosen for their outstanding quality and timeless design</p>
+    </div>
+
+    <p style="color: var(--muted); margin-top:6px;">We import carefully selected products from reputable suppliers around the world, ensuring stylish, durable, and comfortable solutions for homes, offices, schools, and places of worship.</p>
   </header>
 
+  <!-- ===== Search bar ===== -->
   <section class="search-bar">
     <input type="text" id="searchInput" placeholder="🔎 Search for what you want...">
   </section>
 
-  <!-- Google Sheet results appear here -->
+  <!-- ===== Search results placeholder ===== -->
   <section id="searchResults"></section>
-<section class="categories" id="categoryList">
-  <a href="sofa.html" class="category-box" style="display:block;padding:0;background:transparent;text-decoration:none;color:inherit;">
-    <img src="https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg" alt="Sofa">
-    <span style="display:block;padding:8px 10px;margin-top:6px;background:#fff;color:#000;text-decoration:none;border-radius:6px;font-weight:bold;font-size:13px;">🛋 All Types of Sofas</span>
-  </a>
 
-  <a href="bed.html" class="category-box" style="display:block;padding:0;background:transparent;text-decoration:none;color:inherit;">
-    <img src="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg" alt="Bed">
-    <span style="display:block;padding:8px 10px;margin-top:6px;background:#fff;color:#000;text-decoration:none;border-radius:6px;font-weight:bold;font-size:13px;">🛏 All Types of Beds</span>
-  </a>
+  <!-- ===== Categories (always 2 columns) ===== -->
+  <section class="categories" id="categoryList">
+    <a href="sofa.html" class="category-box"><img src="https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg" alt="Sofa"><span>🛋 All Types of Sofas</span></a>
+    <a href="bed.html" class="category-box"><img src="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg" alt="Bed"><span>🛏 All Types of Beds</span></a>
+    <a href="chair.html" class="category-box"><img src="https://i.postimg.cc/7LsSR4Pb/1756750824783.jpg" alt="Chair"><span>🪑 All Types of Chairs</span></a>
+    <a href="dining.html" class="category-box"><img src="https://i.postimg.cc/Sxm8NRJJ/1756750928967.jpg" alt="Dining"><span>🍽 All Types of Dining 2–8 Seaters</span></a>
+    <a href="centertable.html" class="category-box"><img src="https://i.postimg.cc/Px5XJLDr/IMG-20250822-WA0064.jpg" alt="Center Table"><span>🪞 All Types of Center Tables</span></a>
+    <a href="office.html" class="category-box"><img src="https://i.postimg.cc/vBybRLq7/Workstation-348.png" alt="Office"><span>All types of Office furniture 🪑🖥️</span></a>
+    <a href="outdoor.html" class="category-box"><img src="https://i.postimg.cc/yxGGYGDw/Ag-ACkq-HWp-Pyzt-HZ89-Sp-Vx-Y.jpg" alt="Outdoors & Patio"><span>🪑 All Types of Outdoors & Patio</span></a>
+    <a href="game.html" class="category-box"><img src="https://i.postimg.cc/GhBhTtX7/Magshion-Adjustable-Height-Gaming-Chair-with-Retractable-Footrest-and-Computer-Desk-Purple-2e356ae6.png" alt="Gaming"><span>🎮 All types of Gaming Chair & Table</span></a>
+    <a href="snooker.html" class="category-box"><img src="https://i.postimg.cc/7LbWQCnH/807531125-321-1024x1024.jpg" alt="Snooker & Pool"><span>all types of Snooker & Pool 🎱</span></a>
+    <a href="winbar.html" class="category-box"><img src="https://i.postimg.cc/J01rXcj7/Wine-Bar-1.webp" alt="Wine Bar"><span>All Types of Wine Bar 🍷🥂🍾</span></a>
+    <a href="sideboard.html" class="category-box"><img src="https://i.postimg.cc/BnRRj3SZ/PDINCBT32-Glossy-White-Gold-1.jpg" alt="Dining sideboard/Consoles"><span>All /Dressing mirror/Dining buffet/Consoles</span></a>
+    <a href="console.html" class="category-box"><img src="https://i.postimg.cc/d3HMkLJw/c6dcbbe659c10b00e4126e14dcd4021c.jpg" alt="TV Console"><span>📺 All Types of TV Consoles & TV Stand</span></a>
+    <a href="cabinet.html" class="category-box"><img src="https://i.postimg.cc/m2XvGMKH/71-Lqo-G6liv-L-AC-SL1500.jpg" alt="Cabinet"><span>All Types of Cabinet and wardrobe</span></a>
+    <a href="sidestool.html" class="category-box"><img src="https://i.postimg.cc/Sxrz34QC/ec8f0881dd3292db1a7655c79506473c.jpg" alt="Side Stools"><span>🪑All Types Of Side Stools</span></a>
+  </section>
 
-  <a href="chair.html" class="category-box" style="display:block;padding:0;background:transparent;text-decoration:none;color:inherit;">
-    <img src="https://i.postimg.cc/7LsSR4Pb/1756750824783.jpg" alt="Chair">
-    <span style="display:block;padding:8px 10px;margin-top:6px;background:#fff;color:#000;text-decoration:none;border-radius:6px;font-weight:bold;font-size:13px;">🪑 All Types of Chairs</span>
-  </a>
+  <!-- ===== Footer (merged, very black) ===== -->
+  <footer class="shilpi-footer">
+    <div class="shilpi-container" style="max-width:1150px;margin:0 auto;">
+      <div class="footer-extra">
+        <p>Didn’t find the exact furniture you had in mind? Simply share the reference image with us on WhatsApp — our team will guide you to the perfect match or customize it just for you.</p>
+        <p><a href="https://wa.me/2347080535579" target="_blank">💬 Chat with us on WhatsApp</a></p>
+        <p>💫 Your dream home starts here with V’Best Luxury Interiors.</p>
+      </div>
 
-  <a href="dining.html" class="category-box" style="display:block;padding:0;background:transparent;text-decoration:none;color:inherit;">
-    <img src="https://i.postimg.cc/Sxm8NRJJ/1756750928967.jpg" alt="Dining">
-    <span style="display:block;padding:8px 10px;margin-top:6px;background:#fff;color:#000;text-decoration:none;border-radius:6px;font-weight:bold;font-size:13px;">🍽 All Types of Dining 2–8 Seaters</span>
-  </a>
+      <div class="about" style="margin-top:18px;">
+        <h2>V'best Luxury Interiors</h2>
+        <p class="tagline">We're the best</p>
+        <p class="about-text">Designed to elevate your home, our premium pieces combine comfort, durability, and style that speaks volumes.</p>
 
-  <a href="centertable.html" class="category-box" style="display:block;padding:0;background:transparent;text-decoration:none;color:inherit;">
-    <img src="https://i.postimg.cc/Px5XJLDr/IMG-20250822-WA0064.jpg" alt="Center Table">
-    <span style="display:block;padding:8px 10px;margin-top:6px;background:#fff;color:#000;text-decoration:none;border-radius:6px;font-weight:bold;font-size:13px;">🪞 All Types of Center Tables</span>
-  </a>
+        <div class="social-icons" aria-label="social">
+          <a href="https://twitter.com/shilpiluxe" target="_blank" rel="noopener noreferrer">𝕏 Twitter</a>
+          <a href="https://instagram.com/shilpiluxe" target="_blank" rel="noopener noreferrer">📸 Instagram</a>
+          <a href="https://tiktok.com/@shilpiluxe" target="_blank" rel="noopener noreferrer">🎵 TikTok</a>
+        </div>
+      </div>
 
-  <a href="office.html" class="category-box" style="display:block;padding:0;background:transparent;text-decoration:none;color:inherit;">
-    <img src="https://i.postimg.cc/vBybRLq7/Workstation-348.png" alt="Office">
-    <span style="display:block;padding:8px 10px;margin-top:6px;background:#fff;color:#000;text-decoration:none;border-radius:6px;font-weight:bold;font-size:13px;">All types of Office furniture 🪑🖥️</span>
-  </a>
+      <div class="footer-bottom" style="margin-top:18px;">
+        <div class="footer-col">
+          <h3>Categories</h3>
+          <ul>
+            <li>Living Room</li><li>Bedroom</li><li>Dining Room</li><li>Home Office</li><li>Kids & Baby</li><li>Outdoor & Patio</li><li>Storage & Organization</li><li>Accent & Decor</li>
+          </ul>
+        </div>
 
-  <a href="outdoor.html" class="category-box" style="display:block;padding:0;background:transparent;text-decoration:none;color:inherit;">
-    <img src="https://i.postimg.cc/yxGGYGDw/Ag-ACkq-HWp-Pyzt-HZ89-Sp-Vx-Y.jpg" alt="Outdoors & Patio">
-    <span style="display:block;padding:8px 10px;margin-top:6px;background:#fff;color:#000;text-decoration:none;border-radius:6px;font-weight:bold;font-size:13px;">🪑 All Types of Outdoors & Patio</span>
-  </a>
+        <div class="footer-col">
+          <h3>Quick Links</h3>
+          <div class="accordion">
+            <button class="accordion-btn">About Us</button>
+            <div class="accordion-content"><p>We bring world-class premium items to elevate your lifestyle with modern and timeless designs.</p></div>
 
-  <a href="game.html" class="category-box" style="display:block;padding:0;background:transparent;text-decoration:none;color:inherit;">
-    <img src="https://i.postimg.cc/GhBhTtX7/Magshion-Adjustable-Height-Gaming-Chair-with-Retractable-Footrest-and-Computer-Desk-Purple-2e356ae6.png" alt="Gaming">
-    <span style="display:block;padding:8px 10px;margin-top:6px;background:#fff;color:#000;text-decoration:none;border-radius:6px;font-weight:bold;font-size:13px;">🎮 All types of Gaming Chair & Table</span>
-  </a>
+            <button class="accordion-btn">Privacy Policy</button>
+            <div class="accordion-content"><p>Your privacy is our priority. We never share customer data with third parties.</p></div>
 
-  <a href="snooker.html" class="category-box" style="display:block;padding:0;background:transparent;text-decoration:none;color:inherit;">
-    <img src="https://i.postimg.cc/7LbWQCnH/807531125-321-1024x1024.jpg" alt="Snooker & Pool">
-    <span style="display:block;padding:8px 10px;margin-top:6px;background:#fff;color:#000;text-decoration:none;border-radius:6px;font-weight:bold;font-size:13px;">all types of Snooker & Pool 🎱</span>
-  </a>
+            <button class="accordion-btn">Terms & Conditions</button>
+            <div class="accordion-content"><p>All purchases are subject to our company’s standard terms and conditions.</p></div>
 
-  <a href="winbar.html" class="category-box" style="display:block;padding:0;background:transparent;text-decoration:none;color:inherit;">
-    <img src="https://i.postimg.cc/J01rXcj7/Wine-Bar-1.webp" alt="Wine Bar">
-    <span style="display:block;padding:8px 10px;margin-top:6px;background:#fff;color:#000;text-decoration:none;border-radius:6px;font-weight:bold;font-size:13px;">All Types of Wine Bar 🍷🥂🍾</span>
-  </a>
+            <button class="accordion-btn">FAQ</button>
+            <div class="accordion-content"><p>Find answers to the most common questions about delivery, warranty, and payments.</p></div>
 
-  <a href="sideboard.html" class="category-box" style="display:block;padding:0;background:transparent;text-decoration:none;color:inherit;">
-    <img src="https://i.postimg.cc/BnRRj3SZ/PDINCBT32-Glossy-White-Gold-1.jpg" alt="Dining sideboard/Consoles">
-    <span style="display:block;padding:8px 10px;margin-top:6px;background:#fff;color:#000;text-decoration:none;border-radius:6px;font-weight:bold;font-size:13px;">All /Dressing mirror/Dining buffet/Consoles</span>
-  </a>
+            <button class="accordion-btn" data-action="backtotop">Back to Top</button>
+            <div class="accordion-content"><p><a href="#" class="shilpi-top-link">Go to top</a></p></div>
+          </div>
+        </div>
 
-  <a href="console.html" class="category-box" style="display:block;padding:0;background:transparent;text-decoration:none;color:inherit;">
-    <img src="https://i.postimg.cc/d3HMkLJw/c6dcbbe659c10b00e4126e14dcd4021c.jpg" alt="TV Console">
-    <span style="display:block;padding:8px 10px;margin-top:6px;background:#fff;color:#000;text-decoration:none;border-radius:6px;font-weight:bold;font-size:13px;">📺 All Types of TV Consoles & TV Stand</span>
-  </a>
-
-  <a href="cabinet.html" class="category-box" style="display:block;padding:0;background:transparent;text-decoration:none;color:inherit;">
-    <!-- fixed the broken src by using the first of the two image URLs that were previously combined -->
-    <img src="https://i.postimg.cc/m2XvGMKH/71-Lqo-G6liv-L-AC-SL1500.jpg" alt="Cabinet">
-    <span style="display:block;padding:8px 10px;margin-top:6px;background:#fff;color:#000;text-decoration:none;border-radius:6px;font-weight:bold;font-size:13px;">All Types of Cabinet and wardrobe</span>
-  </a>
-
-  <a href="sidestool.html" class="category-box" style="display:block;padding:0;background:transparent;text-decoration:none;color:inherit;">
-    <img src="https://i.postimg.cc/Sxrz34QC/ec8f0881dd3292db1a7655c79506473c.jpg" alt="Side Stools">
-    <span style="display:block;padding:8px 10px;margin-top:6px;background:#fff;color:#000;text-decoration:none;border-radius:6px;font-weight:bold;font-size:13px;">🪑All Types Of Side Stools</span>
-  </a>
-</section>
-
-  <footer>
-    <p>Didn’t find the exact furniture you had in mind? simply share the reference image with us on WhatsApp — our team will guide you to the perfect match or customize it just for you.</p>
-    <p><a href="https://wa.me/2347080535579" target="_blank">💬 Chat with us on WhatsApp</a></p>
-    <p>💫 Your dream home starts here with V’Best Luxury Interiors.</p>
+        <div class="footer-col">
+          <h3>Customer Service</h3>
+          <p>📞 2347080535579</p>
+          <p>✉️ <a href="mailto:best28763@gmail.com">contactus@vbest.com</a></p>
+          <p>📍 156 Olojo Drive, Ojo Alaba International Market, Lagos</p>
+          <p>🕑 24/7 Support</p>
+        </div>
+      </div>
+    </div>
   </footer>
 
+  <!-- ================= Original search script (kept behavior) ================= -->
   <script>
     const searchInput = document.getElementById("searchInput");
     const categoryList = document.getElementById("categoryList").getElementsByClassName("category-box");
     const searchResults = document.getElementById("searchResults");
     let fetchTimeout = null;
 
-    // helper: normalize keys (remove spaces/underscores, lowercase) to match headers
     function normalizeKey(k){ return String(k || '').toLowerCase().replace(/[\s_\-\.]/g,''); }
 
     function findField(item, candidates){
-      // candidates is array of normalized names to search for
       for (const key in item) {
         if (candidates.includes(normalizeKey(key))) return item[key];
       }
       return "";
     }
 
-    // show/hide the category tiles on the page
     function filterCategories(query) {
       let found = false;
       for (let i = 0; i < categoryList.length; i++) {
@@ -286,7 +410,6 @@
       return found;
     }
 
-    // fetch and search your published Google Sheet via opensheet (returns JSON)
     async function fetchFromSheet(query) {
       try {
         const sheetUrl = "https://opensheet.elk.sh/1FA4s21Je3ebeFXUXGu_xvqdo4gbM1v9Q9jOHt6LAH6Y/Sheet1";
@@ -294,12 +417,8 @@
         const data = await res.json();
 
         const lowerQuery = query.toLowerCase();
-        const results = data.filter(item => {
-          // check all values in row for a match
-          return Object.values(item).some(v => v && v.toString().toLowerCase().includes(lowerQuery));
-        });
+        const results = data.filter(item => Object.values(item).some(v => v && v.toString().toLowerCase().includes(lowerQuery)));
 
-        // render results
         searchResults.innerHTML = "";
         if (results.length === 0) {
           const p = document.createElement('p');
@@ -310,12 +429,12 @@
         }
 
         results.forEach(item => {
-          const name = findField(item, ['productname','productname','product','productname','productname','productname']) || findField(item,['name']) || item['Product Name'] || item['Product'] || item['product name'] || "";
+          const name = findField(item, ['productname','product','name']) || item['Product Name'] || item['Product'] || item['product name'] || "";
           const category = findField(item, ['category']) || item['Category'] || "";
           const price = findField(item, ['price','cost']) || item['Price'] || "";
           const region = findField(item, ['region','origin']) || item['region'] || "";
           const image = findField(item, ['imagelink','image','imageurl','image_link']) || item['Image Link'] || item['Image'] || "";
-          const whatsapp = findField(item, ['whatsapplink','whatsapplink','whatsapp','wa']) || item['WhatsApp Link'] || item['WhatsApp'] || "";
+          const whatsapp = findField(item, ['whatsapplink','whatsapp','wa']) || item['WhatsApp Link'] || item['WhatsApp'] || "";
 
           const div = document.createElement('div');
           div.className = 'result';
@@ -325,17 +444,15 @@
             imgHtml = `<img src="${image}" alt="${name}">`;
           }
 
-          // whatsapp link fallback - if the sheet provides a full link use it. If not, create a wa.me message to your number.
           let waHref = "";
           if (whatsapp && whatsapp.trim() !== "") {
             waHref = whatsapp;
-            // if whatsapp column contains just a phone number, build wa.me
             if (!waHref.startsWith('http')) {
               const num = waHref.replace(/\D/g,'');
-              waHref = `https://wa.me/${num}?text=${encodeURIComponent('Hello, I\'m interested in ' + (name || 'this product'))}`;
+              waHref = `https://wa.me/${num}?text=${encodeURIComponent('Hello, I\\'m interested in ' + (name || 'this product'))}`;
             }
           } else {
-            waHref = `https://wa.me/2347080535579?text=${encodeURIComponent('Hello, I\'m interested in ' + (name || 'this product'))}`;
+            waHref = `https://wa.me/2347080535579?text=${encodeURIComponent('Hello, I\\'m interested in ' + (name || 'this product'))}`;
           }
 
           div.innerHTML = `
@@ -356,261 +473,269 @@
       }
     }
 
-    // main listener (debounced)
-    searchInput.addEventListener("input", function() {
-      const queryRaw = searchInput.value || "";
-      const query = queryRaw.trim().toLowerCase();
-      searchResults.innerHTML = "";
+    if (searchInput) {
+      searchInput.addEventListener("input", function() {
+        const queryRaw = searchInput.value || "";
+        const query = queryRaw.trim().toLowerCase();
+        searchResults.innerHTML = "";
 
-      // reset categories if empty
-      if (query.length === 0) {
-        for (let i = 0; i < categoryList.length; i++) categoryList[i].style.display = "";
+        if (query.length === 0) {
+          for (let i = 0; i < categoryList.length; i++) categoryList[i].style.display = "";
+          return;
+        }
+
+        filterCategories(query);
+
+        if (fetchTimeout) clearTimeout(fetchTimeout);
+        fetchTimeout = setTimeout(() => { fetchFromSheet(query); }, 300);
+      });
+    }
+  </script>
+
+  <!-- ================= Firebase + Reviews script ================= -->
+  <script type="module">
+    import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAF_Fy32TmyNOAYebcRCcOLhgcKn82Xavs",
+      authDomain: "v-best-luxury-interiors.firebaseapp.com",
+      databaseURL: "https://v-best-luxury-interiors-default-rtdb.firebaseio.com",
+      projectId: "v-best-luxury-interiors",
+      storageBucket: "v-best-luxury-interiors.firebasestorage.app",
+      messagingSenderId: "331900870737",
+      appId: "1:331900870737:web:c100c6a2987345eb955870",
+      measurementId: "G-NP94R6352Q"
+    };
+
+    // Initialize Firebase safely
+    let app;
+    if (!getApps().length) app = initializeApp(firebaseConfig);
+    else app = getApp();
+    const db = getDatabase(app);
+
+    // DOM refs
+    const writeBtn = document.getElementById('vbestWriteReview');
+    const approvedVisible = document.getElementById('vbest-approved-visible');
+    const approvedHidden = document.getElementById('vbest-approved-hidden');
+    const defaultRev1 = document.getElementById('vbest-default-review-1');
+    const defaultRev2 = document.getElementById('vbest-default-review-2');
+    const seeMoreBtn = document.getElementById('vbestSeeMore');
+
+    // Create floating review form (in DOM)
+    const formContainer = (function(){
+      const cont = document.createElement('div');
+      cont.id = 'vbest-review-form-container';
+      cont.className = 'vbest-review-form-container';
+      cont.setAttribute('role','dialog');
+      cont.setAttribute('aria-hidden','true');
+      cont.innerHTML = `
+        <form id="vbest-review-form" class="vbest-review-form" autocomplete="off">
+          <div class="vbest-form-row"><label for="vbest-name">Name</label><input id="vbest-name" name="name" type="text" placeholder="Your name" required /></div>
+          <div class="vbest-form-row"><label for="vbest-rating">Rating</label>
+            <select id="vbest-rating" name="rating" required>
+              <option value="5">5 - Excellent</option>
+              <option value="4">4 - Very good</option>
+              <option value="3">3 - Good</option>
+              <option value="2">2 - Fair</option>
+              <option value="1">1 - Poor</option>
+            </select>
+          </div>
+          <div class="vbest-form-row"><label for="vbest-comment">Your review</label><textarea id="vbest-comment" name="comment" placeholder="Write your review..." rows="5" minlength="10" required></textarea></div>
+          <div class="vbest-form-actions"><button type="submit" class="vbest-submit-btn">Post Review</button><button type="button" id="vbest-cancel-form" class="vbest-cancel-btn">Cancel</button></div>
+          <div id="vbest-form-msg" class="vbest-form-msg" aria-live="polite"></div>
+        </form>
+      `;
+      document.body.appendChild(cont);
+      return cont;
+    })();
+
+    const form = document.getElementById('vbest-review-form');
+    const cancelBtn = document.getElementById('vbest-cancel-form');
+    const msgEl = document.getElementById('vbest-form-msg');
+
+    // Utility escape
+    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]); }
+
+    // Render one review block
+    function createReviewElement(review) {
+      const art = document.createElement('article');
+      art.className = 'vbest-review';
+      art.innerHTML = `
+        <div class="vbest-avatar">${escapeHtml((review.name||'U').charAt(0).toUpperCase())}</div>
+        <div class="vbest-review-body">
+          <div class="vbest-review-meta">
+            <strong>${escapeHtml(review.name || 'Anonymous')}</strong>
+            <span class="vbest-verified" title="Verified">✔️</span>
+            <small class="vbest-date">${escapeHtml(review.date || '')}</small>
+            <div class="vbest-review-stars">${'★'.repeat(review.rating||5)}${'☆'.repeat(5-(review.rating||5))}</div>
+          </div>
+          <p class="vbest-review-text">${escapeHtml(review.comment || '')}</p>
+        </div>
+      `;
+      return art;
+    }
+
+    // Update summary UI (score + bars)
+    function updateSummaryUIFromApproved(arr){
+      if (!arr || !arr.length) return; // keep defaults if none
+      const totals = {1:0,2:0,3:0,4:0,5:0};
+      let total = 0, weighted = 0;
+      arr.forEach(r => { totals[r.rating] = (totals[r.rating]||0)+1; total++; weighted += (r.rating||0); });
+      const avg = total ? (weighted / total) : 0;
+      document.getElementById('vbest-score-number').textContent = (Math.round(avg * 100) / 100).toFixed(2);
+      document.getElementById('vbest-count').textContent = `${total} review${total!==1 ? 's':''}`;
+      const pct = s => total ? Math.round((s/total)*100) : 0;
+      document.getElementById('vbest-bar-5').style.width = pct(totals[5]) + '%';
+      document.getElementById('vbest-bar-4').style.width = pct(totals[4]) + '%';
+      document.getElementById('vbest-bar-3').style.width = pct(totals[3]) + '%';
+      document.getElementById('vbest-bar-2').style.width = pct(totals[2]) + '%';
+      document.getElementById('vbest-bar-1').style.width = pct(totals[1]) + '%';
+      document.getElementById('vbest-num-5').textContent = `(${totals[5]})`;
+      document.getElementById('vbest-num-4').textContent = `(${totals[4]})`;
+      document.getElementById('vbest-num-3').textContent = `(${totals[3]})`;
+      document.getElementById('vbest-num-2').textContent = `(${totals[2]})`;
+      document.getElementById('vbest-num-1').textContent = `(${totals[1]})`;
+    }
+
+    // Listen to reviews and display approved reviews: 2 visible, rest hidden
+    const reviewsRef = ref(db, 'reviews');
+    onValue(reviewsRef, (snap) => {
+      const val = snap.val();
+      const approved = [];
+      if (val) {
+        Object.keys(val).forEach(k => {
+          const r = val[k];
+          if (r && (r.status === 'approved')) {
+            const rating = parseInt(r.rating,10) || 5;
+            approved.push({ id:k, name: r.name||'Anonymous', rating, comment: r.comment||'', date: r.date || r.createdAt || '' });
+          }
+        });
+      }
+      // sort by date (ISO) descending if available, else by id
+      approved.sort((a,b) => (b.date || '').localeCompare(a.date || '') || (b.id||'').localeCompare(a.id||''));
+
+      // clear containers
+      approvedVisible.innerHTML = '';
+      approvedHidden.innerHTML = '';
+      // hide default placeholders initially
+      if (defaultRev1) defaultRev1.style.display = 'none';
+      if (defaultRev2) defaultRev2.style.display = 'none';
+
+      if (approved.length === 0) {
+        // show defaults
+        if (defaultRev1) defaultRev1.style.display = '';
+        if (defaultRev2) defaultRev2.style.display = '';
+        seeMoreBtn.style.display = 'none';
+        updateSummaryUIFromApproved([]);
         return;
       }
 
-      // filter the category tiles (so user sees matched tiles)
-      const foundInTiles = filterCategories(query);
+      // show first two (or fewer)
+      const visible = approved.slice(0,2);
+      const hidden = approved.slice(2);
+      visible.forEach(r => {
+        approvedVisible.appendChild(createReviewElement(r));
+      });
+      // hidden ones into hidden container
+      hidden.forEach(r => {
+        const el = createReviewElement(r);
+        approvedHidden.appendChild(el);
+      });
 
-      // debounce sheet fetch so you don't spam requests while typing
-      if (fetchTimeout) clearTimeout(fetchTimeout);
-      fetchTimeout = setTimeout(() => {
-        fetchFromSheet(query);
-      }, 300);
+      // show/hide See More button
+      if (hidden.length > 0) {
+        seeMoreBtn.style.display = 'inline-block';
+        approvedHidden.style.display = 'none';
+      } else {
+        seeMoreBtn.style.display = 'none';
+        approvedHidden.style.display = 'none';
+      }
+
+      // update summary
+      updateSummaryUIFromApproved(approved);
+    });
+
+    // toggle floating form
+    function toggleForm(show){
+      if (!formContainer) return;
+      if (typeof show === 'undefined') show = formContainer.style.display !== 'block';
+      formContainer.style.display = show ? 'block' : 'none';
+      formContainer.setAttribute('aria-hidden', show ? 'false' : 'true');
+      if (show) {
+        const nameInput = document.getElementById('vbest-name');
+        if (nameInput) nameInput.focus();
+      }
+    }
+
+    // attach events
+    if (writeBtn) writeBtn.addEventListener('click', (e)=>{ e.preventDefault(); toggleForm(true); });
+
+    if (cancelBtn) cancelBtn.addEventListener('click', ()=>{ toggleForm(false); });
+
+    // submit review -> push to DB with status pending
+    form.addEventListener('submit', async function(e){
+      e.preventDefault();
+      const name = form['name'].value.trim();
+      const rating = parseInt(form['rating'].value,10) || 5;
+      const comment = form['comment'].value.trim();
+      if (!name || !comment || comment.length < 8) {
+        msgEl.textContent = 'Please enter your name and at least 8 characters for your review.';
+        return;
+      }
+      msgEl.textContent = 'Submitting...';
+      try {
+        const newRef = push(reviewsRef);
+        const payload = {
+          name,
+          rating,
+          comment,
+          date: new Date().toISOString(),
+          status: 'pending'
+        };
+        await set(newRef, payload);
+        msgEl.textContent = 'Thanks — your review is submitted for moderation.';
+        form.reset();
+        setTimeout(()=>{ msgEl.textContent=''; toggleForm(false); }, 900);
+      } catch (err) {
+        console.error('Failed to submit review:', err);
+        msgEl.textContent = 'Submission failed — please try again later.';
+      }
+    });
+
+    // See More toggling
+    if (seeMoreBtn) {
+      seeMoreBtn.addEventListener('click', function(){
+        if (approvedHidden.style.display === 'none' || approvedHidden.style.display === '') {
+          approvedHidden.style.display = 'block';
+          this.textContent = 'See Less Reviews';
+        } else {
+          approvedHidden.style.display = 'none';
+          this.textContent = 'See More Reviews';
+          window.scrollTo({ top: document.querySelector('.vbest-reviews').offsetTop - 20, behavior: 'smooth' });
+        }
+      });
+    }
+
+    // keyboard ESC closes form
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && formContainer && formContainer.style.display === 'block') toggleForm(false);
+    });
+
+  </script>
+
+  <!-- Footer accordion script -->
+  <script>
+    document.querySelectorAll(".accordion-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const content = btn.nextElementSibling;
+        content.style.display = content.style.display === "block" ? "none" : "block";
+      });
+    });
+    document.querySelectorAll(".shilpi-top-link").forEach(link => {
+      link.addEventListener("click", e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); });
     });
   </script>
-<section class="shilpi-footer">
-  <div class="shilpi-container">
 
-    <!-- Top Center: Logo & About -->
-    <div class="footer-col about">
-      <h2>V'best Luxury Interiors</h2>
-      <p class="tagline">We're the best</p>
-      <p class="about-text">
-         Designed to elevate your home, our luxury pieces combine comfort, durability, and style that speaks volumes.
-      </p>
-<div class="social-icons">
-  <a href="https://twitter.com/yourhandle" target="_blank">🐦 Twitter</a>
-  <a href="https://instagram.com/yourhandle" target="_blank">📸 Instagram</a>
-  <a href="https://tiktok.com/@yourhandle" target="_blank">🎵 TikTok</a>
-</div>
-
-<style>
-  .social-icons {
-    display: flex;
-    gap: 15px; /* space between each link */
-    justify-content: center; /* center all icons */
-    margin-top: 10px;
-  }
-
-  .social-icons a {
-    text-decoration: none;
-    color: white; /* or your theme color */
-    font-weight: bold;
-    font-size: 16px;
-    transition: 0.3s;
-  }
-
-  .social-icons a:hover {
-    color: #25d366; /* WhatsApp green hover effect */
-  }
-</style>
-    </div>
-
-    <!-- Bottom Row: Categories | Quick Links | Customer Service -->
-    <div class="footer-bottom">
-      
-      <!-- Categories -->
-      <div class="footer-col">
-        <h3>Categories</h3>
-        <ul>
-          <li>Living Room</li>
-          <li>Bedroom</li>
-          <li>Dining Room</li>
-          <li>Home Office</li>
-          <li>Kids & Baby</li>
-          <li>Outdoor & Patio</li>
-          <li>Storage & Organization</li>
-          <li>Accent & Decor</li>
-        </ul>
-      </div>
-
-      <!-- Quick Links Accordion -->
-      <div class="footer-col">
-        <h3>Quick Links</h3>
-        <div class="accordion">
-          <button class="accordion-btn">About Us</button>
-          <div class="accordion-content">
-            <p>We bring world-class luxury furniture to elevate your lifestyle with modern and timeless designs.</p>
-          </div>
-
-          <button class="accordion-btn">Privacy Policy</button>
-          <div class="accordion-content">
-            <p>Your privacy is our priority. We never share customer data with third parties.</p>
-          </div>
-
-          <button class="accordion-btn">Terms & Conditions</button>
-          <div class="accordion-content">
-            <p>All purchases are subject to our company’s standard terms and conditions.</p>
-          </div>
-
-          <button class="accordion-btn">FAQ</button>
-          <div class="accordion-content">
-            <p>Find answers to the most common questions about delivery, warranty, and payments.</p>
-          </div>
-
-          <button class="accordion-btn">Back to Top</button>
-          <div class="accordion-content">
-            <p><a href="#">Click here</a> to scroll back to the top of the page instantly.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Customer Service -->
-<div class="footer-col">
-  <h3>Customer Service</h3>
-  <p>📞 2347080535579</p>
-  <p>✉️ <a href="mailto:best28763@gmail.com">contactus@vbest.com</a></p>
-</div>
-        <p>📍156 Olojo Drive, Ojo Alaba International Market, Lagos</p>
-        <p>🕑 24/7 Support</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<style>
-/* Footer Container */
-.shilpi-footer {
-  background: #111;
-  color: #eee;
-  padding: 40px 20px;
-  font-family: Arial, sans-serif;
-}
-
-/* Centered Header */
-.shilpi-footer .about {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.shilpi-footer .about h2 {
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: 6px;
-  color: #fff;
-}
-
-.shilpi-footer .about .tagline {
-  font-size: 14px;
-  font-weight: 300;
-  margin-bottom: 10px;
-  color: #bbb;
-}
-
-.shilpi-footer .about-text {
-  font-size: 13px;
-  max-width: 600px;
-  margin: 0 auto 15px;
-  line-height: 1.6;
-}
-
-/* Social icons */
-.social-icons a {
-  display: inline-block;
-  margin: 0 6px;
-  font-size: 18px;
-  color: #25d366;
-  text-decoration: none;
-}
-.social-icons a:hover {
-  color: #fff;
-}
-
-/* Bottom layout: 3 equal columns */
-.footer-bottom {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  text-align: left;
-  gap: 20px;
-}
-
-.footer-col {
-  flex: 1;
-  min-width: 200px;
-}
-
-.footer-col h3 {
-  font-size: 16px;
-  margin-bottom: 10px;
-  color: #fff;
-}
-
-.footer-col ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.footer-col ul li {
-  font-size: 14px;
-  margin: 4px 0;
-}
-
-/* Accordion */
-.accordion-btn {
-  background: none;
-  border: none;
-  outline: none;
-  font-size: 14px;
-  font-weight: bold;
-  color: #25d366;
-  text-align: left;
-  padding: 6px 0;
-  cursor: pointer;
-  width: 100%;
-}
-.accordion-content {
-  display: none;
-  font-size: 13px;
-  margin-bottom: 10px;
-  line-height: 1.5;
-}
-.accordion-content p {
-  margin: 5px 0;
-}
-
-/* Responsive: Stack columns on mobile */
-@media (max-width: 768px) {
-  .footer-bottom {
-    flex-direction: column;
-    text-align: center;
-  }
-  .footer-col {
-    width: 100%;
-  }
-  .accordion-btn {
-    text-align: center;
-  }
-}
-</style>
-
-<script>
-// Accordion functionality
-document.querySelectorAll(".accordion-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const content = btn.nextElementSibling;
-    content.style.display = content.style.display === "block" ? "none" : "block";
-  });
-});
-
-// Back to top smooth scroll
-document.querySelectorAll(".accordion-content a[href='#']").forEach(link => {
-  link.addEventListener("click", e => {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-});
-</script>
 </body>
 </html>
