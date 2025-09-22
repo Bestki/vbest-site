@@ -17,7 +17,13 @@
       --accent: #25d366;
       --text: #e8fbf6;
     }
-    html,body { height:100%; }
+
+    /* ====== ADD: safe global fixes to prevent overflow and improve scaling ====== */
+    * { box-sizing: border-box; }
+    html, body { height:100%; overflow-x: hidden; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    img { max-width: 100%; height: auto; display: block; }
+    /* ========================================================================== */
+
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -80,8 +86,9 @@
       gap:12px;
       align-items:flex-start;
     }
-    #searchResults .result img { width:140px; height:90px; object-fit:cover; border-radius:4px; }
-    #searchResults .meta { flex:1; }
+    /* allow results image to scale and not force overflow */
+    #searchResults .result img { width:140px; max-width: 30%; height:auto; object-fit:cover; border-radius:4px; }
+    #searchResults .meta { flex:1; min-width:0; }
     #searchResults .wa {
       display:inline-block; margin-top:8px; padding:8px 10px; background:var(--accent); color:#fff; text-decoration:none; border-radius:5px; font-weight:700;
     }
@@ -89,11 +96,29 @@
     /* ================= Reviews (placed under logo) ================= */
     .vbest-highrev { margin-top: 8px; padding: 12px; background: var(--bg); color: var(--text); box-sizing:border-box; }
 
-    /* Base styling for highlights */
-    .vbest-highlights { display:flex; justify-content:space-between; gap:12px; align-items:center; max-width:1160px; margin: 6px auto 14px; flex-wrap:nowrap; box-sizing:border-box; }
-    .vbest-hi { display:flex; align-items:center; gap:10px; flex:1 1 0; min-width:120px; text-align:left; box-sizing:border-box; padding:0 6px; }
+    /* Base styling for highlights
+       ====== MODIFIED: allow wrap on tiny screens so nothing is clipped ====== */
+    .vbest-highlights {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1160px;
+      margin: 6px auto 14px;
+      width: 100%;
+    }
+
+    .vbest-hi {
+      flex: 1;                /* each takes equal width */
+      min-width: 0;           /* allow shrinking */
+      text-align: center;     /* center text inside each */
+      padding: 6px;
+      box-sizing: border-box;
+      overflow: hidden;       /* avoid cut-off */
+      text-overflow: ellipsis;
+      white-space: nowrap;    /* keep in one line */
+    }
     .vbest-icon { width:44px; height:44px; border-radius:10px; background:rgba(255,255,255,0.02); display:flex; align-items:center; justify-content:center; font-size:22px; color:var(--accent); flex:0 0 auto; }
-    .vbest-hi-text { font-weight:900; font-size:14px; color:var(--text); white-space:normal; }
+    .vbest-hi-text { font-weight:700; font-size:14px; color:var(--text); white-space:normal; overflow-wrap:break-word; }
 
     /* Reviews layout */
     .vbest-reviews { max-width:1160px; margin: 6px auto 0; padding: 0 6px 0; box-sizing:border-box; text-align:left; }
@@ -115,7 +140,7 @@
     .vbest-list { max-width:900px; margin:12px auto 0; }
     .vbest-review { display:flex; gap:12px; padding:14px 12px; border-bottom:1px solid rgba(255,255,255,0.03); align-items:flex-start; background: rgba(255,255,255,0.01); border-radius:8px; margin-bottom:10px; }
     .vbest-avatar { width:56px; height:56px; border-radius:50%; background:#ffd54a; color:#111; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:20px; flex:0 0 56px; }
-    .vbest-review-body { flex:1; }
+    .vbest-review-body { flex:1; min-width:0; }
     .vbest-review-meta { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:8px; }
     .vbest-review-meta strong { color:#fff; font-size:15px; }
     .vbest-verified { color:var(--accent); font-size:14px; }
@@ -127,11 +152,25 @@
     .vbest-see-btn { padding:9px 16px; background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--text); border-radius:8px; cursor:pointer; }
     .vbest-see-btn:hover { background:rgba(255,255,255,0.02); }
 
-    /* Floating review form (larger, clearer) */
+    /* Floating review form (reworked for full-page) */
     .vbest-review-form-container {
       position:fixed; display:none; z-index:4000; left:50%; transform:translateX(-50%); bottom:22px; width:520px; max-width:96%;
       background:#07121a; border:1px solid rgba(255,255,255,0.06); padding:16px; border-radius:10px; box-shadow:0 12px 30px rgba(0,0,0,0.6);
       color:var(--text); box-sizing:border-box;
+    }
+    /* Full-page mode (used for the "page-like" review view) */
+    .vbest-review-form-container.fullpage {
+      left:0;
+      top:0;
+      bottom:0;
+      right:0;
+      width:100%;
+      height:100%;
+      transform:none;
+      padding:20px;
+      border-radius:0;
+      overflow-y:auto;
+      display:none;
     }
     .vbest-form-row { margin-bottom:10px; text-align:left; }
     .vbest-form-row label { display:block; font-size:13px; color:#b8dfe6; margin-bottom:6px; }
@@ -144,170 +183,198 @@
     .vbest-cancel-btn { background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--text); padding:8px 10px; border-radius:6px; cursor:pointer; }
     .vbest-form-msg { margin-top:8px; font-size:14px; color:#bfe9de; }
 
-    /* Footer (kept very black) */
+    /* Rating row (inline, single line) */
+    .rating-row {
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:nowrap;
+      overflow-x:auto;
+      padding-bottom:6px;
+    }
+    .rating-row label {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      cursor:pointer;
+      padding:8px 10px;
+      border-radius:8px;
+      white-space:nowrap;
+      border:1px solid rgba(255,255,255,0.02);
+      background: rgba(255,255,255,0.01);
+      min-width:fit-content;
+    }
+    .rating-row input[type="radio"] { display:none; }
+    .rating-row span { font-weight:700; font-size:14px; color:var(--text); }
+    .rating-row input:checked + span { outline: 2px solid var(--accent); background: rgba(37,211,102,0.06); border-radius:6px; padding:4px 6px; }
+
+    /* ===========================================================================
+       FOOTER STYLES: REPLACED WITH USER PROVIDED STYLES (old footer rules removed)
+       =========================================================================== */
+
+    /* Footer Container */
     .shilpi-footer {
       background: #111;
       color: #eee;
       padding: 40px 20px;
       font-family: Arial, sans-serif;
+    }
+
+    /* Centered Header */
+    .shilpi-footer .about {
       text-align: center;
-    }
-    .shilpi-footer .about h2 { font-size:22px; font-weight:bold; color:#fff; margin-bottom:6px; }
-    .shilpi-footer .tagline { font-size:14px; color:#bbb; }
-    .shilpi-footer .about-text { font-size:13px; max-width:600px; margin:0 auto 15px; line-height:1.6; }
-    .social-icons { display:flex; justify-content:center; gap:15px; margin-top:10px; }
-    .social-icons a { color:var(--accent); font-size:16px; text-decoration:none; transition:0.3s; }
-    .social-icons a:hover { color:#fff; }
-
-    /* Footer bottom base */
-    .footer-bottom { display:flex; flex-wrap:wrap; justify-content:space-between; margin-top:20px; text-align:left; gap:20px; max-width:1150px; margin-left:auto; margin-right:auto; }
-    .footer-col { flex:1; min-width:200px; }
-    .footer-col h3 { font-size:16px; margin-bottom:10px; color:#fff; }
-    .footer-col ul { list-style:none; padding:0; margin:0; }
-    .footer-col ul li { font-size:14px; margin:4px 0; }
-    .accordion-btn { background:none; border:none; font-size:14px; font-weight:bold; color:var(--accent); cursor:pointer; padding:6px 0; text-align:left; width:100%; }
-    .accordion-content { display:none; font-size:13px; margin-bottom:10px; line-height:1.5; }
-
-    .footer-extra { margin-top:25px; font-size:14px; line-height:1.6; }
-    .footer-extra a { color:var(--accent); font-weight:bold; text-decoration:none; }
-    .footer-extra a:hover { color:#fff; }
-
-    /* Responsive tweaks (keep categories 2 columns) */
-    @media (max-width: 820px) {
-      .vbest-review-form-container { width:94%; left:3%; transform:none; bottom:10px; }
-      .vbest-avatar { width:48px; height:48px; font-size:18px; }
-      .vbest-review-text { font-size:15px; }
+      margin-bottom: 30px;
     }
 
-    /* ===========================================================================
-       NEW RESPONSIVE RULES — keep 3 columns side-by-side on phones & desktops
-       (only layout/CSS changes — content and scripts preserved)
-       =========================================================================== */
-
-    /* base: prevent browser text inflation & keep scale consistent */
-    html, body {
-      -webkit-text-size-adjust: 100%;
-      -ms-text-size-adjust: 100%;
+    .shilpi-footer .about h2 {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 6px;
+      color: #fff;
     }
 
-    /* HIGHLIGHTS (under logo) - force three equal columns that stay side-by-side */
-    .vbest-highlights {
-      display: flex !important;
-      justify-content: space-between !important;
-      align-items: center !important;
-      gap: 8px;
-      max-width: 1160px;
-      margin: 6px auto 14px;
-      box-sizing: border-box;
-      padding: 0 6px;
-      flex-wrap: nowrap; /* keep side-by-side */
+    .shilpi-footer .about .tagline {
+      font-size: 14px;
+      font-weight: 300;
+      margin-bottom: 10px;
+      color: #bbb;
     }
 
-    /* Each highlight takes 1/3 width but is allowed to shrink; min-width:0 prevents overflow */
-    .vbest-highlights .vbest-hi {
-      flex: 0 0 calc(33.333% - 8px);
-      min-width: 0;
+    .shilpi-footer .about-text {
+      font-size: 13px;
+      max-width: 600px;
+      margin: 0 auto 15px;
+      line-height: 1.6;
+    }
+
+    /* Social icons */
+    .social-icons {
       display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 6px;
-      box-sizing: border-box;
-      white-space: normal;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    .social-icons a {
+      text-decoration: none;
+      color: #25d366;
+      font-weight: bold;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+    .social-icons a:hover {
+      color: #fff;
     }
 
-    /* make icons + text scale down slightly on small screens but stay readable */
-    .vbest-highlights .vbest-icon {
-      width: clamp(34px, 8vw, 44px);
-      height: clamp(34px, 8vw, 44px);
-      font-size: clamp(14px, 4vw, 22px);
-      flex: 0 0 auto;
-    }
-    .vbest-highlights .vbest-hi-text {
-      font-size: clamp(12px, 2.6vw, 14px);
-      line-height: 1.1;
-    }
-
-    /* alignment of inner content: left / center / right respectively */
-    .vbest-highlights .vbest-hi:first-child  { justify-content: flex-start; text-align:left; }
-    .vbest-highlights .vbest-hi:nth-child(2) { justify-content: center;    text-align:center; }
-    .vbest-highlights .vbest-hi:last-child   { justify-content: flex-end;  text-align:right; }
-
-    /* FOOTER bottom: force three columns side-by-side */
+    /* Bottom layout: 3 equal columns */
     .footer-bottom {
-      display: flex !important;
-      justify-content: space-between !important;
-      align-items: flex-start;
-      gap: 12px;
-      max-width: 1150px;
-      margin: 20px auto 0;
-      padding: 0 12px;
-      box-sizing: border-box;
-      flex-wrap: nowrap; /* keep side-by-side */
-    }
-    .footer-bottom .footer-col {
-      flex: 0 0 calc(33.333% - 12px);
-      min-width: 0;
-      box-sizing: border-box;
-      padding: 0 8px;
-    }
-    .footer-bottom .footer-col:first-child  { text-align: left; }
-    .footer-bottom .footer-col:nth-child(2) { text-align: center; }
-    .footer-bottom .footer-col:last-child   { text-align: right; }
-
-    /* small-screen adjustments: shrink padding & font but KEEP three columns side-by-side */
-    @media (max-width: 420px) {
-      header { padding: 28px 10px 8px; }
-      .logo img { max-height: 180px; }
-      .vbest-highlights { gap:6px; padding: 0 4px; margin: 6px auto 10px; }
-      .vbest-highlights .vbest-hi { padding: 6px 4px; }
-      .vbest-highlights .vbest-hi-text { font-size: 11px; }
-      .vbest-highlights .vbest-icon { width: 30px; height:30px; font-size:13px; }
-
-.footer-bottom {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-/* Categories stays left */
-.footer-bottom .footer-col:nth-child(1) {
-  order: 1;
-  flex: 1;
-  text-align: left;
-}
-
-/* Quick Links goes right */
-.footer-bottom .footer-col:nth-child(2) {
-  order: 2;
-  flex: 1;
-  text-align: right;
-}
-
-/* Customer Service goes below, centered */
-.footer-bottom .footer-col:nth-child(3) {
-  order: 3;
-  flex: 0 0 100%;
-  text-align: center;
-  margin-top: 20px;
-}
-      /* ensure categories still look correct */
-      .categories { gap: 4px; max-width: 900px; }
-      .category-box img { height: 160px; object-fit: cover; }
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      text-align: left;
+      gap: 20px;
     }
 
-    /* final safety: if a device is extremely narrow, allow tiny horizontal scroll rather than collapse */
-    @media (max-width: 300px) {
-      .vbest-highlights, .footer-bottom { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-      .vbest-highlights .vbest-hi, .footer-bottom .footer-col { flex: 0 0 auto; width: auto; }
+    .footer-col {
+      flex: 1;
+      min-width: 200px;
     }
 
-    /* ===========================================================================
-       End responsive rules
-       =========================================================================== */
-       /* ========================== */
-/* ✅ Anti-overflow fixes here */
-/* ========================== */
+    .footer-col h3 {
+      font-size: 16px;
+      margin-bottom: 10px;
+      color: #fff;
+    }
 
+    .footer-col ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-col ul li {
+      font-size: 14px;
+      margin: 4px 0;
+    }
+
+    /* Accordion */
+    .accordion-btn {
+      background: none;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      font-weight: bold;
+      color: #25d366;
+      text-align: left;
+      padding: 6px 0;
+      cursor: pointer;
+      width: 100%;
+    }
+    .accordion-content {
+      display: none;
+      font-size: 13px;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    .accordion-content p {
+      margin: 5px 0;
+    }
+
+    /* === Mobile: stack footer into one centered column === */
+    @media (max-width: 768px) {
+      .footer-bottom {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        gap: 12px;
+        padding-left: 12px;
+        padding-right: 12px;
+        box-sizing: border-box;
+      }
+
+      .footer-bottom .footer-col {
+        width: 100%;
+        max-width: 420px;
+        margin: 8px auto;
+        text-align: center;
+        box-sizing: border-box;
+      }
+
+      .footer-bottom .footer-col ul {
+        margin: 0 auto;
+        padding: 0;
+        list-style: none;
+        text-align: center;
+      }
+
+      .footer-bottom .footer-col ul li {
+        display: block;
+        margin: 4px 0;
+        text-align: center;
+      }
+
+      .accordion-btn {
+        text-align: center;
+        display: block;
+        width: 100%;
+      }
+    }
+    /* =========================================================================== */
+
+    /* ================= Small star UI tweaks (safe & non-invasive) ================= */
+    .vbest-star { font-size:32px; background:transparent; border:0; padding:8px 6px; border-radius:6px; color:rgba(255,255,255,0.26); cursor:pointer; line-height:1; user-select:none; }
+    .vbest-star.filled { color:#ffd54a; text-shadow:0 1px 0 rgba(0,0,0,0.4); }
+    .rating-row-star { display:flex; gap:6px; justify-content:center; align-items:center; }
+    #vbest-star-label { font-size:15px; color:#bfe9de; margin-top:8px; text-align:center; font-weight:700; }
+    /* keep fullpage form usable on small screens */
+    .vbest-review-form-container.fullpage { padding-top: env(safe-area-inset-top,20px); padding-left:12px; padding-right:12px; padding-bottom:20px; box-sizing:border-box; }
+    .vbest-review-form-container.fullpage form { width:100%; max-width:720px; margin:0 auto; }
+    @media (max-width:480px) {
+      .vbest-star { font-size:28px; padding:10px 6px; }
+      .vbest-review-form-container.fullpage { padding-top: env(safe-area-inset-top,14px); padding-left:10px; padding-right:10px; }
+    }
   </style>
 </head>
 <body>
@@ -317,7 +384,6 @@
     <div class="logo">
       <img src="https://i.postimg.cc/X7mNqGh5/IMG-20250822-WA0058.jpg" alt="V'Best Logo">
     </div>
-
 
     <!-- ===== Highlights + Reviews (placed directly under logo) ===== -->
     <div class="vbest-highrev" aria-label="Highlights and reviews">
@@ -339,7 +405,7 @@
         </div>
       </div>
 
-      <!-- Reviews: summary + 2 visible reviews + see more + write button -->
+      <!-- Reviews: summary + visible reviews + see more + write button -->
       <div class="vbest-reviews" aria-label="Customer reviews">
         <div class="vbest-summary" role="region" aria-live="polite">
           <div class="vbest-score">
@@ -401,7 +467,7 @@
             </div>
           </article>
 
-          <!-- Approved reviews container (JS will populate up to 2 visible + the rest hidden) -->
+          <!-- Approved reviews container (JS will populate up to 3 visible + the rest hidden) -->
           <div id="vbest-approved-visible"></div>
           <div id="vbest-approved-hidden" style="display:none;"></div>
 
@@ -622,7 +688,7 @@
     }
   </script>
 
-  <!-- ================= Firebase + Reviews script ================= -->
+  <!-- ================= Firebase + Reviews script (kept unchanged except 'approved' publish + modal form) ================= -->
   <script type="module">
     import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
@@ -652,27 +718,50 @@
     const defaultRev2 = document.getElementById('vbest-default-review-2');
     const seeMoreBtn = document.getElementById('vbestSeeMore');
 
-    // Create floating review form (in DOM)
+    // Create full-page review form (in DOM) — shows like a page when Write a Review clicked
     const formContainer = (function(){
       const cont = document.createElement('div');
       cont.id = 'vbest-review-form-container';
-      cont.className = 'vbest-review-form-container';
+      cont.className = 'vbest-review-form-container fullpage';
       cont.setAttribute('role','dialog');
       cont.setAttribute('aria-hidden','true');
       cont.innerHTML = `
-        <form id="vbest-review-form" class="vbest-review-form" autocomplete="off">
-          <div class="vbest-form-row"><label for="vbest-name">Name</label><input id="vbest-name" name="name" type="text" placeholder="Your name" required /></div>
-          <div class="vbest-form-row"><label for="vbest-rating">Rating</label>
-            <select id="vbest-rating" name="rating" required>
-              <option value="5">5 - Excellent</option>
-              <option value="4">4 - Very good</option>
-              <option value="3">3 - Good</option>
-              <option value="2">2 - Fair</option>
-              <option value="1">1 - Poor</option>
-            </select>
+        <form id="vbest-review-form" class="vbest-review-form" autocomplete="off" aria-label="Submit a review">
+          <h2 style="margin-top:0; margin-bottom:10px; text-align:left;">Write a Review</h2>
+
+          <div class="vbest-form-row">
+            <label for="vbest-name">Name</label>
+            <input id="vbest-name" name="name" type="text" placeholder="Your name" required />
           </div>
-          <div class="vbest-form-row"><label for="vbest-comment">Your review</label><textarea id="vbest-comment" name="comment" placeholder="Write your review..." rows="5" minlength="10" required></textarea></div>
-          <div class="vbest-form-actions"><button type="submit" class="vbest-submit-btn">Post Review</button><button type="button" id="vbest-cancel-form" class="vbest-cancel-btn">Cancel</button></div>
+
+          <fieldset class="vbest-form-row" style="border:none;padding:0;margin:0;">
+            <legend style="display:block;margin-bottom:6px;color:#b8dfe6;font-size:13px;">Rating</legend>
+
+            <!-- Play-store style horizontal star row (replaces radio buttons). Hidden input 'rating' ensures existing submit code works. -->
+            <div id="vbest-rating-wrap" role="radiogroup" aria-label="Rating" class="rating-row" style="justify-content:center;">
+              <div class="rating-row-star" style="gap:6px;">
+                <button type="button" class="vbest-star" data-value="1" aria-label="1 star" role="radio" aria-checked="false">★</button>
+                <button type="button" class="vbest-star" data-value="2" aria-label="2 stars" role="radio" aria-checked="false">★</button>
+                <button type="button" class="vbest-star" data-value="3" aria-label="3 stars" role="radio" aria-checked="false">★</button>
+                <button type="button" class="vbest-star" data-value="4" aria-label="4 stars" role="radio" aria-checked="false">★</button>
+                <button type="button" class="vbest-star" data-value="5" aria-label="5 stars" role="radio" aria-checked="false">★</button>
+              </div>
+              <div id="vbest-star-label">Excellent</div>
+            </div>
+
+            <!-- Hidden input used by submit handler: form['rating'].value -->
+            <input type="hidden" name="rating" id="vbest-hidden-rating" value="5" />
+          </fieldset>
+
+          <div class="vbest-form-row">
+            <label for="vbest-comment">Your review</label>
+            <textarea id="vbest-comment" name="comment" placeholder="Write your review..." rows="6" minlength="10" required></textarea>
+          </div>
+
+          <div class="vbest-form-actions">
+            <button type="submit" class="vbest-submit-btn">Publish Review</button>
+            <button type="button" id="vbest-cancel-form" class="vbest-cancel-btn">Cancel</button>
+          </div>
           <div id="vbest-form-msg" class="vbest-form-msg" aria-live="polite"></div>
         </form>
       `;
@@ -728,7 +817,7 @@
       document.getElementById('vbest-num-1').textContent = `(${totals[1]})`;
     }
 
-    // Listen to reviews and display approved reviews: 2 visible, rest hidden
+    // Listen to reviews and display approved reviews: 3 visible, rest hidden
     const reviewsRef = ref(db, 'reviews');
     onValue(reviewsRef, (snap) => {
       const val = snap.val();
@@ -761,9 +850,9 @@
         return;
       }
 
-      // show first two (or fewer)
-      const visible = approved.slice(0,2);
-      const hidden = approved.slice(2);
+      // show first three (or fewer)
+      const visible = approved.slice(0,3);
+      const hidden = approved.slice(3);
       visible.forEach(r => {
         approvedVisible.appendChild(createReviewElement(r));
       });
@@ -786,7 +875,7 @@
       updateSummaryUIFromApproved(approved);
     });
 
-    // toggle floating form
+    // toggle full-page form
     function toggleForm(show){
       if (!formContainer) return;
       if (typeof show === 'undefined') show = formContainer.style.display !== 'block';
@@ -794,7 +883,14 @@
       formContainer.setAttribute('aria-hidden', show ? 'false' : 'true');
       if (show) {
         const nameInput = document.getElementById('vbest-name');
-        if (nameInput) nameInput.focus();
+        if (nameInput) {
+          nameInput.focus();
+        }
+        // ensure page scroll to top of form on small screens
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        // hide message on close
+        if (msgEl) msgEl.textContent = '';
       }
     }
 
@@ -803,7 +899,7 @@
 
     if (cancelBtn) cancelBtn.addEventListener('click', ()=>{ toggleForm(false); });
 
-    // submit review -> push to DB with status pending
+    // submit review -> push to DB with status 'approved' for auto-publish
     form.addEventListener('submit', async function(e){
       e.preventDefault();
       const name = form['name'].value.trim();
@@ -821,11 +917,15 @@
           rating,
           comment,
           date: new Date().toISOString(),
-          status: 'pending'
+          status: 'approved'   // published immediately
         };
         await set(newRef, payload);
-        msgEl.textContent = 'Thanks — your review is submitted for moderation.';
+        msgEl.textContent = 'Thanks — your review is now published.';
         form.reset();
+        // reset hidden rating to default 5 after reset
+        const hidden = document.getElementById('vbest-hidden-rating');
+        if (hidden) hidden.value = '5';
+        // reset stars UI (handled by helper script below if present)
         setTimeout(()=>{ msgEl.textContent=''; toggleForm(false); }, 900);
       } catch (err) {
         console.error('Failed to submit review:', err);
@@ -854,17 +954,126 @@
 
   </script>
 
-  <!-- Footer accordion script -->
+  <!-- Footer accordion script (REPLACED: click-only toggle, content hidden on load) -->
   <script>
-    document.querySelectorAll(".accordion-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const content = btn.nextElementSibling;
-        content.style.display = content.style.display === "block" ? "none" : "block";
+    (function(){
+      // hide all accordion content on load
+      document.querySelectorAll('.accordion-content').forEach(function(c){ c.style.display = 'none'; });
+
+      // add click handlers so content opens only when clicked (works on desktop & mobile)
+      document.querySelectorAll('.accordion-btn').forEach(function(btn){
+        btn.addEventListener('click', function(e){
+          e.preventDefault();
+          const content = btn.nextElementSibling;
+          if (!content) return;
+          // toggle clicked content only
+          if (content.style.display === 'block') {
+            content.style.display = 'none';
+          } else {
+            content.style.display = 'block';
+          }
+        });
+        // ensure touch doesn't auto-open elsewhere; click handles toggling
+        btn.addEventListener('touchstart', function(){ /* noop */ }, {passive:true});
       });
-    });
-    document.querySelectorAll(".shilpi-top-link").forEach(link => {
-      link.addEventListener("click", e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); });
-    });
+
+      // back-to-top link handling if present
+      document.querySelectorAll(".shilpi-top-link").forEach(link => {
+        link.addEventListener("click", e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); });
+      });
+    })();
+  </script>
+
+  <!-- ================= Star behavior script (wires up the new 5-star UI) ================= -->
+  <script>
+    (function(){
+      const labelsMap = {1:'Poor',2:'Fair',3:'Good',4:'Very Good',5:'Excellent'};
+
+      function setRatingUI(val) {
+        const form = document.getElementById('vbest-review-form');
+        if (!form) return;
+        const hidden = form.querySelector('input[name="rating"]');
+        if (hidden) hidden.value = String(val);
+        const stars = form.querySelectorAll('.vbest-star');
+        stars.forEach(s => {
+          const v = Number(s.dataset.value);
+          if (v <= val) s.classList.add('filled'); else s.classList.remove('filled');
+          s.setAttribute('aria-checked', String(v === val));
+        });
+        const label = form.querySelector('#vbest-star-label');
+        if (label) label.textContent = labelsMap[val] || '';
+      }
+
+      function attachStarHandlers() {
+        const form = document.getElementById('vbest-review-form');
+        if (!form) return;
+        const stars = form.querySelectorAll('.vbest-star');
+        if (!stars || stars.length === 0) return;
+
+        stars.forEach(st => {
+          st.addEventListener('click', function(e){
+            const val = Number(this.dataset.value) || 5;
+            setRatingUI(val);
+          });
+
+          st.addEventListener('keydown', function(e){
+            const current = Number(form.querySelector('input[name=\"rating\"]').value || 5);
+            if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+              e.preventDefault();
+              const next = Math.min(5, current + 1);
+              setRatingUI(next);
+              const el = form.querySelector('.vbest-star[data-value=\"'+next+'\"]');
+              if (el) el.focus();
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+              e.preventDefault();
+              const prev = Math.max(1, current - 1);
+              setRatingUI(prev);
+              const el = form.querySelector('.vbest-star[data-value=\"'+prev+'\"]');
+              if (el) el.focus();
+            } else if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              const val = Number(this.dataset.value) || 5;
+              setRatingUI(val);
+            }
+          });
+
+          // Make stars focusable
+          st.setAttribute('tabindex','0');
+        });
+
+        // default rating
+        setRatingUI(5);
+      }
+
+      // Ensure handlers are attached after the form exists. The form is dynamically created in a module script above.
+      function waitForFormThenAttach(retries = 20) {
+        const form = document.getElementById('vbest-review-form');
+        if (form) {
+          attachStarHandlers();
+          return;
+        }
+        if (retries > 0) {
+          setTimeout(() => waitForFormThenAttach(retries - 1), 120);
+        }
+      }
+      waitForFormThenAttach();
+
+      // When the form opens, scroll to top and focus name input (works on mobile)
+      document.getElementById('vbestWriteReview').addEventListener('click', function(){
+        setTimeout(function(){
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          const nameInput = document.getElementById('vbest-name');
+          if (nameInput) nameInput.focus();
+        }, 160);
+      });
+
+      // After submit reset, restore stars (in case form.reset() cleared hidden rating)
+      document.addEventListener('submit', function(e){
+        if (e.target && e.target.id === 'vbest-review-form') {
+          setTimeout(function(){ setRatingUI(5); }, 300);
+        }
+      }, true);
+    })();
   </script>
 
 </body>
