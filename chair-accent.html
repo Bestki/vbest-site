@@ -1,412 +1,679 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title> Chairs - V’Best Luxury Interiors</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Accent Chairs- V’Best Luxury Interiors</title>
   <style>
+    /* Very black theme + layout */
+    :root{ --green:#27ae60; --whatsapp:#25D366; --accent:#8e44ad; --danger:#ff3b30; --bg:#000; --card:#111; }
+    html,body { height:100%; }
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
-      background: #000;
-      color: #fff;
-      text-align: center;
-      position: relative;
+      margin:0;
+      background:var(--bg);
+      color:#fff;
+      text-align:center;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
     }
-    h1 {
-      padding: 15px 0;
-      margin: 0;
-    }
-    #count {
-      font-size: 16px;
-      font-weight: bold;
-      margin: 10px 0;
-      color: #27ae60;
-    }
+    h1 { padding:16px 0; margin:0; font-size:20px; }
+    #count { font-size:15px; font-weight:700; margin:8px 0 12px; color:var(--green); }
+
+    /* grid always 2 columns */
     .product-grid {
-      display: grid;
+      display:grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      padding: 10px;
-    }
-    .product-card {
-      background: #111;
-      border-radius: 8px;
-      overflow: hidden;
-      padding-bottom: 10px;
-    }
-    .product-card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      cursor: pointer;
-      display: block;
-    }
-    /* SOLD placeholder when no image or image = "sold" */
-    .product-card .sold {
-      width: 100%;
-      height: 180px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #ffffff;   /* white so clearly visible */
-      color: #ff3b30;        /* red SOLD text */
-      font-weight: 800;
-      font-size: 28px;
-      letter-spacing: 2px;
-    }
-    .product-card h3 {
-      font-size: 15px;
-      margin: 8px 0 4px;
-    }
-    .price {
-      font-size: 14px;
-      font-weight: bold;
-      color: #27ae60;
-      margin: 2px 0;
-    }
-    .old-price {
-      text-decoration: line-through;
-      color: #ff3b30;
-      font-size: 13px;
-      margin: 0 0 4px 0;
-    }
-    .stars {
-      color: gold;
-      margin: 4px 0;
-    }
-    .btn-row {
-      display: flex;
-      justify-content: center;
-      gap: 6px;
-      margin-top: 6px;
-    }
-    .inquiry-btn {
-      flex: 1;
-      padding: 8px 12px;
-      background: #25D366;
-      color: white;
-      text-decoration: none;
-      border-radius: 6px;
-      font-weight: bold;
-      font-size: 14px;
-      text-align: center;
-    }
-    .buy-btn {
-      flex: 1;
-      padding: 8px 12px;
-      background: #007BFF;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .buy-btn[disabled] { opacity: 0.55; cursor: not-allowed; }
-    .inquiry-btn:hover { background: #1ebe5d; }
-    .buy-btn:hover { background: #0056b3; }
-    a.back {
-      display: block;
-      margin: 15px 0;
-      text-decoration: none;
-      color: #27ae60;
-      font-weight: bold;
-    }
-    /* Lightbox */
-    .lightbox {
-      display: none;
-      position: fixed;
-      z-index: 1200;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.9);
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    .lightbox img {
-      max-width: 100%;
-      max-height: 75%;
-      border-radius: 10px;
-      object-fit: contain;
-    }
-    .lightbox .caption {
-      color: #fff;
-      margin-top: 12px;
-      font-size: 16px;
-      text-align: center;
-      max-width: 100%;
-      word-break: break-word;
-    }
-    /* Cart icon */
-    .cart-icon {
-      position: fixed;
-      top: 30px;
-      right: 15px;
-      font-size: 40px;
-      cursor: pointer;
-      color: white;
-      z-index: 1300;
-    }
-    .cart-badge {
-      position: absolute;
-      top: 2px;
-      right: 10px;
-      background: red;
-      color: white;
-      font-size: 12px;
-      font-weight: bold;
-      padding: 2px 6px;
-      border-radius: 50%;
-      display: none;
+      gap:10px;
+      padding:10px;
+      max-width:1100px;
+      margin:0 auto 18px;
+      box-sizing:border-box;
     }
 
-    /* small responsive tweak: ensure grid works on tiny screens */
-    @media (max-width: 420px) {
-      .product-grid { grid-template-columns: 1fr 1fr; gap:6px; padding:8px; }
-      .product-card h3 { font-size: 13px; }
+    .product-card {
+      background:var(--card);
+      border-radius:10px;
+      overflow:hidden;
+      text-align:left;
+      display:flex;
+      flex-direction:column;
+      min-height:320px;
+      box-sizing:border-box;
+    }
+    .thumb { width:100%; height:180px; display:block; overflow:hidden; background:#222; }
+    .thumb img { width:100%; height:100%; object-fit:cover; display:block; cursor:pointer; }
+
+    .product-body { padding:10px; flex:1 1 auto; display:flex; flex-direction:column; }
+    .product-body h3 { margin:0 0 6px; font-size:15px; color:#e6fbf6; cursor:pointer; text-decoration:none; }
+    .short-desc { color:#bcdfe6; font-size:13px; margin-bottom:8px; }
+
+    .price-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .old-price {
+      text-decoration-line: line-through;
+      text-decoration-style: double;
+      text-decoration-color: var(--danger);
+      color: var(--danger);
+      font-size:13px;
+      font-weight:700;
+      margin:0;
+    }
+    .price { font-size:14px; font-weight:800; color:var(--green); }
+    .save-amount { font-size:12px; color:#9fe6b9; font-weight:700; margin-left:6px; }
+
+.negotiable-badge {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 15px;
+  margin-top: 6px;
+}
+
+    .stars { color:#ffd54a; margin:8px 0; font-size:14px; }
+
+    .discount-timer { color:#ffd; font-size:13px; margin-top:6px; font-weight:700; }
+
+    .btn-row { display:flex; gap:8px; margin-top:auto; }
+    .btn { flex:1; min-width:0; display:inline-flex; align-items:center; justify-content:center; padding:10px 12px; border-radius:8px; font-weight:700; font-size:14px; text-decoration:none; color:#fff; border:0; cursor:pointer; }
+    .inquiry-btn { background:var(--whatsapp); }
+    .inquiry-btn:hover { background:#1ebe5d; }
+    .buy-btn { background:#007BFF; }
+    .buy-btn[disabled] { opacity:0.55; cursor:not-allowed; }
+    .buy-btn:hover { background:#0056b3; }
+
+    a.back { display:block; margin:12px 0; color:var(--green); text-decoration:none; font-weight:700; }
+
+    /* details overlay - adjusted so the image top is visible and overlay sits above everything */
+    .details-panel {
+      position:fixed;
+      inset:0;
+      z-index:99999; /* raised so it sits above header/cart */
+      display:none;
+      background:rgba(0,0,0,0.98);
+      align-items:flex-start; /* ensure top of details is aligned to top of viewport so image top isn't hidden */
+      justify-content:center;
+      padding:18px 18px 28px;
+      box-sizing:border-box;
+      overflow:auto;
+    }
+    .details-inner {
+      width:100%;
+      max-width:1100px;
+      background:#000;
+      color:#fff;
+      border-radius:10px;
+      padding:18px;
+      box-sizing:border-box;
+      display:flex;
+      gap:18px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+      position:relative;
+      margin-top:8px;
+      max-height: calc(100vh - 40px); /* ensure it fits inside viewport */
+      overflow:auto;
+    }
+    .details-left { flex:1 1 420px; background:var(--card); border-radius:8px; padding:12px; text-align:center; }
+    .details-left .main-image { max-width:100%; max-height: calc(100vh - 220px); object-fit:contain; border-radius:8px; display:block; margin:0 auto; }
+    .img-nav { position:absolute; top:50%; transform:translateY(-50%); font-size:26px; color:#fff; background:rgba(0,0,0,0.3); padding:8px 10px; border-radius:8px; cursor:pointer; user-select:none; }
+    .img-nav.left { left:8px; }
+    .img-nav.right { right:8px; }
+
+    .thumbs { display:flex; gap:8px; margin-top:12px; overflow:auto; justify-content:center; padding-bottom:6px; }
+    .thumbs button { border:2px solid transparent; background:transparent; padding:0; border-radius:6px; cursor:pointer; }
+    .thumbs img { width:72px; height:56px; object-fit:cover; border-radius:6px; display:block; }
+
+    .details-right { flex:1 1 360px; text-align:left; }
+    .details-right h2 { margin:0 0 8px; color:#e6fbf6; font-size:22px; }
+    .meta { color:#bcdfe6; margin-bottom:8px; }
+    .details .price-row { margin-bottom:8px; align-items:center; }
+    .details .old-price { font-size:16px; }
+    .details .price { font-size:20px; font-weight:900; }
+    .details .save-amount { font-size:13px; margin-left:8px; color:#9fe6b9; }
+    .details .negotiable { color:var(--accent); font-weight:800; margin-bottom:8px; }
+    .details .desc { color:#d8eef0; margin-top:12px; line-height:1.6; }
+    .details .actions { display:flex; gap:10px; margin-top:14px; }
+    .details .btn { padding:12px; border-radius:8px; font-weight:800; text-align:center; }
+    .close-btn { position:absolute; right:22px; top:18px; font-size:22px; background:transparent; border:2px solid rgba(255,255,255,0.06); color:#fff; padding:6px 10px; border-radius:8px; cursor:pointer; }
+
+    /* small screens: keep two columns (user requested 2 in every device) */
+    @media (max-width:420px) {
+      .product-grid { grid-template-columns: 1fr 1fr; gap:8px; padding:8px; }
+      .thumbs img { width:60px; height:48px; }
+      .details-inner { padding:12px; max-height: calc(100vh - 20px); }
+      .details-left .main-image { max-height: calc(100vh - 160px); }
     }
   </style>
 </head>
 <body>
 
-  <h1>Accent Chair</h1>
+  <h1>Accent chairs</h1>
   <div id="count">Loading...</div>
-  <div id="products" class="product-grid"></div>
+
+  <div id="products" class="product-grid" aria-live="polite"></div>
 
   <a href="chair.html" class="back">⬅ Back to Categories</a>
 
-  <!-- 🛒 Cart Icon -->
-  <div class="cart-icon" onclick="window.location.href='cart.html'">
-    🛒<span id="cart-count" class="cart-badge">0</span>
+  <!-- cart icon -->
+  <div class="cart-icon" title="View cart" style="position:fixed;top:28px;right:14px;font-size:36px;color:#fff;z-index:3000;cursor:pointer;" onclick="window.location.href='cart.html'">
+    🛒 <span id="cart-count" style="position:absolute;top:0;right:-6px;background:#ff3b30;color:#fff;padding:3px 6px;border-radius:50%;font-size:12px;font-weight:700;display:none;">0</span>
   </div>
 
-  <!-- Lightbox -->
-  <div id="lightbox" class="lightbox" aria-hidden="true">
-    <img id="lightbox-img" src="" alt="">
-    <div id="lightbox-caption" class="caption"></div>
+  <!-- DETAILS PANEL -->
+  <div id="detailsPanel" class="details-panel" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="details-inner" role="document">
+      <button id="detailsClose" class="close-btn" aria-label="Close details">✕</button>
+      <div class="details-left" id="detailsLeft"></div>
+      <div class="details-right" id="detailsRight"></div>
+    </div>
   </div>
 
   <script>
-    // Expected sheet columns:
-    // 0 Category | 1 Product Name | 2 Price | 3 Image Link | 4 region/type | 5 WhatsApp Link | 6 Discount Price | 7 Views/Rating
-
+    // ---------------- CONFIG ----------------
     const SHEET_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4YXFvxl_w447wVuWRrHv8EInZFg1lSIX2_KwxZQJL9n8YHEzIP5WmfBep4yBgfN7EbArsjPPHOzOh/pub?output=csv";
+    const DISCOUNT_DURATION_MS = 60 * 24 * 60 * 60 * 1000; // 60 days (2 months)
 
-    // safe escapers
-    function escapeAttr(s) { return String(s || "").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-    function escJS(s) { return String(s || "").replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,'\\n').replace(/\r/g,''); }
-    function buildStars(n) { let out=""; for(let k=1;k<=5;k++) out += (k<=n) ? "★" : "☆"; return out; }
+    // ---------------- Utilities ----------------
+    function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function escJS(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,'\\n').replace(/\r/g,''); }
+    function formatNaira(n){ if (isNaN(n)) return ''; return '₦' + Math.round(n).toLocaleString(); }
+    function parseNumber(s){ if(!s) return NaN; const cleaned = String(s).replace(/[^\d.-]/g,''); return cleaned === '' ? NaN : parseFloat(cleaned); }
+    function buildStars(n){ let out=''; for(let k=1;k<=5;k++) out += (k<=n) ? '★' : '☆'; return out; }
 
-    fetch(SHEET_CSV)
-      .then(res => res.text())
-      .then(data => {
-        const rows = data.split("\n").slice(1);
-        const container = document.getElementById("products");
-        let count = 0;
-
-        rows.forEach((row, i) => {
-          const cols = row.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g);
-          if (!cols) return;
-
-          const get = idx => (cols[idx] ? cols[idx].replace(/"/g, "").trim() : "");
-          const category = get(0);
-          const name = get(1);
-          const price = get(2);
-          const image = get(3);
-          const type = get(4);
-          const whatsapp = get(5);
-          const discount = get(6);
-          const viewsRaw = get(7);
-
-          const catNorm = (category||"").trim().toLowerCase().replace(/\s+/g,'');
-          const typeNorm = (type||"").trim().toLowerCase().replace(/\s+/g,'');
-
-          if (catNorm === "accent" && typeNorm === "accent") {
-            count++;
-
-            // treat empty/whitespace or literal "sold" (case-insensitive) as sold
-            const imageTrim = (image||"").trim();
-            const isSoldMarker = imageTrim.toLowerCase() === "sold";
-            const hasValidImage = imageTrim !== "" && !isSoldMarker;
-
-            // image HTML
-            let imageHtml = "";
-            if (hasValidImage) {
-              const imgEsc = escapeAttr(imageTrim);
-              const imgJS = escJS(imageTrim);
-              const nameJS = escJS(name);
-              imageHtml = `<img src="${imgEsc}" alt="${escapeAttr(name)}" onclick="openLightbox('${imgJS}','${nameJS}')">`;
-            } else {
-              imageHtml = `<div class="sold" role="img" aria-label="SOLD">SOLD</div>`;
-            }
-
-            // price + discount (discount below, old crossed out in red)
-            let priceHtml = "";
-            if (discount && discount.trim() !== "") {
-              priceHtml = `<div class="old-price">${escapeAttr(price)}</div><div class="price">${escapeAttr(discount)}</div>`;
-            } else {
-              priceHtml = `<div class="price">${escapeAttr(price)}</div>`;
-            }
-
-            // stars / rating
-            let starsHtml = "";
-            if (viewsRaw && viewsRaw.trim() !== "") {
-              const parsed = parseInt(viewsRaw.trim());
-              if (!isNaN(parsed)) {
-                const clamped = Math.max(1, Math.min(5, parsed));
-                starsHtml = `<div class="stars" id="rating-${i}" data-rating="${clamped}" data-name="${escapeAttr(name)}">${buildStars(clamped)}</div>`;
-              } else {
-                starsHtml = `<div class="stars" id="rating-${i}" data-rating="5" data-name="${escapeAttr(name)}">${buildStars(5)}<div style="color:#aaa;font-size:12px;">${escapeAttr(viewsRaw)}</div></div>`;
-              }
-            } else {
-              starsHtml = `<div class="stars" id="rating-${i}" data-rating="5" data-name="${escapeAttr(name)}">${buildStars(5)}</div>`;
-            }
-
-            // inquiry href fallback logic (same behavior as before)
-            const whatsappTrim = (whatsapp||"").trim();
-            let inquiryHref = `https://wa.me/2347080535579?text=${encodeURIComponent("Hello, I'm interested in " + name + " (accent chair) priced at " + price)}`;
-            if (whatsappTrim !== "") {
-              if (whatsappTrim.startsWith("http") || whatsappTrim.startsWith("wa.me") || whatsappTrim.startsWith("https://") || whatsappTrim.startsWith("http://")) {
-                inquiryHref = whatsappTrim;
-              } else if (whatsappTrim.startsWith("+") || whatsappTrim.match(/^\d+$/)) {
-                const number = whatsappTrim.replace(/\D/g, "");
-                if (number) inquiryHref = `https://wa.me/${number}?text=${encodeURIComponent("Hello, I'm interested in " + name + " (accent chair) priced at " + price)}`;
-              } else {
-                inquiryHref = `https://wa.me/2347080535579?text=${encodeURIComponent(whatsappTrim)}`;
-              }
-            }
-
-            // Add button: disabled when sold (so cannot add sold items)
-            const addDisabled = hasValidImage ? "" : "disabled";
-            const imageArgForAdd = hasValidImage ? escJS(imageTrim) : ""; // pass empty string if sold
-
-            const card = `
-              <div class="product-card">
-                ${imageHtml}
-                <h3>${escapeAttr(name)}</h3>
-                ${priceHtml}
-                ${starsHtml}
-                <div class="btn-row">
-                  <a class="inquiry-btn" href="${escapeAttr(inquiryHref)}" target="_blank">📩 Inquiry</a>
-                  <button class="buy-btn" ${addDisabled} onclick="addToCart('${escJS(name)}','${escJS((discount && discount.trim() !== "") ? discount : price)}','${imageArgForAdd}')">🛒 Add</button>
-                </div>
-              </div>
-            `;
-            container.innerHTML += card;
-          }
-        });
-
-        document.getElementById("count").textContent = `Total Accent Chairs Available: ${count}`;
-        updateCartCount();
-      });
-
-    // LIGHTBOX + BACK handling
-    // state flag on body.dataset.lightboxOpen ( '1' when open )
-    function openLightbox(src, name) {
-      if (!src || src.trim() === "") return;
-      const lb = document.getElementById('lightbox');
-      const img = document.getElementById('lightbox-img');
-      const cap = document.getElementById('lightbox-caption');
-      img.src = src;
-      img.alt = name || "";
-      cap.textContent = name || "";
-      lb.style.display = "flex";
-      lb.setAttribute('aria-hidden','false');
-
-      if (document.body.dataset.lightboxOpen !== '1') {
-        // push a history entry so browser back closes the lightbox
-        try { history.pushState({lightbox:true}, ''); } catch(e) {}
-        document.body.dataset.lightboxOpen = '1';
-      }
-    }
-
-    function closeLightbox(initiatedByPopstate = false) {
-      const lb = document.getElementById('lightbox');
-      if (!lb || lb.style.display !== 'flex') return;
-      lb.style.display = 'none';
-      lb.setAttribute('aria-hidden','true');
-      document.getElementById('lightbox-img').src = '';
-      document.getElementById('lightbox-caption').textContent = '';
-
-      if (document.body.dataset.lightboxOpen === '1') {
-        document.body.dataset.lightboxOpen = '0';
-        if (!initiatedByPopstate) {
-          // pop the pushed history entry; popstate listener will not loop because we pass true when handling popstate
-          try { history.back(); } catch(e) {}
+    // robust CSV row parser (handles quoted commas)
+    function parseCSVRow(text){
+      const fields = []; let cur=''; let inQuotes=false;
+      for(let i=0;i<text.length;i++){
+        const ch = text[i];
+        if(inQuotes){
+          if(ch === '"'){
+            if(text[i+1] === '"'){ cur += '"'; i++; } else { inQuotes = false; }
+          } else cur += ch;
+        } else {
+          if(ch === '"') inQuotes = true;
+          else if(ch === ','){ fields.push(cur); cur=''; }
+          else cur += ch;
         }
       }
+      fields.push(cur);
+      return fields;
     }
 
-    // close on clicking outside image (but not when clicking the image itself)
-    (function(){
-      const lb = document.getElementById('lightbox');
-      lb.addEventListener('click', function(e){
-        if (e.target === lb) closeLightbox();
-      });
-    })();
+    // normalize header key
+    function normKey(k){ return String(k || '').toLowerCase().replace(/[^\w]/g,''); }
 
-    // handle browser back / popstate: if lightbox open, close it
-    window.addEventListener('popstate', function(e){
-      if (document.body.dataset.lightboxOpen === '1') {
-        closeLightbox(true);
+    // find column index by possible names
+    function findIndexByNames(headerMap, candidates){
+      for (const c of candidates) {
+        if (headerMap[c] !== undefined) return headerMap[c];
       }
+      return -1;
+    }
+
+    // ---------------- Read & Render ----------------
+    let products = [];
+
+    fetch(SHEET_CSV).then(r => r.text()).then(csv => {
+      const text = csv.replace(/^\uFEFF/,'');
+      const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
+      if (!lines.length) { document.getElementById('count').textContent = 'No data in sheet'; return; }
+
+      // parse header
+      const headerCols = parseCSVRow(lines[0]);
+      const headerMap = {};
+      headerCols.forEach((h,i) => headerMap[normKey(h)] = i);
+
+      // common candidate keys
+      const categoryIdx = findIndexByNames(headerMap, ['category','cat']) !== -1 ? findIndexByNames(headerMap,['category','cat']) : 0;
+      const nameIdx = findIndexByNames(headerMap, ['productname','productname','product','productname','name']) !== -1 ? findIndexByNames(headerMap,['productname','product','name']) : 1;
+      const descIdx = findIndexByNames(headerMap, ['description','desc','details']) !== -1 ? findIndexByNames(headerMap,['description','desc','details']) : 2;
+      const priceIdx = findIndexByNames(headerMap, ['price','priceraw','amount']) !== -1 ? findIndexByNames(headerMap,['price','priceraw','amount']) : 3;
+      const discountIdx = findIndexByNames(headerMap, ['discountprice','discount','discountprice']) !== -1 ? findIndexByNames(headerMap,['discountprice','discount','discountprice']) : 4;
+      const negotiableIdx = findIndexByNames(headerMap, ['negotiable','neg','isnegotiable']) !== -1 ? findIndexByNames(headerMap,['negotiable','neg','isnegotiable']) : 5;
+      const imageIdx = findIndexByNames(headerMap, ['imagelink','imagelinks','imagelink1','image','imagelink','imageurl']) !== -1 ? findIndexByNames(headerMap,['imagelink','image','imageurl','imagelinks']) : 3;
+      const regionIdx = findIndexByNames(headerMap, ['region','type','regiontype','categorytype']) !== -1 ? findIndexByNames(headerMap,['region','type','regiontype','categorytype']) : 4;
+      const viewsIdx = findIndexByNames(headerMap, ['views','rating','stars']) !== -1 ? findIndexByNames(headerMap,['views','rating','stars']) : 7;
+      // fallback if header map seems empty or wrong: use common sofa layout if many lines present
+      // (we assume sheet has header; if not, fallback above covers common indexes)
+
+      const container = document.getElementById('products');
+      container.innerHTML = '';
+      // parse rows (skip header)
+      for (let rowI = 1; rowI < lines.length; rowI++) {
+        const rowText = lines[rowI];
+        if (!rowText || !rowText.trim()) continue;
+        const cols = parseCSVRow(rowText);
+        const get = idx => (typeof cols[idx] !== 'undefined' ? String(cols[idx]).trim() : '');
+
+        const category = get(categoryIdx);
+        const name = get(nameIdx);
+        const description = get(descIdx);
+        const priceStr = get(priceIdx);
+        const discountStr = get(discountIdx);
+        const negotiable = get(negotiableIdx);
+        const imageField = get(imageIdx);
+        const region = get(regionIdx);
+        const viewsRaw = get(viewsIdx);
+
+        // decide if this product matches "Accent sofa" - check category or region fields
+        const catNorm = (category||'').toLowerCase();
+        const regionNorm = (region||'').toLowerCase();
+        if (!(catNorm.includes('accent') || regionNorm.includes('accent') || (name||'').toLowerCase().includes('accent'))) continue;
+
+        // parse images: allow comma or newline separated URLs; also strip quotes
+        const rawImgs = String(imageField || '').replace(/^"|"$/g,'');
+        const imageLinks = rawImgs.split(/[\r\n,]+/).map(s => s.trim()).filter(Boolean);
+        const cleaned = imageLinks.filter(u => u.toLowerCase() !== 'sold');
+        const hasImage = cleaned.length > 0;
+        const firstImage = hasImage ? cleaned[0] : '';
+
+        // short desc
+        const shortDesc = description ? (description.length > 80 ? description.slice(0,78).trim() + '…' : description) : '';
+
+        // price math
+        const priceNum = parseNumber(priceStr);
+        const discNum = parseNumber(discountStr);
+        const hasDiscount = !(String(discountStr||'').trim().toLowerCase() === 'no' || String(discountStr||'').trim() === '') && !isNaN(discNum);
+        const saveNum = (hasDiscount && !isNaN(priceNum)) ? (priceNum - discNum) : NaN;
+
+        // stars/ratings
+        let stars = '';
+        if (viewsRaw && viewsRaw.trim() !== '') {
+          const p = parseInt(viewsRaw.trim(),10);
+          if(!isNaN(p)){ const clamped = Math.max(1, Math.min(5, p)); for(let k=1;k<=5;k++) stars += (k<=clamped ? '★':'☆'); }
+          else stars = '★★★★★';
+        } else stars = '★★★★★';
+
+        // product object
+        const product = { rowI, category, name, description, priceStr, discountStr, negotiable, imageLinks: cleaned, region, viewsRaw, hasImage, firstImage, priceNum, discNum, hasDiscount, saveNum, stars };
+
+        // countdown setup
+        // SHOW countdown on any row that has a valid price (not only when there's a discount)
+        if (!isNaN(product.priceNum)) {
+          product._durationMs = DISCOUNT_DURATION_MS;
+          product._endTime = Date.now() + product._durationMs;
+          product._hasCountdown = true;
+        } else {
+          product._hasCountdown = false;
+        }
+
+        const idxForOpen = products.length;
+        products.push(product);
+
+        // build card html
+        const linkClick = `openDetails(${idxForOpen})`;
+        const imgHtml = product.hasImage
+          ? `<span class="thumb" onclick="${linkClick}" role="button" aria-label="Open details for ${escapeHtml(name)}"><img src="${escapeHtml(product.firstImage)}" alt="${escapeHtml(name)}"></span>`
+          : `<span class="thumb" onclick="${linkClick}" role="button" aria-label="Open details for ${escapeHtml(name)}"><div style="width:100%;height:180px;display:flex;align-items:center;justify-content:center;background:#fff;color:#ff3b30;font-weight:800;font-size:28px;">SOLD</div></span>`;
+
+        // original logic: crossed red price shows only when there's a discount (old price)
+        const oldPriceHtml = (product.hasDiscount && priceStr) ? `<div class="old-price">${escapeHtml(priceStr)}</div>` : '';
+        // show discount price when available, otherwise normal price
+        const priceHtml = product.hasDiscount ? `<div class="price">${escapeHtml(discountStr)}</div>` : `<div class="price">${escapeHtml(priceStr)}</div>`;
+        // restore original save logic (show save when there's a discount and the save amount > 0)
+        const saveHtml = (product.hasDiscount && !isNaN(product.saveNum) && product.saveNum > 0) ? `<div class="save-amount">Save ${formatNaira(product.saveNum)}</div>` : '';
+        const negotiableHtml = (negotiable && ['yes','y','true','1','negotiable'].includes(String(negotiable).trim().toLowerCase())) ? `<div class="negotiable-badge">Negotiable</div>` : '';
+
+        // inquiry message
+        const inquiryMessage = `Hello, I'm interested in ${name} priced at ${ product.hasDiscount ? discountStr : priceStr }. Please send a photo of the product you'd like to inquire about.`;
+        const inquiryHref = 'https://wa.me/2347080535579?text=' + encodeURIComponent(inquiryMessage);
+
+        const addDisabled = product.hasImage ? '' : 'disabled';
+        const imageArg = product.hasImage ? escJS(product.firstImage) : '';
+
+        const timerHtml = product._hasCountdown ? `<div id="timer-${idxForOpen}" class="discount-timer" data-product-index="${idxForOpen}">Offer ends in: --d --h --m --s</div>` : '';
+
+        const html = `
+          <div class="product-card" role="article" aria-label="${escapeHtml(name)}">
+            ${imgHtml}
+            <div class="product-body">
+              <a style="text-decoration:none;color:inherit;" onclick="${linkClick}"><h3>${escapeHtml(name)}</h3></a>
+              ${ shortDesc ? `<div class="short-desc">${escapeHtml(shortDesc)}</div>` : '' }
+              <div class="price-row">
+                ${oldPriceHtml}
+                <div style="display:flex;align-items:center;gap:8px;">
+                  ${priceHtml}
+                  ${saveHtml}
+                </div>
+              </div>
+              ${timerHtml}
+              ${negotiableHtml}
+              <div class="stars">${escapeHtml(stars)}</div>
+              <div class="btn-row">
+                <a class="btn inquiry-btn" href="${escapeHtml(inquiryHref)}" target="_blank" rel="noopener noreferrer">📩 Inquiry on WhatsApp</a>
+                <button class="btn buy-btn" ${addDisabled} onclick="addToCart('${escJS(name)}','${escJS(product.hasDiscount ? discountStr : priceStr)}','${imageArg}')">🛒 Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+
+        // start countdown if required
+        if (product._hasCountdown) startProductCountdown(idxForOpen);
+      } // end rows loop
+
+      document.getElementById('count').textContent = `Total Accent Chairs Available: ${products.length}`;
+      updateCartCount();
+    }).catch(err => {
+      console.error('Failed to load sheet:', err);
+      document.getElementById('count').textContent = 'Failed to load products';
     });
 
-    // intercept the page Back link: if lightbox open, close it instead of navigating away
-    (function(){
-      const backLink = document.querySelector('a.back');
-      if (backLink) {
-        backLink.addEventListener('click', function(e){
-          if (document.body.dataset.lightboxOpen === '1') {
-            e.preventDefault();
-            closeLightbox();
-          }
-          // else allow default navigation
-        }, {passive:false});
-      }
-    })();
+    // ---------------- Countdown (per product, looping) ----------------
+    function startProductCountdown(productIndex) {
+      const p = products[productIndex];
+      if (!p || !p._hasCountdown) return;
+      if (p._timerIntervalId) return;
+      if (!p._endTime || isNaN(p._endTime)) p._endTime = Date.now() + p._durationMs;
+      updateCountdownDisplays(productIndex);
+      p._timerIntervalId = setInterval(() => {
+        if (!p._hasCountdown) { clearInterval(p._timerIntervalId); p._timerIntervalId = null; return; }
+        const now = Date.now();
+        let timeLeft = p._endTime - now;
+        if (timeLeft <= 0) {
+          // restart automatically
+          p._endTime = Date.now() + p._durationMs;
+          timeLeft = p._endTime - Date.now();
+        }
+        updateCountdownDisplays(productIndex);
+      }, 1000);
+    }
 
-    // addToCart: now ignores sold items (image arg empty or whitespace)
-    function addToCart(name, price, image) {
-      if (!image || image.trim() === "") {
-        // sold item — do nothing (button is disabled so this rarely runs)
-        return;
+    function formatTimeRemaining(ms){
+      if (isNaN(ms) || ms <= 0) return '0s';
+      const totalSec = Math.floor(ms / 1000);
+      const days = Math.floor(totalSec / 86400);
+      const hours = Math.floor((totalSec % 86400) / 3600);
+      const mins = Math.floor((totalSec % 3600) / 60);
+      const secs = totalSec % 60;
+      return `${days}d ${hours}h ${mins}m ${secs}s`;
+    }
+
+    function updateCountdownDisplays(productIndex) {
+      const p = products[productIndex];
+      if (!p || !p._hasCountdown) return;
+      const els = document.querySelectorAll(`.discount-timer[data-product-index="${productIndex}"]`);
+      const now = Date.now();
+      let timeLeft = p._endTime - now;
+      if (timeLeft <= 0) { p._endTime = Date.now() + p._durationMs; timeLeft = p._endTime - Date.now(); }
+      const human = formatTimeRemaining(timeLeft);
+      els.forEach(el => el.textContent = `Offer ends in: ${human}`);
+      // if details view open for this product, update details timer too
+      const detailsTimer = document.getElementById('details-timer');
+      if (detailsTimer && detailsTimer.dataset.productIndex == String(productIndex)) detailsTimer.textContent = `Offer ends in: ${human}`;
+    }
+
+    // --------------- DETAILS PANEL (gallery + info) ---------------
+    const detailsPanel = document.getElementById('detailsPanel');
+    const detailsLeft = document.getElementById('detailsLeft');
+    const detailsRight = document.getElementById('detailsRight');
+    const detailsClose = document.getElementById('detailsClose');
+
+    let detailsOpenIndex = null;
+    let currentImageIndex = 0;
+    let touchStartX = null;
+
+    function openDetails(idx) {
+      if (typeof idx !== 'number' || !products[idx]) return;
+      detailsOpenIndex = idx;
+      currentImageIndex = 0;
+      const p = products[idx];
+      renderDetailsLeft(p);
+      renderDetailsRight(p);
+      detailsPanel.style.display = 'flex';
+      detailsPanel.setAttribute('aria-hidden','false');
+      try { history.pushState({detailsOpen:true}, ''); } catch(e){}
+      document.body.dataset.detailsOpen = '1';
+      // prevent background scroll so header/body won't shift while details open
+      document.body.style.overflow = 'hidden';
+      if (p._hasCountdown) startProductCountdown(idx);
+      document.addEventListener('keydown', detailsKeyHandler);
+    }
+
+    function closeDetails(byPopstate = false) {
+      detailsPanel.style.display = 'none';
+      detailsPanel.setAttribute('aria-hidden','true');
+      detailsLeft.innerHTML = '';
+      detailsRight.innerHTML = '';
+      detailsOpenIndex = null;
+      currentImageIndex = 0;
+      // restore body scroll
+      document.body.style.overflow = '';
+      if (document.body.dataset.detailsOpen === '1') {
+        document.body.dataset.detailsOpen = '0';
+        if (!byPopstate) { try { history.back(); } catch(e){} }
       }
-      let cart = JSON.parse(localStorage.getItem("cart")) || [];
-      cart.push({ name, price, image });
-      localStorage.setItem("cart", JSON.stringify(cart));
+      document.removeEventListener('keydown', detailsKeyHandler);
+    }
+
+    detailsClose.addEventListener('click', () => closeDetails(false));
+
+    function renderDetailsLeft(p){
+      let mainImgHtml = '';
+      if (p.hasImage) mainImgHtml = `<img id="detailsMainImage" class="main-image" src="${escapeHtml(p.imageLinks[0])}" alt="${escapeHtml(p.name)}">`;
+      else mainImgHtml = `<div style="width:100%;height:60vh;display:flex;align-items:center;justify-content:center;background:#111;color:${escapeHtml('#ff3b30')};font-weight:800;font-size:28px;border-radius:8px;">SOLD</div>`;
+
+      const hasMultiple = p.imageLinks && p.imageLinks.length > 1;
+      const leftArrow = hasMultiple ? `<div class="img-nav left" id="imgPrev" role="button" aria-label="Previous image">‹</div>` : '';
+      const rightArrow = hasMultiple ? `<div class="img-nav right" id="imgNext" role="button" aria-label="Next image">›</div>` : '';
+
+      let thumbsHtml = '';
+      if (p.imageLinks && p.imageLinks.length) {
+        thumbsHtml = '<div class="thumbs" id="thumbsContainer">';
+        p.imageLinks.forEach((url,i) => thumbsHtml += `<button data-idx="${i}" class="thumb-btn" aria-label="View image ${i+1}"><img src="${escapeHtml(url)}" alt="thumb ${i+1}"></button>`);
+        thumbsHtml += '</div>';
+      }
+
+      detailsLeft.innerHTML = `${leftArrow}${mainImgHtml}${rightArrow}${thumbsHtml}`;
+
+      if (hasMultiple) {
+        document.getElementById('imgPrev').addEventListener('click', () => showImageIndex(-1));
+        document.getElementById('imgNext').addEventListener('click', () => showImageIndex(1));
+      }
+      const thumbsContainer = document.getElementById('thumbsContainer');
+      if (thumbsContainer) {
+        thumbsContainer.querySelectorAll('button.thumb-btn').forEach(btn => btn.addEventListener('click', () => {
+          const i = parseInt(btn.getAttribute('data-idx'),10);
+          goToImage(i);
+        }));
+        highlightThumb(currentImageIndex);
+      }
+
+      const mainImg = document.getElementById('detailsMainImage');
+      if (mainImg) {
+        mainImg.addEventListener('touchstart', (ev) => { touchStartX = ev.touches[0].clientX; }, {passive:true});
+        mainImg.addEventListener('touchend', (ev) => {
+          if (touchStartX === null) return;
+          const endX = ev.changedTouches[0].clientX;
+          const diff = endX - touchStartX;
+          if (Math.abs(diff) > 40) { if (diff < 0) showImageIndex(1); else showImageIndex(-1); }
+          touchStartX = null;
+        }, {passive:true});
+      }
+    }
+
+    function renderDetailsRight(p){
+      const saveHtml = (p.hasDiscount && !isNaN(p.saveNum) && p.saveNum > 0) ? `<div class="save-amount">Save ${formatNaira(p.saveNum)}</div>` : '';
+      const negotiableHtml = (p.negotiable && ['yes','y','true','1','negotiable'].includes(String(p.negotiable).trim().toLowerCase())) ? `<div class="negotiable">Negotiable</div>` : '';
+      // show old (crossed) price first, then discount (if discount exists)
+      const priceHtml = p.hasDiscount ? `<div class="old-price">${escapeHtml(p.priceStr)}</div><div class="price">${escapeHtml(p.discountStr)}</div>` : `<div class="price">${escapeHtml(p.priceStr)}</div>`;
+      const inquiryMessage = `Hello, I'm interested in ${p.name} priced at ${ p.hasDiscount ? p.discountStr : p.priceStr }. Please send a photo of the product you'd like to inquire about.`;
+      const inquiryHref = 'https://wa.me/2347080535579?text=' + encodeURIComponent(inquiryMessage);
+
+      const detailsTimerHtml = p._hasCountdown ? `<div id="details-timer" class="discount-timer" data-product-index="${detailsOpenIndex}">Offer ends in: --d --h --m --s</div>` : '';
+
+      detailsRight.innerHTML = `
+        <h2>${escapeHtml(p.name)}</h2>
+        <div class="meta">Category: ${escapeHtml(p.category || p.region || '')}</div>
+        <div class="price-row">${priceHtml} ${saveHtml}</div>
+        ${detailsTimerHtml}
+        ${negotiableHtml}
+        <div class="stars">${escapeHtml(p.stars)}</div>
+        <div class="actions" style="margin-top:12px;">
+          <a class="btn inquiry-btn" href="${escapeHtml(inquiryHref)}" target="_blank" rel="noopener noreferrer">📩 Inquiry on WhatsApp</a>
+          <button class="btn buy-btn" ${p.hasImage ? '' : 'disabled'} onclick="addToCart('${escJS(p.name)}','${escJS(p.hasDiscount ? p.discountStr : p.priceStr)}','${escJS(p.hasImage ? p.firstImage : '')}')">🛒 Add to Cart</button>
+        </div>
+        <div class="desc"><h3 style="margin-top:14px;color:#e6fbf6;">Product description</h3><p style="margin:8px 0 0;line-height:1.6;color:#d8eef0;">${escapeHtml(p.description || 'No description available.')}</p></div>
+      `;
+
+      // sync countdown immediately
+      if (p._hasCountdown) updateCountdownDisplays(detailsOpenIndex);
+    }
+
+    function showImageIndex(delta) {
+      if (detailsOpenIndex === null) return;
+      const p = products[detailsOpenIndex];
+      const len = (p.imageLinks && p.imageLinks.length) ? p.imageLinks.length : 0;
+      if (!len) return;
+      currentImageIndex = (currentImageIndex + delta + len) % len;
+      updateMainImageForProduct(p);
+    }
+
+    function goToImage(i) {
+      if (detailsOpenIndex === null) return;
+      const p = products[detailsOpenIndex];
+      if (!p.imageLinks || !p.imageLinks[i]) return;
+      currentImageIndex = i;
+      updateMainImageForProduct(p);
+    }
+
+    function updateMainImageForProduct(p) {
+      const mainImg = document.getElementById('detailsMainImage');
+      if (mainImg && p.imageLinks && p.imageLinks[currentImageIndex]) {
+        mainImg.src = p.imageLinks[currentImageIndex];
+        highlightThumb(currentImageIndex);
+      }
+    }
+
+    function highlightThumb(i) {
+      const thumbs = document.querySelectorAll('#thumbsContainer button.thumb-btn');
+      thumbs.forEach((b, idx) => { b.style.border = (idx === i) ? '2px solid #25d366' : '2px solid transparent'; });
+      const sel = thumbs[i];
+      if (sel && sel.scrollIntoView) sel.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+    }
+
+    function detailsKeyHandler(e) {
+      if (e.key === 'Escape') { closeDetails(false); return; }
+      if (e.key === 'ArrowLeft') showImageIndex(-1);
+      if (e.key === 'ArrowRight') showImageIndex(1);
+    }
+
+    detailsPanel.addEventListener('click', function(e){ if (e.target === detailsPanel) closeDetails(false); });
+    window.addEventListener('popstate', function(e){ if (document.body.dataset.detailsOpen === '1') closeDetails(true); });
+
+    // ---------------- CART ----------------
+    <!-- Replace your existing addToCart function with this (same signature used by your pages) -->
+    
+    
+    
+/* Helper: show a small non-blocking toast (will create #vbest-toast element if missing) */
+function showToast(message, ms = 2000) {
+  let t = document.getElementById('vbest-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'vbest-toast';
+    Object.assign(t.style, {
+      position: 'fixed',
+      right: '14px',
+      bottom: '18px',
+      background: '#111',
+      color: '#fff',
+      padding: '10px 14px',
+      borderRadius: '8px',
+      boxShadow: '0 10px 30px rgba(0,0,0,0.6)',
+      zIndex: 99999,
+      fontWeight: 700,
+      opacity: 0,
+      transition: 'opacity 200ms ease, transform 200ms ease',
+      transform: 'translateY(8px)',
+      pointerEvents: 'none',
+      maxWidth: '320px',
+      fontSize: '14px',
+    });
+    document.body.appendChild(t);
+  }
+  // set message & show
+  t.textContent = message;
+  t.style.opacity = '1';
+  t.style.transform = 'translateY(0)';
+  // clear previous timer
+  if (t._hideTimer) clearTimeout(t._hideTimer);
+  t._hideTimer = setTimeout(() => {
+    t.style.opacity = '0';
+    t.style.transform = 'translateY(8px)';
+  }, ms);
+}
+
+/* Replace your page's addToCart(name, price, image) with this version.
+   Keeps same signature and behavior (localStorage + cart badge). */
+function addToCart(name, price, image) {
+  try {
+    // if image empty => treat as not available (keeps your current behavior)
+    if (!image || !String(image).trim()) return;
+
+    // read current cart
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+    // add item (you can change payload shape if you store extra fields)
+    cart.push({ name: name, price: price, image: image, qty: 1 });
+
+    // save
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    // update cart count using existing function if present, otherwise do minimal update
+    if (typeof updateCartCount === 'function') {
       updateCartCount();
+    } else {
+      const badge = document.getElementById('cart-count');
+      if (badge) {
+        badge.style.display = cart.length ? 'inline-block' : 'none';
+        badge.textContent = cart.length;
+      }
+    }
 
-      // increment local star rating for the product (match by data-name)
+    // keep previous UX: increment local star rating if you use that behavior (safe-guarded)
+    try {
       const els = document.querySelectorAll('.stars');
       for (let el of els) {
         if (el.getAttribute('data-name') === name) {
           let r = parseInt(el.getAttribute('data-rating')) || 0;
           r = Math.min(5, r + 1);
           el.setAttribute('data-rating', r);
-          el.innerHTML = buildStars(r);
+          // if you have a global buildStars() use it; otherwise create a simple stars string
+          if (typeof buildStars === 'function') el.innerHTML = buildStars(r);
+          else el.innerHTML = (Array(r).fill('★').join('')) + (Array(5 - r).fill('☆').join(''));
           break;
         }
       }
+    } catch (errRating) {
+      // ignore rating errors silently
     }
 
-    function updateCartCount() {
-      let cart = JSON.parse(localStorage.getItem("cart")) || [];
-      const badge = document.getElementById("cart-count");
-      if (cart.length > 0) {
-        badge.style.display = "inline-block";
-        badge.textContent = cart.length;
-      } else {
-        badge.style.display = "none";
-      }
+    // SESSION single-popup logic:
+    // Show one popup per browser tab session (sessionStorage cleared when tab/window is closed)
+    const popupKey = 'vbest_cart_popup_shown';
+    if (!sessionStorage.getItem(popupKey)) {
+      // Short, clear message per your spec:
+      showToast("Added to your cart. Click the cart at the top-right corner to view or remove items.", 10000);
+      sessionStorage.setItem(popupKey, '1');
     }
+    // otherwise silent (no popup) for subsequent adds in same session
+  } catch (err) {
+    // fallback: still update cart silently
+    console.error('addToCart error:', err);
+  }
+}
+  
+  
+  
+    function updateCartCount(){
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const badge = document.getElementById('cart-count');
+      if (cart.length > 0) { badge.style.display = 'inline-block'; badge.textContent = cart.length; } else { badge.style.display = 'none'; }
+    }
+    updateCartCount();
+
+    // cleanup intervals on unload
+    window.addEventListener('beforeunload', function(){ products.forEach(p => { if (p && p._timerIntervalId) clearInterval(p._timerIntervalId); }); });
   </script>
-
 </body>
 </html>
