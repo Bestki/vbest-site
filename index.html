@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
     <title>V'Best Luxury Interiors</title>
@@ -397,11 +398,104 @@
 <body>
 
   <!-- ================= Header with logo ================= -->
+  
   <header>
-    <div class="logo">
-      <img src="https://i.postimg.cc/X7mNqGh5/IMG-20250822-WA0058.jpg" alt="V'Best Logo">
-    </div>
+  
+<div class="logo-carousel">
+  <!-- Your actual logo first -->
+  <img id="logoImage" src="https://i.postimg.cc/X7mNqGh5/IMG-20250822-WA0058.jpg" alt="V'Best Logo">
 
+  <div class="logo-caption" id="logoCaption">
+    V'Best Luxury Interiors
+  </div>
+</div>
+
+<style>
+  .logo-carousel {
+    text-align: center;
+    margin: 20px auto;
+    position: relative;
+  }
+
+  .logo-carousel img {
+    width: 260px;   /* fixed width */
+    height: 260px;  /* fixed height */
+    object-fit: contain; /* keeps aspect ratio inside box */
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto 12px;
+    transition: opacity 0.8s ease-in-out;
+    background: #fff; /* optional clean background */
+  }
+
+  .logo-caption {
+    font-size: clamp(16px, 2.5vw, 22px);
+    font-weight: 700;
+    color: #25d366;
+    text-align: center;
+    min-height: 28px;
+    transition: opacity 0.6s ease-in-out;
+  }
+</style>
+
+<script>
+  (function(){
+    // slides: start with your logo first
+    const items = [
+      {
+        img: "https://i.postimg.cc/X7mNqGh5/IMG-20250822-WA0058.jpg",
+        text: "V'Best Luxury Interiors"
+      },
+      {
+        img: "https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg",
+        text: "🛏 Beds – From ₦350,000"
+      },
+      {
+        img: "https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg",
+        text: "🛋 Sofas – From ₦250,000"
+      },
+      {
+        img: "https://i.postimg.cc/Sxm8NRJJ/1756750928967.jpg",
+        text: "🍽 Dining Sets – From ₦400,000"
+      },
+      {
+        img: "https://i.postimg.cc/7LsSR4Pb/1756750824783.jpg",
+        text: "🪑 Chairs – From ₦120,000"
+      },
+      {
+        img: "https://i.postimg.cc/vBybRLq7/Workstation-348.png",
+        text: "🖥 Office Furniture – From ₦150,000"
+      }
+    ];
+
+    let index = 0;
+    const imgEl = document.getElementById("logoImage");
+    const captionEl = document.getElementById("logoCaption");
+
+    function showNext(){
+      index = (index + 1) % items.length;
+
+      // fade out
+      imgEl.style.opacity = 0;
+      captionEl.style.opacity = 0;
+
+      setTimeout(() => {
+        imgEl.src = items[index].img;
+        imgEl.alt = items[index].text;
+        captionEl.textContent = items[index].text;
+
+        // fade in
+        imgEl.style.opacity = 1;
+        captionEl.style.opacity = 1;
+      }, 700);
+    }
+
+    // logo stays 2s, others rotate every 4s
+    setTimeout(() => {
+      setInterval(showNext, 4000);
+    }, 1000); // 1 seconds pause for logo
+  })();
+</script>
     <!-- ===== Highlights + Reviews (placed directly under logo) ===== -->
     <div class="vbest-highrev" aria-label="Highlights and reviews">
       <!-- Highlights -->
@@ -1091,6 +1185,32 @@
       }, true);
     })();
   </script>
+<style>
+  /* Keep layout the same, just add animation */
+  .vbest-highlights .vbest-hi {
+    opacity: 0.6;
+    transform: translateY(10px);
+    animation: hiFade 6s infinite;
+  }
 
+  /* delay each item so they animate one after the other */
+  .vbest-highlights .vbest-hi:nth-child(1) {
+    animation-delay: 0s;
+  }
+  .vbest-highlights .vbest-hi:nth-child(2) {
+    animation-delay: 2s;
+  }
+  .vbest-highlights .vbest-hi:nth-child(3) {
+    animation-delay: 4s;
+  }
+
+  @keyframes hiFade {
+    0% { opacity: 0; transform: translateY(15px); }
+    10% { opacity: 1; transform: translateY(0); }
+    30% { opacity: 1; transform: translateY(0); }
+    40% { opacity: 0.6; transform: translateY(10px); }
+    100% { opacity: 0; transform: translateY(15px); }
+  }
+</style>
 </body>
 </html>

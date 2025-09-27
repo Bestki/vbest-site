@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Homepage -->
+  <url>
+    <loc>https://vbest-site.vercel.app/</loc>
+  </url>
+
+  <!-- Category pages (as listed in your index.html) -->
+  <url><loc>https://vbest-site.vercel.app/sofa.html</loc></url>
+  <url><loc>https://vbest-site.vercel.app/bed.html</loc></url>
+  <url><loc>https://vbest-site.vercel.app/chair.html</loc></url>
+  <url><loc>https://vbest-site.vercel.app/dining.html</loc></url>
+  <url><loc>https://vbest-site.vercel.app/centertable.html</loc></url>
+  <url><loc>https://vbest-site.vercel.app/office.html</loc></url>
+  <url><loc>https://vbest-site.vercel.app/outdoor.html</loc></url>
+  <url><loc>https://vbest-site.vercel.app/game.html</loc></url>
+  <url><loc>https://vbest-site.vercel.app/snooker.html</loc></url>
+  <url><loc>https://vbest-site.vercel.app/winbar.html</loc></url>
+  <url><loc>https://vbest-site.vercel.app/sideboard.html</loc></url>
+  <url><loc>https://vbest-site.vercel.app/console.html</loc></url>
+  <url><loc>https://vbest-site.vercel.app/cabinet.html</loc></url>
+  <url><loc>https://vbest-site.vercel.app/sidestool.html</loc></url>
+
+</urlset>
