@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
- <title>Dining Sets in Lagos | V'Best Interiors</title>
-<meta name="description" content="Shop elegant dining sets at V'Best Interiors. Perfect for modern and classic homes with premium quality tables and chairs.">
-<meta name="keywords" content="dining sets Lagos, dining table Nigeria, luxury dining, wooden dining set, V'Best dining">
-<meta property="og:title" content="Dining Sets - V'Best Interiors">
-<meta property="og:description" content="Discover stylish dining sets at V'Best Interiors. High-quality tables and chairs for your dining room.">
-<meta property="og:image" content="https://i.postimg.cc/zD6bXm8W/IMG-20250326-WA0006.jpg">
-<meta property="og:url" content="https://vbest-site.vercel.app/dining.html">
-<meta name="twitter:card" content="summary_large_image">
+  <title>Dining Sets in Lagos | V'Best Interiors</title>
+  <meta name="description" content="Shop elegant dining sets at V'Best Interiors. Perfect for modern and classic homes with premium quality tables and chairs.">
+  <meta name="keywords" content="dining sets Lagos, dining table Nigeria, luxury dining, wooden dining set, V'Best dining">
+  <meta property="og:title" content="Dining Sets - V'Best Interiors">
+  <meta property="og:description" content="Discover stylish dining sets at V'Best Interiors. High-quality tables and chairs for your dining room.">
+  <meta property="og:image" content="https://i.postimg.cc/zD6bXm8W/IMG-20250326-WA0006.jpg">
+  <meta property="og:url" content="https://vbest-site.vercel.app/dining.html">
+  <meta name="twitter:card" content="summary_large_image">
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -21,7 +22,6 @@
     }
 
     h1 {
-      color: #fff;
       margin-bottom: 20px;
       font-size: 26px;
       font-weight: bold;
@@ -29,45 +29,55 @@
 
     .categories {
       display: grid;
-      grid-template-columns: repeat(2, 1fr); /* 2 per row */
-      gap: 3px; /* tiny gap like homepage */
+      grid-template-columns: repeat(2, 1fr); /* Default: 2 per row */
+      gap: 6px;
       max-width: 900px;
       margin: 0 auto;
+    }
+
+    /* On desktop (big screens) → 3 columns */
+    @media (min-width: 992px) {
+      .categories {
+        grid-template-columns: repeat(3, 1fr);
+      }
     }
 
     .category-box {
       background: #111;
       border-radius: 6px;
-      padding: 5px;
+      overflow: hidden;
+    }
+
+    .category-box a {
+      display: block;
+      text-decoration: none;
+      color: white;
     }
 
     .category-box img {
       width: 100%;
-      height: 180px; /* consistent size */
+      height: 180px;
       object-fit: cover;
-      border-radius: 4px;
       display: block;
+      border-radius: 4px;
     }
 
-    .categories a {
+    .category-box span {
       display: block;
-      padding: 8px 10px;
-      margin-top: 6px;
+      padding: 10px;
       background: #25d366;
-      color: white;
-      text-decoration: none;
-      border-radius: 6px;
       font-weight: bold;
       font-size: 13px;
+      border-radius: 0 0 6px 6px;
     }
 
-    .categories a:hover {
+    .category-box span:hover {
       background: #1da851;
     }
 
     a.back {
       display: inline-block;
-      margin-top: 20px;
+      margin-top: 25px;
       text-decoration: none;
       color: #25d366;
       font-weight: bold;
@@ -76,23 +86,29 @@
 </head>
 <body>
 
-  <h1>🍽Dining Sets 3 to 6 seaters</h1>
+  <h1>🍽 Dining Sets 3 to 6 Seaters</h1>
   <strong>Discover elegant dining sets at V’Best — from 3-seaters to 6-seaters, crafted for comfort and style, with fast delivery across Nigeria.</strong>
 
   <section class="categories">
     <div class="category-box">
-      <img src="https://i.postimg.cc/5NWzCwy1/IMG-20250827-WA0027.jpg" alt="6 Seaters Dining">
-      <a href="dining-6.html">6 SEATERS</a>
+      <a href="dining-6.html">
+        <img src="https://i.postimg.cc/5NWzCwy1/IMG-20250827-WA0027.jpg" alt="6 Seaters Dining">
+        <span>6 SEATERS</span>
+      </a>
     </div>
 
     <div class="category-box">
-      <img src="https://i.postimg.cc/bNqJPLdG/zealux-furniture-340573678.jpg" alt="4 Seaters Dining">
-      <a href="dining-4.html">4 SEATERS</a>
+      <a href="dining-4.html">
+        <img src="https://i.postimg.cc/bNqJPLdG/zealux-furniture-340573678.jpg" alt="4 Seaters Dining">
+        <span>4 SEATERS</span>
+      </a>
     </div>
 
     <div class="category-box">
-      <img src="https://i.postimg.cc/4dbgFk6W/zealux-furniture-340398538.jpg" alt="3 Seaters Dining">
-      <a href="dining-3.html">3 SEATERS</a>
+      <a href="dining-3.html">
+        <img src="https://i.postimg.cc/4dbgFk6W/zealux-furniture-340398538.jpg" alt="3 Seaters Dining">
+        <span>3 SEATERS</span>
+      </a>
     </div>
   </section>
 
