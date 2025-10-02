@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>Dining Sets in Lagos | V'Best Interiors</title>
   <meta name="description" content="Shop elegant dining sets at V'Best Interiors. Perfect for modern and classic homes with premium quality tables and chairs.">
   <meta name="keywords" content="dining sets Lagos, dining table Nigeria, luxury dining, wooden dining set, V'Best dining">
@@ -16,7 +17,7 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 20px;
-      background: #000; /* Dark background */
+      background: #000;
       text-align: center;
       color: #fff;
     }
@@ -29,17 +30,10 @@
 
     .categories {
       display: grid;
-      grid-template-columns: repeat(2, 1fr); /* Default: 2 per row */
+      grid-template-columns: repeat(2, 1fr); /* 🔒 always 2 columns */
       gap: 6px;
-      max-width: 900px;
+      max-width: 500px;  /* 🔒 lock width so same on phone + desktop */
       margin: 0 auto;
-    }
-
-    /* On desktop (big screens) → 3 columns */
-    @media (min-width: 992px) {
-      .categories {
-        grid-template-columns: repeat(3, 1fr);
-      }
     }
 
     .category-box {
@@ -112,7 +106,7 @@
     </div>
   </section>
 
-  <a href="index.h" class="back"></a>
+  <a href="index.html" class="back"></a>
 
 </body>
 </html>
