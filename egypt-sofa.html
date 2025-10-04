@@ -5,147 +5,186 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>Egypt Sofa - V’Best Luxury Interiors</title>
   <style>
-    /* Very black theme + layout */
-    :root{ --green:#27ae60; --whatsapp:#25D366; --accent:#8e44ad; --danger:#ff3b30; --bg:#000; --card:#111; }
-    html,body { height:100%; }
-    body {
-      font-family: Arial, sans-serif;
-      margin:0;
-      background:var(--bg);
-      color:#fff;
-      text-align:center;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-    }
-    h1 { padding:16px 0; margin:0; font-size:20px; }
-    #count { font-size:15px; font-weight:700; margin:8px 0 12px; color:var(--green); }
+/* === COLOR-ONLY: replace your entire <style> with this ===
+   Keeps layout/spacing/behavior identical to your original file.
+   Only color values and text color are changed to a light/Amazon-like theme.
+*/
 
-    /* grid always 2 columns */
-    .product-grid {
-      display:grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap:10px;
-      padding:10px;
-      max-width:1100px;
-      margin:0 auto 18px;
-      box-sizing:border-box;
-    }
+/* Color variables — keep the same variable names so JS/CSS references still work */
+:root{
+  --green: #ff9900;    /* price / primary accent (Amazon orange) */
+  --whatsapp: #25D366; /* WhatsApp green (kept) */
+  --accent: #146eb4;   /* titles / links (blue) */
+  --danger: #b12704;   /* old price / alerts (deep red) */
+  --bg: #ffffff;       /* page background (light) */
+  --card: #f9f9f9;     /* card background (light gray) */
+}
 
-    .product-card {
-      background:var(--card);
-      border-radius:10px;
-      overflow:hidden;
-      text-align:left;
-      display:flex;
-      flex-direction:column;
-      min-height:320px;
-      box-sizing:border-box;
-    }
-    .thumb { width:100%; height:180px; display:block; overflow:hidden; background:#222; }
-    .thumb img { width:100%; height:100%; object-fit:cover; display:block; cursor:pointer; }
+/* keep layout and sizing exactly the same as original */
+html,body { height:100%; }
+body {
+  font-family: Arial, sans-serif;
+  margin:0;
+  background:var(--bg);
+  color:#111;                      /* changed from #fff -> readable dark text */
+  text-align:center;               /* preserve original centered layout */
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+h1 { padding:16px 0; margin:0; font-size:20px; }
+#count { font-size:15px; font-weight:700; margin:8px 0 12px; color:var(--accent); }
 
-    .product-body { padding:10px; flex:1 1 auto; display:flex; flex-direction:column; }
-    .product-body h3 { margin:0 0 6px; font-size:15px; color:#e6fbf6; cursor:pointer; text-decoration:none; }
-    .short-desc { color:#bcdfe6; font-size:13px; margin-bottom:8px; }
+/* grid always 2 columns (unchanged) */
+.product-grid {
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap:10px;
+  padding:10px;
+  max-width:1100px;
+  margin:0 auto 18px;
+  box-sizing:border-box;
+}
 
-    .price-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-    .old-price {
-      text-decoration-line: line-through;
-      text-decoration-style: double;
-      text-decoration-color: var(--danger);
-      color: var(--danger);
-      font-size:13px;
-      font-weight:700;
-      margin:0;
-    }
-    .price { font-size:14px; font-weight:800; color:var(--green); }
-    .save-amount { font-size:12px; color:#9fe6b9; font-weight:700; margin-left:6px; }
+.product-card {
+  background:var(--card);
+  border-radius:10px;
+  overflow:hidden;
+  text-align:left;
+  display:flex;
+  flex-direction:column;
+  min-height:320px;
+  box-sizing:border-box;
+}
+.thumb { width:100%; height:180px; display:block; overflow:hidden; background:#eee; } /* lighter thumb bg */
+.thumb img { width:100%; height:100%; object-fit:cover; display:block; cursor:pointer; }
+
+.product-body { padding:10px; flex:1 1 auto; display:flex; flex-direction:column; }
+.product-body h3 { margin:0 0 6px; font-size:15px; color:var(--accent); cursor:pointer; text-decoration:none; } /* changed to accent blue */
+.short-desc { color:#6b6b6b; font-size:13px; margin-bottom:8px; } /* muted gray (if ever shown) */
+
+.price-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.old-price {
+  text-decoration-line: line-through;
+  text-decoration-style: double;
+  text-decoration-color: var(--danger);
+  color: var(--danger);
+  font-size:13px;
+  font-weight:700;
+  margin:0;
+}
+.price { font-size:14px; font-weight:800; color:var(--green); } /* orange */
+.save-amount { font-size:12px; color:var(--accent); font-weight:700; margin-left:6px; } /* blue */
 
 .negotiable-badge {
-  color: #ffffff;
+  color: var(--accent);    /* blue */
   font-weight: 700;
   font-size: 15px;
   margin-top: 6px;
 }
 
-    .stars { color:#ffd54a; margin:8px 0; font-size:14px; }
+.stars { color:#ffd54a; margin:8px 0; font-size:14px; } /* keep star color */
+.discount-timer { color:var(--danger); font-size:13px; margin-top:6px; font-weight:700; } /* red */
 
-    .discount-timer { color:#ffd; font-size:13px; margin-top:6px; font-weight:700; }
+.btn-row { display:flex; gap:8px; margin-top:auto; }
+.btn { flex:1; min-width:0; display:inline-flex; align-items:center; justify-content:center; padding:10px 12px; border-radius:8px; font-weight:700; font-size:14px; text-decoration:none; color:#fff; border:0; cursor:pointer; }
+.inquiry-btn { background:var(--whatsapp); color:#fff; } /* keep WhatsApp green */
+.inquiry-btn:hover { filter:brightness(0.95); }
+.buy-btn { background:var(--green); color:#fff; } /* orange buy button */
+.buy-btn[disabled] { opacity:0.55; cursor:not-allowed; }
+.buy-btn:hover { filter:brightness(0.95); }
 
-    .btn-row { display:flex; gap:8px; margin-top:auto; }
-    .btn { flex:1; min-width:0; display:inline-flex; align-items:center; justify-content:center; padding:10px 12px; border-radius:8px; font-weight:700; font-size:14px; text-decoration:none; color:#fff; border:0; cursor:pointer; }
-    .inquiry-btn { background:var(--whatsapp); }
-    .inquiry-btn:hover { background:#1ebe5d; }
-    .buy-btn { background:#007BFF; }
-    .buy-btn[disabled] { opacity:0.55; cursor:not-allowed; }
-    .buy-btn:hover { background:#0056b3; }
+a.back { display:block; margin:12px 0; color:var(--accent); text-decoration:none; font-weight:700; }
 
-    a.back { display:block; margin:12px 0; color:var(--green); text-decoration:none; font-weight:700; }
+/* details overlay colors adjusted only */
+.details-panel {
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  display:none;
+  background:rgba(0,0,0,0.9); /* overlay kept dark for contrast */
+  align-items:flex-start;
+  justify-content:center;
+  padding:18px 18px 28px;
+  box-sizing:border-box;
+  overflow:auto;
+}
+.details-inner {
+  width:100%;
+  max-width:1100px;
+  background:var(--bg);   /* changed from #000 to page bg (white) */
+  color:#111;            /* dark readable text */
+  border-radius:10px;
+  padding:18px;
+  box-sizing:border-box;
+  display:flex;
+  gap:18px;
+  align-items:flex-start;
+  flex-wrap:wrap;
+  position:relative;
+  margin-top:8px;
+  max-height: calc(100vh - 40px);
+  overflow:auto;
+}
+.details-left { flex:1 1 420px; background:var(--card); border-radius:8px; padding:12px; text-align:center; }
+.details-left .main-image { max-width:100%; max-height: calc(100vh - 220px); object-fit:contain; border-radius:8px; display:block; margin:0 auto; }
+.img-nav { position:absolute; top:50%; transform:translateY(-50%); font-size:26px; color:#fff; background:rgba(0,0,0,0.3); padding:8px 10px; border-radius:8px; cursor:pointer; user-select:none; }
+.img-nav.left { left:8px; }
+.img-nav.right { right:8px; }
 
-    /* details overlay - adjusted so the image top is visible and overlay sits above everything */
-    .details-panel {
-      position:fixed;
-      inset:0;
-      z-index:99999; /* raised so it sits above header/cart */
-      display:none;
-      background:rgba(0,0,0,0.98);
-      align-items:flex-start; /* ensure top of details is aligned to top of viewport so image top isn't hidden */
-      justify-content:center;
-      padding:18px 18px 28px;
-      box-sizing:border-box;
-      overflow:auto;
-    }
-    .details-inner {
-      width:100%;
-      max-width:1100px;
-      background:#000;
-      color:#fff;
-      border-radius:10px;
-      padding:18px;
-      box-sizing:border-box;
-      display:flex;
-      gap:18px;
-      align-items:flex-start;
-      flex-wrap:wrap;
-      position:relative;
-      margin-top:8px;
-      max-height: calc(100vh - 40px); /* ensure it fits inside viewport */
-      overflow:auto;
-    }
-    .details-left { flex:1 1 420px; background:var(--card); border-radius:8px; padding:12px; text-align:center; }
-    .details-left .main-image { max-width:100%; max-height: calc(100vh - 220px); object-fit:contain; border-radius:8px; display:block; margin:0 auto; }
-    .img-nav { position:absolute; top:50%; transform:translateY(-50%); font-size:26px; color:#fff; background:rgba(0,0,0,0.3); padding:8px 10px; border-radius:8px; cursor:pointer; user-select:none; }
-    .img-nav.left { left:8px; }
-    .img-nav.right { right:8px; }
+.thumbs { display:flex; gap:8px; margin-top:12px; overflow:auto; justify-content:center; padding-bottom:6px; }
+.thumbs button { border:2px solid transparent; background:transparent; padding:0; border-radius:6px; cursor:pointer; }
+.thumbs img { width:72px; height:56px; object-fit:cover; border-radius:6px; display:block; }
 
-    .thumbs { display:flex; gap:8px; margin-top:12px; overflow:auto; justify-content:center; padding-bottom:6px; }
-    .thumbs button { border:2px solid transparent; background:transparent; padding:0; border-radius:6px; cursor:pointer; }
-    .thumbs img { width:72px; height:56px; object-fit:cover; border-radius:6px; display:block; }
+.details-right { flex:1 1 360px; text-align:left; }
+.details-right h2 { margin:0 0 8px; color:var(--accent); font-size:22px; } /* blue title */
+.meta { color:#6b6b6b; margin-bottom:8px; } /* muted meta */
+.details .price-row { margin-bottom:8px; align-items:center; }
+.details .old-price { font-size:16px; }
+.details .price { font-size:20px; font-weight:900; color:var(--green); } /* orange price */
+.details .save-amount { font-size:13px; margin-left:8px; color:var(--accent); }
+.details .negotiable { color:var(--accent); font-weight:800; margin-bottom:8px; }
+.details .desc { color:#333; margin-top:12px; line-height:1.6; } /* readable description */
 
-    .details-right { flex:1 1 360px; text-align:left; }
-    .details-right h2 { margin:0 0 8px; color:#e6fbf6; font-size:22px; }
-    .meta { color:#bcdfe6; margin-bottom:8px; }
-    .details .price-row { margin-bottom:8px; align-items:center; }
-    .details .old-price { font-size:16px; }
-    .details .price { font-size:20px; font-weight:900; }
-    .details .save-amount { font-size:13px; margin-left:8px; color:#9fe6b9; }
-    .details .negotiable { color:var(--accent); font-weight:800; margin-bottom:8px; }
-    .details .desc { color:#d8eef0; margin-top:12px; line-height:1.6; }
-    .details .actions { display:flex; gap:10px; margin-top:14px; }
-    .details .btn { padding:12px; border-radius:8px; font-weight:800; text-align:center; }
-    .close-btn { position:absolute; right:22px; top:18px; font-size:22px; background:transparent; border:2px solid rgba(255,255,255,0.06); color:#fff; padding:6px 10px; border-radius:8px; cursor:pointer; }
+.details .actions { display:flex; gap:10px; margin-top:14px; }
+.details .btn { padding:12px; border-radius:8px; font-weight:800; text-align:center; }
+.close-btn { position:absolute; right:22px; top:18px; font-size:22px; background:transparent; border:2px solid rgba(0,0,0,0.06); color:#111; padding:6px 10px; border-radius:8px; cursor:pointer; }
 
-    /* small screens: keep two columns (user requested 2 in every device) */
-    @media (max-width:420px) {
-      .product-grid { grid-template-columns: 1fr 1fr; gap:8px; padding:8px; }
-      .thumbs img { width:60px; height:48px; }
-      .details-inner { padding:12px; max-height: calc(100vh - 20px); }
-      .details-left .main-image { max-height: calc(100vh - 160px); }
-    }
+/* keep small-screen two-columns (you requested two columns on all screens originally) */
+@media (max-width:420px) {
+  .product-grid { grid-template-columns: 1fr 1fr; gap:8px; padding:8px; } /* still 2 cols, slightly tighter */
+  .thumbs img { width:60px; height:48px; }
+ /* Make details popup background clear white */
+.details-inner {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Ensure the description text is pure black */
+.details .desc {
+  color: #ffffff !important;
+  font-size: 15px;
+  line-height: 1.6;
+}
+  .details-left .main-image { max-height: calc(100vh - 160px); }
+}
+
+/* tiny visual helpers remain unchanged */
   </style>
 </head>
 <body>
 
+<!-- Header: left = V'Best (styled), right = discount message -->
+<header class="site-header" role="banner" aria-label="V'Best header">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div class="logo" aria-hidden="true">V’Best</div>
+    <div class="discount-banner" aria-hidden="true">
+      <span class="scroll">Limited-time discount on luxury sofa designs — ending soon!</span>
+    </div>
+  </div>
+
+  <!-- keep this small/right area empty (your title and cart remain below), or place quick links here if needed -->
+  <div style="width:44px;"></div>
+</header>
   <h1>Egypt Sofa</h1>
   <div id="count">Loading...</div>
 
