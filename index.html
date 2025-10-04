@@ -20,31 +20,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
 /* Video tile style — minimal and safe */
-.category-box { position: relative; overflow: hidden; display:block; }
+/* minimal video tile styles */
+.category-box { position: relative; overflow: hidden; display:block; text-align:center; }
 .category-box .cat-video,
 .category-box img.cat-fallback {
   width: 100%;
-  height: 180px;           /* match your image height */
+  height: 180px;
   object-fit: cover;
   display: block;
-  border-radius: 4px;
+  border-radius: 6px;
   background: #000;
 }
 
-/* orange badge (non-clickable, pointer-events none) */
+/* small orange badge */
 .category-box .discount-badge {
   position: absolute;
   top: 10px;
   left: 10px;
+  z-index: 6;
   background: linear-gradient(180deg,#ff9900,#e68a00);
   color: #fff;
-  padding: 6px 8px;
+  padding: 6px 9px;
+  font-size: 13px;
   font-weight: 800;
-  font-size: 12px;
   border-radius: 6px;
-  z-index: 3;
-  pointer-events: none;
   box-shadow: 0 6px 18px rgba(230,138,0,0.18);
+  pointer-events: none;
+  opacity: .96;
 }
   /* ================= Base (Amazon-like light theme) ================= */
   :root {
@@ -590,29 +592,119 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   <section id="searchResults"></section>
 
   <!-- ===== Categories (always 2 columns) ===== -->
-  <section class="categories" id="categoryList">
-<a href="sofa.html" class="category-box"
-   data-video="https://cdn.pixabay.com/video/2021/08/04/16-39-24-6646_640.mp4"
-   data-poster="https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg"
-   data-badge="40% OFF">
-  <img src="https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg" alt="Sofa" loading="lazy">
-  <span>🛋 SOFAS</span>
-</a>
-    <a href="bed.html" class="category-box"><img src="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg" alt="Bed"loading="lazy"><span>🛏 BEDS</span></a>
-    <a href="chair.html" class="category-box"><img src="https://i.postimg.cc/rFrmWTqS/Screenshot-20250213-113547-Instagram.jpg" alt="Chair"loading="lazy"><span>🪑 CHAIRS</span></a>
-    <a href="dining.html" class="category-box"><img src="https://i.postimg.cc/Sxm8NRJJ/1756750928967.jpg" alt="Dining"loading="lazy"><span>🍽 DINING 3–6 SEATERS</span></a>
-    <a href="centertable.html" class="category-box"><img src="https://i.postimg.cc/Px5XJLDr/IMG-20250822-WA0064.jpg" alt="Center Table"loading="lazy"><span>🪞 CENTER TABLES</span></a>
-    <a href="office.html" class="category-box"><img src="https://i.postimg.cc/vBybRLq7/Workstation-348.png" alt="Office"loading="lazy"><span>OFFICE FURNITURES🪑🖥️</span></a>
-    <a href="outdoor.html" class="category-box"><img src="https://i.postimg.cc/yxGGYGDw/Ag-ACkq-HWp-Pyzt-HZ89-Sp-Vx-Y.jpg" alt="Outdoors & Patio"loading="lazy"><span>🪑 OUTDOORS & PATIO   </span></a>
-    <a href="game.html" class="category-box"><img src="https://i.postimg.cc/GhBhTtX7/Magshion-Adjustable-Height-Gaming-Chair-with-Retractable-Footrest-and-Computer-Desk-Purple-2e356ae6.png" alt="Gaming"loading="lazy"><span>🎮 GAMING CHAIRS & TABLE</span></a>
-    <a href="snooker.html" class="category-box"><img src="https://i.postimg.cc/7LbWQCnH/807531125-321-1024x1024.jpg" alt="Snooker & Pool"loading="lazy"><span>SNOOKERS & POOL🎱</span></a>
-    <a href="winbar.html" class="category-box"><img src="https://i.postimg.cc/J01rXcj7/Wine-Bar-1.webp" alt="Wine Bar"loading="lazy"><span>WINE BAR🍷🥂🍾</span></a>
-    <a href="sideboard.html" class="category-box"><img src="https://i.postimg.cc/BnRRj3SZ/PDINCBT32-Glossy-White-Gold-1.jpg" alt="Dining sideboard/Consoles"loading="lazy"><span>DRESSING MIRROR, DINING BUFFET & CONSOLES</span></a>
-    <a href="console.html" class="category-box"><img src="https://i.postimg.cc/d3HMkLJw/c6dcbbe659c10b00e4126e14dcd4021c.jpg" alt="TV Console"loading="lazy"><span>📺TV CONSOLES & TV STAND</span></a>
-    <a href="cabinet.html" class="category-box"><img src="https://i.postimg.cc/m2XvGMKH/71-Lqo-G6liv-L-AC-SL1500.jpg" alt="Cabinet"loading="lazy"><span>CABINET & WARDROBE</span></a>
-    <a href="sidestool.html" class="category-box"><img src="https://i.postimg.cc/Sxrz34QC/ec8f0881dd3292db1a7655c79506473c.jpg" alt="Side Stools"loading="lazy"><span>🪑 SIDE STOOLS</span></a>
-  </section>
+<section class="categories" id="categoryList">
+  <a href="sofa.html" class="category-box"
+     data-video="https://cdn.pixabay.com/video/2023/10/25/187983-881964416_large.mp4"
+     data-poster="https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg"
+     data-badge="40% OFF">
+    <img src="https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg" alt="Sofa" loading="lazy">
+    <span>🛋 SOFAS</span>
+  </a>
 
+  <a href="bed.html" class="category-box"
+     data-video="https://cdn.pixabay.com/video/2023/06/28/168888-840043090_tiny.mp4"
+     data-poster="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg"
+     data-badge="35% OFF">
+    <img src="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg" alt="Bed" loading="lazy">
+    <span>🛏 BEDS</span>
+  </a>
+
+  <a href="chair.html" class="category-box"
+     data-video="https://cdn.pixabay.com/video/2022/07/09/13/07/living-room-7311661_1280.mp4"
+     data-poster="https://i.postimg.cc/rFrmWTqS/Screenshot-20250213-113547-Instagram.jpg"
+     data-badge="30% OFF">
+    <img src="https://i.postimg.cc/rFrmWTqS/Screenshot-20250213-113547-Instagram.jpg" alt="Chair" loading="lazy">
+    <span>🪑 CHAIRS</span>
+  </a>
+
+  <a href="dining.html" class="category-box"
+     data-video="https://cdn.pixabay.com/video/2021/04/16/09/16/dining-room-6186446_1280.mp4"
+     data-poster="https://i.postimg.cc/Sxm8NRJJ/1756750928967.jpg"
+     data-badge="50% OFF">
+    <img src="https://i.postimg.cc/Sxm8NRJJ/1756750928967.jpg" alt="Dining" loading="lazy">
+    <span>🍽 DINING 3–6 SEATERS</span>
+  </a>
+
+  <a href="centertable.html" class="category-box"
+     data-video="https://cdn.pixabay.com/video/2022/01/26/03/14/interior-6966100_1280.mp4"
+     data-poster="https://i.postimg.cc/Px5XJLDr/IMG-20250822-WA0064.jpg"
+     data-badge="33% OFF">
+    <img src="https://i.postimg.cc/Px5XJLDr/IMG-20250822-WA0064.jpg" alt="Center Table" loading="lazy">
+    <span>🪞 CENTER TABLES</span>
+  </a>
+
+  <a href="office.html" class="category-box"
+     data-video="https://cdn.pixabay.com/video/2021/07/28/05/45/office-6482338_1280.mp4"
+     data-poster="https://i.postimg.cc/vBybRLq7/Workstation-348.png"
+     data-badge="37% OFF">
+    <img src="https://i.postimg.cc/vBybRLq7/Workstation-348.png" alt="Office" loading="lazy">
+    <span>OFFICE FURNITURES🪑🖥️</span>
+  </a>
+
+  <a href="outdoor.html" class="category-box"
+     data-video="https://cdn.pixabay.com/video/2019/12/03/05/28/garden-4671578_1280.mp4"
+     data-poster="https://i.postimg.cc/yxGGYGDw/Ag-ACkq-HWp-Pyzt-HZ89-Sp-Vx-Y.jpg"
+     data-badge="30% OFF">
+    <img src="https://i.postimg.cc/yxGGYGDw/Ag-ACkq-HWp-Pyzt-HZ89-Sp-Vx-Y.jpg" alt="Outdoors & Patio" loading="lazy">
+    <span>🪑 OUTDOORS & PATIO</span>
+  </a>
+
+  <a href="game.html" class="category-box"
+     data-video="https://cdn.pixabay.com/video/2020/10/06/16/01/gaming-room-5637119_1280.mp4"
+     data-poster="https://i.postimg.cc/GhBhTtX7/Magshion-Adjustable-Height-Gaming-Chair-with-Retractable-Footrest-and-Computer-Desk-Purple-2e356ae6.png"
+     data-badge="34% OFF">
+    <img src="https://i.postimg.cc/GhBhTtX7/Magshion-Adjustable-Height-Gaming-Chair-with-Retractable-Footrest-and-Computer-Desk-Purple-2e356ae6.png" alt="Gaming" loading="lazy">
+    <span>🎮 GAMING CHAIRS & TABLE</span>
+  </a>
+
+  <a href="snooker.html" class="category-box"
+     data-video="https://cdn.pixabay.com/video/2017/08/07/08/56/pool-2592740_1280.mp4"
+     data-poster="https://i.postimg.cc/7LbWQCnH/807531125-321-1024x1024.jpg"
+     data-badge="31% OFF">
+    <img src="https://i.postimg.cc/7LbWQCnH/807531125-321-1024x1024.jpg" alt="Snooker & Pool" loading="lazy">
+    <span>SNOOKERS & POOL🎱</span>
+  </a>
+
+  <a href="winbar.html" class="category-box"
+     data-video="https://cdn.pixabay.com/video/2016/03/27/22/27/bar-1283768_1280.mp4"
+     data-poster="https://i.postimg.cc/J01rXcj7/Wine-Bar-1.webp"
+     data-badge="45% OFF">
+    <img src="https://i.postimg.cc/J01rXcj7/Wine-Bar-1.webp" alt="Wine Bar" loading="lazy">
+    <span>WINE BAR🍷🥂🍾</span>
+  </a>
+
+  <a href="sideboard.html" class="category-box"
+     data-video="https://cdn.pixabay.com/video/2021/08/13/12/29/interior-6547530_1280.mp4"
+     data-poster="https://i.postimg.cc/BnRRj3SZ/PDINCBT32-Glossy-White-Gold-1.jpg"
+     data-badge="32% OFF">
+    <img src="https://i.postimg.cc/BnRRj3SZ/PDINCBT32-Glossy-White-Gold-1.jpg" alt="Dining sideboard/Consoles" loading="lazy">
+    <span>DRESSING MIRROR, DINING BUFFET & CONSOLES</span>
+  </a>
+
+  <a href="console.html" class="category-box"
+     data-video="https://cdn.pixabay.com/video/2022/02/16/08/26/flat-screen-tv-7016981_1280.mp4"
+     data-poster="https://i.postimg.cc/d3HMkLJw/c6dcbbe659c10b00e4126e14dcd4021c.jpg"
+     data-badge="36% OFF">
+    <img src="https://i.postimg.cc/d3HMkLJw/c6dcbbe659c10b00e4126e14dcd4021c.jpg" alt="TV Console" loading="lazy">
+    <span>📺TV CONSOLES & TV STAND</span>
+  </a>
+
+  <a href="cabinet.html" class="category-box"
+     data-video="https://cdn.pixabay.com/video/2018/03/06/12/30/wardrobe-3200918_1280.mp4"
+     data-poster="https://i.postimg.cc/m2XvGMKH/71-Lqo-G6liv-L-AC-SL1500.jpg"
+     data-badge="38% OFF">
+    <img src="https://i.postimg.cc/m2XvGMKH/71-Lqo-G6liv-L-AC-SL1500.jpg" alt="Cabinet" loading="lazy">
+    <span>CABINET & WARDROBE</span>
+  </a>
+
+  <a href="sidestool.html" class="category-box"
+     data-video="https://cdn.pixabay.com/video/2018/01/17/07/09/furniture-3088590_1280.mp4"
+     data-poster="https://i.postimg.cc/Sxrz34QC/ec8f0881dd3292db1a7655c79506473c.jpg"
+     data-badge="30% OFF">
+    <img src="https://i.postimg.cc/Sxrz34QC/ec8f0881dd3292db1a7655c79506473c.jpg" alt="Side Stools" loading="lazy">
+    <span>🪑 SIDE STOOLS</span>
+  </a>
+</section>
   <!-- ===== Footer (merged, very black) ===== -->
   <footer class="shilpi-footer">
     <div class="shilpi-container" style="max-width:1150px;margin:0 auto;">
@@ -1202,28 +1294,18 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 </style>
 <script>
 (function(){
-  // Finds .category-box elements that have data-video and attempts to show video autoplaying.
   const boxes = document.querySelectorAll('.category-box[data-video]');
-  if (!boxes || boxes.length === 0) return;
+  if (!boxes.length) return;
 
   boxes.forEach(box => {
     const videoUrl = box.getAttribute('data-video');
     const poster = box.getAttribute('data-poster') || '';
     const badgeText = box.getAttribute('data-badge') || '';
 
-    // remove existing video if any (defensive)
-    const existingVideo = box.querySelector('video.cat-video');
-    if (existingVideo) existingVideo.remove();
+    // ensure box is positioned
+    box.classList.add('video-enabled');
 
-    // keep original <img> as fallback (if present)
-    const origImg = box.querySelector('img');
-    const fallbackImg = document.createElement('img');
-    fallbackImg.className = 'cat-fallback';
-    fallbackImg.alt = origImg ? origImg.alt || '' : '';
-    fallbackImg.src = poster || (origImg ? origImg.src : '');
-    // we don't remove origImg yet — will remove after video confirmed
-
-    // badge
+    // insert badge if not present
     if (badgeText && !box.querySelector('.discount-badge')) {
       const b = document.createElement('div');
       b.className = 'discount-badge';
@@ -1234,36 +1316,41 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     // create video element
     const v = document.createElement('video');
     v.className = 'cat-video';
-    v.setAttribute('playsinline','');
-    v.setAttribute('muted','');    // required for autoplay in many browsers
-    v.setAttribute('loop','');
-    v.setAttribute('preload','metadata');
-    // add source
+    v.playsInline = true;
+    v.muted = true;
+    v.loop = true;
+    v.preload = 'metadata';
+
     const src = document.createElement('source');
     src.src = videoUrl;
     src.type = 'video/mp4';
     v.appendChild(src);
 
-    // Insert the video before the <span> label (or as first child)
+    // create fallback image element (used when video blocked/failed)
+    const origImg = box.querySelector('img');
+    const fallback = document.createElement('img');
+    fallback.className = 'cat-fallback';
+    fallback.alt = origImg ? origImg.alt || '' : '';
+    fallback.src = poster || (origImg ? origImg.src : '');
+
+    // insert video before the span label
     const label = box.querySelector('span');
     if (label) box.insertBefore(v, label);
     else box.appendChild(v);
 
-    // If image existed, hide it for now to avoid double visuals (we will restore if video fails)
+    // hide original image while we attempt play
     if (origImg) origImg.style.display = 'none';
 
-    // IntersectionObserver: play only while visible
+    // observer: play when visible, pause when not
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting && entry.intersectionRatio > 0.35) {
-          // try to play
-          v.play().catch(err => {
-            // autoplay blocked: show fallback image instead
+          v.play().catch(() => {
+            // blocked -> hide video and show fallback
             v.style.display = 'none';
-            if (!box.querySelector('img.cat-fallback')) box.insertBefore(fallbackImg, label);
+            if (!box.querySelector('img.cat-fallback')) box.insertBefore(fallback, label);
           });
         } else {
-          // pause to save resource
           try { v.pause(); } catch(e){}
         }
       });
@@ -1271,23 +1358,21 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
     io.observe(box);
 
-    // if the video has an error, show fallback
+    // on error -> show fallback
     v.addEventListener('error', () => {
       v.style.display = 'none';
-      if (!box.querySelector('img.cat-fallback')) box.insertBefore(fallbackImg, label);
+      if (!box.querySelector('img.cat-fallback')) box.insertBefore(fallback, label);
     });
 
-    // Extra safety: if after 2s video hasn't advanced (autoplay blocked silently), show fallback
+    // safety timeout: if video not ready/playing after 1300ms -> fallback
     setTimeout(() => {
-      // readyState >=2 means enough data to play; paused + not playing -> problem
       if (v.readyState < 2 || v.paused) {
-        // attempt quick play to detect block
-        v.play().then(()=>{}).catch(()=> {
+        v.play().catch(() => {
           v.style.display = 'none';
-          if (!box.querySelector('img.cat-fallback')) box.insertBefore(fallbackImg, label);
+          if (!box.querySelector('img.cat-fallback')) box.insertBefore(fallback, label);
         });
       }
-    }, 1200);
+    }, 1300);
 
   });
 })();
