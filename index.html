@@ -19,6 +19,14 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
+.category-box video.cat-video {
+  width: 100%;
+  height: 180px; 
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+  background: #000;
+}
   /* ================= Base (Amazon-like light theme) ================= */
   :root {
     --bg: #ffffff;             /* page background */
@@ -564,7 +572,14 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
   <!-- ===== Categories (always 2 columns) ===== -->
   <section class="categories" id="categoryList">
-    <a href="sofa.html" class="category-box"><img src="https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg" alt="Sofa"loading="lazy"><span>🛋 SOFAS</span></a>
+<a href="sofa.html" class="category-box">
+  <video autoplay muted loop playsinline preload="auto" class="cat-video">
+    <source src="https://cdn.pixabay.com/video/2021/09/08/88353-600733969_large.mp4" type="video/mp4">
+    <!-- fallback image -->
+    <img src="https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg" alt="Sofa">
+  </video>
+  <span>🛋 SOFAS</span>
+</a>
     <a href="bed.html" class="category-box"><img src="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg" alt="Bed"loading="lazy"><span>🛏 BEDS</span></a>
     <a href="chair.html" class="category-box"><img src="https://i.postimg.cc/rFrmWTqS/Screenshot-20250213-113547-Instagram.jpg" alt="Chair"loading="lazy"><span>🪑 CHAIRS</span></a>
     <a href="dining.html" class="category-box"><img src="https://i.postimg.cc/Sxm8NRJJ/1756750928967.jpg" alt="Dining"loading="lazy"><span>🍽 DINING 3–6 SEATERS</span></a>
