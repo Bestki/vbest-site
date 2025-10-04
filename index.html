@@ -19,13 +19,32 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
-.category-box video.cat-video {
+/* Video tile style — minimal and safe */
+.category-box { position: relative; overflow: hidden; display:block; }
+.category-box .cat-video,
+.category-box img.cat-fallback {
   width: 100%;
-  height: 180px; 
+  height: 180px;           /* match your image height */
   object-fit: cover;
-  border-radius: 4px;
   display: block;
+  border-radius: 4px;
   background: #000;
+}
+
+/* orange badge (non-clickable, pointer-events none) */
+.category-box .discount-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: linear-gradient(180deg,#ff9900,#e68a00);
+  color: #fff;
+  padding: 6px 8px;
+  font-weight: 800;
+  font-size: 12px;
+  border-radius: 6px;
+  z-index: 3;
+  pointer-events: none;
+  box-shadow: 0 6px 18px rgba(230,138,0,0.18);
 }
   /* ================= Base (Amazon-like light theme) ================= */
   :root {
@@ -572,11 +591,11 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
   <!-- ===== Categories (always 2 columns) ===== -->
   <section class="categories" id="categoryList">
-<a href="sofa.html" class="category-box">
-  <video autoplay muted loop playsinline preload="auto" class="cat-video" poster="https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg">
-    <source src="https://player.vimeo.com/external/452461086.sd.mp4?s=dd4d27f18a1a9cfb7fa94e1e4074da2c8f38d8d2&profile_id=164&oauth2_token_id=57447761" type="video/mp4">
-    <img src="https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg" alt="Sofa">
-  </video>
+<a href="sofa.html" class="category-box"
+   data-video="https://cdn.pixabay.com/video/2021/08/04/16-39-24-6646_640.mp4"
+   data-poster="https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg"
+   data-badge="40% OFF">
+  <img src="https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg" alt="Sofa" loading="lazy">
   <span>🛋 SOFAS</span>
 </a>
     <a href="bed.html" class="category-box"><img src="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg" alt="Bed"loading="lazy"><span>🛏 BEDS</span></a>
@@ -1181,5 +1200,97 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     100% { opacity: 0; transform: translateY(15px); }
   }
 </style>
+<script>
+(function(){
+  // Finds .category-box elements that have data-video and attempts to show video autoplaying.
+  const boxes = document.querySelectorAll('.category-box[data-video]');
+  if (!boxes || boxes.length === 0) return;
+
+  boxes.forEach(box => {
+    const videoUrl = box.getAttribute('data-video');
+    const poster = box.getAttribute('data-poster') || '';
+    const badgeText = box.getAttribute('data-badge') || '';
+
+    // remove existing video if any (defensive)
+    const existingVideo = box.querySelector('video.cat-video');
+    if (existingVideo) existingVideo.remove();
+
+    // keep original <img> as fallback (if present)
+    const origImg = box.querySelector('img');
+    const fallbackImg = document.createElement('img');
+    fallbackImg.className = 'cat-fallback';
+    fallbackImg.alt = origImg ? origImg.alt || '' : '';
+    fallbackImg.src = poster || (origImg ? origImg.src : '');
+    // we don't remove origImg yet — will remove after video confirmed
+
+    // badge
+    if (badgeText && !box.querySelector('.discount-badge')) {
+      const b = document.createElement('div');
+      b.className = 'discount-badge';
+      b.textContent = badgeText;
+      box.insertBefore(b, box.firstChild);
+    }
+
+    // create video element
+    const v = document.createElement('video');
+    v.className = 'cat-video';
+    v.setAttribute('playsinline','');
+    v.setAttribute('muted','');    // required for autoplay in many browsers
+    v.setAttribute('loop','');
+    v.setAttribute('preload','metadata');
+    // add source
+    const src = document.createElement('source');
+    src.src = videoUrl;
+    src.type = 'video/mp4';
+    v.appendChild(src);
+
+    // Insert the video before the <span> label (or as first child)
+    const label = box.querySelector('span');
+    if (label) box.insertBefore(v, label);
+    else box.appendChild(v);
+
+    // If image existed, hide it for now to avoid double visuals (we will restore if video fails)
+    if (origImg) origImg.style.display = 'none';
+
+    // IntersectionObserver: play only while visible
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.intersectionRatio > 0.35) {
+          // try to play
+          v.play().catch(err => {
+            // autoplay blocked: show fallback image instead
+            v.style.display = 'none';
+            if (!box.querySelector('img.cat-fallback')) box.insertBefore(fallbackImg, label);
+          });
+        } else {
+          // pause to save resource
+          try { v.pause(); } catch(e){}
+        }
+      });
+    }, { threshold: [0.35] });
+
+    io.observe(box);
+
+    // if the video has an error, show fallback
+    v.addEventListener('error', () => {
+      v.style.display = 'none';
+      if (!box.querySelector('img.cat-fallback')) box.insertBefore(fallbackImg, label);
+    });
+
+    // Extra safety: if after 2s video hasn't advanced (autoplay blocked silently), show fallback
+    setTimeout(() => {
+      // readyState >=2 means enough data to play; paused + not playing -> problem
+      if (v.readyState < 2 || v.paused) {
+        // attempt quick play to detect block
+        v.play().then(()=>{}).catch(()=> {
+          v.style.display = 'none';
+          if (!box.querySelector('img.cat-fallback')) box.insertBefore(fallbackImg, label);
+        });
+      }
+    }, 1200);
+
+  });
+})();
+</script>
 </body>
 </html>
