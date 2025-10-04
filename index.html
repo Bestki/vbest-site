@@ -1293,7 +1293,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   }
 </style>
 <script>
-(function(){
+window.onload = function() {
   const boxes = document.querySelectorAll('.category-box[data-video]');
   if (!boxes.length) return;
 
@@ -1316,37 +1316,34 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     // create video element
     const v = document.createElement('video');
     v.className = 'cat-video';
-    v.playsInline = true;
+    v.src = videoUrl;
+    v.autoplay = true;
     v.muted = true;
     v.loop = true;
+    v.playsInline = true;
     v.preload = 'metadata';
+    v.setAttribute('poster', poster);
 
-    const src = document.createElement('source');
-    src.src = videoUrl;
-    src.type = 'video/mp4';
-    v.appendChild(src);
-
-    // create fallback image element (used when video blocked/failed)
+    // create fallback image element
     const origImg = box.querySelector('img');
     const fallback = document.createElement('img');
     fallback.className = 'cat-fallback';
     fallback.alt = origImg ? origImg.alt || '' : '';
     fallback.src = poster || (origImg ? origImg.src : '');
 
-    // insert video before the span label
+    // insert video before label
     const label = box.querySelector('span');
     if (label) box.insertBefore(v, label);
     else box.appendChild(v);
 
-    // hide original image while we attempt play
+    // hide original image
     if (origImg) origImg.style.display = 'none';
 
     // observer: play when visible, pause when not
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting && entry.intersectionRatio > 0.35) {
+        if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
           v.play().catch(() => {
-            // blocked -> hide video and show fallback
             v.style.display = 'none';
             if (!box.querySelector('img.cat-fallback')) box.insertBefore(fallback, label);
           });
@@ -1354,17 +1351,17 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
           try { v.pause(); } catch(e){}
         }
       });
-    }, { threshold: [0.35] });
+    }, { threshold: [0.3] });
 
     io.observe(box);
 
-    // on error -> show fallback
+    // on error -> fallback
     v.addEventListener('error', () => {
       v.style.display = 'none';
       if (!box.querySelector('img.cat-fallback')) box.insertBefore(fallback, label);
     });
 
-    // safety timeout: if video not ready/playing after 1300ms -> fallback
+    // safety timeout: if not playing after 1.5s -> fallback
     setTimeout(() => {
       if (v.readyState < 2 || v.paused) {
         v.play().catch(() => {
@@ -1372,10 +1369,9 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
           if (!box.querySelector('img.cat-fallback')) box.insertBefore(fallback, label);
         });
       }
-    }, 1300);
-
+    }, 1500);
   });
-})();
+};
 </script>
 </body>
 </html>
