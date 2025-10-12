@@ -1,79 +1,89 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Luxury Sofas in Lagos | V'Best Interiors</title>
-<meta name="description" content="Shop premium luxury sofas at V'Best Interiors. Classic, modern, and sectional sofas with fast delivery in Lagos and across Nigeria.">
-<meta name="keywords" content="luxury sofas Lagos, sectional sofas Nigeria, leather sofa, V'Best sofas">
-<meta property="og:title" content="Luxury Sofas - V'Best Interiors">
-<meta property="og:description" content="Discover luxury sofas at V'Best Interiors. Perfect for living rooms, stylish, durable, and affordable.">
-<meta property="og:image" content=".https://i.postimg.cc/zDbCDJMm/1756750621579.jpg">
-<meta property="og:url" content="https://vbest-site.vercel.app/sofa.html">
-<meta name="twitter:card" content="summary_large_image">
+  <meta name="description" content="Shop premium luxury sofas at V'Best Interiors. Classic, modern, and sectional sofas with fast delivery in Lagos and across Nigeria.">
+  <meta name="keywords" content="luxury sofas Lagos, sectional sofas Nigeria, leather sofa, V'Best sofas">
+  <meta property="og:title" content="Luxury Sofas - V'Best Interiors">
+  <meta property="og:description" content="Discover luxury sofas at V'Best Interiors. Perfect for living rooms, stylish, durable, and affordable.">
+  <meta property="og:image" content="https://i.postimg.cc/zDbCDJMm/1756750621579.jpg">
+  <meta property="og:url" content="https://vbest-site.vercel.app/sofa.html">
+  <meta name="twitter:card" content="summary_large_image">
+
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background: #000; /* Dark background */
-      text-align: center;
-      color: #fff;
+    :root{
+      --bg:#ffffff; --card:#f8f8f8; --text:#111827; --accent:#1f2937; --btn:#FF9900; --btn-text:#fff;
+      --price-new:#27ae60; --price-old:#B12704; --offer:#FF9900;
+    }
+    body[data-theme="classic"]{
+      --bg:#ffffff; --card:#f8f8f8; --text:#111827; --accent:#1f2937; --btn:#FF9900; --btn-text:#fff;
+      --price-new:#27ae60; --price-old:#B12704; --offer:#FF9900;
+    }
+    body[data-theme="dark"]{
+      --bg:#0f1111; --card:#131921; --text:#ffffff; --accent:#FF9900; --btn:#FF9900; --btn-text:#fff;
+      --price-new:#FF9900; --price-old:#FF9900; --offer:#FF9900;
+    }
+    body[data-theme="gold"]{
+      --bg:#fff8e7; --card:#fff3d6; --text:#2e2e2e; --accent:#c89200; --btn:#d4a017; --btn-text:#fff;
+      --price-new:#c47800; --price-old:#B12704; --offer:#c89200;
     }
 
-    h1 {
-      color: #fff;
-      margin-bottom: 20px;
-      font-size: 26px;
-      font-weight: bold;
-    }
+    html,body{ height:100%; margin:0; padding:0; box-sizing:border-box; font-family:Arial,Helvetica,sans-serif; background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+    body{
+  margin:0;
+  padding:0;
+  padding-bottom:150px; /* ensures extra space */
+  box-sizing:border-box;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}main {
+  padding-bottom:80px; /* keeps grid clear of bottom nav */
+}
 
-    .categories {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr); /* 2 per row */
-      gap: 3px; /* tiny gap like homepage */
-      max-width: 900px;
-      margin: 0 auto;
-    }
+    /* Top logo area */
+    .top-media{ width:100%; max-height:220px; overflow:hidden; background:transparent; display:block; }
+    .logo-media{ width:100%; height:auto; display:block; object-fit:contain; max-height:200px; margin:0 auto; }
 
-    .category-box {
-      background: #111;
-      border-radius: 6px;
-      padding: 5px;
-    }
+    header{ text-align:center; padding:12px 14px 8px; }
+    header h1{ margin:6px 0 4px; font-size:20px; color:var(--accent); }
+    #count{ font-weight:700; color:var(--price-new); margin-bottom:6px; }
 
-    .category-box img {
-      width: 100%;
-      height: 180px; /* consistent size */
-      object-fit: cover;
-      border-radius: 4px;
-      display: block;
-    }
+    /* Product grid: 2 columns mobile, 3 columns desktop */
+    .product-grid{ max-width:1100px; margin:0 auto; padding:10px; display:grid; gap:12px; grid-template-columns:repeat(2,1fr); box-sizing:border-box; }
+    @media(min-width:900px){ .product-grid{ grid-template-columns:repeat(3,1fr); } }
 
-    .categories a {
-      display: block;
-      padding: 8px 10px;
-      margin-top: 6px;
-      background: #25d366;
-      color: white;
-      text-decoration: none;
-      border-radius: 6px;
-      font-weight: bold;
-      font-size: 13px;
-    }
+    .product-card{ background:var(--card); border-radius:10px; overflow:hidden; display:flex; flex-direction:column; text-align:left; min-height:220px; position:relative; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+    .thumb{ width:100%; height:160px; background:#eee; display:block; overflow:hidden; }
+    .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
 
-    .categories a:hover {
-      background: #1da851;
-    }
+    .product-body{ padding:12px; display:flex; flex-direction:column; gap:8px; flex:1 1 auto; }
+    .product-body h3{ margin:0; font-size:15px; color:var(--text); text-transform:uppercase; letter-spacing:0.6px; }
+    .product-body p{ margin:0; color:#6b6b6b; font-size:14px; }
 
-    a.back {
-      display: inline-block;
-      margin-top: 20px;
-      text-decoration: none;
-      color: #25d366;
-      font-weight: bold;
-    }
+    .shop-btn{ display:inline-block; width:100%; padding:10px; text-align:center; border-radius:8px; background:var(--btn); color:var(--btn-text); font-weight:800; text-decoration:none; cursor:pointer; border:0; }
+
+    /* details modal (kept simple) */
+    .details-panel{ position:fixed; inset:0; display:none; z-index:99999; align-items:flex-start; justify-content:center; background:rgba(0,0,0,0.85); padding:18px; box-sizing:border-box; overflow:auto; }
+    .details-inner{ width:100%; max-width:1100px; background:var(--card); color:var(--text); border-radius:10px; padding:18px; display:flex; gap:18px; flex-wrap:wrap; position:relative; max-height:calc(100vh - 40px); overflow:auto; }
+    .details-left{ flex:1 1 420px; text-align:center; }
+    .details-left img{ max-width:100%; max-height:calc(100vh - 220px); object-fit:contain; border-radius:8px; display:block; margin:0 auto; }
+    .details-right{ flex:1 1 360px; }
+    .close-btn{ position:absolute; right:18px; top:12px; background:transparent; border:2px solid rgba(0,0,0,0.06); color:var(--text); padding:6px 10px; border-radius:8px; cursor:pointer; }
+
+    /* bottom nav */
+    .bottom-nav{ position:fixed; left:0; right:0; bottom:0; z-index:99998; height:64px; display:flex; justify-content:space-around; align-items:center; background:var(--card); border-top:1px solid rgba(0,0,0,0.06); box-shadow:0 -6px 18px rgba(0,0,0,0.08); padding:6px 10px; }
+    .bottom-nav a, .bottom-nav button{ background:transparent; border:0; font-size:16px; color:var(--accent); font-weight:700; cursor:pointer; display:flex; align-items:center; gap:8px; text-decoration:none; }
+    .cart-badge{ background:#ff3b30; color:#fff; border-radius:50%; padding:2px 7px; font-size:12px; margin-left:6px; display:inline-block; }
+
+    @media(max-width:420px){ .thumb{ height:120px; } .logo-media{ max-height:120px; } .details-inner{ padding:12px; max-height:calc(100vh - 20px); } }
   </style>
-  <!-- TikTok Pixel Code Start -->
+
+  <!-- TikTok Pixel Code (kept) -->
 <script>
 !function (w, d, t) {
   w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
@@ -85,32 +95,151 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   ttq.page();
 }(window, document, 'ttq');
 </script>
-<!-- TikTok Pixel Code End -->
+
 </head>
-<body>
+<body data-theme="classic">
+  <!-- logo top -->
+  <div class="top-media" aria-hidden="false">
+    <img src="images/logo.png" alt="V'Best Interiors logo" class="logo-media">
+  </div>
 
-<h1>Luxury Sofas in Lagos</h1>
-<p>Shop premium leather and fabric sofas at V'Best. From ₦250,000. Fast delivery across Nigeria.</p>
+  <header>
+    <h1>Luxury Sofas</h1>
+    <div id="count">Shop premium sofas</div>
+  </header>
 
-  <section class="categories">
-    <div class="category-box">
-      <img src="https://i.postimg.cc/3x2mxDNc/royal-sofa-set-with-table-1040x.jpg" alt="Egypt Sofa">
-      <a href="egypt-sofa.html">🇪🇬 Egypt Sofa</a>
+  <main>
+    <div id="products" class="product-grid" aria-live="polite">
+      <!-- Egypt Sofa -->
+      <article class="product-card" role="article">
+        <a href="egypt-sofa.html" style="text-decoration:none;color:inherit;">
+          <div class="thumb" aria-hidden="false">
+            <img src="https://i.postimg.cc/3x2mxDNc/royal-sofa-set-with-table-1040x.jpg" alt="Egypt Sofa">
+          </div>
+          <div class="product-body">
+            <h3>Egypt Sofa</h3>
+            <p>Classic luxurious set — ideal for large living rooms.</p>
+            <div style="margin-top:auto;"><button class="shop-btn" type="button" onclick="location.href='egypt-sofa.html'">SHOP NOW</button></div>
+          </div>
+        </a>
+      </article>
+
+      <!-- Turkey Sofa -->
+      <article class="product-card" role="article">
+        <a href="highturkey-sofa.html" style="text-decoration:none;color:inherit;">
+          <div class="thumb" aria-hidden="false">
+            <img src="https://i.postimg.cc/7h7tPZ2M/arnica-sofa-florence-collection.jpg" alt="Turkey Sofa">
+          </div>
+          <div class="product-body">
+            <h3>Turkey Sofa</h3>
+            <p>Elegant European designs with premium upholstery.</p>
+            <div style="margin-top:auto;"><button class="shop-btn" type="button" onclick="location.href='highturkey-sofa.html'">SHOP NOW</button></div>
+          </div>
+        </a>
+      </article>
+
+      <!-- China Sofa -->
+      <article class="product-card" role="article">
+        <a href="china-sofa.html" style="text-decoration:none;color:inherit;">
+          <div class="thumb" aria-hidden="false">
+            <img src="https://i.postimg.cc/qRcCkf76/Chinese-Sofa-Furniture-Factory-Wholesale-Luxury-Leather-Sofa-Set-in-Optional-Couch-Color-and-Seat.webp" alt="China Sofa">
+          </div>
+          <div class="product-body">
+            <h3>China Sofa</h3>
+            <p>Modern & affordable sectional options.</p>
+            <div style="margin-top:auto;"><button class="shop-btn" type="button" onclick="location.href='china-sofa.html'">SHOP NOW</button></div>
+          </div>
+        </a>
+      </article>
+
     </div>
 
-    <div class="category-box">
-      <img src="https://i.postimg.cc/7h7tPZ2M/arnica-sofa-florence-collection.jpg" alt="Turkey Sofa">
-      <a href="highturkey-sofa.html">🇹🇷 Turkey Sofa</a>
+    <!-- explicit spacer so last grid row is always above the fixed nav -->
+    <div class="end-spacer" aria-hidden="true"></div>
+  </main>
+
+  <!-- details panel (kept minimal) -->
+  <div id="detailsPanel" class="details-panel" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="details-inner" role="document">
+      <button id="detailsClose" class="close-btn" aria-label="Close details">✕</button>
+      <div class="details-left" id="detailsLeft"></div>
+      <div class="details-right" id="detailsRight"></div>
     </div>
+  </div>
 
-    <div class="category-box">
-      <img src="https://i.postimg.cc/qRcCkf76/Chinese-Sofa-Furniture-Factory-Wholesale-Luxury-Leather-Sofa-Set-in-Optional-Couch-Color-and-Seat.webp" alt="China Sofa">
-      <a href="china-sofa.html">🇨🇳 China Sofa</a>
-    </div>
+  <!-- bottom nav -->
+  <nav class="bottom-nav" role="navigation" aria-label="Main navigation">
+    <a href="index.html" id="nav-home">🏠 Home</a>
+    <button id="themeSwitch" aria-label="Switch theme">🎨 Theme</button>
+    <a href="cart.html" id="nav-cart">🛒 Cart <span id="cart-count" class="cart-badge" style="display:none">0</span></a>
+  </nav>
 
-  </section>
+  <script>
+    // Theme switcher (classic, dark, gold)
+    (function(){
+      const themes = ['classic','dark','gold'];
+      let current = localStorage.getItem('vbest_theme') || 'classic';
+      if (!themes.includes(current)) current = 'classic';
+      document.body.setAttribute('data-theme', current);
+      let idx = themes.indexOf(current);
+      const btn = document.getElementById('themeSwitch');
+      if (btn){
+        btn.addEventListener('click', ()=> {
+          idx = (idx + 1) % themes.length;
+          const t = themes[idx];
+          document.body.setAttribute('data-theme', t);
+          localStorage.setItem('vbest_theme', t);
+        });
+      }
+    })();
 
-  <a href="index.html" class="back">⬅ Back to Home</a>
+    // Cart badge (localStorage 'cart' array)
+    function updateCartCount(){
+      try{
+        const el = document.getElementById('cart-count');
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        if (cart && cart.length > 0){ el.style.display = 'inline-block'; el.textContent = cart.length; }
+        else { el.style.display = 'none'; }
+      }catch(e){ /* ignore */ }
+    }
+    updateCartCount();
+    window.addEventListener('storage', (e) => { if(e.key === 'cart') updateCartCount(); });
 
+    // Details panel basic hooks (keeps behavior if you populate it)
+    const detailsPanel = document.getElementById('detailsPanel');
+    const detailsClose = document.getElementById('detailsClose');
+    detailsClose && detailsClose.addEventListener('click', () => {
+      detailsPanel.style.display = 'none';
+      detailsPanel.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+      document.querySelector('.bottom-nav').style.display = '';
+    });
+
+    function openDetailsWithContent(leftHtml, rightHtml){
+      document.getElementById('detailsLeft').innerHTML = leftHtml || '';
+      document.getElementById('detailsRight').innerHTML = rightHtml || '';
+      detailsPanel.style.display = 'flex';
+      detailsPanel.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+      document.querySelector('.bottom-nav').style.display = 'none';
+      try{ history.pushState({detailsOpen:true}, '', '#details'); }catch(e){}
+    }
+    window.addEventListener('popstate', function(){
+      if (detailsPanel.style.display === 'flex'){
+        detailsPanel.style.display = 'none';
+        detailsPanel.setAttribute('aria-hidden','true');
+        document.body.style.overflow = '';
+        document.querySelector('.bottom-nav').style.display = '';
+      }
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && detailsPanel.style.display === 'flex'){
+        detailsPanel.style.display = 'none';
+        detailsPanel.setAttribute('aria-hidden','true');
+        document.body.style.overflow = '';
+        document.querySelector('.bottom-nav').style.display = '';
+      }
+    });
+  </script>
 </body>
 </html>

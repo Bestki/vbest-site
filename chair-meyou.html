@@ -2,161 +2,136 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>Me Chairs - V’Best Luxury Interiors</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>Me & You Chairs — Premium & Imported Couple Seating | V'Best Interiors</title>
+  <meta name="description" content="Explore our curated collection of 'Me & You' chairs — premium couple seating, loveseats and two-seaters crafted for shared comfort and style.">
+  <meta name="keywords" content="meand, me & you chair, couple chair, loveseat, two-seater, V'Best Interiors">
+  <meta property="og:title" content="Me & You Chairs — Premium & Imported Couple Seating - V'Best Interiors">
+  <meta property="og:description" content="Discover premium two-seat chairs and loveseats for couples and shared spaces at V'Best Interiors.">
+  <meta property="og:image" content="https://i.postimg.cc/yNXsb9Q8/IMG-20250822-WA0058.jpg">
+  <meta property="og:url" content="https://vbest-site.vercel.app/chair-meyou.html">
+  <meta name="twitter:card" content="summary_large_image">
+
   <style>
-    /* Very black theme + layout */
-    :root{ --green:#27ae60; --whatsapp:#25D366; --accent:#8e44ad; --danger:#ff3b30; --bg:#000; --card:#111; }
-    html,body { height:100%; }
-    body {
-      font-family: Arial, sans-serif;
-      margin:0;
-      background:var(--bg);
-      color:#fff;
-      text-align:center;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-    }
-    h1 { padding:16px 0; margin:0; font-size:20px; }
-    #count { font-size:15px; font-weight:700; margin:8px 0 12px; color:var(--green); }
-
-    /* grid always 2 columns */
-    .product-grid {
-      display:grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap:10px;
-      padding:10px;
-      max-width:1100px;
-      margin:0 auto 18px;
-      box-sizing:border-box;
+    /* Theme variables (Classic + Dark + Gold) */
+    :root{
+      --bg:#ffffff;
+      --card:#f8f8f8;
+      --text:#111827;
+      --accent:#1f2937;
+      --btn:#FF9900;
+      --btn-text:#fff;
+      --green:#27ae60;
+      --whatsapp:#25D366;
+      --price:#B12704;
     }
 
-    .product-card {
-      background:var(--card);
-      border-radius:10px;
-      overflow:hidden;
-      text-align:left;
-      display:flex;
-      flex-direction:column;
-      min-height:320px;
-      box-sizing:border-box;
+    /* Dark theme */
+    body[data-theme="dark"]{
+      --bg:#0f172a;
+      --card:#1e293b;
+      --text:#f1f5f9;
+      --accent:#f8fafc;
+      --btn:#FF9900;
+      --btn-text:#111;
+      --green:#22c55e;
+      --whatsapp:#22c55e;
+      --price:#f87171;
     }
-    .thumb { width:100%; height:180px; display:block; overflow:hidden; background:#222; }
-    .thumb img { width:100%; height:100%; object-fit:cover; display:block; cursor:pointer; }
 
-    .product-body { padding:10px; flex:1 1 auto; display:flex; flex-direction:column; }
-    .product-body h3 { margin:0 0 6px; font-size:15px; color:#e6fbf6; cursor:pointer; text-decoration:none; }
-    .short-desc { color:#bcdfe6; font-size:13px; margin-bottom:8px; }
-
-    .price-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-    .old-price {
-      text-decoration-line: line-through;
-      text-decoration-style: double;
-      text-decoration-color: var(--danger);
-      color: var(--danger);
-      font-size:13px;
-      font-weight:700;
-      margin:0;
+    /* Gold / warm theme */
+    body[data-theme="gold"]{
+      --bg:#fff8e1;
+      --card:#fff4d6;
+      --text:#3e2723;
+      --accent:#5d4037;
+      --btn:#ffb300;
+      --btn-text:#3e2723;
+      --green:#2e7d32;
+      --whatsapp:#388e3c;
+      --price:#c62828;
     }
-    .price { font-size:14px; font-weight:800; color:var(--green); }
-    .save-amount { font-size:12px; color:#9fe6b9; font-weight:700; margin-left:6px; }
 
-.negotiable-badge {
-  color: #ffffff;
-  font-weight: 700;
-  font-size: 15px;
-  margin-top: 6px;
-}
+    /* Base layout */
+    html,body{height:100%;margin:0;padding:0;box-sizing:border-box;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
+    body{background:var(--bg);color:var(--text);text-align:center;padding-bottom:96px;}
 
-    .stars { color:#ffd54a; margin:8px 0; font-size:14px; }
+    /* Header / logo (full-width banner) */
+    .top-media{width:100%;overflow:hidden;padding:10px 0;background:transparent;}
+    .logo-media{width:100%;max-height:220px;object-fit:contain;display:block;margin:0 auto;}
 
-    .discount-timer { color:#ffd; font-size:13px; margin-top:6px; font-weight:700; }
+    h1{margin:12px 0 6px;font-size:20px;color:var(--accent);}
+    #count{font-size:14px;color:var(--green);font-weight:700;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;}
 
-    .btn-row { display:flex; gap:8px; margin-top:auto; }
-    .btn { flex:1; min-width:0; display:inline-flex; align-items:center; justify-content:center; padding:10px 12px; border-radius:8px; font-weight:700; font-size:14px; text-decoration:none; color:#fff; border:0; cursor:pointer; }
-    .inquiry-btn { background:var(--whatsapp); }
-    .inquiry-btn:hover { background:#1ebe5d; }
-    .buy-btn { background:#007BFF; }
-    .buy-btn[disabled] { opacity:0.55; cursor:not-allowed; }
-    .buy-btn:hover { background:#0056b3; }
+    /* Spinner */
+    .spinner{width:16px;height:16px;border-radius:50%;border:3px solid rgba(0,0,0,0.08);border-top-color:var(--accent);animation:spin 1s linear infinite;display:inline-block;}
+    @keyframes spin{to{transform:rotate(360deg);} }
 
-    a.back { display:block; margin:12px 0; color:var(--green); text-decoration:none; font-weight:700; }
+    /* Product grid: 2 columns on mobile/tablet, 3 on desktop (>=1024px) */
+    .product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:10px;max-width:1100px;margin:0 auto;}
+    @media(min-width:1024px){ .product-grid{grid-template-columns:repeat(3,1fr);} }
 
-    /* details overlay - adjusted so the image top is visible and overlay sits above everything */
-    .details-panel {
-      position:fixed;
-      inset:0;
-      z-index:99999; /* raised so it sits above header/cart */
-      display:none;
-      background:rgba(0,0,0,0.98);
-      align-items:flex-start; /* ensure top of details is aligned to top of viewport so image top isn't hidden */
-      justify-content:center;
-      padding:18px 18px 28px;
-      box-sizing:border-box;
-      overflow:auto;
-    }
-    .details-inner {
-      width:100%;
-      max-width:1100px;
-      background:#000;
-      color:#fff;
-      border-radius:10px;
-      padding:18px;
-      box-sizing:border-box;
-      display:flex;
-      gap:18px;
-      align-items:flex-start;
-      flex-wrap:wrap;
-      position:relative;
-      margin-top:8px;
-      max-height: calc(100vh - 40px); /* ensure it fits inside viewport */
-      overflow:auto;
-    }
-    .details-left { flex:1 1 420px; background:var(--card); border-radius:8px; padding:12px; text-align:center; }
-    .details-left .main-image { max-width:100%; max-height: calc(100vh - 220px); object-fit:contain; border-radius:8px; display:block; margin:0 auto; }
-    .img-nav { position:absolute; top:50%; transform:translateY(-50%); font-size:26px; color:#fff; background:rgba(0,0,0,0.3); padding:8px 10px; border-radius:8px; cursor:pointer; user-select:none; }
-    .img-nav.left { left:8px; }
-    .img-nav.right { right:8px; }
+    .product-card{background:var(--card);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;min-height:320px;text-align:left;box-shadow:0 2px 10px rgba(0,0,0,0.04);}
+    .thumb{width:100%;height:180px;background:#222;overflow:hidden;display:block;cursor:pointer;}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
 
-    .thumbs { display:flex; gap:8px; margin-top:12px; overflow:auto; justify-content:center; padding-bottom:6px; }
-    .thumbs button { border:2px solid transparent; background:transparent; padding:0; border-radius:6px; cursor:pointer; }
-    .thumbs img { width:72px; height:56px; object-fit:cover; border-radius:6px; display:block; }
+    .product-body{padding:12px;display:flex;flex-direction:column;flex:1;}
+    .product-body h3{margin:0 0 6px;font-size:15px;color:var(--text);}
+    .meta-small{font-size:13px;color:#6b7280;margin-bottom:6px;}
+    .price-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+    .old-price{text-decoration:line-through;color:var(--price);font-weight:700;font-size:13px;}
+    .price{color:var(--green);font-weight:800;font-size:14px;}
+    .discount-timer{color:var(--btn);font-weight:700;font-size:13px;margin-top:6px;}
+    .stars{color:#ffd54a;margin:8px 0;font-size:14px;}
 
-    .details-right { flex:1 1 360px; text-align:left; }
-    .details-right h2 { margin:0 0 8px; color:#e6fbf6; font-size:22px; }
-    .meta { color:#bcdfe6; margin-bottom:8px; }
-    .details .price-row { margin-bottom:8px; align-items:center; }
-    .details .old-price { font-size:16px; }
-    .details .price { font-size:20px; font-weight:900; }
-    .details .save-amount { font-size:13px; margin-left:8px; color:#9fe6b9; }
-    .details .negotiable { color:var(--accent); font-weight:800; margin-bottom:8px; }
-    .details .desc { color:#d8eef0; margin-top:12px; line-height:1.6; }
-    .details .actions { display:flex; gap:10px; margin-top:14px; }
-    .details .btn { padding:12px; border-radius:8px; font-weight:800; text-align:center; }
-    .close-btn { position:absolute; right:22px; top:18px; font-size:22px; background:transparent; border:2px solid rgba(255,255,255,0.06); color:#fff; padding:6px 10px; border-radius:8px; cursor:pointer; }
+    .btn-row{display:flex;gap:8px;justify-content:space-between;margin-top:auto;}
+    .btn-row a,.btn-row button{flex:1 1 48%;padding:10px;border-radius:8px;border:0;font-weight:700;cursor:pointer;text-decoration:none;color:var(--btn-text);display:inline-flex;align-items:center;justify-content:center;}
+    .inquiry-btn{background:var(--whatsapp);}
+    .buy-btn{background:var(--btn);}
+    .buy-btn[disabled]{opacity:.55;cursor:not-allowed;}
 
-    /* small screens: keep two columns (user requested 2 in every device) */
-    @media (max-width:420px) {
-      .product-grid { grid-template-columns: 1fr 1fr; gap:8px; padding:8px; }
-      .thumbs img { width:60px; height:48px; }
-      .details-inner { padding:12px; max-height: calc(100vh - 20px); }
-      .details-left .main-image { max-height: calc(100vh - 160px); }
+    /* Details overlay */
+    .details-panel{position:fixed;inset:0;display:none;align-items:flex-start;justify-content:center;background:rgba(0,0,0,0.85);z-index:99999;padding:18px;overflow:auto;}
+    .details-inner{width:100%;max-width:1100px;background:var(--card);color:var(--text);border-radius:10px;padding:18px;display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;position:relative;max-height:calc(100vh - 40px);overflow:auto;}
+    .details-left{flex:1 1 420px;text-align:center;}
+    .details-left .main-image{max-width:100%;max-height:calc(100vh - 220px);object-fit:contain;border-radius:8px;display:block;margin:0 auto;}
+    .thumbs{display:flex;gap:8px;margin-top:12px;overflow:auto;justify-content:center;padding-bottom:6px;}
+    .thumbs img{width:72px;height:56px;object-fit:cover;border-radius:6px;}
+    .img-nav{position:absolute;top:50%;transform:translateY(-50%);font-size:26px;color:#fff;background:rgba(0,0,0,0.28);padding:8px 10px;border-radius:8px;cursor:pointer;user-select:none;}
+    .img-nav.left{left:8px;} .img-nav.right{right:8px;}
+
+    .details-right{flex:1 1 360px;text-align:left;}
+    .details-right h2{margin:0 0 8px;font-size:22px;color:var(--accent);}
+    .details-right .desc{margin-top:12px;line-height:1.6;color:var(--text);}
+    .close-btn{position:absolute;right:18px;top:12px;background:transparent;border:2px solid rgba(0,0,0,0.08);color:var(--text);padding:6px 10px;border-radius:8px;cursor:pointer;}
+
+    /* bottom nav */
+    .bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:99998;height:64px;display:flex;justify-content:space-around;align-items:center;background:var(--card);border-top:1px solid rgba(0,0,0,0.06);box-shadow:0 -6px 18px rgba(0,0,0,0.08);padding:6px 10px;}
+    .bottom-nav a,.bottom-nav button{background:transparent;border:0;font-size:16px;color:var(--accent);font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;}
+    .cart-badge{background:#ff3b30;color:#fff;border-radius:50%;padding:2px 7px;font-size:12px;margin-left:6px;display:inline-block;}
+
+    @media(max-width:420px){
+      .product-grid{grid-template-columns:repeat(2,1fr);gap:8px;padding:8px;}
+      .logo-media{max-height:120px;object-fit:cover;}
+      .details-inner{padding:12px;max-height:calc(100vh - 20px);}
+      .details-left .main-image{max-height:calc(100vh - 160px);}
     }
   </style>
 </head>
-<body>
+<body data-theme="classic">
 
-  <h1>Me & you Chairs</h1>
-  <div id="count">Loading...</div>
+  <!-- Header / Logo -->
+  <div class="top-media" aria-hidden="false">
+    <img src="images/logo.png" alt="V'Best Interiors logo" class="logo-media">
+  </div>
 
+  <h1>Me & You Chairs — Premium Couple Seating</h1>
+  <div id="count"><span class="spinner" aria-hidden="true"></span> Loading products...</div>
+
+  <!-- Products grid -->
   <div id="products" class="product-grid" aria-live="polite"></div>
 
-  <a href="chair.html" class="back">⬅ Back to Categories</a>
-
-  <!-- cart icon -->
-  <div class="cart-icon" title="View cart" style="position:fixed;top:28px;right:14px;font-size:36px;color:#fff;z-index:3000;cursor:pointer;" onclick="window.location.href='cart.html'">
-    🛒 <span id="cart-count" style="position:absolute;top:0;right:-6px;background:#ff3b30;color:#fff;padding:3px 6px;border-radius:50%;font-size:12px;font-weight:700;display:none;">0</span>
-  </div>
+  <a href="furniture.html" class="back" style="display:block;margin:14px 0;color:var(--accent);text-decoration:none;font-weight:700;">⬅ Back to Categories</a>
 
   <!-- DETAILS PANEL -->
   <div id="detailsPanel" class="details-panel" aria-hidden="true" role="dialog" aria-modal="true">
@@ -167,30 +142,36 @@
     </div>
   </div>
 
-  <script>
-    // ---------------- CONFIG ----------------
-    const SHEET_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4YXFvxl_w447wVuWRrHv8EInZFg1lSIX2_KwxZQJL9n8YHEzIP5WmfBep4yBgfN7EbArsjPPHOzOh/pub?output=csv";
-    const DISCOUNT_DURATION_MS = 60 * 24 * 60 * 60 * 1000; // 60 days (2 months)
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav" role="navigation" aria-label="Main navigation">
+    <a href="index.html" id="nav-home">🏠 Home</a>
+    <button id="themeSwitch">🎨 Theme</button>
+    <a href="cart.html" id="nav-cart">🛒 Cart <span id="cart-count-bottom" class="cart-badge" style="display:none">0</span></a>
+  </div>
 
-    // ---------------- Utilities ----------------
+  <script>
+    /* CONFIG — replace with your sheet CSV if different */
+    const SHEET_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4YXFvxl_w447wVuWRrHv8EInZFg1lSIX2_KwxZQJL9n8YHEzIP5WmfBep4yBgfN7EbArsjPPHOzOh/pub?output=csv";
+    const FETCH_TIMEOUT_MS = 10000; // 10 seconds
+    const DISCOUNT_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // cosmetic 60 days
+
+    /* SMALL UTILITIES */
     function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
     function escJS(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,'\\n').replace(/\r/g,''); }
-    function formatNaira(n){ if (isNaN(n)) return ''; return '₦' + Math.round(n).toLocaleString(); }
-    function parseNumber(s){ if(!s) return NaN; const cleaned = String(s).replace(/[^\d.-]/g,''); return cleaned === '' ? NaN : parseFloat(cleaned); }
-    function buildStars(n){ let out=''; for(let k=1;k<=5;k++) out += (k<=n) ? '★' : '☆'; return out; }
+    function normKey(k){ return String(k||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
 
-    // robust CSV row parser (handles quoted commas)
+    // CSV parser with quoted-field support
     function parseCSVRow(text){
       const fields = []; let cur=''; let inQuotes=false;
-      for(let i=0;i<text.length;i++){
+      for (let i=0;i<text.length;i++){
         const ch = text[i];
-        if(inQuotes){
-          if(ch === '"'){
-            if(text[i+1] === '"'){ cur += '"'; i++; } else { inQuotes = false; }
+        if (inQuotes){
+          if (ch === '"'){
+            if (text[i+1] === '"'){ cur += '"'; i++; } else { inQuotes = false; }
           } else cur += ch;
         } else {
-          if(ch === '"') inQuotes = true;
-          else if(ch === ','){ fields.push(cur); cur=''; }
+          if (ch === '"') inQuotes = true;
+          else if (ch === ','){ fields.push(cur); cur=''; }
           else cur += ch;
         }
       }
@@ -198,496 +179,364 @@
       return fields;
     }
 
-    // normalize header key
-    function normKey(k){ return String(k || '').toLowerCase().replace(/[^\w]/g,''); }
-
-    // find column index by possible names
     function findIndexByNames(headerMap, candidates){
-      for (const c of candidates) {
-        if (headerMap[c] !== undefined) return headerMap[c];
+      for (const c of candidates){
+        const k = normKey(c);
+        if (headerMap[k] !== undefined) return headerMap[k];
       }
       return -1;
     }
 
-    // ---------------- Read & Render ----------------
-    let products = [];
+    function parseNumber(s){ if (!s) return NaN; const n = String(s).replace(/[^\d.-]/g,''); return n===''?NaN:parseFloat(n); }
+    function formatNaira(n){ if (isNaN(n)) return ''; return '₦' + Math.round(n).toLocaleString(); }
 
-    fetch(SHEET_CSV).then(r => r.text()).then(csv => {
-      const text = csv.replace(/^\uFEFF/,'');
-      const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
-      if (!lines.length) { document.getElementById('count').textContent = 'No data in sheet'; return; }
-
-      // parse header
-      const headerCols = parseCSVRow(lines[0]);
-      const headerMap = {};
-      headerCols.forEach((h,i) => headerMap[normKey(h)] = i);
-
-      // common candidate keys
-      const categoryIdx = findIndexByNames(headerMap, ['category','cat']) !== -1 ? findIndexByNames(headerMap,['category','cat']) : 0;
-      const nameIdx = findIndexByNames(headerMap, ['productname','productname','product','productname','name']) !== -1 ? findIndexByNames(headerMap,['productname','product','name']) : 1;
-      const descIdx = findIndexByNames(headerMap, ['description','desc','details']) !== -1 ? findIndexByNames(headerMap,['description','desc','details']) : 2;
-      const priceIdx = findIndexByNames(headerMap, ['price','priceraw','amount']) !== -1 ? findIndexByNames(headerMap,['price','priceraw','amount']) : 3;
-      const discountIdx = findIndexByNames(headerMap, ['discountprice','discount','discountprice']) !== -1 ? findIndexByNames(headerMap,['discountprice','discount','discountprice']) : 4;
-      const negotiableIdx = findIndexByNames(headerMap, ['negotiable','neg','isnegotiable']) !== -1 ? findIndexByNames(headerMap,['negotiable','neg','isnegotiable']) : 5;
-      const imageIdx = findIndexByNames(headerMap, ['imagelink','imagelinks','imagelink1','image','imagelink','imageurl']) !== -1 ? findIndexByNames(headerMap,['imagelink','image','imageurl','imagelinks']) : 3;
-      const regionIdx = findIndexByNames(headerMap, ['region','type','regiontype','categorytype']) !== -1 ? findIndexByNames(headerMap,['region','type','regiontype','categorytype']) : 4;
-      const viewsIdx = findIndexByNames(headerMap, ['views','rating','stars']) !== -1 ? findIndexByNames(headerMap,['views','rating','stars']) : 7;
-      // fallback if header map seems empty or wrong: use common sofa layout if many lines present
-      // (we assume sheet has header; if not, fallback above covers common indexes)
-
-      const container = document.getElementById('products');
-      container.innerHTML = '';
-      // parse rows (skip header)
-      for (let rowI = 1; rowI < lines.length; rowI++) {
-        const rowText = lines[rowI];
-        if (!rowText || !rowText.trim()) continue;
-        const cols = parseCSVRow(rowText);
-        const get = idx => (typeof cols[idx] !== 'undefined' ? String(cols[idx]).trim() : '');
-
-        const category = get(categoryIdx);
-        const name = get(nameIdx);
-        const description = get(descIdx);
-        const priceStr = get(priceIdx);
-        const discountStr = get(discountIdx);
-        const negotiable = get(negotiableIdx);
-        const imageField = get(imageIdx);
-        const region = get(regionIdx);
-        const viewsRaw = get(viewsIdx);
-
-        // decide if this product matches "Me Chairs" - check category, region or name fields for common variants
-        const catNorm = (category||'').toLowerCase();
-        const regionNorm = (region||'').toLowerCase();
-        const nameNorm = (name||'').toLowerCase();
-        if (!(
-            catNorm.includes('meand') ||
-            catNorm.includes('meand') ||
-            catNorm.includes('meand') ||
-            catNorm.includes('meand') ||
-            catNorm.includes('meand') ||
-            regionNorm.includes('meand') ||
-            regionNorm.includes('meand') ||
-            nameNorm.includes('meand') ||
-            nameNorm.includes('meand') ||
-            nameNorm.includes('meand') ||
-            nameNorm.includes('meand') ||
-            nameNorm.includes('meand')
-          )) continue;
-
-        // parse images: allow comma or newline separated URLs; also strip quotes
-        const rawImgs = String(imageField || '').replace(/^"|"$/g,'');
-        const imageLinks = rawImgs.split(/[\r\n,]+/).map(s => s.trim()).filter(Boolean);
-        const cleaned = imageLinks.filter(u => u.toLowerCase() !== 'sold');
-        const hasImage = cleaned.length > 0;
-        const firstImage = hasImage ? cleaned[0] : '';
-
-        // short desc
-        const shortDesc = description ? (description.length > 80 ? description.slice(0,78).trim() + '…' : description) : '';
-
-        // price math
-        const priceNum = parseNumber(priceStr);
-        const discNum = parseNumber(discountStr);
-        const hasDiscount = !(String(discountStr||'').trim().toLowerCase() === 'no' || String(discountStr||'').trim() === '') && !isNaN(discNum);
-        const saveNum = (hasDiscount && !isNaN(priceNum)) ? (priceNum - discNum) : NaN;
-
-        // stars/ratings
-        let stars = '';
-        if (viewsRaw && viewsRaw.trim() !== '') {
-          const p = parseInt(viewsRaw.trim(),10);
-          if(!isNaN(p)){ const clamped = Math.max(1, Math.min(5, p)); for(let k=1;k<=5;k++) stars += (k<=clamped ? '★':'☆'); }
-          else stars = '★★★★★';
-        } else stars = '★★★★★';
-
-        // product object
-        const product = { rowI, category, name, description, priceStr, discountStr, negotiable, imageLinks: cleaned, region, viewsRaw, hasImage, firstImage, priceNum, discNum, hasDiscount, saveNum, stars };
-
-        // countdown setup
-        // SHOW countdown on any row that has a valid price (not only when there's a discount)
-        if (!isNaN(product.priceNum)) {
-          product._durationMs = DISCOUNT_DURATION_MS;
-          product._endTime = Date.now() + product._durationMs;
-          product._hasCountdown = true;
-        } else {
-          product._hasCountdown = false;
-        }
-
-        const idxForOpen = products.length;
-        products.push(product);
-
-        // build card html
-        const linkClick = `openDetails(${idxForOpen})`;
-        const imgHtml = product.hasImage
-          ? `<span class="thumb" onclick="${linkClick}" role="button" aria-label="Open details for ${escapeHtml(name)}"><img src="${escapeHtml(product.firstImage)}" alt="${escapeHtml(name)}"></span>`
-          : `<span class="thumb" onclick="${linkClick}" role="button" aria-label="Open details for ${escapeHtml(name)}"><div style="width:100%;height:180px;display:flex;align-items:center;justify-content:center;background:#fff;color:#ff3b30;font-weight:800;font-size:28px;">SOLD</div></span>`;
-
-        // original logic: crossed red price shows only when there's a discount (old price)
-        const oldPriceHtml = (product.hasDiscount && priceStr) ? `<div class="old-price">${escapeHtml(priceStr)}</div>` : '';
-        // show discount price when available, otherwise normal price
-        const priceHtml = product.hasDiscount ? `<div class="price">${escapeHtml(discountStr)}</div>` : `<div class="price">${escapeHtml(priceStr)}</div>`;
-        // restore original save logic (show save when there's a discount and the save amount > 0)
-        const saveHtml = (product.hasDiscount && !isNaN(product.saveNum) && product.saveNum > 0) ? `<div class="save-amount">Save ${formatNaira(product.saveNum)}</div>` : '';
-        const negotiableHtml = (negotiable && ['yes','y','true','1','negotiable'].includes(String(negotiable).trim().toLowerCase())) ? `<div class="negotiable-badge">Negotiable</div>` : '';
-
-        // inquiry message
-        const inquiryMessage = `Hello, I'm interested in ${name} priced at ${ product.hasDiscount ? discountStr : priceStr }. Please send a photo of the product you'd like to inquire about.`;
-        const inquiryHref = 'https://wa.me/2347080535579?text=' + encodeURIComponent(inquiryMessage);
-
-        const addDisabled = product.hasImage ? '' : 'disabled';
-        const imageArg = product.hasImage ? escJS(product.firstImage) : '';
-
-        const timerHtml = product._hasCountdown ? `<div id="timer-${idxForOpen}" class="discount-timer" data-product-index="${idxForOpen}">Offer ends in: --d --h --m --s</div>` : '';
-
-        const html = `
-          <div class="product-card" role="article" aria-label="${escapeHtml(name)}">
-            ${imgHtml}
-            <div class="product-body">
-              <a style="text-decoration:none;color:inherit;" onclick="${linkClick}"><h3>${escapeHtml(name)}</h3></a>
-              ${ shortDesc ? `<div class="short-desc">${escapeHtml(shortDesc)}</div>` : '' }
-              <div class="price-row">
-                ${oldPriceHtml}
-                <div style="display:flex;align-items:center;gap:8px;">
-                  ${priceHtml}
-                  ${saveHtml}
-                </div>
-              </div>
-              ${timerHtml}
-              ${negotiableHtml}
-              <div class="stars">${escapeHtml(stars)}</div>
-              <div class="btn-row">
-                <a class="btn inquiry-btn" href="${escapeHtml(inquiryHref)}" target="_blank" rel="noopener noreferrer">📩 Inquiry on WhatsApp</a>
-                <button class="btn buy-btn" ${addDisabled} onclick="addToCart('${escJS(name)}','${escJS(product.hasDiscount ? discountStr : priceStr)}','${imageArg}')">🛒 Add to Cart</button>
-              </div>
-            </div>
-          </div>
-        `;
-        container.insertAdjacentHTML('beforeend', html);
-
-        // start countdown if required
-        if (product._hasCountdown) startProductCountdown(idxForOpen);
-      } // end rows loop
-
-      document.getElementById('count').textContent = `Total Me & you Chairs Available: ${products.length}`;
-      updateCartCount();
-    }).catch(err => {
-      console.error('Failed to load sheet:', err);
-      document.getElementById('count').textContent = 'Failed to load products';
-    });
-
-    // ---------------- Countdown (per product, looping) ----------------
-    function startProductCountdown(productIndex) {
-      const p = products[productIndex];
-      if (!p || !p._hasCountdown) return;
-      if (p._timerIntervalId) return;
-      if (!p._endTime || isNaN(p._endTime)) p._endTime = Date.now() + p._durationMs;
-      updateCountdownDisplays(productIndex);
-      p._timerIntervalId = setInterval(() => {
-        if (!p._hasCountdown) { clearInterval(p._timerIntervalId); p._timerIntervalId = null; return; }
-        const now = Date.now();
-        let timeLeft = p._endTime - now;
-        if (timeLeft <= 0) {
-          // restart automatically
-          p._endTime = Date.now() + p._durationMs;
-          timeLeft = p._endTime - Date.now();
-        }
-        updateCountdownDisplays(productIndex);
-      }, 1000);
-    }
-
-    function formatTimeRemaining(ms){
-      if (isNaN(ms) || ms <= 0) return '0s';
-      const totalSec = Math.floor(ms / 1000);
-      const days = Math.floor(totalSec / 86400);
-      const hours = Math.floor((totalSec % 86400) / 3600);
-      const mins = Math.floor((totalSec % 3600) / 60);
-      const secs = totalSec % 60;
-      return `${days}d ${hours}h ${mins}m ${secs}s`;
-    }
-
-    function updateCountdownDisplays(productIndex) {
-      const p = products[productIndex];
-      if (!p || !p._hasCountdown) return;
-      const els = document.querySelectorAll(`.discount-timer[data-product-index="${productIndex}"]`);
-      const now = Date.now();
-      let timeLeft = p._endTime - now;
-      if (timeLeft <= 0) { p._endTime = Date.now() + p._durationMs; timeLeft = p._endTime - Date.now(); }
-      const human = formatTimeRemaining(timeLeft);
-      els.forEach(el => el.textContent = `Offer ends in: ${human}`);
-      // if details view open for this product, update details timer too
-      const detailsTimer = document.getElementById('details-timer');
-      if (detailsTimer && detailsTimer.dataset.productIndex == String(productIndex)) detailsTimer.textContent = `Offer ends in: ${human}`;
-    }
-
-    // --------------- DETAILS PANEL (gallery + info) ---------------
+    /* DOM refs & state */
+    const countEl = document.getElementById('count');
+    const container = document.getElementById('products');
     const detailsPanel = document.getElementById('detailsPanel');
     const detailsLeft = document.getElementById('detailsLeft');
     const detailsRight = document.getElementById('detailsRight');
     const detailsClose = document.getElementById('detailsClose');
+    const bottomNav = document.querySelector('.bottom-nav');
+    const cartBadge = document.getElementById('cart-count-bottom');
+    const themeBtn = document.getElementById('themeSwitch');
 
+    let products = [];
     let detailsOpenIndex = null;
     let currentImageIndex = 0;
-    let touchStartX = null;
+    let pushedState = false;
+    let ignorePopstate = false;
 
-    function openDetails(idx) {
+    /* fetch with timeout helper */
+    async function fetchWithTimeout(url, ms){
+      const controller = new AbortController();
+      const id = setTimeout(()=> controller.abort(), ms);
+      try {
+        const resp = await fetch(url, { signal: controller.signal });
+        clearTimeout(id);
+        if (!resp.ok) throw new Error('Network response was not ok: ' + resp.status);
+        return await resp.text();
+      } catch (err) {
+        clearTimeout(id);
+        throw err;
+      }
+    }
+
+    /* Load products and filter by category 'meand' (case-insensitive) */
+    (async function loadProducts(){
+      try {
+        const csv = await fetchWithTimeout(SHEET_CSV, FETCH_TIMEOUT_MS);
+        const text = csv.replace(/^\uFEFF/,'');
+        const lines = text.split(/\r?\n/).filter(l=>l.trim() !== '');
+        if (!lines.length){ countEl.innerHTML = 'No data found in the sheet.'; return; }
+
+        const headerCols = parseCSVRow(lines[0]);
+        const headerMap = {};
+        headerCols.forEach((h,i)=> headerMap[normKey(h)] = i);
+
+        const categoryIdx = findIndexByNames(headerMap, ['category','cat','type','group']);
+        const nameIdx     = findIndexByNames(headerMap, ['productname','product','name','title','item']);
+        const descIdx     = findIndexByNames(headerMap, ['description','desc','details','longdescription']);
+        const priceIdx    = findIndexByNames(headerMap, ['price','priceraw','amount','cost']);
+        const discountIdx = findIndexByNames(headerMap, ['discountprice','discount','offer','specialprice']);
+        const negotiableIdx = findIndexByNames(headerMap, ['negotiable','neg','isnegotiable']);
+        const imageIdx    = findIndexByNames(headerMap, ['imagelink','imagelinks','image','imageurl','image1','images','photo','photos']);
+        const viewsIdx    = findIndexByNames(headerMap, ['views','rating','stars']);
+
+        for (let i=1;i<lines.length;i++){
+          const cols = parseCSVRow(lines[i]);
+          if (!cols || cols.length === 0) continue;
+          const get = idx => (idx >= 0 && typeof cols[idx] !== 'undefined') ? String(cols[idx]).trim() : '';
+
+          const category = get(categoryIdx);
+          const name = get(nameIdx);
+          const description = get(descIdx);
+          const priceStr = get(priceIdx);
+          const discountStr = get(discountIdx);
+          const negotiable = get(negotiableIdx);
+          const imageField = get(imageIdx);
+          const viewsRaw = get(viewsIdx);
+
+          const catNorm = (category||'').toLowerCase();
+
+          // Accept items whose category contains the word 'meand'
+          if (!catNorm.includes('meand')) continue;
+
+          const rawImgs = String(imageField || '').replace(/^"|"$/g,'');
+          const imageLinks = rawImgs.split(/[\r\n,]+/).map(s=>s.trim()).filter(Boolean);
+          const cleaned = imageLinks.filter(u => u && u.toLowerCase() !== 'sold');
+          const hasImage = cleaned.length > 0;
+          const firstImage = hasImage ? cleaned[0] : '';
+
+          const priceNum = parseNumber(priceStr);
+          const discNum = parseNumber(discountStr);
+          const hasDiscount = !(String(discountStr||'').trim().toLowerCase()==='no' || String(discountStr||'').trim()==='') && !isNaN(discNum);
+          const saveNum = (hasDiscount && !isNaN(priceNum)) ? (priceNum - discNum) : NaN;
+
+          const stars = (viewsRaw && viewsRaw.trim() !== '') ? (function(){ let p = parseInt(viewsRaw,10); if (isNaN(p)) p = 5; p = Math.max(1,Math.min(5,p)); return Array.from({length:5},(_,k)=>k<p?'★':'☆').join(''); })() : '★★★★★';
+
+          const product = {
+            name, category, description, priceStr, discountStr, negotiable,
+            imageLinks: cleaned, hasImage, firstImage, priceNum, discNum, hasDiscount, saveNum, stars
+          };
+
+          if (!isNaN(product.priceNum)){
+            product._durationMs = DISCOUNT_DURATION_MS;
+            product._endTime = Date.now() + product._durationMs;
+            product._hasCountdown = true;
+          } else product._hasCountdown = false;
+
+          products.push(product);
+        }
+
+        countEl.innerHTML = `Total Me & You Chairs: ${products.length}`;
+        if (products.length === 0){
+          countEl.innerHTML = 'No products found in category "meand". Make sure your Category column includes the token <strong>meand</strong>.';
+          return;
+        }
+
+        renderGrid();
+        updateCartCount();
+      } catch (err) {
+        console.error('Failed to load CSV:', err);
+        if (err.name === 'AbortError'){
+          countEl.innerHTML = 'Failed to load products: request timed out. Ensure the Google Sheet is published to the web (CSV) and the link is correct.';
+        } else {
+          countEl.innerHTML = 'Failed to load products. Verify your SHEET_CSV link and that the sheet is published (File → Publish to web → CSV).';
+        }
+      }
+    })();
+
+    /* Render cards */
+    function renderGrid(){
+      container.innerHTML = '';
+      products.forEach((p, idx) => {
+        const inquiryHref = 'https://wa.me/2347080535579?text=' + encodeURIComponent(`Hello, I'm interested in ${p.name} priced at ${ p.hasDiscount ? p.discountStr : p.priceStr }.`);
+        const addDisabled = p.hasImage ? '' : 'disabled';
+        const imageArg = p.hasImage ? escJS(p.firstImage) : '';
+        const imgHtml = p.hasImage
+          ? `<span class="thumb" onclick="openDetails(${idx})" role="button" aria-label="Open ${escapeHtml(p.name)}"><img src="${escapeHtml(p.firstImage)}" alt="${escapeHtml(p.name)}"></span>`
+          : `<span class="thumb" onclick="openDetails(${idx})" role="button" aria-label="Open ${escapeHtml(p.name)}"><div style="width:100%;height:180px;display:flex;align-items:center;justify-content:center;background:#fff;color:#ff3b30;font-weight:800;font-size:10px;border-radius:6px;">This item is currently sold out. New stock coming soon!</div></span>`;
+
+        const priceHtml = p.hasDiscount ? `<div class="old-price">${escapeHtml(p.priceStr)}</div><div class="price">${escapeHtml(p.discountStr)}</div>` : `<div class="price">${escapeHtml(p.priceStr)}</div>`;
+        const saveHtml = (p.hasDiscount && !isNaN(p.saveNum) && p.saveNum>0) ? `<div class="save-amount">Save ${formatNaira(p.saveNum)}</div>` : '';
+
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.setAttribute('role','article');
+        card.innerHTML = `
+          ${imgHtml}
+          <div class="product-body">
+            <a style="text-decoration:none;color:inherit;" onclick="openDetails(${idx})"><h3>${escapeHtml(p.name)}</h3></a>
+            <div class="meta-small">Category: ${escapeHtml(p.category || 'Me & You')}</div>
+            <div class="price-row">${priceHtml}${saveHtml}</div>
+            <div class="discount-timer" data-product-index="${idx}"></div>
+            <div class="stars">${escapeHtml(p.stars)}</div>
+            ${(p.negotiable && ['yes','y','true','1','negotiable'].includes(String(p.negotiable).trim().toLowerCase())) ? '<div style="color:var(--green);font-weight:600;">Negotiable</div>' : ''}
+            <div class="btn-row">
+              <a class="inquiry-btn" href="${escapeHtml(inquiryHref)}" target="_blank" rel="noopener noreferrer">📩 Inquiry</a>
+              <button class="buy-btn" ${addDisabled} onclick="addToCart('${escJS(p.name)}','${escJS(p.hasDiscount?p.discountStr:p.priceStr)}','${imageArg}')">🛒 Add to Cart</button>
+            </div>
+          </div>`;
+        container.appendChild(card);
+      });
+    }
+
+    /* Cart */
+    function addToCart(name, price, image){
+      try{
+        let cart = JSON.parse(localStorage.getItem('cart')||'[]');
+        cart.push({ name, price, image, qty:1 });
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
+      } catch(e){ console.error('addToCart error', e); }
+    }
+    function updateCartCount(){
+      const cart = JSON.parse(localStorage.getItem('cart')||'[]');
+      if (cart.length > 0){ cartBadge.style.display = 'inline-block'; cartBadge.textContent = cart.length; } else cartBadge.style.display = 'none';
+    }
+
+    /* Countdown updater */
+    setInterval(()=> {
+      const now = Date.now();
+      document.querySelectorAll('.discount-timer').forEach(el=>{
+        const idx = parseInt(el.dataset.productIndex, 10);
+        const p = products[idx];
+        if (!p || !p._hasCountdown) return;
+        let timeLeft = p._endTime - now;
+        if (timeLeft <= 0){ p._endTime = Date.now() + p._durationMs; timeLeft = p._endTime - Date.now(); }
+        el.textContent = 'Offer ends in: ' + formatTimeRemaining(timeLeft);
+      });
+      const dTimer = document.getElementById('details-timer');
+      if (dTimer && detailsOpenIndex !== null){
+        const p = products[detailsOpenIndex];
+        if (p && p._hasCountdown){
+          let t = p._endTime - now;
+          if (t <= 0){ p._endTime = Date.now() + p._durationMs; t = p._endTime - Date.now(); }
+          dTimer.textContent = 'Offer ends in: ' + formatTimeRemaining(t);
+        }
+      }
+    }, 1000);
+
+    function formatTimeRemaining(ms){
+      if (isNaN(ms) || ms <= 0) return '0s';
+      const total = Math.floor(ms/1000);
+      const days = Math.floor(total/86400);
+      const hours = Math.floor((total%86400)/3600);
+      const mins = Math.floor((total%3600)/60);
+      const secs = total%60;
+      return `${days}d ${hours}h ${mins}m ${secs}s`;
+    }
+
+    /* DETAILS PANEL + back-button handling */
+    detailsClose.addEventListener('click', ()=> closeDetails());
+    function openDetails(idx){
       if (typeof idx !== 'number' || !products[idx]) return;
       detailsOpenIndex = idx;
       currentImageIndex = 0;
-      const p = products[idx];
-      renderDetailsLeft(p);
-      renderDetailsRight(p);
+      renderDetails(products[idx]);
       detailsPanel.style.display = 'flex';
       detailsPanel.setAttribute('aria-hidden','false');
-      try { history.pushState({detailsOpen:true}, ''); } catch(e){}
-      document.body.dataset.detailsOpen = '1';
-      // prevent background scroll so header/body won't shift while details open
       document.body.style.overflow = 'hidden';
-      if (p._hasCountdown) startProductCountdown(idx);
+      bottomNav.style.display = 'none';
       document.addEventListener('keydown', detailsKeyHandler);
-    }
 
-    function closeDetails(byPopstate = false) {
+      // push state so browser Back closes overlay rather than navigating away
+      try {
+        history.pushState({ vbest:'details', idx: idx }, '', '#product-' + idx);
+        pushedState = true;
+      } catch(e){ /* ignore */ }
+    }
+    function closeDetails(fromPopstate = false){
       detailsPanel.style.display = 'none';
       detailsPanel.setAttribute('aria-hidden','true');
       detailsLeft.innerHTML = '';
       detailsRight.innerHTML = '';
       detailsOpenIndex = null;
       currentImageIndex = 0;
-      // restore body scroll
       document.body.style.overflow = '';
-      if (document.body.dataset.detailsOpen === '1') {
-        document.body.dataset.detailsOpen = '0';
-        if (!byPopstate) { try { history.back(); } catch(e){} }
-      }
+      bottomNav.style.display = '';
       document.removeEventListener('keydown', detailsKeyHandler);
+
+      if (pushedState && !fromPopstate){
+        ignorePopstate = true;
+        try { history.back(); } catch(e){ /* ignore */ }
+      }
+      pushedState = false;
     }
+    function detailsKeyHandler(e){
+      if (e.key === 'Escape') closeDetails();
+      if (e.key === 'ArrowLeft') showImageIndex(-1);
+      if (e.key === 'ArrowRight') showImageIndex(1);
+    }
+    window.addEventListener('popstate', (event) => {
+      if (ignorePopstate){ ignorePopstate = false; return; }
+      if (detailsPanel.style.display === 'flex') closeDetails(true);
+    });
 
-    detailsClose.addEventListener('click', () => closeDetails(false));
-
-    function renderDetailsLeft(p){
-      let mainImgHtml = '';
-      if (p.hasImage) mainImgHtml = `<img id="detailsMainImage" class="main-image" src="${escapeHtml(p.imageLinks[0])}" alt="${escapeHtml(p.name)}">`;
-      else mainImgHtml = `<div style="width:100%;height:60vh;display:flex;align-items:center;justify-content:center;background:#111;color:${escapeHtml('#ff3b30')};font-weight:800;font-size:28px;border-radius:8px;">SOLD</div>`;
-
+    function renderDetails(p){
+      const mainImg = p.hasImage ? `<img id="detailsMainImage" class="main-image" src="${escapeHtml(p.imageLinks[0])}" alt="${escapeHtml(p.name)}">` : `<div style="width:100%;height:60vh;display:flex;align-items:center;justify-content:center;background:#111;color:#fff;font-weight:800;font-size:20px;border-radius:8px;">This item is currently sold out. New stock coming soon!</div>`;
+      
       const hasMultiple = p.imageLinks && p.imageLinks.length > 1;
-      const leftArrow = hasMultiple ? `<div class="img-nav left" id="imgPrev" role="button" aria-label="Previous image">‹</div>` : '';
-      const rightArrow = hasMultiple ? `<div class="img-nav right" id="imgNext" role="button" aria-label="Next image">›</div>` : '';
-
+      const leftArrow = hasMultiple ? `<div class="img-nav left" id="imgPrev">‹</div>` : '';
+      const rightArrow = hasMultiple ? `<div class="img-nav right" id="imgNext">›</div>` : '';
       let thumbsHtml = '';
-      if (p.imageLinks && p.imageLinks.length) {
+      if (p.imageLinks && p.imageLinks.length){
         thumbsHtml = '<div class="thumbs" id="thumbsContainer">';
-        p.imageLinks.forEach((url,i) => thumbsHtml += `<button data-idx="${i}" class="thumb-btn" aria-label="View image ${i+1}"><img src="${escapeHtml(url)}" alt="thumb ${i+1}"></button>`);
+        p.imageLinks.forEach((u,i)=> thumbsHtml += `<button data-idx="${i}" class="thumb-btn" style="border:2px solid transparent;background:transparent;padding:0;margin:0;"><img src="${escapeHtml(u)}" alt="thumb ${i+1}"></button>`);
         thumbsHtml += '</div>';
       }
+      detailsLeft.innerHTML = `${leftArrow}${mainImg}${rightArrow}${thumbsHtml}`;
 
-      detailsLeft.innerHTML = `${leftArrow}${mainImgHtml}${rightArrow}${thumbsHtml}`;
-
-      if (hasMultiple) {
-        document.getElementById('imgPrev').addEventListener('click', () => showImageIndex(-1));
-        document.getElementById('imgNext').addEventListener('click', () => showImageIndex(1));
+      if (hasMultiple){
+        document.getElementById('imgPrev').addEventListener('click', ()=> showImageIndex(-1));
+        document.getElementById('imgNext').addEventListener('click', ()=> showImageIndex(1));
       }
       const thumbsContainer = document.getElementById('thumbsContainer');
-      if (thumbsContainer) {
-        thumbsContainer.querySelectorAll('button.thumb-btn').forEach(btn => btn.addEventListener('click', () => {
-          const i = parseInt(btn.getAttribute('data-idx'),10);
-          goToImage(i);
-        }));
+      if (thumbsContainer){
+        thumbsContainer.querySelectorAll('button.thumb-btn').forEach(btn => btn.addEventListener('click', ()=> { goToImage(parseInt(btn.getAttribute('data-idx'),10)); }));
         highlightThumb(currentImageIndex);
       }
 
-      const mainImg = document.getElementById('detailsMainImage');
-      if (mainImg) {
-        mainImg.addEventListener('touchstart', (ev) => { touchStartX = ev.touches[0].clientX; }, {passive:true});
-        mainImg.addEventListener('touchend', (ev) => {
-          if (touchStartX === null) return;
-          const endX = ev.changedTouches[0].clientX;
-          const diff = endX - touchStartX;
-          if (Math.abs(diff) > 40) { if (diff < 0) showImageIndex(1); else showImageIndex(-1); }
+      const main = document.getElementById('detailsMainImage');
+      if (main){
+        let touchStartX = null;
+        main.addEventListener('touchstart', (ev)=> { touchStartX = ev.touches[0].clientX; }, {passive:true});
+        main.addEventListener('touchend', (ev)=> {
+          if (touchStartX===null) return;
+          const endX = ev.changedTouches[0].clientX; const diff = endX - touchStartX;
+          if (Math.abs(diff) > 40){ if (diff < 0) showImageIndex(1); else showImageIndex(-1); }
           touchStartX = null;
         }, {passive:true});
       }
-    }
 
-    function renderDetailsRight(p){
-      const saveHtml = (p.hasDiscount && !isNaN(p.saveNum) && p.saveNum > 0) ? `<div class="save-amount">Save ${formatNaira(p.saveNum)}</div>` : '';
+      const saveHtml = (p.hasDiscount && !isNaN(p.saveNum) && p.saveNum>0) ? `<div class="save-amount">Save ${formatNaira(p.saveNum)}</div>` : '';
       const negotiableHtml = (p.negotiable && ['yes','y','true','1','negotiable'].includes(String(p.negotiable).trim().toLowerCase())) ? `<div class="negotiable">Negotiable</div>` : '';
-      // show old (crossed) price first, then discount (if discount exists)
       const priceHtml = p.hasDiscount ? `<div class="old-price">${escapeHtml(p.priceStr)}</div><div class="price">${escapeHtml(p.discountStr)}</div>` : `<div class="price">${escapeHtml(p.priceStr)}</div>`;
-      const inquiryMessage = `Hello, I'm interested in ${p.name} priced at ${ p.hasDiscount ? p.discountStr : p.priceStr }. Please send a photo of the product you'd like to inquire about.`;
-      const inquiryHref = 'https://wa.me/2347080535579?text=' + encodeURIComponent(inquiryMessage);
-
-      const detailsTimerHtml = p._hasCountdown ? `<div id="details-timer" class="discount-timer" data-product-index="${detailsOpenIndex}">Offer ends in: --d --h --m --s</div>` : '';
+      const inquiryHref = 'https://wa.me/2347080535579?text=' + encodeURIComponent(`Hello, I'm interested in ${p.name} priced at ${ p.hasDiscount ? p.discountStr : p.priceStr }.`);
+      const detailsTimerHtml = p._hasCountdown ? `<div id="details-timer" class="discount-timer">Offer ends in: --d --h --m --s</div>` : '';
 
       detailsRight.innerHTML = `
         <h2>${escapeHtml(p.name)}</h2>
-        <div class="meta">Category: ${escapeHtml(p.category || p.region || '')}</div>
+        <div class="meta-small">Category: ${escapeHtml(p.category || '')}</div>
         <div class="price-row">${priceHtml} ${saveHtml}</div>
         ${detailsTimerHtml}
         ${negotiableHtml}
         <div class="stars">${escapeHtml(p.stars)}</div>
-        <div class="actions" style="margin-top:12px;">
-          <a class="btn inquiry-btn" href="${escapeHtml(inquiryHref)}" target="_blank" rel="noopener noreferrer">📩 Inquiry on WhatsApp</a>
-          <button class="btn buy-btn" ${p.hasImage ? '' : 'disabled'} onclick="addToCart('${escJS(p.name)}','${escJS(p.hasDiscount ? p.discountStr : p.priceStr)}','${escJS(p.hasImage ? p.firstImage : '')}')">🛒 Add to Cart</button>
+        <div class="details-actions" style="margin-top:12px;display:flex;gap:10px;">
+          <a class="inquiry-btn" href="${escapeHtml(inquiryHref)}" target="_blank" rel="noopener noreferrer">📩 Inquiry on WhatsApp</a>
+          <button class="buy-btn" ${p.hasImage ? '' : 'disabled'} onclick="addToCart('${escJS(p.name)}','${escJS(p.hasDiscount?p.discountStr:p.priceStr)}','${escJS(p.hasImage?p.firstImage:'')}')">🛒 Add to Cart</button>
         </div>
-        <div class="desc"><h3 style="margin-top:14px;color:#e6fbf6;">Product description</h3><p style="margin:8px 0 0;line-height:1.6;color:#d8eef0;">${escapeHtml(p.description || 'No description available.')}</p></div>
+        <div class="desc"><h3 style="margin-top:14px;color:var(--accent);">Product description</h3><p style="margin:8px 0 0;line-height:1.6;color:var(--text);">${escapeHtml(p.description || 'No description available.')}</p></div>
       `;
 
-      // sync countdown immediately
-      if (p._hasCountdown) updateCountdownDisplays(detailsOpenIndex);
+      if (p._hasCountdown){
+        const now = Date.now(); let timeLeft = p._endTime - now; if (timeLeft<=0){ p._endTime = Date.now() + p._durationMs; timeLeft = p._endTime - Date.now(); }
+        const dt = document.getElementById('details-timer'); if (dt) dt.textContent = 'Offer ends in: ' + formatTimeRemaining(timeLeft);
+      }
     }
 
-    function showImageIndex(delta) {
+    function showImageIndex(delta){
       if (detailsOpenIndex === null) return;
-      const p = products[detailsOpenIndex];
-      const len = (p.imageLinks && p.imageLinks.length) ? p.imageLinks.length : 0;
-      if (!len) return;
-      currentImageIndex = (currentImageIndex + delta + len) % len;
-      updateMainImageForProduct(p);
+      const p = products[detailsOpenIndex]; if(!p||!p.imageLinks||!p.imageLinks.length) return;
+      currentImageIndex = (currentImageIndex + delta + p.imageLinks.length) % p.imageLinks.length;
+      const main = document.getElementById('detailsMainImage'); if (main) main.src = p.imageLinks[currentImageIndex];
+      highlightThumb(currentImageIndex);
     }
-
-    function goToImage(i) {
+    function goToImage(i){
       if (detailsOpenIndex === null) return;
-      const p = products[detailsOpenIndex];
-      if (!p.imageLinks || !p.imageLinks[i]) return;
+      const p = products[detailsOpenIndex]; if(!p||!p.imageLinks||!p.imageLinks[i]) return;
       currentImageIndex = i;
-      updateMainImageForProduct(p);
+      const main = document.getElementById('detailsMainImage'); if (main) main.src = p.imageLinks[currentImageIndex];
+      highlightThumb(currentImageIndex);
     }
-
-    function updateMainImageForProduct(p) {
-      const mainImg = document.getElementById('detailsMainImage');
-      if (mainImg && p.imageLinks && p.imageLinks[currentImageIndex]) {
-        mainImg.src = p.imageLinks[currentImageIndex];
-        highlightThumb(currentImageIndex);
-      }
-    }
-
-    function highlightThumb(i) {
+    function highlightThumb(i){
       const thumbs = document.querySelectorAll('#thumbsContainer button.thumb-btn');
-      thumbs.forEach((b, idx) => { b.style.border = (idx === i) ? '2px solid #25d366' : '2px solid transparent'; });
-      const sel = thumbs[i];
-      if (sel && sel.scrollIntoView) sel.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+      thumbs.forEach((b,idx)=> b.style.border = (idx===i)?'2px solid var(--green)':'2px solid transparent');
+      const sel = thumbs[i]; if (sel && sel.scrollIntoView) sel.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
     }
 
-    function detailsKeyHandler(e) {
-      if (e.key === 'Escape') { closeDetails(false); return; }
-      if (e.key === 'ArrowLeft') showImageIndex(-1);
-      if (e.key === 'ArrowRight') showImageIndex(1);
-    }
+    /* Theme switcher */
+    (function(){
+      const themes = ['classic','dark','gold'];
+      let current = localStorage.getItem('vbest_theme') || 'classic';
+      if (!themes.includes(current)) current = 'classic';
+      document.body.setAttribute('data-theme', current);
+      let idx = themes.indexOf(current);
+      themeBtn.addEventListener('click', ()=> {
+        idx = (idx + 1) % themes.length;
+        const t = themes[idx];
+        document.body.setAttribute('data-theme', t);
+        localStorage.setItem('vbest_theme', t);
+      });
+    })();
 
-    detailsPanel.addEventListener('click', function(e){ if (e.target === detailsPanel) closeDetails(false); });
-    window.addEventListener('popstate', function(e){ if (document.body.dataset.detailsOpen === '1') closeDetails(true); });
+    /* close details on backdrop click */
+    detailsPanel.addEventListener('click', function(e){ if (e.target === detailsPanel) closeDetails(); });
 
-    // ---------------- CART ----------------
-    <!-- Replace your existing addToCart function with this (same signature used by your pages) -->
-    
-    
-    
-/* Helper: show a small non-blocking toast (will create #vbest-toast element if missing) */
-function showToast(message, ms = 2000) {
-  let t = document.getElementById('vbest-toast');
-  if (!t) {
-    t = document.createElement('div');
-    t.id = 'vbest-toast';
-    Object.assign(t.style, {
-      position: 'fixed',
-      right: '14px',
-      bottom: '18px',
-      background: '#111',
-      color: '#fff',
-      padding: '10px 14px',
-      borderRadius: '8px',
-      boxShadow: '0 10px 30px rgba(0,0,0,0.6)',
-      zIndex: 99999,
-      fontWeight: 700,
-      opacity: 0,
-      transition: 'opacity 200ms ease, transform 200ms ease',
-      transform: 'translateY(8px)',
-      pointerEvents: 'none',
-      maxWidth: '320px',
-      fontSize: '14px',
-    });
-    document.body.appendChild(t);
-  }
-  // set message & show
-  t.textContent = message;
-  t.style.opacity = '1';
-  t.style.transform = 'translateY(0)';
-  // clear previous timer
-  if (t._hideTimer) clearTimeout(t._hideTimer);
-  t._hideTimer = setTimeout(() => {
-    t.style.opacity = '0';
-    t.style.transform = 'translateY(8px)';
-  }, ms);
-}
+    /* sync cart across tabs */
+    window.addEventListener('storage', (e)=> { if (e.key === 'cart') updateCartCount(); });
 
-/* Replace your page's addToCart(name, price, image) with this version.
-   Keeps same signature and behavior (localStorage + cart badge). */
-function addToCart(name, price, image) {
-  try {
-    // if image empty => treat as not available (keeps your current behavior)
-    if (!image || !String(image).trim()) return;
-
-    // read current cart
-    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-
-    // add item (you can change payload shape if you store extra fields)
-    cart.push({ name: name, price: price, image: image, qty: 1 });
-
-    // save
-    localStorage.setItem('cart', JSON.stringify(cart));
-
-    // update cart count using existing function if present, otherwise do minimal update
-    if (typeof updateCartCount === 'function') {
-      updateCartCount();
-    } else {
-      const badge = document.getElementById('cart-count');
-      if (badge) {
-        badge.style.display = cart.length ? 'inline-block' : 'none';
-        badge.textContent = cart.length;
-      }
-    }
-
-    // keep previous UX: increment local star rating if you use that behavior (safe-guarded)
-    try {
-      const els = document.querySelectorAll('.stars');
-      for (let el of els) {
-        if (el.getAttribute('data-name') === name) {
-          let r = parseInt(el.getAttribute('data-rating')) || 0;
-          r = Math.min(5, r + 1);
-          el.setAttribute('data-rating', r);
-          // if you have a global buildStars() use it; otherwise create a simple stars string
-          if (typeof buildStars === 'function') el.innerHTML = buildStars(r);
-          else el.innerHTML = (Array(r).fill('★').join('')) + (Array(5 - r).fill('☆').join(''));
-          break;
-        }
-      }
-    } catch (errRating) {
-      // ignore rating errors silently
-    }
-
-    // SESSION single-popup logic:
-    // Show one popup per browser tab session (sessionStorage cleared when tab/window is closed)
-    const popupKey = 'vbest_cart_popup_shown';
-    if (!sessionStorage.getItem(popupKey)) {
-      // Short, clear message per your spec:
-      showToast("Added to your cart. Click the cart at the top-right corner to view or remove items.", 10000);
-      sessionStorage.setItem(popupKey, '1');
-    }
-    // otherwise silent (no popup) for subsequent adds in same session
-  } catch (err) {
-    // fallback: still update cart silently
-    console.error('addToCart error:', err);
-  }
-}
-  
-  
-  
-    function updateCartCount(){
-      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-      const badge = document.getElementById('cart-count');
-      if (cart.length > 0) { badge.style.display = 'inline-block'; badge.textContent = cart.length; } else { badge.style.display = 'none'; }
-    }
-    updateCartCount();
-
-    // cleanup intervals on unload
-    window.addEventListener('beforeunload', function(){ products.forEach(p => { if (p && p._timerIntervalId) clearInterval(p._timerIntervalId); }); });
   </script>
 </body>
 </html>

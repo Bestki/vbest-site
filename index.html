@@ -3,22 +3,63 @@
 
 <head>
   <meta charset="UTF-8" />
-<title>Best Furniture,V'best Luxury Interiors | Sofas, Beds, Dining & Office Furniture in Lagos</title>
-  <meta name="description" content="V'Best Luxury Interiors - Premium furniture in Lagos. Sofas, beds, dining, office, outdoor sets and more. Fast delivery, 100% authentic products, 24/7 support.">
-<meta name="keywords" content="furniture Nigeria, sofas Lagos, luxury interiors, dining sets, beds, office chairs, center tables, V'Best furniture">
-<meta name="author" content="V'Best Luxury Interiors">
-<meta property="og:title" content="V'Best Luxury Interiors | Premium Furniture in Lagos">
-<meta property="og:description" content="Shop luxury sofas, beds, dining sets, and office furniture with fast delivery and 24/7 support.">
-<meta property="og:image" content="https://i.postimg.cc/yNXsb9Q8/IMG-20250822-WA0058.jpg">
+<title>Vbest Luxury Interiors | Buy Luxury Furniture in Lagos</title>
+<meta name="description" content="Shop luxury furniture in Lagos at Vbest Luxury Interiors — sofas, beds, dining sets, and office furniture. Fast delivery, authentic designs, and 24/7 WhatsApp support.">
+<meta name="keywords" content="furniture, sofa, sofas for sale, sofa set, leather sofa, sectional sofa, sofa bed, living room furniture, bed, bed frame, king size bed, queen bed, beds for sale, mattress, dining table, dining set, dining chairs, wardrobe, closet design, office furniture, home furniture, outdoor furniture, patio furniture, custom furniture, bespoke furniture, upholstery services, made to order furniture, furniture store near me, furniture Lagos, modern furniture Lagos, luxury furniture Lagos, handcrafted furniture Lagos, modular sofas Lagos, leather sofas Lagos, bedroom sets Lagos, dining room furniture Lagos">
+<link rel="canonical" href="https://vbest-site.vercel.app/">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Vbest Luxury Interiors — Premium Furniture in Lagos">
+<meta property="og:description" content="Premium sofas, beds, dining & office furniture in Lagos. Fast delivery & custom designs.">
+<meta property="og:image" content="blog/logo.jpg">
 <meta property="og:url" content="https://vbest-site.vercel.app/">
 <meta name="twitter:card" content="summary_large_image">
-  
+
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/jpeg" href="blog/logo.jpg">
 <style>
+/* SHOP NOW button matching Dining (uses dining variable --btn) */
+.shop-now {
+  display: block;
+  margin-top: 8px;
+  padding: 9px 12px;
+  background: var(--btn, #FF9900);   /* dining main button color (fallback #FF9900) */
+  color: var(--btn-text, #fff);
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 13px;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  transition: transform .12s ease, opacity .12s ease;
+}
+.shop-now:hover,
+.shop-now:focus {
+  opacity: 0.95;
+  transform: translateY(-2px);
+  outline: none;
+}
+
+/* optional: small visual label style directly under image */
+.category-box .cat-label {
+  display:block;
+  padding:6px 8px;
+  font-weight:700;
+  color:var(--text, #111);
+}
+
+/* keep layout consistent for the .category-box when switching anchor->div */
+.category-box { display:flex; flex-direction:column; align-items:stretch; }
+.category-box img { width:100%; height:180px; object-fit:cover; border-radius:4px; display:block; }
+
+/* mobile tweak */
+@media (max-width:480px){
+  .shop-now { padding:8px 10px; font-size:13px; }
+  .category-box img { height:150px; }
+}
 /* Video tile style — minimal and safe */
 /* minimal video tile styles */
 .category-box { position: relative; overflow: hidden; display:block; text-align:center; }
@@ -48,7 +89,17 @@
   pointer-events: none;
   opacity: .96;
 }
-  /* ================= Base (Amazon-like light theme) ================= */
+/* simple visual feedback when category clicked */
+.category-box {
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.category-box:active {
+  transform: scale(0.97);
+  box-shadow: 0 0 8px rgba(0,0,0,0.3);
+}
+  /* ================= Base (Amazon-like ligh.t theme) ================= */
   :root {
     --bg: #ffffff;             /* page background */
     --panel: #f9f9f9;          /* card / panel background */
@@ -320,6 +371,7 @@
   .footer-col { flex:1; min-width:200px; }
   .footer-col h3 { font-size:16px; margin-bottom:10px; color:var(--text); }
   .footer-col ul li { font-size:14px; margin:4px 0; color:var(--muted); }
+  
 
   .accordion-btn { background:none; border:none; outline:none; font-size:14px; font-weight:bold; color:var(--accent); text-align:left; padding:6px 0; cursor:pointer; width:100%; }
   .accordion-content { display:none; font-size:13px; margin-bottom:10px; line-height:1.5; color:var(--muted); }
@@ -356,7 +408,129 @@
     100% { opacity: 0; transform: translateY(15px); }
   }
 </style>
-  <!-- Google Analytics -->
+
+<!-- =========================
+  ADDED CSS: Theme overrides, review clamping, bottom-nav, footer center & social colors
+   (This is an insertion only — does not remove or alter your original styles)
+   ========================= -->
+<style>
+  /* Theme variable overrides — dining-style themes */
+  body[data-theme="classic"]{
+    --bg:#ffffff; --panel:#f9f9f9; --card-border:#e9e9e9; --muted:#565959;
+    --accent:#ff9900; --accent-2:#e68a00; --brand-blue:#146eb4; --text:#111111; --star:#ffd54a;
+  }
+  body[data-theme="dark"]{
+    --bg:#0f1111; --panel:#131921; --card-border:rgba(255,255,255,0.04); --muted:#cfcfcf;
+    --accent:#ff9900; --accent-2:#e68a00; --brand-blue:#9ac8ff; --text:#ffffff; --star:#ffd54a;
+  }
+  body[data-theme="gold"]{
+    --bg:#fff8e7; --panel:#fff3d6; --card-border:#f1e1c7; --muted:#5a5a5a;
+    --accent:#c89200; --accent-2:#d4a017; --brand-blue:#146eb4; --text:#2e2e2e; --star:#ffd54a;
+  }
+
+  /* bottom nav (theme + cart) */
+  .bottom-nav{
+    position:fixed; left:0; right:0; bottom:0; z-index:99998; height:64px;
+    display:flex; justify-content:flex-end; align-items:center; gap:12px;
+    padding:8px 12px; background:var(--panel); border-top:1px solid rgba(0,0,0,0.06);
+    box-shadow:0 -6px 18px rgba(0,0,0,0.08);
+  }
+  .bottom-nav button, .bottom-nav a{ background:transparent; border:0; font-size:16px; color:var(--brand-blue); font-weight:800; text-decoration:none; cursor:pointer; display:flex; align-items:center; gap:8px; }
+  .cart-badge{ background:#ff3b30; color:#fff; border-radius:50%; padding:3px 8px; font-size:12px; margin-left:6px; display:inline-block; }
+
+  /* Trusted line under header video */
+  .trusted-line{
+    max-width:1100px; margin:14px auto 8px; display:flex; gap:10px; align-items:center; justify-content:center; color:var(--muted);
+    font-weight:700; font-size:15px;
+  }
+  .trusted-line .trusted-icon{ width:36px; height:36px; border-radius:50%; background:linear-gradient(180deg,var(--accent),var(--accent-2)); color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+
+  /* Review truncation + view toggle */
+  .vbest-review-text { position:relative; }
+  .vbest-review-preview { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .vbest-review-full { display:none; }
+  .vbest-review .view-full { display:inline-block; margin-top:8px; background:none; border:0; color:var(--brand-blue); font-weight:700; cursor:pointer; padding:0; }
+
+  /* Footer social brand colors (keeps existing icons but colors them) */
+/* --- Minimal fix: shrink social icons and keep labels but tighter --- */
+.social-icons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;        /* keep in one row */
+  white-space: nowrap;
+  overflow-x: auto;        /* small horizontal scroll on tiny screens */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* reduce anchor padding and make text smaller so everything fits */
+.social-icons a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  font-weight:700;
+  font-size: 13px;         /* slightly smaller label text */
+  text-decoration: none;
+  color: inherit;
+}
+
+/* shrink icons (font-awesome) */
+.social-icons a i {
+  font-size: 18px;         /* icon size */
+  line-height: 1;
+  width: 20px;
+  text-align: center;
+  display: inline-block;
+}
+
+/* brand colors (override earlier coloring) */
+.social-icons a .fa-whatsapp { color: #25D366; }
+.social-icons a .fa-facebook { color: #1877F2; }
+.social-icons a .fa-youtube  { color: #FF0000; }
+.social-icons a .fa-twitter  { color: #1DA1F2; }
+.social-icons a .fa-instagram{ color: #E1306C; }
+.social-icons a .fa-tiktok   { color: #010101; }
+
+/* On very small narrow screens allow wrapping instead of clipping */
+@media (max-width:420px) {
+  .social-icons { flex-wrap: wrap; gap:6px; padding:4px 6px; }
+  .social-icons a { font-size: 12px; padding:4px 6px; }
+  .social-icons a i { font-size:16px; width:18px; }
+}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FurnitureStore",
+  "name": "Vbest Luxury Interiors",
+  "url": "https://vbest-site.vercel.app/",
+  "telephone": "+2347080535579",
+  "priceRange": "$$",
+  "image": "https://i.postimg.cc/yNXsb9Q8/IMG-20250822-WA0058.jpg",
+  "description": "Premium sofas, beds, dining & office furniture in Lagos. Fast delivery & custom designs.",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "156 Olojo Drive, Ojo Alaba International Market",
+    "addressLocality": "Lagos",
+    "addressCountry": "NG"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 6.4531,
+    "longitude": 3.3958
+  },
+  "openingHours": "Mo-Su 08:00-21:00",
+  "sameAs": [
+    "https://twitter.com/shilpiluxe",
+    "https://instagram.com/shilpiluxe",
+    "https://tiktok.com/@shilpiluxe"
+  ]
+}
+</script>
+
+<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-NP94R6352Q"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -377,6 +551,19 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 }(window, document, 'ttq');
 </script>
 <!-- TikTok Pixel Code End -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "VBest Luxury Interiors",
+  "url": "https://vbest-site.vercel.app/",
+  "logo": "https://vbest-site.vercel.app/blog/logo.jpg",
+  "sameAs": [
+    "https://www.instagram.com/vbestinteriors",
+    "https://www.facebook.com/vbestinteriors"
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -384,102 +571,54 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   
   <header>
   
-<div class="logo-carousel">
-  <!-- Your actual logo first -->
-  <img id="logoImage" src="https://i.postimg.cc/X7mNqGh5/IMG-20250822-WA0058.jpg" alt="V'Best Logo">
+<!-- ===== Video Header Section with Shop Now Button ===== -->
+<div class="header-video-container">
+  <video autoplay muted loop playsinline preload="metadata" poster="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg" class="header-video">
+    <source src="videos/best1.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
 
-  <div class="logo-caption" id="logoCaption">
-    V'Best Luxury Interiors
-  </div>
+  <!-- Shop Now Button Overlay -->
+
 </div>
 
 <style>
-  .logo-carousel {
-    text-align: center;
-    margin: 20px auto;
-    position: relative;
-  }
+.header-video-container {
+  position: relative;
+  width: 100%;
+  max-height: 400px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #000;
+}
+.header-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .logo-carousel img {
-    width: 260px;   /* fixed width */
-    height: 260px;  /* fixed height */
-    object-fit: contain; /* keeps aspect ratio inside box */
-    border-radius: 8px;
-    display: block;
-    margin: 0 auto 12px;
-    transition: opacity 0.8s ease-in-out;
-    background: #fff; /* optional clean background */
-  }
-
-  .logo-caption {
-    font-size: clamp(16px, 2.5vw, 22px);
-    font-weight: 700;
-    color: #25d366;
-    text-align: center;
-    min-height: 28px;
-    transition: opacity 0.6s ease-in-out;
-  }
+@media (max-width: 600px) {
+  .header-video-container { max-height: 290px; }
+}
 </style>
 
-<script>
-  (function(){
-    // slides: start with your logo first
-    const items = [
-      {
-        img: "https://i.postimg.cc/X7mNqGh5/IMG-20250822-WA0058.jpg",
-        text: "V'Best Luxury Interiors"
-      },
-      {
-        img: "https://i.postimg.cc/zGjtzwTy/IMG-20250829-WA0011.jpg",
-        text: "🛏 Beds – From ₦350,000"
-      },
-      {
-        img: "https://i.postimg.cc/yxzBC8Qm/IMG-20250912-WA0189.jpg",
-        text: "🛋 Sofas – From ₦250,000"
-      },
-      {
-        img: "https://i.postimg.cc/Sxm8NRJJ/1756750928967.jpg",
-        text: "🍽 Dining Sets – From ₦400,000"
-      },
-      {
-        img: "https://i.postimg.cc/7LsSR4Pb/1756750824783.jpg",
-        img: "https://i.postimg.cc/rFrmWTqS/Screenshot-20250213-113547-Instagram.jpg",
-        text: "🪑 Chairs – From ₦120,000"
-      },
-      {
-        img: "https://i.postimg.cc/vBybRLq7/Workstation-348.png",
-        text: "🖥 Office Furniture – From ₦150,000"
-      }
-    ];
+<!-- Insert Trusted line directly below the header video -->
+<div class="trusted-line" aria-hidden="false" role="note" title="Trusted by many customers">
+  <div class="trusted-icon" aria-hidden="true"><i class="fa-solid fa-users"></i></div>
+  <div class="trusted-text">Trusted and recommended by over <strong>89.7K</strong> satisfied customers worldwide.</div>
+</div>
 
-    let index = 0;
-    const imgEl = document.getElementById("logoImage");
-    const captionEl = document.getElementById("logoCaption");
-
-    function showNext(){
-      index = (index + 1) % items.length;
-
-      // fade out
-      imgEl.style.opacity = 0;
-      captionEl.style.opacity = 0;
-
-      setTimeout(() => {
-        imgEl.src = items[index].img;
-        imgEl.alt = items[index].text;
-        captionEl.textContent = items[index].text;
-
-        // fade in
-        imgEl.style.opacity = 1;
-        captionEl.style.opacity = 1;
-      }, 700);
-    }
-
-    // logo stays 2s, others rotate every 4s
-    setTimeout(() => {
-      setInterval(showNext, 4000);
-    }, 1000); // 1 seconds pause for logo
-  })();
-</script>
     <!-- ===== Highlights + Reviews (placed directly under logo) ===== -->
     <div class="vbest-highrev" aria-label="Highlights and reviews">
       <!-- Highlights -->
@@ -572,9 +711,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         </div>
       </div>
     </div>
-    <!-- ===== End highlights + reviews ===== -->
-
-    <!-- Featured text area (rewrite-side) -->
+    <!-- ===== 1 chapter End highlights + reviews ===== -->
+    <!-- ===== Featured text area (rewrite-side) ===== -->
     <div class="rewrite-side">
       <h3>Featured Collection</h3>
       <p>Explore our top picks, chosen for their outstanding quality and timeless design</p>
@@ -582,6 +720,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
 
   </header>
+  
 
   <!-- ===== Search bar ===== -->
   <section class="search-bar">
@@ -592,118 +731,188 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   <section id="searchResults"></section>
 
   <!-- ===== Categories (always 2 columns) ===== -->
-<section class="categories" id="categoryList">
-  <a href="sofa.html" class="category-box"
-     data-video="videos/best9.mp4"
-     data-poster="https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg"
-     data-badge="40% OFF">
-    <img src="https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg" alt="Sofa" loading="lazy">
-    <span>🛋 SOFAS</span>
-  </a>
+<section class="categories" id="categoryList" aria-label="Product categories">
+  <div class="category-box"
+       data-video="videos/best9.mp4"
+       data-poster="https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg"
+       data-badge="40% OFF"
+       data-href="sofa.html"
+       aria-label="Sofas category">
+    <div class="discount-badge" aria-hidden="true">40% OFF</div>
+    <img src="https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg"
+         alt="Luxury sofa set in Lagos — Vbest Luxury Interiors" loading="lazy">
+    <span class="cat-label">🛋 SOFAS</span>
+    <a href="sofa.html" class="shop-now" aria-label="Shop Sofas">SHOP NOW</a>
+  </div>
 
-  <a href="bed.html" class="category-box"
-     data-video="https://cdn.pixabay.com/video/2023/06/28/168888-840043090_tiny.mp4"
-     data-poster="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg"
-     data-badge="35% OFF">
-    <img src="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg" alt="Bed" loading="lazy">
-    <span>🛏 BEDS</span>
-  </a>
+  <div class="category-box"
+       data-href="bed.html"
+       data-video="https://cdn.pixabay.com/video/2023/06/28/168888-840043090_tiny.mp4"
+       data-poster="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg"
+       data-badge="35% OFF"
+       aria-label="Beds category">
+    <div class="discount-badge" aria-hidden="true">35% OFF</div>
+    <img src="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg"
+         alt="Modern bed frame and mattress in Lagos — Vbest Luxury Interiors" loading="lazy">
+    <span class="cat-label">🛏 BEDS</span>
+    <a href="bed.html" class="shop-now" aria-label="Shop Beds">SHOP NOW</a>
+  </div>
 
-  <a href="chair.html" class="category-box"
-     data-video="videos/best3.mp4"
-     data-poster="https://i.postimg.cc/rFrmWTqS/Screenshot-20250213-113547-Instagram.jpg"
-     data-badge="30% OFF">
-    <img src="https://i.postimg.cc/rFrmWTqS/Screenshot-20250213-113547-Instagram.jpg" alt="Chair" loading="lazy">
-    <span>🪑 CHAIRS</span>
-  </a>
+  <div class="category-box"
+       data-href="chair.html"
+       data-video="videos/best3.mp4"
+       data-poster="https://i.postimg.cc/rFrmWTqS/Screenshot-20250213-113547-Instagram.jpg"
+       data-badge="30% OFF"
+       aria-label="Chairs category">
+    <div class="discount-badge" aria-hidden="true">30% OFF</div>
+    <img src="https://i.postimg.cc/rFrmWTqS/Screenshot-20250213-113547-Instagram.jpg"
+         alt="Comfortable designer chairs in Lagos — Vbest Luxury Interiors" loading="lazy">
+    <span class="cat-label">🪑 CHAIRS</span>
+    <a href="chair.html" class="shop-now" aria-label="Shop Chairs">SHOP NOW</a>
+  </div>
 
-  <a href="dining.html" class="category-box"
-     data-video="videos/best8.mp4"
-     data-poster="https://i.postimg.cc/Sxm8NRJJ/1756750928967.jpg"
-     data-badge="50% OFF">
-    <img src="https://i.postimg.cc/Sxm8NRJJ/1756750928967.jpg" alt="Dining" loading="lazy">
-    <span>🍽 DINING 3–6 SEATERS</span>
-  </a>
+  <div class="category-box"
+       data-href="dining.html"
+       data-video="videos/best8.mp4"
+       data-poster="https://i.postimg.cc/Sxm8NRJJ/1756750928967.jpg"
+       data-badge="50% OFF"
+       aria-label="Dining sets category">
+    <div class="discount-badge" aria-hidden="true">50% OFF</div>
+    <img src="https://i.postimg.cc/Sxm8NRJJ/1756750928967.jpg"
+         alt="6-seater dining set in Lagos — Vbest Luxury Interiors" loading="lazy">
+    <span class="cat-label">🍽 DINING 3–6 SEATERS</span>
+    <a href="dining.html" class="shop-now" aria-label="Shop Dining Sets">SHOP NOW</a>
+  </div>
 
-  <a href="centertable.html" class="category-box"
-     data-video="https://cdn.pixabay.com/video/2022/01/26/03/14/interior-6966100_1280.mp4"
-     data-poster="https://i.postimg.cc/Px5XJLDr/IMG-20250822-WA0064.jpg"
-     data-badge="33% OFF">
-    <img src="https://i.postimg.cc/Px5XJLDr/IMG-20250822-WA0064.jpg" alt="Center Table" loading="lazy">
-    <span>🪞 CENTER TABLES</span>
-  </a>
+  <div class="category-box"
+       data-href="centertable.html"
+       data-video="https://cdn.pixabay.com/video/2022/01/26/03/14/interior-6966100_1280.mp4"
+       data-poster="https://i.postimg.cc/Px5XJLDr/IMG-20250822-WA0064.jpg"
+       data-badge="33% OFF"
+       aria-label="Center tables category">
+    <div class="discount-badge" aria-hidden="true">33% OFF</div>
+    <img src="https://i.postimg.cc/Px5XJLDr/IMG-20250822-WA0064.jpg"
+         alt="Center table and coffee table in Lagos — Vbest Luxury Interiors" loading="lazy">
+    <span class="cat-label">🪞 CENTER TABLES</span>
+    <a href="centertable.html" class="shop-now" aria-label="Shop Center Tables">SHOP NOW</a>
+  </div>
 
-  <a href="office.html" class="category-box"
-     data-video="https://cdn.pixabay.com/video/2021/07/28/05/45/office-6482338_1280.mp4"
-     data-poster="https://i.postimg.cc/vBybRLq7/Workstation-348.png"
-     data-badge="37% OFF">
-    <img src="https://i.postimg.cc/vBybRLq7/Workstation-348.png" alt="Office" loading="lazy">
-    <span>OFFICE FURNITURES🪑🖥️</span>
-  </a>
+  <div class="category-box"
+       data-href="office.html"
+       data-video="https://cdn.pixabay.com/video/2021/07/28/05/45/office-6482338_1280.mp4"
+       data-poster="https://i.postimg.cc/vBybRLq7/Workstation-348.png"
+       data-badge="37% OFF"
+       aria-label="Office furniture category">
+    <div class="discount-badge" aria-hidden="true">37% OFF</div>
+    <img src="https://i.postimg.cc/vBybRLq7/Workstation-348.png"
+         alt="Office furniture and workstations in Lagos — Vbest Luxury Interiors" loading="lazy">
+    <span class="cat-label">OFFICE FURNITURES 🪑🖥️</span>
+    <a href="office.html" class="shop-now" aria-label="Shop Office Furniture">SHOP NOW</a>
+  </div>
 
-  <a href="outdoor.html" class="category-box"
-     data-video="https://cdn.pixabay.com/video/2019/12/03/05/28/garden-4671578_1280.mp4"
-     data-poster="https://i.postimg.cc/yxGGYGDw/Ag-ACkq-HWp-Pyzt-HZ89-Sp-Vx-Y.jpg"
-     data-badge="30% OFF">
-    <img src="https://i.postimg.cc/yxGGYGDw/Ag-ACkq-HWp-Pyzt-HZ89-Sp-Vx-Y.jpg" alt="Outdoors & Patio" loading="lazy">
-    <span>🪑 OUTDOORS & PATIO</span>
-  </a>
+  <div class="category-box"
+       data-href="outdoor.html"
+       data-video="https://cdn.pixabay.com/video/2019/12/03/05/28/garden-4671578_1280.mp4"
+       data-poster="https://i.postimg.cc/yxGGYGDw/Ag-ACkq-HWp-Pyzt-HZ89-Sp-Vx-Y.jpg"
+       data-badge="30% OFF"
+       aria-label="Outdoor & patio category">
+    <div class="discount-badge" aria-hidden="true">30% OFF</div>
+    <img src="https://i.postimg.cc/yxGGYGDw/Ag-ACkq-HWp-Pyzt-HZ89-Sp-Vx-Y.jpg"
+         alt="Outdoor and patio furniture in Lagos — Vbest Luxury Interiors" loading="lazy">
+    <span class="cat-label">🪑 OUTDOORS & PATIO</span>
+    <a href="outdoor.html" class="shop-now" aria-label="Shop Outdoor Furniture">SHOP NOW</a>
+  </div>
 
-  <a href="game.html" class="category-box"
-     data-video="https://cdn.pixabay.com/video/2020/10/06/16/01/gaming-room-5637119_1280.mp4"
-     data-poster="https://i.postimg.cc/GhBhTtX7/Magshion-Adjustable-Height-Gaming-Chair-with-Retractable-Footrest-and-Computer-Desk-Purple-2e356ae6.png"
-     data-badge="34% OFF">
-    <img src="https://i.postimg.cc/GhBhTtX7/Magshion-Adjustable-Height-Gaming-Chair-with-Retractable-Footrest-and-Computer-Desk-Purple-2e356ae6.png" alt="Gaming" loading="lazy">
-    <span>🎮 GAMING CHAIRS & TABLE</span>
-  </a>
+  <div class="category-box"
+       data-href="game.html"
+       data-video="https://cdn.pixabay.com/video/2020/10/06/16/01/gaming-room-5637119_1280.mp4"
+       data-poster="https://i.postimg.cc/GhBhTtX7/Magshion-Adjustable-Height-Gaming-Chair-with-Retractable-Footrest-and-Computer-Desk-Purple-2e356ae6.png"
+       data-badge="34% OFF"
+       aria-label="Gaming chairs category">
+    <div class="discount-badge" aria-hidden="true">34% OFF</div>
+    <img src="https://i.postimg.cc/GhBhTtX7/Magshion-Adjustable-Height-Gaming-Chair-with-Retractable-Footrest-and-Computer-Desk-Purple-2e356ae6.png"
+         alt="Gaming chair and desk in Lagos — Vbest Luxury Interiors" loading="lazy">
+    <span class="cat-label">🎮 GAMING CHAIRS & TABLE</span>
+    <a href="game.html" class="shop-now" aria-label="Shop Gaming Chairs">SHOP NOW</a>
+  </div>
 
-  <a href="snooker.html" class="category-box"
-     data-video="videos/best4.mp4"
-     data-poster="https://i.postimg.cc/7LbWQCnH/807531125-321-1024x1024.jpg"
-     data-badge="31% OFF">
-    <img src="https://i.postimg.cc/7LbWQCnH/807531125-321-1024x1024.jpg" alt="Snooker & Pool" loading="lazy">
-    <span>SNOOKERS & POOL🎱</span>
-  </a>
+  <div class="category-box"
+       data-href="snooker.html"
+       data-video="videos/best4.mp4"
+       data-poster="https://i.postimg.cc/7LbWQCnH/807531125-321-1024x1024.jpg"
+       data-badge="31% OFF"
+       aria-label="Snooker and pool category">
+    <div class="discount-badge" aria-hidden="true">31% OFF</div>
+    <img src="https://i.postimg.cc/7LbWQCnH/807531125-321-1024x1024.jpg"
+         alt="Snooker and pool tables in Lagos — Vbest Luxury Interiors" loading="lazy">
+    <span class="cat-label">SNOOKERS & POOL 🎱</span>
+    <a href="snooker.html" class="shop-now" aria-label="Shop Snooker & Pool">SHOP NOW</a>
+  </div>
 
-  <a href="winbar.html" class="category-box"
-     data-video="https://cdn.pixabay.com/video/2016/03/27/22/27/bar-1283768_1280.mp4"
-     data-poster="https://i.postimg.cc/J01rXcj7/Wine-Bar-1.webp"
-     data-badge="45% OFF">
-    <img src="https://i.postimg.cc/J01rXcj7/Wine-Bar-1.webp" alt="Wine Bar" loading="lazy">
-    <span>WINE BAR🍷🥂🍾</span>
-  </a>
+  <div class="category-box"
+       data-href="winbar.html"
+       data-video="https://cdn.pixabay.com/video/2016/03/27/22/27/bar-1283768_1280.mp4"
+       data-poster="https://i.postimg.cc/J01rXcj7/Wine-Bar-1.webp"
+       data-badge="45% OFF"
+       aria-label="Wine bar furniture category">
+    <div class="discount-badge" aria-hidden="true">45% OFF</div>
+    <img src="https://i.postimg.cc/J01rXcj7/Wine-Bar-1.webp"
+         alt="Home wine bar furniture in Lagos — Vbest Luxury Interiors" loading="lazy">
+    <span class="cat-label">WINE BAR 🍷🥂🍾</span>
+    <a href="winbar.html" class="shop-now" aria-label="Shop Wine Bar">SHOP NOW</a>
+  </div>
 
-  <a href="sideboard.html" class="category-box"
-     data-video="https://cdn.pixabay.com/video/2021/08/13/12/29/interior-6547530_1280.mp4"
-     data-poster="https://i.postimg.cc/BnRRj3SZ/PDINCBT32-Glossy-White-Gold-1.jpg"
-     data-badge="32% OFF">
-    <img src="https://i.postimg.cc/BnRRj3SZ/PDINCBT32-Glossy-White-Gold-1.jpg" alt="Dining sideboard/Consoles" loading="lazy">
-    <span>DRESSING MIRROR, DINING BUFFET & CONSOLES</span>
-  </a>
+  <div class="category-box"
+       data-href="sideboard.html"
+       data-video="https://cdn.pixabay.com/video/2021/08/13/12/29/interior-6547530_1280.mp4"
+       data-poster="https://i.postimg.cc/BnRRj3SZ/PDINCBT32-Glossy-White-Gold-1.jpg"
+       data-badge="32% OFF"
+       aria-label="Sideboard and consoles category">
+    <div class="discount-badge" aria-hidden="true">32% OFF</div>
+    <img src="https://i.postimg.cc/BnRRj3SZ/PDINCBT32-Glossy-White-Gold-1.jpg"
+         alt="Dining sideboard and console tables in Lagos — Vbest Luxury Interiors" loading="lazy">
+    <span class="cat-label">DRESSING MIRROR, DINING BUFFET & CONSOLES</span>
+    <a href="sideboard.html" class="shop-now" aria-label="Shop Sideboards">SHOP NOW</a>
+  </div>
 
-  <a href="console.html" class="category-box"
-     data-video="https://cdn.pixabay.com/video/2022/02/16/08/26/flat-screen-tv-7016981_1280.mp4"
-     data-poster="https://i.postimg.cc/d3HMkLJw/c6dcbbe659c10b00e4126e14dcd4021c.jpg"
-     data-badge="36% OFF">
-    <img src="https://i.postimg.cc/d3HMkLJw/c6dcbbe659c10b00e4126e14dcd4021c.jpg" alt="TV Console" loading="lazy">
-    <span>📺TV CONSOLES & TV STAND</span>
-  </a>
+  <div class="category-box"
+       data-href="console.html"
+       data-video="https://cdn.pixabay.com/video/2022/02/16/08/26/flat-screen-tv-7016981_1280.mp4"
+       data-poster="https://i.postimg.cc/d3HMkLJw/c6dcbbe659c10b00e4126e14dcd4021c.jpg"
+       data-badge="36% OFF"
+       aria-label="TV consoles category">
+    <div class="discount-badge" aria-hidden="true">36% OFF</div>
+    <img src="https://i.postimg.cc/d3HMkLJw/c6dcbbe659c10b00e4126e14dcd4021c.jpg"
+         alt="TV consoles and media stands in Lagos — Vbest Luxury Interiors" loading="lazy">
+    <span class="cat-label">📺 TV CONSOLES & TV STAND</span>
+    <a href="console.html" class="shop-now" aria-label="Shop TV Consoles">SHOP NOW</a>
+  </div>
 
-  <a href="cabinet.html" class="category-box"
-     data-video="https://cdn.pixabay.com/video/2018/03/06/12/30/wardrobe-3200918_1280.mp4"
-     data-poster="https://i.postimg.cc/m2XvGMKH/71-Lqo-G6liv-L-AC-SL1500.jpg"
-     data-badge="38% OFF">
-    <img src="https://i.postimg.cc/m2XvGMKH/71-Lqo-G6liv-L-AC-SL1500.jpg" alt="Cabinet" loading="lazy">
-    <span>CABINET & WARDROBE</span>
-  </a>
+  <div class="category-box"
+       data-href="cabinet.html"
+       data-video="https://cdn.pixabay.com/video/2018/03/06/12/30/wardrobe-3200918_1280.mp4"
+       data-poster="https://i.postimg.cc/m2XvGMKH/71-Lqo-G6liv-L-AC-SL1500.jpg"
+       data-badge="38% OFF"
+       aria-label="Cabinet and wardrobe category">
+    <div class="discount-badge" aria-hidden="true">38% OFF</div>
+    <img src="https://i.postimg.cc/m2XvGMKH/71-Lqo-G6liv-L-AC-SL1500.jpg"
+         alt="Wardrobe and cabinet storage in Lagos — Vbest Luxury Interiors" loading="lazy">
+    <span class="cat-label">CABINET & WARDROBE</span>
+    <a href="cabinet.html" class="shop-now" aria-label="Shop Cabinets">SHOP NOW</a>
+  </div>
 
-  <a href="sidestool.html" class="category-box"
-     data-video="https://cdn.pixabay.com/video/2018/01/17/07/09/furniture-3088590_1280.mp4"
-     data-poster="https://i.postimg.cc/Sxrz34QC/ec8f0881dd3292db1a7655c79506473c.jpg"
-     data-badge="30% OFF">
-    <img src="https://i.postimg.cc/Sxrz34QC/ec8f0881dd3292db1a7655c79506473c.jpg" alt="Side Stools" loading="lazy">
-    <span>🪑 SIDE STOOLS</span>
-  </a>
+  <div class="category-box"
+       data-href="sidestool.html"
+       data-video="https://cdn.pixabay.com/video/2018/01/17/07/09/furniture-3088590_1280.mp4"
+       data-poster="https://i.postimg.cc/Sxrz34QC/ec8f0881dd3292db1a7655c79506473c.jpg"
+       data-badge="30% OFF"
+       aria-label="Side stools category">
+    <div class="discount-badge" aria-hidden="true">30% OFF</div>
+    <img src="https://i.postimg.cc/Sxrz34QC/ec8f0881dd3292db1a7655c79506473c.jpg"
+         alt="Side stools and small seating in Lagos — Vbest Luxury Interiors" loading="lazy">
+    <span class="cat-label">🪑 SIDE STOOLS</span>
+    <a href="sidestool.html" class="shop-now" aria-label="Shop Side Stools">SHOP NOW</a>
+  </div>
 </section>
   <!-- ===== Footer (merged, very black) ===== -->
   <footer class="shilpi-footer">
@@ -720,6 +929,10 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         <p class="about-text">Designed to elevate your home, our premium pieces combine comfort, durability, and style that speaks volumes.</p>
 
         <div class="social-icons" aria-label="social">
+          <!-- Added WhatsApp, Facebook, YouTube (brand colored icons) -->
+          <a href="https://wa.me/2347080535579" target="_blank" rel="noopener noreferrer" title="WhatsApp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+          <a href="https://facebook.com/" target="_blank" rel="noopener noreferrer" title="Facebook"><i class="fab fa-facebook"></i> Facebook</a>
+          <a href="https://youtube.com/" target="_blank" rel="noopener noreferrer" title="YouTube"><i class="fab fa-youtube"></i> YouTube</a>
           <a href="https://twitter.com/shilpiluxe" target="_blank" rel="noopener noreferrer">𝕏 Twitter</a>
           <a href="https://instagram.com/shilpiluxe" target="_blank" rel="noopener noreferrer">📸 Instagram</a>
           <a href="https://tiktok.com/@shilpiluxe" target="_blank" rel="noopener noreferrer">🎵 TikTok</a>
@@ -731,6 +944,9 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
           <h3>Categories</h3>
           <ul>
             <li>Living Room</li><li>Bedroom</li><li>Dining Room</li><li>Home Office</li><li>Kids & Baby</li><li>Outdoor & Patio</li><li>Storage & Organization</li><li>Accent & Decor</li>
+        
+        
+<p><p> bedroom door</p>
           </ul>
         </div>
 
@@ -758,13 +974,24 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
           <h3>Customer Service</h3>
           <p>📞 2347080535579</p>
           <p>✉️ <a href="mailto:best28763@gmail.com">contactus@vbest.com</a></p>
-          <p>📍 156 Olojo Drive, Ojo Alaba International Market, Lagos</p>
+          <p>📍 
+          <strong> visit our showroom:</strong>156 Olojo Drive, Ojo Alaba International Market, Lagos</p>
           <p>🕑 24/7 Support</p>
+          <p>🛋 Learn more in our <a href="/blog/sofa-in-lagos.html">Sofas in Lagos guide</a> — discover designs and care tips.</p>
+          <iframe
+  src="https://www.google.com/maps/embed?pb=!1m0!3m2!1sen!2sng!4v0!cid=7368111619021559737"
+  width="100%" height="180"
+  style="border:0; border-radius:10px; margin-top:8px; margin-bottom:0;"
+  allowfullscreen
+  loading="lazy"
+  title="Vbest Luxury Interiors on Google Maps">
+</iframe>
         </div>
       </div>
     </div>
+    </div>
+    
   </footer>
-
   <!-- ================= Original search script (kept behavior) ================= -->
   <script>
     const searchInput = document.getElementById("searchInput");
@@ -878,7 +1105,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     }
   </script>
 
-  <!-- ================= Firebase + Reviews script (kept unchanged except 'approved' publish + modal form) ================= -->
+  <!-- ================= Firebase + Reviews script (kept unchanged except added review preview toggle wiring) ================= -->
   <script type="module">
     import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
@@ -1007,6 +1234,54 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       document.getElementById('vbest-num-1').textContent = `(${totals[1]})`;
     }
 
+    // Helper: process review text blocks to show preview + toggle full text
+    function processAllReviews() {
+      const all = document.querySelectorAll('.vbest-review');
+      all.forEach(node => {
+        if (node.dataset.processed === '1') return;
+        const p = node.querySelector('.vbest-review-text');
+        if (!p) { node.dataset.processed = '1'; return; }
+        const fullText = p.textContent.trim();
+        if (!fullText) { node.dataset.processed = '1'; return; }
+        // build preview: first sentence if possible, else 120 chars
+        let preview = fullText;
+        const idx = fullText.indexOf('. ');
+        if (idx > -1 && idx < 220) preview = fullText.slice(0, idx+1);
+        if (preview.length > 220) preview = preview.slice(0,120) + '…';
+        // construct inner markup
+        p.innerHTML = '';
+        const spanPreview = document.createElement('span');
+        spanPreview.className = 'vbest-review-preview';
+        spanPreview.textContent = preview;
+        const spanFull = document.createElement('span');
+        spanFull.className = 'vbest-review-full';
+        spanFull.textContent = fullText;
+        p.appendChild(spanPreview);
+        p.appendChild(spanFull);
+        // add toggle button
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'view-full';
+        btn.textContent = 'View Full Review';
+        btn.addEventListener('click', function(){
+          const showing = spanFull.style.display === 'inline';
+          if (showing) {
+            spanFull.style.display = 'none';
+            spanPreview.style.display = 'block';
+            btn.textContent = 'View Full Review';
+          } else {
+            spanFull.style.display = 'inline';
+            spanPreview.style.display = 'none';
+            btn.textContent = 'Show Less';
+          }
+        });
+        // append button if not already appended
+        const existing = node.querySelector('.view-full');
+        if (!existing) node.querySelector('.vbest-review-body').appendChild(btn);
+        node.dataset.processed = '1';
+      });
+    }
+
     // Listen to reviews and display approved reviews: 3 visible, rest hidden
     const reviewsRef = ref(db, 'reviews');
     onValue(reviewsRef, (snap) => {
@@ -1037,6 +1312,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         if (defaultRev2) defaultRev2.style.display = '';
         seeMoreBtn.style.display = 'none';
         updateSummaryUIFromApproved([]);
+        // ensure static defaults get the preview toggle
+        processAllReviews();
         return;
       }
 
@@ -1060,6 +1337,9 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         seeMoreBtn.style.display = 'none';
         approvedHidden.style.display = 'none';
       }
+
+      // process review preview toggles for newly added reviews
+      processAllReviews();
 
       // update summary
       updateSummaryUIFromApproved(approved);
@@ -1129,6 +1409,8 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         if (approvedHidden.style.display === 'none' || approvedHidden.style.display === '') {
           approvedHidden.style.display = 'block';
           this.textContent = 'See Less Reviews';
+          // process reviews newly revealed
+          processAllReviews();
         } else {
           approvedHidden.style.display = 'none';
           this.textContent = 'See More Reviews';
@@ -1265,6 +1547,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       }, true);
     })();
   </script>
+
 <style>
   /* Keep layout the same, just add animation */
   .vbest-highlights .vbest-hi {
@@ -1292,6 +1575,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     100% { opacity: 0; transform: translateY(15px); }
   }
 </style>
+
 <script>
 window.onload = function() {
   const boxes = document.querySelectorAll('.category-box[data-video]');
@@ -1373,5 +1657,144 @@ window.onload = function() {
   });
 };
 </script>
+
+<!-- ================= ADDED: Bottom nav (theme + cart) and scripts ================= -->
+<!-- bottom nav HTML (no home icon as requested) -->
+<nav class="bottom-nav" role="navigation" aria-label="Main nav">
+  <button id="themeSwitch" aria-label="Switch theme">🎨 Theme</button>
+  <a href="cart.html" id="nav-cart" aria-label="Cart">🛒 Cart <span id="cart-count" class="cart-badge" style="display:none">0</span></a>
+</nav>
+
+<script>
+  // Theme switcher (classic, dark, gold) — non-intrusive, uses CSS variables already present
+  (function(){
+    const themes = ['classic','dark','gold'];
+    let current = localStorage.getItem('vbest_theme') || 'classic';
+    if (!themes.includes(current)) current = 'classic';
+    document.body.setAttribute('data-theme', current);
+    let idx = themes.indexOf(current);
+    const btn = document.getElementById('themeSwitch');
+    if (btn){
+      btn.addEventListener('click', ()=> {
+        idx = (idx + 1) % themes.length;
+        const t = themes[idx];
+        document.body.setAttribute('data-theme', t);
+        localStorage.setItem('vbest_theme', t);
+      });
+    }
+  })();
+
+  // Cart badge (localStorage 'cart' array)
+  (function(){
+    function updateCartCount(){
+      try{
+        const el = document.getElementById('cart-count');
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        if (cart && cart.length > 0){ el.style.display = 'inline-block'; el.textContent = cart.length; }
+        else { el.style.display = 'none'; }
+      }catch(e){ /* ignore */ }
+    }
+    updateCartCount();
+    window.addEventListener('storage', (e) => { if(e.key === 'cart') updateCartCount(); });
+  })();
+</script>
+<script>
+document.addEventListener('click', function(e){
+  const box = e.target.closest('.category-box[data-href]');
+  if (!box) return;
+  // Don’t trigger when clicking the Shop Now link itself
+  if (e.target.closest('a.shop-now')) return;
+  const href = box.getAttribute('data-href');
+  if (href) window.location.href = href;
+});
+</script>
+<!-- CHAT POPUP START -->
+<style>
+#chatPopup {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  width: 260px;
+  display: none;
+  font-family: Arial, sans-serif;
+}
+#chatPopup header {
+  background: #222;
+  color: white;
+  padding: 10px;
+  border-radius: 10px 10px 0 0;
+  font-weight: bold;
+  text-align: center;
+}
+#chatPopup textarea {
+  width: 90%;
+  height: 80px;
+  margin: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none;
+  padding: 5px;
+}
+#chatPopup button {
+  background: #25D366;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  margin: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+#chatIcon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #25D366;
+  color: white;
+  padding: 12px 16px;
+  border-radius: 30px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  cursor: pointer;
+  font-family: sans-serif;
+  z-index: 1000;
+}
+</style>
+
+<div id="chatIcon">💬 Message Us</div>
+
+<div id="chatPopup">
+  <header>Chat with VBest</header>
+  <textarea id="chatMessage" placeholder="Type your message..."></textarea>
+  <button id="sendMessage">Send</button>
+</div>
+
+<script>
+const chatIcon = document.getElementById("chatIcon");
+const chatPopup = document.getElementById("chatPopup");
+const sendMessage = document.getElementById("sendMessage");
+
+chatIcon.onclick = function() {
+  chatPopup.style.display = "block";
+  chatIcon.style.display = "none";
+};
+
+sendMessage.onclick = function() {
+  const msg = encodeURIComponent(document.getElementById("chatMessage").value.trim());
+  if (msg) {
+    window.open(`https://wa.me/2347080535579?text=${msg}`, "_blank");
+    chatPopup.style.display = "none";
+    chatIcon.style.display = "block";
+  } else {
+    alert("Please type a message first.");
+  }
+};
+</script>
+<!-- CHAT POPUP END -->
+</body>
+</html>
 </body>
 </html>
