@@ -5,20 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Cart - V’Best Luxury Interiors</title>
   <style>
-    body { font-family: Arial, sans-serif; background:#000; color:#fff; margin:0; padding:20px; }
-    h1 { text-align:center; margin-bottom:20px; }
-    table { width:100%; border-collapse:collapse; margin-bottom:20px; }
-    th, td { padding:10px; border-bottom:1px solid #444; text-align:center; vertical-align:middle; }
-    th { background:#111; }
-    img { width:80px; height:auto; border-radius:5px; object-fit:cover; }
-    input, button { padding:10px; margin:5px 0; width:100%; border-radius:6px; border:none; box-sizing:border-box; }
-    input { background:#222; color:#fff; }
-    .checkout-btn { background:#27ae60; color:white; font-weight:bold; cursor:pointer; }
+    /* Amazon-like light theme — only theme changed */
+    :root{
+      --accent: #ff9900;
+      --bg: #f4f4f6;
+      --card: #ffffff;
+      --text: #111;
+      --muted: #6b6b6b;
+      --danger: #d32f2f;
+      --success: #27ae60;
+    }
+
+    body { font-family: Arial, sans-serif; background:var(--bg); color:var(--text); margin:0; padding:20px; }
+    h1 { text-align:center; margin-bottom:20px; color:var(--text); }
+    table { width:100%; border-collapse:collapse; margin-bottom:20px; background:var(--card); border-radius:8px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.06);}
+    thead th { background: #fff8f0; color:var(--text); padding:12px; text-align:center; border-bottom:1px solid #eee; font-weight:700; }
+    th, td { padding:12px; border-bottom:1px solid #f0f0f0; text-align:center; vertical-align:middle; color:var(--text); }
+    img { width:80px; height:60px; border-radius:6px; object-fit:cover; display:block; margin:0 auto; }
+    input, button, select { padding:10px; margin:6px 0; width:100%; border-radius:6px; border:1px solid #e6e6e6; box-sizing:border-box; font-size:14px; }
+    input[type="email"], input[type="text"] { background:#fff; color:var(--text); }
+    .checkout-btn { background:var(--accent); color:#111; font-weight:900; cursor:pointer; border: none; }
     .checkout-btn[disabled] { opacity:0.6; cursor:not-allowed; }
-    .summary { text-align:center; margin-bottom:20px; font-size:18px; font-weight:bold; }
-    button.remove-btn { background:#c0392b; color:white; padding:5px 10px; border-radius:5px; cursor:pointer; }
-    .small-muted { font-size:0.9rem; color:#bbb; text-align:center; margin-top:8px; }
+    .summary { text-align:center; margin-bottom:20px; font-size:18px; font-weight:bold; color:var(--text); }
+    button.remove-btn { background:transparent; border:1px solid #f1c27d; color:var(--danger); padding:6px 10px; border-radius:5px; cursor:pointer; }
+    .small-muted { font-size:0.9rem; color:var(--muted); text-align:center; margin-top:8px; }
+    .container { max-width:980px; margin:0 auto; }
+    form.card { background:var(--card); padding:16px; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,0.04); }
+    label { display:block; font-weight:700; margin-bottom:6px; color:var(--text); }
+    .row { display:flex; gap:12px; flex-wrap:wrap; }
+    .col-2 { flex:1 1 calc(50% - 6px); min-width:200px; }
+    .full { width:100%; }
+    .hint { font-size:13px; color:var(--muted); margin-top:6px; }
   </style>
+
   <!-- TikTok Pixel Code Start -->
 <script>
 !function (w, d, t) {
@@ -34,34 +53,76 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 <!-- TikTok Pixel Code End -->
 </head>
 <body>
+  <div class="container">
+    <h1>🛒 Your Cart</h1>
 
-  <h1>🛒 Your Cart</h1>
+    <table id="cart-table" aria-live="polite">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Product</th>
+          <th>Image</th>
+          <th>Price (₦)</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
 
-  <table id="cart-table" aria-live="polite">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Product</th>
-        <th>Image</th>
-        <th>Price (₦)</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+    <div class="summary" id="total-amount">Total Amount: ₦0</div>
 
-  <div class="summary" id="total-amount">Total Amount: ₦0</div>
+    <h2>Customer Details</h2>
 
-  <h2>Customer Details</h2>
-  <form id="checkout-form" onsubmit="return false;">
-    <input type="text" id="name" placeholder="Full Name" required>
-    <input type="text" id="phone" placeholder="Phone Number" required>
-    <input type="email" id="email" placeholder="Email" required>
-    <input type="text" id="address" placeholder="Delivery Address" required>
-    <button type="button" class="checkout-btn" id="checkoutBtn">Checkout</button>
-  </form>
+    <!-- KEEP original logic but replace form with Amazon-style customer details (State + Town) -->
+    <form id="checkout-form" class="card" onsubmit="return false;">
+      <div class="row">
+        <div class="col-2">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" placeholder="Full Name" required>
+        </div>
+        <div class="col-2">
+          <label for="phone">Phone Number</label>
+          <input type="text" id="phone" placeholder="Phone Number" required>
+        </div>
+      </div>
 
-  <div class="small-muted" id="status-msg"></div>
+      <div class="row">
+        <div class="col-2">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="Email" required>
+        </div>
+
+        <div class="col-2">
+          <label for="stateInput">State (type to search)</label>
+          <input list="stateList" id="stateInput" placeholder="Select state">
+          <datalist id="stateList"></datalist>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="full">
+          <label for="areaSelect">Town / Area / City</label>
+          <select id="areaSelect"><option value="">Select state first</option></select>
+          <div class="hint">Choose town or major area in selected state.</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="full">
+          <label for="address">Delivery Address</label>
+          <input type="text" id="address" placeholder="House no, street, estate, nearest landmark" required>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="full">
+          <button type="button" class="checkout-btn" id="checkoutBtn">Checkout</button>
+        </div>
+      </div>
+
+      <div class="small-muted" id="status-msg"></div>
+    </form>
+  </div>
 
   <!-- Firebase module helper (exposes saveOrderToRealtime) -->
   <script type="module">
@@ -95,7 +156,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   </script>
 
   <script>
-    // ---------- Utilities ----------
+    // ---------- Utilities (unchanged behavior) ----------
     function escapeHtml(str) {
       if (str === null || str === undefined) return "";
       return String(str).replace(/[&<>"']/g, function (m) {
@@ -103,7 +164,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       });
     }
 
-    // Wait helper
     function waitFor(conditionFn, timeout = 5000, interval = 150) {
       const start = Date.now();
       return new Promise((resolve) => {
@@ -155,12 +215,12 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         let priceRaw = rawItem.price ?? rawItem.amount ?? rawItem.cost ?? rawItem.priceText ?? 0;
         if (typeof priceRaw === "string") priceRaw = priceRaw.replace(/[^0-9.]/g, "");
         const price = parseFloat(priceRaw) || 0;
-        const quantity = Math.max(1, parseInt(rawItem.quantity) || 1);
+        const quantity = Math.max(1, parseInt(rawItem.quantity) || parseInt(rawItem.qty) || 1);
         return { name: String(name), image: String(image), price, quantity };
       });
     }
 
-    // ---------- Rendering ----------
+    // ---------- Rendering (unchanged logic) ----------
     let cart = [];
     let cartKey = "cart";
 
@@ -212,21 +272,92 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       renderCart();
     };
 
+    // ---------- MAJOR TOWNS for each state (approx 20 towns per state) ----------
+    // Only customer-details data change — everything else unchanged
+    const MAJOR_TOWNS = {
+      "Abia":["Aba","Umuahia","Ohafia","Isiala-Ngwa","Umunneochi","Bende","Arochukwu","Ukwa East","Ukwa West","Ugwunagbo","Osisioma Ngwa","Ikwuano","Umuahia North","Umuahia South","Isuikwuato","Obingwa","Aba North","Aba South","Umuahia Town","Isu"],
+      "Adamawa":["Yola","Jimeta","Mubi","Numan","Hong","Ganye","Gombi","Maiha","Michika","Demsa","Song","Toungo","Lamurde","Jada","Madagali","Mubi North","Mubi South","Numan Town","Girei","Fufore"],
+      "Akwa Ibom":["Uyo","Eket","Ikot Ekpene","Oron","Ibeno","Onna","Mbo","Mkpat-Enin","Nsit Ibom","Etinan","Essien Udim","Ikono","Ibiono-Ibom","Obot Akara","Okobo","Ibesikpo Asutan","Uruan","Urue-Offong/Oruko","Ukanafun","Udung Uko"],
+      "Anambra":["Awka","Onitsha","Nnewi","Ekwulobia","Ihiala","Ogbaru","Aguata","Njikoka","Anaocha","Idemili North","Idemili South","Nnewi North","Nnewi South","Igbariam","Umunze","Otuocha","Atani","Onitsha North","Onitsha South","Orumba"],
+      "Bauchi":["Bauchi","Azare","Ningi","Jama'are","Toro","Alkaleri","Misau","Damban","Darazo","Katagum","Ganjuwa","Itas/Gadau","Shira","Warji","Giade","Dass","Giwa","Sakaba","Kirfi","Bogoro"],
+      "Bayelsa":["Yenagoa","Ogbia","Brass","Nembe","Sagbama","Ekeremor","Southern Ijaw","Oporoma","Amassoma","Okpoama","Twon-Brass","Okaka","Kaiama","Etuoke","Otuasega","Igbogene","Odi","Igbotom","Opokuma","Yenagoa Town"],
+      "Benue":["Makurdi","Gboko","Otukpo","Ugbokolo","Adikpo","Oju","Oturkpo","Ado","Agatu","Kwande","Konshisha","Apa","Buruku","Logo","Ukum","Ushongo","Tarka","Guma","Gwer East","Gwer West"],
+      "Borno":["Maiduguri","Biu","Dikwa","Bama","Damboa","Gwoza","Kukawa","Monguno","Ngala","Gubio","Askira-Uba","Hawul","Kaga","Kala/Balge","Magumeri","Marte","Shani","Mobbar","Jere","Biu Town"],
+      "Cross River":["Calabar","Ikom","Ogoja","Obudu","Obubra","Odukpani","Akpabuyo","Bakassi","Okuku","Ugep","Yarkurr","Yala","Abi","Biase","Etung","Ogoja Town","Calabar South","Calabar North","Ikom Town","Akamkpa"],
+      "Delta":["Asaba","Warri","Sapele","Effurun","Ughelli","Kwale","Oghara","Patani","Umunede","Abraka","Ozoro","Koko","Sapele Town","Sapele Road","Bomadi","Burutu","Udu","Eku","Oshimili","Uvwie"],
+      "Ebonyi":["Abakaliki","Afikpo","Onicha","Ebonyi Town","Ezza","Ishielu","Izzi","Ohaukwu","Ohaozara","Onicha-Ezza","Afikpo Town","Abakaliki Town","Onueke","Nkalagu","Ivo","Ezza South","Ezza North","Ebonyi South","Ebonyi North","Ishielu Town"],
+      "Edo":["Benin City","Auchi","Ekpoma","Uromi","Igueben","Igarra","Irrua","Oredo","Egor","Ovia North-East","Ovia South-West","Esan Central","Esan North-East","Esan South-East","Esan West","Etsako Central","Etsako East","Etsako West","Uhunmwonde","Owan"],
+      "Ekiti":["Ado-Ekiti","Ikere-Ekiti","Ikole","Oye-Ekiti","Ise-Ekiti","Moba","Efon","Emure","Ido-Osi","Irepodun/Ifelodun","Ilejemeje","Gbonyin","Ilawe","Ikere Town","Ado Town","Oye Town","Ise Town","Aramoko-Ekiti","Irepodun Town","Moba Town"],
+      "Enugu":["Enugu","Nsukka","Awgu","Udi","Oji River","Nkanu","Ezeagu","Igbo-Etiti","Igbo Eze North","Isi-Uzo","Nkanu West","Nkanu East","Udenu","Udi Town","Nsukka Town","Enugu East","Enugu North","Enugu South","Oji River Town","Agbani"],
+      "Gombe":["Gombe","Kaltungo","Dukku","Billiri","Yamaltu/Deba","Balanga","Akko","Kwami","Nafada","Funakaye","Kaltungo Town","Gombe Town","Dukku Town","Billiri Town","Akko Town","Kwami Town","Gombe East","Gombe West","Akko Locality","Balanga Town"],
+      "Imo":["Owerri","Orlu","Okigwe","Oguta","Njaba","Mbaitoli","Ohaji-Egbema","Orsu","Oru East","Oru West","Ideato North","Ideato South","Ehime-Mbano","Ihitte/Uboma","Ngor-Okpala","Owerri North","Owerri South","Owerri West","Njaba Town","Orlu Town"],
+      "Jigawa":["Dutse","Hadejia","Gumel","Kazaure","Ringim","Guri","Babura","Birnin Kudu","Gagarawa","Gwiwa","Kafin Hausa","Miga","Roni","Taura","Sule Tankarkar","Hadejia Town","Dutse Town","Kazaure Town","Gumel Town","Ringim Town"],
+      "Kaduna":["Kaduna","Zaria","Kafanchan","Kachia","Kagarko","Jema'a","Birnin Gwari","Kudan","Lere","Makarfi","Sabon Gari","Sanga","Zaria Town","Kaduna North","Kaduna South","Kafanchan Town","Kachia Town","Kagarko Town","Kudan Town","Lere Town"],
+      "Kano":["Kano","Wudil","Rano","Gaya","Kumbotso","Gezawa","Bichi","Gwarzo","Dala","Tofa","Tarauni","Sumaila","Kano Municipal","Gwale","Ungogo","Rimin Gado","Kano Town","Madobi","Kunchi","Rogo"],
+      "Katsina":["Katsina","Funtua","Daura","Kankara","Dutsin-Ma","Malumfashi","Kaita","Kankia","Jibia","Mashi","Kafur","Kusada","Funtua Town","Daura Town","Katsina Town","Dutsin Town","Malumfashi Town","Rimi","Safana","Sabuwa"],
+      "Kebbi":["Birnin Kebbi","Argungu","Yauri","Zuru","Koko/Besse","Sakaba","Bunza","Jega","Fakai","Dandi","Augie","Maiyama","Shanga","Suru","Wasagu/Danko","Aliero","Birnin Kebbi Town","Argungu Town","Yauri Town","Zuru Town"],
+      "Kogi":["Lokoja","Okene","Kabba","Idah","Ankpa","Ajaokuta","Mopa-Muro","Ofu","Ogori-Magongo","Olamaboro","Lokoja Town","Okene Town","Kabba Town","Idah Town","Ankpa Town","Ajaokuta Town","Kogi East","Kogi West","Egbe","Isanlu"],
+      "Kwara":["Ilorin","Offa","Omu-Aran","Kaiama","Isin","Asa","Pategi","Moro","Edu","Baruten","Ilorin East","Ilorin West","Ilorin South","Irepodun","Oke-Ero","Oyun","Ifelodun","Ilorin Town","Offa Town","Omu-Aran Town"],
+      "Lagos":["Ikeja","Lekki","Victoria Island","Ikoyi","Surulere","Ajah","Yaba","Mushin","Apapa","Oshodi","Badagry","Epe","Ikorodu","Kosofe","Agege","Magodo","Festac","Ojo","Shomolu","Ojodu"],
+      "Nasarawa":["Lafia","Keffi","Akwanga","Nasarawa-Eggon","Karu","Obi","Toto","Doma","Wamba","Lafia Town","Keffi Town","Akwanga Town","Karu Town","Nasarawa Town","Nasarawa-Eggon Town","Toto Town","Obi Town","Doma Town","Keffi City","Akwanga City"],
+      "Niger":["Minna","Bida","Kontagora","Suleja","Lapai","Mokwa","Tafa","Bosso","Edati","Gbako","Mariga","Lavun","Magama","Rafi","Wushishi","Paikoro","Katcha","Minna Town","Bida Town","Kontagora Town"],
+      "Ogun":["Abeokuta","Sagamu","Ota","Ilaro","Ijebu-Ode","Ifo","Remo","Ikenne","Imeko-Afon","Obafemi-Owode","Odeda","Ipokia","Ogun Waterside","Ado-Odo/Ota","Sango-Ota","Abeokuta Town","Sagamu Town","Ilaro Town","Ijebu North","Ijebu East"],
+      "Ondo":["Akure","Owo","Ondo","Okitipupa","Ikare-Akoko","Ifon","Ondo Town","Akure Town","Owo Town","Okitipupa Town","Ikare Town","Idanre","Ilaje","Odigbo","Ose","Ile-Oluji","Akoko","Ondo East","Ondo West","Akure North"],
+      "Osun":["Osogbo","Ilesa","Ife","Ede","Iwo","Ede North","Ila-Orangun","Ilesa Town","Ikirun","Gbongan","Irewole","Ifelodun","Ejigbo","Orolu","Obokun","Odo Otin","Boluwaduro","Iwo Town","Osogbo Town","Ila Town"],
+      "Oyo":["Ibadan","Ogbomosho","Oyo","Saki","Iseyin","Eruwa","Oyo Town","Ibadan North","Ibadan South","Ibadan East","Ibadan West","Ogbomosho North","Ogbomosho South","Irepo","Ona-Ara","Akinyele","Lagelu","Egbeda","Kajola","Iseyin Town"],
+      "Plateau":["Jos","Barkin Ladi","Pankshin","Langtang","Bukuru","Mangu","Riyom","Shendam","Kanke","Jos North","Jos South","Qua'an Pan","Kanam","Bokkos","Mikang","Barkin Ladi Town","Pankshin Town","Langtang North","Langtang South","Bukuru Town"],
+      "Rivers":["Port Harcourt","Bonny","Ahoada","Degema","Emohua","Oyigbo","Obio-Akpor","Ogba-Egbema-Ndoni","Okrika","Omuma","Opobo/Nkoro","Ikwerre","Tai","Gokana","Khana","Port Harcourt City","Rumuokoro","Choba","Eleme","Abua/Odual"],
+      "Sokoto":["Sokoto","Gwadabawa","Kebbe","Wurno","Goronyo","Binji","Dange Shuni","Illela","Shagari","Tambuwal","Kware","Rabah","Sokoto North","Sokoto South","Yabo","Gada","Goronyo Town","Wurno Town","Kebbe Town","Illela Town"],
+      "Taraba":["Jalingo","Wukari","Takum","Bali","Sardauna","Ardo-Kola","Gassol","Zing","Ibi","Kurmi","Donga","Jalingo Town","Wukari Town","Takum Town","Bali Town","Gassol Town","Zing Town","Donga Town","Yorro","Kente"],
+      "Yobe":["Damaturu","Potiskum","Gashua","Nguru","Buni Yadi","Gujba","Machina","Fune","Tarmuwa","Damaturu Town","Potiskum Town","Gashua Town","Nguru Town","Gujba Town","Karasuwa","Jakusko","Damaturu Areas","Bade","Yunusari","Fika"],
+      "Zamfara":["Gusau","Talata Mafara","Shinkafi","Anka","Maru","Kaura Namoda","Bungudu","Bakura","Zurmi","Gummi","Tsafe","Maradun","Gusau Town","Talata Town","Shinkafi Town","Kaura Namoda Town","Bakura Town","Zurmi Town","Maru Town","Anka Town"],
+      "FCT":["Abuja","Gwarinpa","Asokoro","Wuse","Garki","Kubwa","Kuje","Bwari","Gwagwalada","Maitama","Wuse II","Jabi","Lugbe","Gwarimpa Phase 1","Gwarimpa Phase 2","Wuye","Utako","Katampe","LifeCamp","Utako Town"]
+    };
+
+    // populate datalist and wire area select
+    (function initStatesAndAreas(){
+      const dl = document.getElementById('stateList');
+      if (!dl) return;
+      dl.innerHTML = '';
+      Object.keys(MAJOR_TOWNS).sort().forEach(st => {
+        const opt = document.createElement('option'); opt.value = st; dl.appendChild(opt);
+      });
+
+      const stateInput = document.getElementById('stateInput');
+      const areaSelect = document.getElementById('areaSelect');
+
+      function populateAreas(state) {
+        areaSelect.innerHTML = '';
+        const towns = MAJOR_TOWNS[state] || [];
+        if (!towns.length) {
+          const op = document.createElement('option'); op.value = ''; op.textContent = 'No towns available for this state'; areaSelect.appendChild(op); return;
+        }
+        const choose = document.createElement('option'); choose.value = ''; choose.textContent = 'Choose town / city'; areaSelect.appendChild(choose);
+        towns.forEach(t => { const op = document.createElement('option'); op.value = t; op.textContent = t; areaSelect.appendChild(op); });
+      }
+
+      stateInput.addEventListener('change', () => populateAreas(stateInput.value || ''));
+      stateInput.addEventListener('blur', () => populateAreas(stateInput.value || ''));
+      if (stateInput.value) populateAreas(stateInput.value);
+    })();
+
     // ---------- Firebase helper ready check ----------
     async function ensureRealtimeHelperReady(timeoutMs = 5000) {
       const ready = await waitFor(() => typeof window.saveOrderToRealtime === "function", timeoutMs);
       return ready;
     }
 
-    // ---------- Checkout function ----------
+    // ---------- Checkout (modified only to include state & area) ----------
     window.payWithPaystack = async function() {
       const name = document.getElementById("name").value.trim();
       const phone = document.getElementById("phone").value.trim();
       const email = document.getElementById("email").value.trim();
       const address = document.getElementById("address").value.trim();
+      const state = document.getElementById("stateInput").value.trim();
+      const area = document.getElementById("areaSelect").value.trim();
 
-      if (!name || !phone || !email || !address) {
-        alert("Please fill all details before checkout!");
+      if (!name || !phone || !email || !address || !state || !area) {
+        alert("Please fill all details (including State and Town) before checkout!");
         return;
       }
 
@@ -237,7 +368,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
       const totalAmount = cart.reduce((sum, it) => sum + ((it.price || 0) * (it.quantity || 1)), 0);
 
-      // IMPORTANT: attach per-item status = 'pending' so admin can approve/decline each item
       const cartWithStatus = (cart || []).map(it => ({
         name: it.name,
         image: it.image || "",
@@ -247,7 +377,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       }));
 
       const orderData = {
-        customer: { name, phone, email, address },
+        customer: { name, phone, email, address, state, area },
         cart: cartWithStatus,
         totalAmount,
         status: "pending",
@@ -271,7 +401,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         localStorage.removeItem(cartKey);
         statusMsg.textContent = "";
 
-        // <-- critical: store key and redirect with key so thankyou page can listen live
         try {
           localStorage.setItem("lastOrderKey", res.key);
           window.location.href = "thankyou.html?key=" + encodeURIComponent(res.key);
@@ -285,7 +414,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       }
     };
 
-    // Bind button and render on DOM ready
+    // wire click to existing button
     document.addEventListener("DOMContentLoaded", function () {
       renderCart();
       const btn = document.getElementById("checkoutBtn");
