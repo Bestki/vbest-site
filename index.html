@@ -612,13 +612,6 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   .header-video-container { max-height: 290px; }
 }
 </style>
-
-<!-- Insert Trusted line directly below the header video -->
-<div class="trusted-line" aria-hidden="false" role="note" title="Trusted by many customers">
-  <div class="trusted-icon" aria-hidden="true"><i class="fa-solid fa-users"></i></div>
-  <div class="trusted-text">Trusted and recommended by over <strong>89.7K</strong> satisfied customers worldwide.</div>
-</div>
-
     <!-- ===== Highlights + Reviews (placed directly under logo) ===== -->
     <div class="vbest-highrev" aria-label="Highlights and reviews">
       <!-- Highlights -->
@@ -1708,93 +1701,85 @@ document.addEventListener('click', function(e){
   if (href) window.location.href = href;
 });
 </script>
-<!-- CHAT POPUP START -->
+<!-- FULL-SCREEN WHATSAPP CHAT OVERLAY -->
 <style>
-#chatPopup {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 9999;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  width: 260px;
-  display: none;
-  font-family: Arial, sans-serif;
+#vChatBtn{
+  position:fixed; left:10px;bottom:70px;
+  width:50px;height:50px;border-radius:50%;
+  background:#25D366;color:#fff;font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 18px rgba(0,0,0,.25);
+  cursor:pointer;z-index:10000;
+  animation:pulse 1.4s infinite;
 }
-#chatPopup header {
-  background: #222;
-  color: white;
-  padding: 10px;
-  border-radius: 10px 10px 0 0;
-  font-weight: bold;
-  text-align: center;
+@keyframes pulse{
+  0%,100%{transform:scale(1);opacity:1}
+  50%{transform:scale(1.15);opacity:.9}
 }
-#chatPopup textarea {
-  width: 90%;
-  height: 80px;
-  margin: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  resize: none;
-  padding: 5px;
+#vChatOverlay{
+  position:fixed;inset:0;z-index:9999;
+  background:#fff;display:none;flex-direction:column;
+  font-family:Arial,Helvetica,sans-serif;
 }
-#chatPopup button {
-  background: #25D366;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 5px;
-  margin: 10px;
-  cursor: pointer;
-  font-weight: bold;
+#vChatOverlay header{
+  background:#25D366;color:#fff;
+  padding:10px;font-size:10px;font-weight:700;
+  display:flex;justify-content:space-between;align-items:center;
 }
-#chatIcon {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #25D366;
-  color: white;
-  padding: 12px 16px;
-  border-radius: 30px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-  cursor: pointer;
-  font-family: sans-serif;
-  z-index: 1000;
+#vChatOverlay header button{
+  background:none;border:none;color:#fff;
+  font-size:22px;cursor:pointer;
+}
+#vChatOverlay .body{
+  flex:1;padding:10px;overflow:auto;
+  display:flex;flex-direction:column;justify-content:center;
+  text-align:center;font-size:16px;color:#333;
+}
+#vChatOverlay textarea{
+  width:90%;max-width:500px;height:100px;
+  margin:0 auto 20px;border-radius:8px;
+  border:1px solid #ccc;padding:10px;resize:none;
+  font-size:15px;
+}
+#vChatOverlay .send{
+  background:#25D366;color:#fff;border:none;
+  padding:10px 20px;border-radius:8px;
+  font-size:16px;font-weight:700;cursor:pointer;
 }
 </style>
 
-<div id="chatIcon">💬 Message Us</div>
+<div id="vChatBtn" title="Chat with us">💬</div>
 
-<div id="chatPopup">
-  <header>Chat with VBest</header>
-  <textarea id="chatMessage" placeholder="Type your message..."></textarea>
-  <button id="sendMessage">Send</button>
+<div id="vChatOverlay">
+  <header>
+    <span>Chat with VBest</span>
+    <button id="vClose">×</button>
+  </header>
+  <div class="body">
+    <textarea id="vMsg" placeholder="Hi! Tell us what you need (size, budget, color …)"></textarea>
+    <button class="send" id="vSend">Send on WhatsApp</button>
+  </div>
 </div>
 
 <script>
-const chatIcon = document.getElementById("chatIcon");
-const chatPopup = document.getElementById("chatPopup");
-const sendMessage = document.getElementById("sendMessage");
+const btn=document.getElementById('vChatBtn');
+const overlay=document.getElementById('vChatOverlay');
+const close=document.getElementById('vClose');
+const send=document.getElementById('vSend');
+const msg=document.getElementById('vMsg');
+const phone="2347080535579"; // your WhatsApp number
 
-chatIcon.onclick = function() {
-  chatPopup.style.display = "block";
-  chatIcon.style.display = "none";
-};
-
-sendMessage.onclick = function() {
-  const msg = encodeURIComponent(document.getElementById("chatMessage").value.trim());
-  if (msg) {
-    window.open(`https://wa.me/2347080535579?text=${msg}`, "_blank");
-    chatPopup.style.display = "none";
-    chatIcon.style.display = "block";
-  } else {
-    alert("Please type a message first.");
-  }
+btn.onclick=()=>overlay.style.display="flex";
+close.onclick=()=>overlay.style.display="none";
+send.onclick=()=>{
+  const text=msg.value.trim();
+  if(!text){alert("Please type a message.");return;}
+  const url="https://wa.me/"+phone+"?text="+encodeURIComponent(text);
+  window.open(url,"_blank");
+  msg.value="";
+  overlay.style.display="none";
 };
 </script>
-<!-- CHAT POPUP END -->
-</body>
-</html>
+<!-- END FULL-SCREEN WHATSAPP CHAT OVERLAY -->
 </body>
 </html>
