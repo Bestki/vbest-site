@@ -51,6 +51,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 }(window, document, 'ttq');
 </script>
 <!-- TikTok Pixel Code End -->
+<!-- Facebook Pixel Code --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js'); fbq('init', '677322691667443'); fbq('track', 'PageView');</script><noscript> <img height="1" width="1" src="https://www.facebook.com/tr?id=677322691667443&ev=PageView&noscript=1"/></noscript><!-- End Facebook Pixel Code -->
 </head>
 <body>
   <div class="container">
@@ -428,5 +429,83 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       if (possibleKeys.includes(e.key)) renderCart();
     });
   </script>
+    <style>
+#vChatBtn{
+  position:fixed; left:10px;bottom:90px;
+  width:50px;height:50px;border-radius:50%;
+  background:#25D366;color:#fff;font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 18px rgba(0,0,0,.25);
+  cursor:pointer;z-index:10000;
+  animation:pulse 1.4s infinite;
+}
+@keyframes pulse{
+  0%,100%{transform:scale(1);opacity:1}
+  50%{transform:scale(1.15);opacity:.9}
+}
+#vChatOverlay{
+  position:fixed;inset:0;z-index:9999;
+  background:#fff;display:none;flex-direction:column;
+  font-family:Arial,Helvetica,sans-serif;
+}
+#vChatOverlay header{
+  background:#25D366;color:#fff;
+  padding:10px;font-size:10px;font-weight:700;
+  display:flex;justify-content:space-between;align-items:center;
+}
+#vChatOverlay header button{
+  background:none;border:none;color:#fff;
+  font-size:22px;cursor:pointer;
+}
+#vChatOverlay .body{
+  flex:1;padding:10px;overflow:auto;
+  display:flex;flex-direction:column;justify-content:center;
+  text-align:center;font-size:16px;color:#333;
+}
+#vChatOverlay textarea{
+  width:90%;max-width:500px;height:100px;
+  margin:0 auto 20px;border-radius:8px;
+  border:1px solid #ccc;padding:10px;resize:none;
+  font-size:15px;
+}
+#vChatOverlay .send{
+  background:#25D366;color:#fff;border:none;
+  padding:10px 20px;border-radius:8px;
+  font-size:16px;font-weight:700;cursor:pointer;
+}
+</style>
+
+<div id="vChatBtn" title="Chat with us">💬</div>
+
+<div id="vChatOverlay">
+  <header>
+    <span>Chat with VBest</span>
+    <button id="vClose">×</button>
+  </header>
+  <div class="body">
+    <textarea id="vMsg" placeholder="Hi! Tell us what you need (size, budget, color …)"></textarea>
+    <button class="send" id="vSend">Send on WhatsApp</button>
+  </div>
+</div>
+
+<script>
+const btn=document.getElementById('vChatBtn');
+const overlay=document.getElementById('vChatOverlay');
+const close=document.getElementById('vClose');
+const send=document.getElementById('vSend');
+const msg=document.getElementById('vMsg');
+const phone="2347080535579"; // your WhatsApp number
+
+btn.onclick=()=>overlay.style.display="flex";
+close.onclick=()=>overlay.style.display="none";
+send.onclick=()=>{
+  const text=msg.value.trim();
+  if(!text){alert("Please type a message.");return;}
+  const url="https://wa.me/"+phone+"?text="+encodeURIComponent(text);
+  window.open(url,"_blank");
+  msg.value="";
+  overlay.style.display="none";
+};
+</script>
 </body>
 </html>
