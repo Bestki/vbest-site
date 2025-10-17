@@ -272,8 +272,13 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             <td>${index + 1}</td>
             <td style="max-width:200px; white-space:normal; text-align:left;">${nameSafe}</td>
             <td>${imgSrc ? `<img src="${imgSrc}" alt="${nameSafe}">` : ""}</td>
-            <td>${priceDisplay}</td>
-            <td><button class="remove-btn" onclick="removeProduct(${index})">Remove</button></td>
+<td>${priceDisplay}</td>
+<td>
+  <button type="button" onclick="changeQty(${index}, -1)">−</button>
+  <span>${item.quantity || 1}</span>
+  <button type="button" onclick="changeQty(${index}, 1)">+</button>
+  <button class="remove-btn" onclick="removeProduct(${index})">Remove</button>
+</td>
           </tr>
         `);
       });
@@ -288,7 +293,13 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
       localStorage.setItem(cartKey, JSON.stringify(cart));
       renderCart();
     };
-
+window.changeQty = function(index, change) {
+  if (!Array.isArray(cart)) return;
+  if (typeof cart[index] === 'undefined') return;
+  cart[index].quantity = Math.max(1, (cart[index].quantity || 1) + change);
+  try { localStorage.setItem(cartKey, JSON.stringify(cart)); } catch(e){ console.warn('save failed', e); }
+  renderCart();
+};
     // ---------- MAJOR TOWNS for each state (36 + FCT with many towns) ----------
     const MAJOR_TOWNS = {
       "Abia":["Aba","Umuahia","Ohafia","Isiala-Ngwa","Umunneochi","Bende","Arochukwu","Ukwa East","Ukwa West","Ugwunagbo","Osisioma Ngwa","Ikwuano","Umuahia North","Umuahia South","Isuikwuato","Obingwa","Aba North","Aba South","Umuahia Town","Isu","Naze","Ubahu","Eziukwu","Ihunta","Aba Old Market","Aba New Road","Ibeku","Ndoki","Azumini"],
@@ -454,13 +465,39 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
         console.log("Order saved, key:", res.key);
 
         // Remove cart then redirect to thankyou page with key so customer can watch approval/payment
+        // Remove cart then open WhatsApp confirmation and redirect to thankyou page
         localStorage.removeItem(cartKey);
         statusMsg.textContent = "";
 
         try {
+          // save last order key locally
           localStorage.setItem("lastOrderKey", res.key);
+
+          // Build WhatsApp message (Option 1) — uses variables already present in this function:
+          // name, phone, email, address, state, area, cart, totalAmount
+          const phoneNumber = "2347080535579"; // your WhatsApp number (change if needed)
+          let msg = "🛍️ *New Order from V'Best Interiors*%0A%0A";
+          msg += `Order Ref: ${res.key}%0A`;
+          msg += `Name: ${encodeURIComponent(name)}%0A`;
+          msg += `Phone: ${encodeURIComponent(phone)}%0A`;
+          msg += `Email: ${encodeURIComponent(email)}%0A`;
+          msg += `Address: ${encodeURIComponent(address)}, ${encodeURIComponent(area)}, ${encodeURIComponent(state)}%0A%0A`;
+          msg += "Items:%0A";
+          cart.forEach(it => {
+            msg += `• ${encodeURIComponent(String(it.name))} × ${encodeURIComponent(String(it.quantity || 1))}%0A`;
+          });
+          msg += `%0ATotal: ₦${totalAmount.toLocaleString()}%0A%0A`;
+          msg += "Please confirm this order and send payment link.";
+
+          // Open WhatsApp in a new tab/window
+          const waUrl = `https://wa.me/${phoneNumber}?text=${msg}`;
+          try { window.open(waUrl, "_blank"); } catch(e){ console.warn("Could not open WhatsApp", e); }
+
+          // finally redirect customer to thankyou page
           window.location.href = "thankyou.html?key=" + encodeURIComponent(res.key);
         } catch (e) {
+          // fallback: inform user of saved reference
+          console.warn("Post-save redirect error", e);
           alert("Order saved! Reference: " + res.key);
         }
       } catch (err) {
