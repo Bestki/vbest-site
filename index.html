@@ -895,7 +895,441 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <a href="sidestool.html" class="shop-now" aria-label="Shop Side Stools">SHOP NOW</a>
   </div>
 </section>
-  <!-- ===== Footer (merged, very black) ===== -->
+<!-- ======= Featured (Top / New / Most) — full ready block (paste after categories) ======= -->
+<section id="featSection" aria-label="Featured products" style="padding:20px 12px;">
+  <style>
+    /* Scoped styles */
+    #featSection { max-width:1160px; margin:0 auto; }
+    .fs-block { margin-bottom:26px; }
+
+    /* Title banner: animated highlight + blinking dot, boxed so it reads like a banner */
+    .fs-title {
+      display:inline-block;
+      position:relative;
+      padding:8px 14px;
+      border-radius:10px;
+      background: linear-gradient(90deg, rgba(0,123,255,0.35), rgba(0,204,255,0.15) 40%, transparent 60%);
+      background-size:200% 100%;
+      animation: bannerSlide 6s linear infinite;
+      box-shadow:0 6px 18px rgba(0,0,0,0.03);
+      font-weight:800;
+      font-size:20px;
+      color:var(--accent,#111);
+      margin:0 0 6px;
+    }
+    @keyframes bannerSlide { 0%{background-position:0% 50%}100%{background-position:200% 50%} }
+    .fs-title::after{
+      content:'';
+      position:absolute;
+      right:-10px;
+      top:50%;
+      transform:translateY(-50%);
+      width:12px;height:12px;border-radius:50%;
+      background:#ff3b30; box-shadow:0 0 14px #ff3b30;
+      animation: blinkDot 1.4s infinite;
+    }
+    @keyframes blinkDot { 0%,50%{opacity:1}51%,100%{opacity:0.15} }
+
+    .fs-sub { color:var(--muted,#666); font-weight:700; font-size:13px; margin:0 0 12px; display:block; }
+
+    .fs-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+    @media(min-width:1024px){ .fs-grid { grid-template-columns:repeat(3,1fr); } }
+
+    .fs-card {
+      background:var(--card,#f8f8f8); border-radius:10px; overflow:hidden; position:relative;
+      border:1px solid var(--card-border,#eee); box-shadow:0 6px 18px rgba(0,0,0,0.04);
+      display:flex; flex-direction:column; min-height:320px;
+    }
+    .fs-thumb{ width:100%; height:180px; overflow:hidden; cursor:pointer; display:block; }
+    .fs-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+    .fs-badge {
+      position:absolute; left:12px; top:12px; z-index:12; padding:8px 12px; border-radius:999px;
+      color:#fff; font-weight:900; font-size:12px; box-shadow:0 8px 26px rgba(0,0,0,0.12);
+    }
+    .fs-orange{ background:linear-gradient(180deg,#ff9900,#e68a00); }
+    .fs-green{ background:linear-gradient(180deg,#27ae60,#1f8a3f); }
+    .fs-blink{ animation:fsPulse 1.4s ease-in-out infinite; }
+    @keyframes fsPulse { 0%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.03)}100%{transform:translateY(0) scale(1)} }
+
+    .fs-body{ padding:10px; display:flex; flex-direction:column; gap:6px; flex:1; text-align:left; }
+    .fs-body h3{ margin:0; font-size:15px; font-weight:800; color:var(--text,#111); cursor:pointer; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .fs-price-row{ display:flex; flex-direction:column; gap:4px; align-items:flex-start; flex-wrap:wrap; }
+    .fs-old{ text-decoration:line-through; color:#B12704; font-weight:800; font-size:13px; }
+    .fs-price{ color:#27ae60; font-weight:900; font-size:15px; }
+    .fs-timer{ color:#FF9900; font-weight:800; font-size:13px; margin-top:6px; }
+    .fs-stars{ color:#ffd54a; margin-top:6px; font-size:14px; }
+
+    /* Save style — red but NOT struck-through */
+    .fs-save { color:#B12704; font-weight:700; font-size:13px; text-decoration:none; margin-top:2px; }
+
+    .fs-btns{ margin-top:auto; display:flex; gap:8px; }
+    .fs-btn{ flex:1; padding:10px; border-radius:8px; font-weight:800; border:0; cursor:pointer; color:#fff; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; }
+    .fs-inquiry{ background:var(--whatsapp,#25D366); }
+    .fs-add{ background:var(--btn,#FF9900); color:var(--btn-text,#fff); }
+
+    /* details overlay (self-contained IDs) */
+    #featDetails{ position:fixed; inset:0; display:none; align-items:flex-start; justify-content:center; background:rgba(0,0,0,0.9); z-index:99999; padding:18px; overflow:auto; }
+    #featDetailsInner{ width:100%; max-width:1100px; background:var(--card,#fff); color:var(--text,#111); border-radius:10px; padding:18px; display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap; max-height:calc(100vh - 40px); overflow:auto; }
+    #featClose{ position:absolute; right:18px; top:12px; background:transparent; border:2px solid rgba(0,0,0,0.08); color:var(--text,#111); padding:6px 10px; border-radius:8px; cursor:pointer; }
+    .feat-left{ flex:1 1 420px; text-align:center; }
+    .feat-left img{ max-width:100%; max-height:60vh; object-fit:contain; border-radius:8px; display:block; margin:0 auto; }
+    .feat-right{ flex:1 1 360px; }
+    .feat-right h2{ margin:0 0 8px; color:var(--accent,#111); font-size:22px; }
+    .feat-desc{ margin-top:12px; line-height:1.6; color:var(--text,#333); }
+  </style>
+
+  <!-- Most Viewed -->
+  <div class="fs-block">
+    <h3 class="fs-title">👀 Most Viewed</h3>
+    <p class="fs-sub">Trending now — items people are checking out</p>
+    <div id="fsMostGrid" class="fs-grid" aria-live="polite"></div>
+  </div>
+
+  <!-- Top Selling -->
+  <div class="fs-block">
+    <h3 class="fs-title">🔥 Top Selling Items</h3>
+    <p class="fs-sub">Customers' favourites — high demand items</p>
+    <div id="fsTopGrid" class="fs-grid" aria-live="polite"></div>
+  </div>
+
+  <!-- New Products -->
+  <div class="fs-block">
+    <h3 class="fs-title">🆕 New Products</h3>
+    <p class="fs-sub">Fresh arrivals — check what's just added</p>
+    <div id="fsNewGrid" class="fs-grid" aria-live="polite"></div>
+  </div>
+
+  <div id="fsMsg" style="text-align:center;color:var(--muted,#666);font-size:14px;"></div>
+</section>
+
+<!-- Details overlay for featured (self-contained) -->
+<div id="featDetails" role="dialog" aria-hidden="true">
+  <div id="featDetailsInner" role="document">
+    <button id="featClose">✕</button>
+    <div class="feat-left" id="featLeft"></div>
+    <div class="feat-right" id="featRight"></div>
+  </div>
+</div>
+
+<script>
+/* ===== Full featured logic (self-contained, tolerant field matching + flexible parsing) ===== */
+(async function(){
+  const sheetUrl = "https://opensheet.elk.sh/1FA4s21Je3ebeFXUXGu_xvqdo4gbM1v9Q9jOHt6LAH6Y/Sheet1";
+  const limit = 6;
+
+  /* Utilities */
+  function normKey(k){ return String(k||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
+
+  // tolerant findField: exact normalized match, partial contains match, and synonyms fallback
+  function findField(item, candidates){
+    if(!item) return '';
+    const map = {};
+    for(const k in item){
+      if(!k) continue;
+      map[normKey(k)] = item[k];
+    }
+    // direct normalized match
+    for(const c of candidates){
+      const key = normKey(c);
+      if(map.hasOwnProperty(key)) return map[key];
+    }
+    // partial contains match (helps with "Price (₦)", "Selling Price")
+    const candKeys = candidates.map(c => normKey(c));
+    for(const key in map){
+      for(const ck of candKeys){
+        if(key.includes(ck) || ck.includes(key)) return map[key];
+      }
+    }
+    // synonyms fallback
+    const synonyms = ['price','amount','sellingprice','cost','discount','discountprice','image','imagelink','views','tag','category','productname','product'];
+    for(const s of synonyms){
+      if(map.hasOwnProperty(s)) return map[s];
+    }
+    return '';
+  }
+
+  // flexible number parsing (supports "₦120,000", "120k", "120 000", "120,000.00")
+  function parseNumberFlexible(s){
+    if(s === undefined || s === null) return NaN;
+    let t = String(s).trim();
+    if(t === '') return NaN;
+    t = t.replace(/[₦$€£]/g,'');
+    t = t.replace(/\s+/g,'');
+    t = t.replace(/k$/i,'000');
+    t = t.replace(/[^0-9.\-]/g,'');
+    const n = parseFloat(t);
+    return isNaN(n) ? NaN : n;
+  }
+
+  function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function escJs(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"'); }
+  function safe(u){ return u && String(u).trim() ? String(u).trim() : 'https://i.postimg.cc/yxGGYGDw/Ag-ACkq-HWp-Pyzt-HZ89-Sp-Vx-Y.jpg'; }
+
+  try {
+    const res = await fetch(sheetUrl);
+    if(!res.ok) throw new Error('sheet fetch failed ' + res.status);
+    const data = await res.json();
+    if(!Array.isArray(data) || !data.length){ document.getElementById('fsMsg').textContent='No products found.'; return; }
+
+    // CATEGORY tokens for chairs and related
+    const CATEGORY_TOKENS = ['chair','meand','auditorium','barchair','recliner','centertable','bar'];
+    function matchesCategory(item){
+      const search = [
+        findField(item,['Tag','Category','Cat','type','group']),
+        findField(item,['ProductName','Product Name','product','name','title']),
+        findField(item,['Description','description','details']),
+        findField(item,['ImageLink','Image','imageurl','images'])
+      ].join(' ').toLowerCase();
+      return CATEGORY_TOKENS.some(t => String(search||'').includes(String(t||'').toLowerCase()));
+    }
+
+    const chairFiltered = data.filter(matchesCategory);
+    const useData = chairFiltered.length ? chairFiltered : data;
+
+    // compute lists
+    const top = useData.filter(i=> String(findField(i,['Tag','tag'])||i.Tag||'').toLowerCase().includes('top')).slice(0,limit);
+    const newList = (function(){
+      const hasDate = Object.keys(useData[0] || {}).some(k=> normKey(k) === 'dateadded' || normKey(k) === 'date');
+      if(hasDate){
+        return useData.map(it=> Object.assign({__date: (findField(it,['DateAdded','Date Added','dateadded','date','added'])||'')}, it))
+                   .filter(x=> x.__date )
+                   .sort((a,b)=> new Date(b.__date) - new Date(a.__date))
+                   .slice(0,limit);
+      } else {
+        return useData.filter(i=> String(findField(i,['Tag','tag'])||i.Tag||'').toLowerCase().includes('new')).slice(0,limit);
+      }
+    })();
+    const most = useData.slice().map(it=> Object.assign({__views: parseInt(String(findField(it,['Views','views','viewscount'])||it.Views||'0').replace(/\D/g,''),10)||0}, it)).sort((a,b)=> b.__views - a.__views).slice(0,limit);
+
+    // render
+    const topGrid = document.getElementById('fsTopGrid'), newGrid = document.getElementById('fsNewGrid'), mostGrid = document.getElementById('fsMostGrid');
+    window.fsProducts = []; let gIdx = 0;
+
+    function makeCard(p, idx, tag){
+      const name = findField(p, ['ProductName','Product Name','product','name','title']) || 'Unnamed';
+      // tolerant field lookup for prices
+      const priceTxt = findField(p, ['DiscountPrice','Discount Price','discount','Sale Price','saleprice','specialprice','PriceNow','NowPrice']) || '';
+      const oldTxt   = findField(p, ['Price','price','Amount','amount','Selling Price','SellingPrice','Cost']) || '';
+      const priceStr = String(priceTxt || oldTxt || '').trim();
+      const oldStr   = String(oldTxt || '').trim();
+      const img = safe(findField(p, ['ImageLink','Image','imageurl','images','photo','photos']));
+      const hasDiscount = String(priceTxt||'').trim() !== '' && String(oldTxt||'').trim() !== '';
+
+      // numeric parse to compute save if possible
+      const priceNum = parseNumberFlexible(priceStr);
+      const oldNum = parseNumberFlexible(oldStr);
+      let saveHtml = '';
+      if(!isNaN(oldNum) && !isNaN(priceNum) && oldNum > priceNum){
+        const save = Math.round(oldNum - priceNum);
+        saveHtml = `<div class="fs-save">Save ${'₦' + save.toLocaleString()}</div>`;
+      } else if((oldStr || priceStr) && hasDiscount && (isNaN(oldNum) || isNaN(priceNum))){
+        // cannot compute numeric save but show placeholder so users see Save position
+        saveHtml = `<div class="fs-save">Save: —</div>`;
+      }
+
+      const viewsVal = findField(p, ['Views','views','rating']) || '';
+      const stars = viewsVal && String(viewsVal).trim() !== '' ? (function(){
+        let v = parseInt(String(viewsVal).replace(/\D/g,''),10);
+        if(isNaN(v)) v = 5;
+        v = Math.max(1, Math.min(5, v));
+        return Array.from({length:5},(_,k)=> k<v ? '★' : '☆').join('');
+      })() : '★★★★★';
+
+      const wa = (findField(p,['WhatsApp','WhatsApp Link','whatsapp']) || 'https://wa.me/2347080535579');
+      const badgeClass = tag==='top' ? 'fs-orange' : (tag==='new' ? 'fs-green' : 'fs-orange');
+      const badgeText = tag==='top' ? 'BESTSELLER' : (tag==='new' ? 'NEW' : 'TRENDING');
+
+      // priceHtml includes saveHtml so Save sits directly under price
+      const priceHtml = `${ hasDiscount ? `<div class="fs-old">${escHtml(oldStr)}</div>` : '' }<div class="fs-price">${escHtml(priceStr || oldStr)}</div>${saveHtml ? saveHtml : ''}`;
+
+      return `
+        <div class="fs-card" data-idx="${idx}">
+          <div class="fs-badge ${badgeClass} fs-blink">${badgeText}</div>
+          <span class="fs-thumb" onclick="fsOpenDetails(${idx})" role="button" aria-label="Open ${escHtml(name)}"><img src="${escHtml(img)}" alt="${escHtml(name)}" loading="lazy"></span>
+          <div class="fs-body">
+            <h3 onclick="fsOpenDetails(${idx})">${escHtml(name)}</h3>
+            <div class="fs-price-row">
+              ${ priceHtml }
+            </div>
+            <div class="fs-timer" id="fs-timer-${idx}" data-idx="${idx}"></div>
+            <div class="fs-stars">${escHtml(stars)}</div>
+            <div class="fs-btns">
+              <a class="fs-btn fs-inquiry" href="${(String(wa).startsWith('http')? wa : wa + '?text=' + encodeURIComponent('Hello, I am interested in ' + name))}" target="_blank" rel="noopener">📩 Inquiry</a>
+              <button class="fs-btn fs-add" onclick="fsAddToCart('${escJs(name)}','${escJs(priceStr || oldStr)}','${escJs(img)}')">🛒 Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function appendList(list, grid, tag){
+      const out = [];
+      for(const it of list){
+        const idx = gIdx++;
+        window.fsProducts[idx] = it;
+        out.push(makeCard(it, idx, tag));
+      }
+      grid.innerHTML = out.length ? out.join('') : `<div style="grid-column:1/-1;padding:12px;color:var(--muted,#666);border-radius:8px;background:var(--card,#fff)">No ${tag} items</div>`;
+    }
+
+    appendList(most, mostGrid, 'most');
+    appendList(top, topGrid, 'top');
+    appendList(newList, newGrid, 'new');
+
+    // set countdown metadata: prefer explicit OfferEnd/EndDate if present else 30-day from now or from DateAdded
+    window.fsProducts.forEach((p, idx) => {
+      if(!p) return;
+      const endField = findField(p, ['OfferEnds','Offer End','EndDate','End Date','OfferEndDate']);
+      const dateField = findField(p, ['DateAdded','Date Added','date','added']);
+      let endTime = null;
+      if(endField){
+        const d = new Date(endField);
+        if(!isNaN(d)) endTime = d.getTime();
+      }
+      if(!endTime && dateField){
+        const d = new Date(dateField);
+        if(!isNaN(d)) endTime = d.getTime() + (30 * 24 * 60 * 60 * 1000);
+      }
+      if(!endTime) endTime = Date.now() + (30 * 24 * 60 * 60 * 1000);
+      p._hasCountdown = !!( findField(p,['Price','price','DiscountPrice','discount','Offer']) || findField(p,['Price','DiscountPrice','Discount Price']) );
+      p._durationMs = 30 * 24 * 60 * 60 * 1000;
+      p._endTime = endTime;
+    });
+
+    // timers tick
+    setInterval(()=> {
+      (window.fsProducts||[]).forEach((p, idx) => {
+        if(!p || !p._hasCountdown) return;
+        const el = document.getElementById('fs-timer-' + idx);
+        if(!el) return;
+        let t = p._endTime - Date.now();
+        if(t <= 0){ p._endTime = Date.now() + p._durationMs; t = p._endTime - Date.now(); }
+        const s = Math.floor(t/1000); const d=Math.floor(s/86400); const h=Math.floor((s%86400)/3600); const m=Math.floor((s%3600)/60); const sec=s%60;
+        el.textContent = 'Offer ends in: ' + `${d}d ${h}h ${m}m ${sec}s`;
+      });
+    }, 1000);
+
+    // stop badge blink after 10s (attention then calm)
+    setTimeout(()=> document.querySelectorAll('.fs-blink').forEach(b=> b.classList.remove('fs-blink')), 10000);
+
+  } catch(err){
+    console.error('feat error', err);
+    try{ document.getElementById('fsMsg').textContent = 'Error loading featured products.'; }catch(e){}
+  }
+
+  // Add-to-cart (robust + sync)
+  window.fsAddToCart = function(name, price, image){
+    try {
+      if(!image || String(image).trim()==='') { alert('Item image missing — cannot add'); return; }
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      cart.push({ name: name || '', price: price || '', image: image || '', qty: 1 });
+      localStorage.setItem('cart', JSON.stringify(cart));
+      try { const ev = new Event('storage'); ev.key = 'cart'; window.dispatchEvent(ev); } catch(e){}
+      updateCartBadges(cart.length);
+    } catch (err) { console.error('fsAddToCart error', err); }
+  };
+
+  function updateCartBadges(count){
+    const ids = ['cart-count-bottom','cart-count','cart-count-bottom'];
+    let found = false;
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.style.display = count > 0 ? 'inline-block' : 'none';
+        el.textContent = count;
+        try { el.animate([{ transform: 'scale(1.2)' }, { transform: 'scale(1)' }], { duration: 220 }); } catch(e){}
+        found = true;
+      }
+    });
+    if (!found) {
+      setTimeout(()=> {
+        if (!updateCartBadges._tries) updateCartBadges._tries = 1; else updateCartBadges._tries++;
+        if (updateCartBadges._tries <= 8) updateCartBadges(count);
+        else updateCartBadges._tries = 0;
+      }, 300);
+    } else updateCartBadges._tries = 0;
+  }
+
+  (function syncCartUI(){
+    try {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      updateCartBadges(cart.length);
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'cart' || !e.key) {
+          const c = JSON.parse(localStorage.getItem('cart')||'[]');
+          updateCartBadges(c.length);
+        }
+      });
+    } catch(e){ console.error('syncCartUI error', e); }
+  })();
+
+  // Details open/close + back behavior (single close on Back)
+  window.fsOpenDetails = function(idx){
+    const p = (window.fsProducts||[])[idx]; if(!p) return;
+    const img = escHtml(findField(p,['ImageLink','Image','image','imageurl','images']) || 'https://i.postimg.cc/yxGGYGDw/Ag-ACkq-HWp-Pyzt-HZ89-Sp-Vx-Y.jpg');
+    document.getElementById('featLeft').innerHTML = `<img src="${img}" alt="${escHtml(p.ProductName||p.product||'')}" />`;
+    const name = escHtml(findField(p,['ProductName','Product Name','product','name']) || 'Unnamed');
+    const priceTxt = findField(p, ['DiscountPrice','Discount Price','discount','Offer','Price','price']) || '';
+    const origTxt = findField(p, ['Price','price','Amount','amount']) || '';
+    const priceHtml = priceTxt ? `<div class="fs-old">${escHtml(origTxt)}</div><div class="fs-price">${escHtml(priceTxt)}</div>` : `<div class="fs-price">${escHtml(origTxt||priceTxt)}</div>`;
+    const desc = escHtml(findField(p,['Description','description','details']) || 'No description available.');
+    const wa = (findField(p,['WhatsApp','WhatsApp Link','whatsapp']) || 'https://wa.me/2347080535579');
+
+    document.getElementById('featRight').innerHTML = `
+      <h2>${name}</h2>
+      <div class="fs-price-row">${priceHtml}</div>
+      <div class="fs-timer" id="fs-details-timer">--</div>
+      <div class="fs-stars">${escHtml(findField(p,['Views','views','rating']) || '★★★★★')}</div>
+      <div style="margin-top:12px;display:flex;gap:8px;">
+        <a class="fs-btn fs-inquiry" href="${wa}?text=${encodeURIComponent('Hello, I am interested in ' + name)}" target="_blank">📩 Inquiry</a>
+        <button class="fs-btn fs-add" onclick="fsAddToCart('${escJs(name)}','${escJs(priceTxt||origTxt)}','${escJs(img)}')">🛒 Add to Cart</button>
+      </div>
+      <div class="feat-desc"><h3 style="margin-top:18px;color:var(--accent,#111)">Product description</h3><p style="margin-top:8px;">${desc}</p></div>
+    `;
+
+    // show overlay
+    const details = document.getElementById('featDetails');
+    details.style.display = 'flex'; details.setAttribute('aria-hidden','false'); document.body.style.overflow = 'hidden';
+
+    // set details timer
+    if(p._hasCountdown){
+      const dt = document.getElementById('fs-details-timer'); let t = p._endTime - Date.now();
+      if(t<=0){ p._endTime = Date.now() + p._durationMs; t = p._endTime - Date.now(); }
+      if(dt){
+        const s = Math.floor(t/1000); const d=Math.floor(s/86400); const h=Math.floor((s%86400)/3600); const m=Math.floor((s%3600)/60); const sec=s%60;
+        dt.textContent = 'Offer ends in: ' + `${d}d ${h}h ${m}m ${sec}s`;
+      }
+    }
+
+    try{ history.pushState({feat:'open', idx: idx}, '', '#fproduct-' + idx); } catch(e){}
+  };
+
+  // close button
+  document.getElementById('featClose').addEventListener('click', function(){
+    const details = document.getElementById('featDetails');
+    details.style.display = 'none'; details.setAttribute('aria-hidden','true'); document.body.style.overflow = '';
+  });
+
+  // popstate: if overlay is open -> close it (once)
+  window.addEventListener('popstate', function(){
+    try{
+      const details = document.getElementById('featDetails');
+      if(details && details.style.display === 'flex'){
+        const closeBtn = document.getElementById('featClose');
+        if(closeBtn) closeBtn.click();
+      }
+    }catch(e){ console.error('feat popstate', e); }
+  });
+
+  // utility shorthand used above (kept for compatibility)
+  function findField(it, names){ for(const n of names){ for(const k in it) if(normKey(k)===normKey(n)) return it[k]; } return ''; }
+
+})();
+</script>
+
+
+<!-- ======= end featured block ======= --><!-- ===== Footer (merged, very black) ===== -->
   <footer class="shilpi-footer">
     <div class="shilpi-container" style="max-width:1150px;margin:0 auto;">
       <div class="footer-extra">
