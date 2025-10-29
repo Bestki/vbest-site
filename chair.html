@@ -13,6 +13,82 @@
   <meta name="twitter:card" content="summary_large_image">
 
   <style>
+    .shilpi-footer {
+    background: #f3f3f3;
+    color: var(--text);
+    padding: 40px 20px;
+    font-family: Arial, sans-serif;
+  }
+  .shilpi-footer .about h2 { font-size:22px; font-weight:bold; margin-bottom:6px; color:var(--text); }
+  .shilpi-footer .about .tagline { font-size:14px; font-weight:300; margin-bottom:10px; color:var(--muted); }
+  .shilpi-footer .about-text { font-size:13px; max-width:600px; margin:0 auto 15px; line-height:1.6; color:var(--muted); }
+
+  .social-icons { display:flex; gap:15px; justify-content:center; margin-top:10px; }
+  .social-icons a { text-decoration:none; color:var(--brand-blue); font-weight:bold; font-size:16px; transition:0.3s; }
+  .social-icons a:hover { color:var(--accent); }
+
+  .footer-bottom { display:flex; flex-wrap:wrap; justify-content:space-between; text-align:left; gap:20px; }
+  .footer-col { flex:1; min-width:200px; }
+  .footer-col h3 { font-size:16px; margin-bottom:10px; color:var(--text); }
+  .footer-col ul li { font-size:14px; margin:4px 0; color:var(--muted); }
+  
+
+  .accordion-btn { background:none; border:none; outline:none; font-size:14px; font-weight:bold; color:var(--accent); text-align:left; padding:6px 0; cursor:pointer; width:100%; }
+  .accordion-content { display:none; font-size:13px; margin-bottom:10px; line-height:1.5; color:var(--muted); }
+
+  @media (max-width: 768px) {
+    .footer-bottom { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:12px; padding-left:12px; padding-right:12px; box-sizing:border-box; }
+    .footer-bottom .footer-col { width:100%; max-width:420px; margin:8px auto; text-align:center; box-sizing:border-box; }
+    .accordion-btn { text-align:center; display:block; width:100%; }
+  }
+    /* Footer social brand colors (keeps existing icons but colors them) */
+/* --- Minimal fix: shrink social icons and keep labels but tighter --- */
+.social-icons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;        /* keep in one row */
+  white-space: nowrap;
+  overflow-x: auto;        /* small horizontal scroll on tiny screens */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* reduce anchor padding and make text smaller so everything fits */
+.social-icons a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  font-weight:700;
+  font-size: 13px;         /* slightly smaller label text */
+  text-decoration: none;
+  color: inherit;
+}
+
+/* shrink icons (font-awesome) */
+.social-icons a i {
+  font-size: 18px;         /* icon size */
+  line-height: 1;
+  width: 20px;
+  text-align: center;
+  display: inline-block;
+}
+
+/* brand colors (override earlier coloring) */
+.social-icons a .fa-whatsapp { color: #25D366; }
+.social-icons a .fa-facebook { color: #1877F2; }
+.social-icons a .fa-youtube  { color: #FF0000; }
+.social-icons a .fa-twitter  { color: #1DA1F2; }
+.social-icons a .fa-instagram{ color: #E1306C; }
+.social-icons a .fa-tiktok   { color: #010101; }
+
+/* On very small narrow screens allow wrapping instead of clipping */
+@media (max-width:420px) {
+  .social-icons { flex-wrap: wrap; gap:6px; padding:4px 6px; }
+  .social-icons a { font-size: 12px; padding:4px 6px; }
+  .social-icons a i { font-size:16px; width:18px; }
+}
     /* Theme variables (three themes) */
     :root{
       --bg:#ffffff; --card:#f8f8f8; --text:#111827; --accent:#1f2937; --btn:#FF9900; --btn-text:#fff;
@@ -302,6 +378,177 @@ Each piece is crafted for comfort, elegance, and lasting quality to elevate your
     // Example: if you want to open a product in the details panel programmatically,
     // call openDetailsWithContent(leftHtml, rightHtml).
     // Example (not executed): openDetailsWithContent('<img src=\"...\">', '<h2>Title</h2><p>Desc</p>');
-  </script>
+  </script>  </script>
+    <footer class="shilpi-footer">
+    <div class="shilpi-container" style="max-width:1150px;margin:0 auto;">
+      <div class="footer-extra">
+        <p><strong>Didn’t find the exact furniture you had in mind? Simply share the reference image with us on WhatsApp — our team will guide you to the perfect match or customize it just for you.</strong></p>
+        <p><a href="https://wa.me/2347080535579" target="_blank">💬 Chat with us on WhatsApp</a></p>
+        <p>💫 Your dream home starts here with V’Best Luxury Interiors.</p>
+      </div>
+
+      <div class="about" style="margin-top:18px;">
+        <h2>V'best Luxury Interiors</h2>
+        <p class="tagline">We're the best</p>
+        <p class="about-text">Designed to elevate your home, our premium pieces combine comfort, durability, and style that speaks volumes.</p>
+
+        <div class="social-icons" aria-label="social">
+          <!-- Added WhatsApp, Facebook, YouTube (brand colored icons) -->
+          <a href="https://wa.me/2347080535579" target="_blank" rel="noopener noreferrer" title="WhatsApp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+          <a href="https://www.facebook.com/share/179pLbZtXk/" target="_blank" rel="noopener noreferrer" title="Facebook"><i class="fab fa-facebook"></i> Facebook</a>
+          <a href="https://youtube.com/@best-tm7bm?si=w23wMA5R7ii3gmfM" target="_blank" rel="noopener noreferrer" title="YouTube"><i class="fab fa-youtube"></i> YouTube</a>
+          <a href="https://x.com/V_Best_?s=09" target="_blank" rel="noopener noreferrer">𝕏 Twitter</a>
+          <a href="https://www.instagram.com/vbest_luxury_interiors?igsh=MWFxcmN4eTd6dndnNQ==" target="_blank" rel="noopener noreferrer">📸 Instagram</a>
+          <a href="https://www.tiktok.com/@vbestluxuryinterior?_t=ZS-90f23kWVIJh&_r=1" target="_blank" rel="noopener noreferrer">🎵 TikTok</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom" style="margin-top:18px;">
+        <div class="footer-col">
+          <h3>Categories</h3>
+          <ul>
+            <li>Living Room</li><li>Bedroom</li><li>Dining Room</li><li>Home Office</li><li>Kids & Baby</li><li>Outdoor & Patio</li><li>Storage & Organization</li><li>Accent & Decor</li>
+        
+        
+<p><p> bedroom door</p>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h3>Quick Links</h3>
+          <div class="accordion">
+            <button class="accordion-btn">About Us</button>
+            <div class="accordion-content"><p>We bring world-class premium items to elevate your lifestyle with modern and timeless designs.</p></div>
+
+            <button class="accordion-btn">Privacy Policy</button>
+            <div class="accordion-content"><p>Your privacy is our priority. We never share customer data with third parties.</p></div>
+
+            <button class="accordion-btn">Terms & Conditions</button>
+            <div class="accordion-content"><p>All purchases are subject to our company’s standard terms and conditions.</p></div>
+
+            <button class="accordion-btn">FAQ</button>
+            <div class="accordion-content"><p>Find answers to the most common questions about delivery, warranty, and payments.</p></div>
+
+            <button class="accordion-btn" data-action="backtotop">Back to Top</button>
+            <div class="accordion-content"><p><a href="#" class="shilpi-top-link">Go to top</a></p></div>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h3>Customer Service</h3>
+          <p>📞 2347080535579</p>
+          <p>✉️ <a href="mailto:best28763@gmail.com">contactus@vbest.com</a></p>
+          <p>📍 
+          <strong> visit our showroom:</strong>156 Olojo Drive, Ojo Alaba International Market, Lagos</p>
+          <p>🕑 24/7 Support</p>
+          <section style="text-align:center;padding:30px 15px;background:#fff;">
+  <h2 style="font-size:20px;font-weight:700;color:#111;margin-bottom:10px;">
+    V-Best Luxury Interiors
+  </h2>
+  <p style="color:#444;font-size:15px;margin-bottom:15px;">
+    Learn more about how to choose the best luxury furniture for your home and lifestyle:
+  </p>
+  <div style="display:flex;flex-direction:column;gap:8px;">
+    <a href="blog/bed-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;">Beds</a>
+    <a href="blog/chair-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;">Chairs</a>
+    <a href="blog/sofa-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;">Sofas</a>
+    <a href="blog/dining-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;">Dining</a>
+    <a href="blog/table-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;">Tables</a>
+        <a href="blog/office-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;">office furniture</a>
+              <a href="blog/outdoor-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;">Outdoors</a>  
+  </div>
+</section>
+          <iframe
+  src="https://www.google.com/maps/embed?pb=!1m0!3m2!1sen!2sng!4v0!cid=7368111619021559737"
+  width="100%" height="180"
+  style="border:0; border-radius:10px; margin-top:8px; margin-bottom:0;"
+  allowfullscreen
+  loading="lazy"
+  title="V-Best Luxury Interiors on Google Maps">
+</iframe>
+        </div>
+      </div>
+    </div>
+    </div>
+    
+  </footer>
+  <style>
+#vChatBtn{
+  position:fixed; left:10px;bottom:90px;
+  width:50px;height:50px;border-radius:50%;
+  background:#25D366;color:#fff;font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 18px rgba(0,0,0,.25);
+  cursor:pointer;z-index:10000;
+  animation:pulse 1.4s infinite;
+}
+@keyframes pulse{
+  0%,100%{transform:scale(1);opacity:1}
+  50%{transform:scale(1.15);opacity:.9}
+}
+#vChatOverlay{
+  position:fixed;inset:0;z-index:9999;
+  background:#fff;display:none;flex-direction:column;
+  font-family:Arial,Helvetica,sans-serif;
+}
+#vChatOverlay header{
+  background:#25D366;color:#fff;
+  padding:10px;font-size:10px;font-weight:700;
+  display:flex;justify-content:space-between;align-items:center;
+}
+#vChatOverlay header button{
+  background:none;border:none;color:#fff;
+  font-size:22px;cursor:pointer;
+}
+#vChatOverlay .body{
+  flex:1;padding:10px;overflow:auto;
+  display:flex;flex-direction:column;justify-content:center;
+  text-align:center;font-size:16px;color:#333;
+}
+#vChatOverlay textarea{
+  width:90%;max-width:500px;height:100px;
+  margin:0 auto 20px;border-radius:8px;
+  border:1px solid #ccc;padding:10px;resize:none;
+  font-size:15px;
+}
+#vChatOverlay .send{
+  background:#25D366;color:#fff;border:none;
+  padding:10px 20px;border-radius:8px;
+  font-size:16px;font-weight:700;cursor:pointer;
+}
+</style>
+
+<div id="vChatBtn" title="Chat with us">💬</div>
+
+<div id="vChatOverlay">
+  <header>
+    <span>Chat with VBest</span>
+    <button id="vClose">×</button>
+  </header>
+  <div class="body">
+    <textarea id="vMsg" placeholder="Hi! Tell us what you need (size, budget, color …)"></textarea>
+    <button class="send" id="vSend">Send on WhatsApp</button>
+  </div>
+</div>
+
+<script>
+const btn=document.getElementById('vChatBtn');
+const overlay=document.getElementById('vChatOverlay');
+const close=document.getElementById('vClose');
+const send=document.getElementById('vSend');
+const msg=document.getElementById('vMsg');
+const phone="2347080535579"; // your WhatsApp number
+
+btn.onclick=()=>overlay.style.display="flex";
+close.onclick=()=>overlay.style.display="none";
+send.onclick=()=>{
+  const text=msg.value.trim();
+  if(!text){alert("Please type a message.");return;}
+  const url="https://wa.me/"+phone+"?text="+encodeURIComponent(text);
+  window.open(url,"_blank");
+  msg.value="";
+  overlay.style.display="none";
+};
+</script>
 </body>
 </html>
