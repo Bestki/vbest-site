@@ -552,6 +552,11 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   <!-- Shop Now Button Overlay -->
 
 </div>
+<section class="search-bar">
+  <input type="text" id="searchInput" placeholder="🔎 Search for what you want...">
+</section>
+
+<section id="searchResults"></section>
 
 <style>
 .header-video-container {
@@ -607,13 +612,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   </header>
   
 
-  <!-- ===== Search bar ===== -->
-  <section class="search-bar">
-    <input type="text" id="searchInput" placeholder="🔎 Search for what you want...">
-  </section>
 
-  <!-- ===== Search results placeholder ===== -->
-  <section id="searchResults"></section>
 
   <!-- ===== Categories (always 2 columns) ===== -->
 
@@ -1251,117 +1250,6 @@ const useData = data.filter(item => {
     
   </footer>
   <!-- ================= Original search script (kept behavior) ================= -->
-  <script>
-    const searchInput = document.getElementById("searchInput");
-    const categoryList = document.getElementById("categoryList").getElementsByClassName("category-box");
-    const searchResults = document.getElementById("searchResults");
-    let fetchTimeout = null;
-
-    function normalizeKey(k){ return String(k || '').toLowerCase().replace(/[\s_\-\.]/g,''); }
-
-    function findField(item, candidates){
-      for (const key in item) {
-        if (candidates.includes(normalizeKey(key))) return item[key];
-      }
-      return "";
-    }
-
-    function filterCategories(query) {
-      let found = false;
-      for (let i = 0; i < categoryList.length; i++) {
-        const box = categoryList[i];
-        const text = box.innerText.toLowerCase();
-        if (text.includes(query)) {
-          box.style.display = "";
-          found = true;
-        } else {
-          box.style.display = "none";
-        }
-      }
-      return found;
-    }
-
-    async function fetchFromSheet(query) {
-      try {
-        const sheetUrl = "https://opensheet.elk.sh/1FA4s21Je3ebeFXUXGu_xvqdo4gbM1v9Q9jOHt6LAH6Y/Sheet1";
-        const res = await fetch(sheetUrl);
-        const data = await res.json();
-
-        const lowerQuery = query.toLowerCase();
-        const results = data.filter(item => Object.values(item).some(v => v && v.toString().toLowerCase().includes(lowerQuery)));
-
-        searchResults.innerHTML = "";
-        if (results.length === 0) {
-          const p = document.createElement('p');
-          p.style.color = "#25d366";
-          p.textContent = "❌ No matches found in catalog.";
-          searchResults.appendChild(p);
-          return;
-        }
-
-        results.forEach(item => {
-          const name = findField(item, ['productname','product','name']) || item['Product Name'] || item['Product'] || item['product name'] || "";
-          const category = findField(item, ['category']) || item['Category'] || "";
-          const price = findField(item, ['price','cost']) || item['Price'] || "";
-          const region = findField(item, ['region','origin']) || item['region'] || "";
-          const image = findField(item, ['imagelink','image','imageurl','image_link']) || item['Image Link'] || item['Image'] || "";
-          const whatsapp = findField(item, ['whatsapplink','whatsapp','wa']) || item['WhatsApp Link'] || item['WhatsApp'] || "";
-
-          const div = document.createElement('div');
-          div.className = 'result';
-
-          let imgHtml = "";
-          if (image && image.trim() !== "") {
-            imgHtml = `<img src="${image}" alt="${name}">`;
-          }
-
-          let waHref = "";
-          if (whatsapp && whatsapp.trim() !== "") {
-            waHref = whatsapp;
-            if (!waHref.startsWith('http')) {
-              const num = waHref.replace(/\D/g,'');
-              waHref = `https://wa.me/${num}?text=${encodeURIComponent('Hello, I\\'m interested in ' + (name || 'this product'))}`;
-            }
-          } else {
-            waHref = `https://wa.me/2347080535579?text=${encodeURIComponent('Hello, I\\'m interested in ' + (name || 'this product'))}`;
-          }
-
-          div.innerHTML = `
-            ${imgHtml}
-            <div class="meta">
-              <strong>${name || 'Unnamed product'}</strong>
-              ${category ? `🛋 <b>Category:</b> ${category}<br>` : ''}
-              ${price ? `💵 <b>Price:</b> ${price}<br>` : ''}
-              ${region ? `🌍 <b>Region:</b> ${region}<br>` : ''}
-              <a class="wa" href="${waHref}" target="_blank">💬 Inquiry on WhatsApp</a>
-            </div>
-          `;
-          searchResults.appendChild(div);
-        });
-      } catch (err) {
-        console.error("Error fetching sheet:", err);
-        searchResults.innerHTML = `<p style="color:#ffcc00">Error reading catalog — check sheet publish settings.</p>`;
-      }
-    }
-
-    if (searchInput) {
-      searchInput.addEventListener("input", function() {
-        const queryRaw = searchInput.value || "";
-        const query = queryRaw.trim().toLowerCase();
-        searchResults.innerHTML = "";
-
-        if (query.length === 0) {
-          for (let i = 0; i < categoryList.length; i++) categoryList[i].style.display = "";
-          return;
-        }
-
-        filterCategories(query);
-
-        if (fetchTimeout) clearTimeout(fetchTimeout);
-        fetchTimeout = setTimeout(() => { fetchFromSheet(query); }, 300);
-      });
-    }
-  </script>
 
 
   <script type="module">
@@ -1927,5 +1815,364 @@ send.onclick=()=>{
 };
 </script>
 <!-- END FULL-SCREEN WHATSAPP CHAT OVERLAY -->
+<!-- === SEARCH: show main category + matching sub-pages + products (paste before </body>) === -->
+<style id="liveSearchStyles">
+/* EXACT styles you provided — do not change */
+#searchResults { max-width: 980px; margin: 12px auto 36px; padding: 0 12px; box-sizing: border-box; }
+#searchPages { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:10px; }
+.search-page-link {
+  display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:8px;
+  background:linear-gradient(90deg, rgba(255,153,0,0.12), rgba(0,0,0,0.02));
+  color:var(--brand-blue,#146eb4); font-weight:800; text-decoration:none; border:1px solid rgba(0,0,0,0.04);
+}
+.search-page-link:hover{ transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,0.06); }
+#searchProductsGrid { display:grid; grid-template-columns:repeat(1,1fr); gap:12px; }
+@media (min-width:720px){ #searchProductsGrid { grid-template-columns:repeat(2,1fr); } }
+@media (min-width:1060px){ #searchProductsGrid { grid-template-columns:repeat(3,1fr); } }
+.sr-card { background:var(--panel,#f9f9f9); border-radius:10px; padding:10px; display:flex; gap:10px; align-items:flex-start; border:1px solid var(--card-border,#e9e9e9); }
+.sr-thumb { width:120px; height:90px; flex:0 0 120px; border-radius:6px; overflow:hidden; background:#fff; display:block; }
+.sr-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+.sr-meta { flex:1; min-width:0; text-align:left; }
+.sr-name { font-weight:800; font-size:15px; margin:0 0 6px; color:var(--text,#111); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; cursor:pointer; }
+.sr-price-wrap { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:8px; }
+.sr-old { text-decoration:line-through; color:#b12704; font-weight:800; font-size:13px; }
+.sr-price { color:#27ae60; font-weight:900; font-size:15px; }
+.sr-actions { display:flex; gap:8px; margin-top:6px; }
+.sr-btn { padding:8px 10px; border-radius:8px; font-weight:800; text-decoration:none; border:0; cursor:pointer; display:inline-flex; align-items:center; gap:8px; }
+.sr-inquiry { background:#25D366; color:#fff; }
+.sr-add { background:var(--accent,#ff9900); color:#fff; }
+#searchNoResults { text-align:center; color:var(--muted,#666); padding:12px 6px; }
+.sr-highlight { background:linear-gradient(90deg, rgba(255,153,0,0.12), rgba(255,153,0,0.04)); padding:0 4px; border-radius:4px; }
+.sr-count { color:var(--muted,#666); font-size:13px; margin-bottom:8px; display:block; }
+</style>
+
+<script>
+(function(){
+  // CONFIG: Google Sheet + site-index.json
+  const SHEET_URL = "https://opensheet.elk.sh/1FA4s21Je3ebeFXUXGu_xvqdo4gbM1v9Q9jOHt6LAH6Y/Sheet1";
+  const INDEX_URL = "site-index.json"; // your JSON you provided
+  const MAX_RESULTS = 100;
+  const DEFAULT_WA = "https://wa.me/2347080535579";
+
+  // MAIN CATEGORY PAGES mapping — ensure these filenames exist on your site
+  // add or edit if you use different category page filenames
+  const CATEGORY_PAGES = {
+    chair: "chair.html",
+    chairs: "chair.html",
+    sofa: "sofa.html",
+    sofas: "sofa.html",
+    bed: "bed.html",
+    beds: "bed.html",
+    dining: "dining.html",
+    table: "centertable.html",
+    tables: "centertable.html",
+    office: "office.html",
+    outdoor: "outdoor.html",
+    game: "game.html",
+    all: "all.html"
+  };
+
+  // DOM refs
+  const input = document.getElementById('searchInput');
+  const resultsEl = document.getElementById('searchResults');
+  if(!input || !resultsEl) return;
+
+  // state
+  let sheetData = [];
+  let pageIndex = [];
+  let loaded = false;
+  window.fsProducts = window.fsProducts || [];
+  const idxMap = {}; // ProductName||Image -> idx
+
+  // helpers
+  const norm = s => String(s||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').trim();
+  const esc = s => String(s||'');
+  const safeImg = u => (u && String(u).trim()) ? u : 'https://i.postimg.cc/yxGGYGDw/Ag-ACkq-HWp-Pyzt-HZ89-Sp-Vx-Y.jpg';
+  function reEscape(s){ return String(s||'').replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+  function highlight(text, tokens){
+    if(!tokens || !tokens.length) return esc(text);
+    let out = esc(text);
+    tokens.forEach(t => {
+      if(!t) return;
+      out = out.replace(new RegExp('(' + reEscape(t) + ')','ig'), '<span class="sr-highlight">$1</span>');
+    });
+    return out;
+  }
+
+  // load sheet + index
+  async function loadData(){
+    if(loaded) return; loaded = true;
+    try{
+      const [sRes, pRes] = await Promise.all([fetch(SHEET_URL), fetch(INDEX_URL)]);
+      const sJson = await sRes.json();
+      const pJson = await pRes.json();
+      sheetData = Array.isArray(sJson) ? sJson : [];
+      pageIndex = Array.isArray(pJson) ? pJson : [];
+
+      // normalize and append sheet rows into window.fsProducts (avoid duplicates)
+      sheetData.forEach((r) => {
+        const row = {
+          Category: r.Category || r.category || '',
+          ProductName: r.ProductName || r.product || '',
+          Description: r.Description || r.description || '',
+          DiscountPrice: r.DiscountPrice || r['DiscountPrice '] || r.discountprice || '',
+          Price: r.Price || r.price || '',
+          ImageLink: r.ImageLink || r.image || r.imageurl || '',
+          Region: r.Region || r.region || '',
+          Views: r.Views || r.views || 0,
+          Tag: r.Tag || r.tag || ''
+        };
+        const key = (row.ProductName||'') + '||' + (row.ImageLink||'');
+        if(idxMap[key] !== undefined) return;
+        const idx = window.fsProducts.length;
+        window.fsProducts.push(row);
+        idxMap[key] = idx;
+      });
+    }catch(err){
+      console.error('loadData error', err);
+      sheetData = [];
+      pageIndex = [];
+    }
+  }
+
+  // tokens from query
+  function queryTokens(q){
+    return (q||'').toLowerCase().split(/\s+/).map(t => t.trim()).filter(Boolean);
+  }
+
+  // tokenMatchesField: true if token contains field or field contains token or any word-substring match
+  function tokenMatchesField(token, field){
+    if(!field) return false;
+    const f = norm(field);
+    const t = norm(token);
+    if(!t) return false;
+    if(f.includes(t) || t.includes(f)) return true;
+    const words = f.split(/[^a-z0-9]+/).filter(Boolean);
+    for(const w of words){
+      if(w && (w.includes(t) || t.includes(w))) return true;
+    }
+    return false;
+  }
+
+  // Score row according to priority: Category (100) > ProductName (60) > Region (30) > Description (10)
+  function scoreRow(row, tokens){
+    let score = 0;
+    for(const tok of tokens){
+      if(!tok) continue;
+      if(tokenMatchesField(tok, row.Category)) { score += 100; continue; }
+      if(tokenMatchesField(tok, row.ProductName)) { score += 60; continue; }
+      if(tokenMatchesField(tok, row.Region)) { score += 30; continue; }
+      if(tokenMatchesField(tok, row.Description)) { score += 10; continue; }
+    }
+    // small views boost
+    const v = parseInt(String(row.Views||0).replace(/\D/g,''),10) || 0;
+    score += Math.min(50, Math.floor(v/10));
+    return score;
+  }
+
+  // detect main category page (chair.html etc) from tokens using CATEGORY_PAGES map
+  function detectMainCategoryPage(tokens){
+    for(const tok of tokens){
+      if(!tok) continue;
+      const t = tok.toLowerCase().replace(/[^a-z0-9]/g,'');
+      if(CATEGORY_PAGES[t]) return { link: CATEGORY_PAGES[t], title: t.charAt(0).toUpperCase() + t.slice(1) };
+    }
+    return null;
+  }
+
+  // detect matching sub-pages from pageIndex (title/tags/description)
+  function detectSubPages(tokens){
+    const matches = [];
+    for(const p of pageIndex){
+      for(const tok of tokens){
+        if(!tok) continue;
+        if(tokenMatchesField(tok, p.title) || tokenMatchesField(tok, p.description) || (p.tags||[]).some(tag => tokenMatchesField(tok, tag))){
+          matches.push(p);
+          break;
+        }
+      }
+    }
+    return matches;
+  }
+
+  // find product matches from sheet and return scored sorted list
+  function findProductMatches(tokens){
+    const scored = [];
+    for(const r of sheetData){
+      const s = scoreRow(r, tokens);
+      if(s > 0) scored.push({row:r, score:s});
+    }
+    scored.sort((a,b) => {
+      if(b.score !== a.score) return b.score - a.score;
+      const av = parseInt(String(a.row.Views||0).replace(/\D/g,''),10) || 0;
+      const bv = parseInt(String(b.row.Views||0).replace(/\D/g,''),10) || 0;
+      return bv - av;
+    });
+    return scored.slice(0, MAX_RESULTS);
+  }
+
+  // render final results: main category page first (if any), then sub-pages, then products
+  function render(query){
+    const tokens = queryTokens(query);
+    resultsEl.innerHTML = '';
+    if(!tokens.length) return;
+
+    const mainPage = detectMainCategoryPage(tokens);      // e.g., {link:'chair.html', title:'Chair'}
+    const subPages = detectSubPages(tokens);              // from site-index.json (e.g., Accent Chairs)
+    const products = findProductMatches(tokens);          // sheet results (scored)
+
+    let html = '';
+
+    // main category CTA first (if exists) — ensure not duplicate with subPages
+    if(mainPage){
+      html += `<div id="searchPages" aria-label="Pages matching search">
+        <a class="search-page-link" href="${esc(mainPage.link)}">View all ${esc(mainPage.title)}</a>
+      </div>`;
+    }
+
+    // sub-pages (if any) — show them below main CTA (avoid duplicate main page link)
+    if(subPages && subPages.length){
+      // ensure we still have the banner container (append)
+      if(!mainPage) html += `<div id="searchPages" aria-label="Pages matching search">`;
+      html += subPages.map(p => {
+        // include thumbnail if present
+        const thumb = p.image ? `<img src="${esc(p.image)}" style="width:30px;height:30px;border-radius:4px"> ` : '';
+        return `<a class="search-page-link" href="${esc(p.link)}">${thumb}${highlight(p.title || p.link, tokens)}</a>`;
+      }).join('');
+      if(!mainPage) html += `</div>`;
+    }
+
+    // products
+    if(products.length === 0){
+      html += `<div id="searchNoResults">No matching products. Try fewer words or check pages above.</div>`;
+    } else {
+      html += `<div class="sr-count">Showing ${products.length} result(s)</div><div id="searchProductsGrid">` +
+        products.map(item => {
+          const p = item.row;
+          const key = (p.ProductName||'') + '||' + (p.ImageLink||'');
+          let idx = idxMap[key];
+          if(idx === undefined){
+            idx = window.fsProducts.length;
+            window.fsProducts.push(p);
+            idxMap[key] = idx;
+          }
+          const nameEsc = esc(p.ProductName || 'Unnamed');
+          const price = esc(p.DiscountPrice || p.Price || '');
+          const old = esc(p.Price || '');
+          const img = safeImg(p.ImageLink || '');
+          const waLink = DEFAULT_WA + '?text=' + encodeURIComponent('Hello, I am interested in ' + (p.ProductName||''));
+          return `
+            <div class="sr-card" data-idx="${idx}">
+              <a class="sr-thumb" href="javascript:void(0)" data-idx="${idx}" aria-label="Open ${nameEsc}"><img src="${esc(img)}" alt="${nameEsc}" loading="lazy"></a>
+              <div class="sr-meta">
+                <div class="sr-name" data-idx="${idx}" role="button">${ highlight(nameEsc, tokens) }</div>
+                <div class="sr-price-wrap">
+                  ${ old ? `<div class="sr-old">${old}</div>` : '' }
+                  <div class="sr-price">${ price || old || '' }</div>
+                </div>
+                <div class="sr-actions">
+                  <a class="sr-btn sr-inquiry" href="${waLink}" target="_blank" rel="noopener">📩 Inquiry</a>
+                  <button class="sr-btn sr-add" data-idx="${idx}">🛒 Add to Cart</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('') + `</div>`;
+    }
+
+    resultsEl.innerHTML = html;
+
+    // interactions
+    resultsEl.querySelectorAll('.sr-thumb, .sr-name').forEach(el => {
+      el.addEventListener('click', function(){
+        const idx = parseInt(this.getAttribute('data-idx'), 10);
+        if(!isNaN(idx) && typeof window.fsOpenDetails === 'function'){
+          try{ window.fsOpenDetails(idx); } catch(e){ console.error('fsOpenDetails', e); }
+        }
+      }, { passive:true });
+    });
+    resultsEl.querySelectorAll('.sr-add').forEach(btn => {
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        const idx = parseInt(this.getAttribute('data-idx'), 10);
+        const p = window.fsProducts && window.fsProducts[idx];
+        if(!p){ alert('Product data not available'); return; }
+        try{
+          if(typeof window.fsAddToCart === 'function'){
+            window.fsAddToCart(p.ProductName || '', p.DiscountPrice || p.Price || '', p.ImageLink || '');
+          } else {
+            const cart = JSON.parse(localStorage.getItem('cart')||'[]');
+            cart.push({ name: p.ProductName || '', price: p.DiscountPrice || p.Price || '', image: p.ImageLink || '', qty:1 });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert('Added to cart (local)');
+          }
+        }catch(err){ console.error('AddToCart error', err); alert('Error adding to cart'); }
+      }, { passive:false });
+    });
+  }
+
+  // input wiring: debounce + load data
+  let dTimer = null;
+  input.addEventListener('input', function(){
+    const v = input.value || '';
+    if(!loaded) loadData().then(()=> { clearTimeout(dTimer); dTimer = setTimeout(()=> render(v), 160); });
+    clearTimeout(dTimer);
+    dTimer = setTimeout(()=> render(v), 160);
+  });
+
+  input.addEventListener('focus', function(){ if(!loaded) loadData(); if(input.value) render(input.value); });
+  input.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ input.value=''; resultsEl.innerHTML=''; input.blur(); } });
+
+})();
+</script>
+
+
+<div id="loader" style="
+  position:fixed;inset:0;z-index:9999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:white;font-family:system-ui,sans-serif;
+  color:#5b21b6;font-weight:600;font-size:18px;
+  transition:opacity .8s ease;">
+  <div id="loaderText" style="animation:zoom 2s ease-in-out infinite;">
+    Please wait<span id="dots">...</span>
+  </div>
+  <div id="loaderMsg" style="margin-top:8px;font-size:14px;color:#6b7280;animation:zoom 3s ease-in-out infinite;">
+    Loading your furniture experience ✨
+  </div>
+</div>
+
+<style>
+body{opacity:1;transition:opacity 1s ease;} /* visible by default */
+@keyframes blink{0%,100%{opacity:.2;}50%{opacity:1;}}
+#dots{display:inline-block;animation:blink 1.2s infinite;}
+@keyframes zoom{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+</style>
+
+<script>
+(function(){
+  const loader=document.getElementById('loader');
+  const msg=document.getElementById('loaderMsg');
+
+  // Skip loader if returning via back/forward navigation
+  if (performance.getEntriesByType("navigation")[0].type === "back_forward") {
+    loader.remove();
+    return;
+  }
+
+  const lines=[
+    "Polishing visuals ✨",
+    "Arranging comfy chairs 🪑",
+    "Almost ready 💫"
+  ];
+  let i=0;
+  const rot=setInterval(()=>{i=(i+1)%lines.length;msg.textContent=lines[i];},1000);
+  setTimeout(()=>{
+    clearInterval(rot);
+    loader.style.opacity='0';
+    setTimeout(()=>{loader.remove();},800);
+  },3000); // loader visible 10 s
+})();
+</script>
 </body>
+
 </html>

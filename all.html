@@ -282,15 +282,27 @@
   }
 
   /* bottom nav (theme + cart) */
-  .bottom-nav{
-    position:fixed; left:0; right:0; bottom:0; z-index:99998; height:64px;
-    display:flex; justify-content:flex-end; align-items:center; gap:12px;
-    padding:8px 12px; background:var(--panel); border-top:1px solid rgba(0,0,0,0.06);
-    box-shadow:0 -6px 18px rgba(0,0,0,0.08);
-  }
-  .bottom-nav button, .bottom-nav a{ background:transparent; border:0; font-size:16px; color:var(--brand-blue); font-weight:800; text-decoration:none; cursor:pointer; display:flex; align-items:center; gap:8px; }
-  .cart-badge{ background:#ff3b30; color:#fff; border-radius:50%; padding:3px 8px; font-size:12px; margin-left:6px; display:inline-block; }
-
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;  /* space-around or center also works */
+  align-items: center;
+  padding: 10px 25px;
+  background: var(--card, #fff);
+  border-top: 1px solid var(--card-border, #ddd);
+  z-index: 9999;
+}
+.bottom-nav a, .bottom-nav button {
+  background: none;
+  border: none;
+  font-weight: 700;
+  color: var(--text, #111);
+  font-size: 14px;
+  text-decoration: none;
+}
   /* Trusted line under header video */
   .trusted-line{
     max-width:1100px; margin:14px auto 8px; display:flex; gap:10px; align-items:center; justify-content:center; color:var(--muted);

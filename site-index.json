@@ -1,0 +1,58 @@
+[
+  {
+    "title": "Accent Chairs",
+    "description": "Stylish accent chairs to lift any room.",
+    "image": "https://i.postimg.cc/bJbrPcWD/Modern-Upholstered-Faux-Leather-Tufted-Armchair-Linen-Accent-Chairs.jpg",
+    "link": "chair-accent.html",
+    "tags": ["accent","chair","chairs","furniture"]
+  },
+  {
+    "title": "Recliner Chairs",
+    "description": "Comfort-first recliners for lounging.",
+    "image": "https://i.postimg.cc/Wbfv5YYQ/71u-AIkar-Rm-S-AC-SL1500-1024x1024-2x.jpg",
+    "link": "chair-recliner.html",
+    "tags": ["recliner","chair"]
+  },
+  {
+    "title": "Turkey Sofa",
+    "description": "Elegant European designs with premium upholstery.",
+    "image": "https://i.postimg.cc/7h7tPZ2M/arnica-sofa-florence-collection.jpg",
+    "link": "highturkey-sofa.html",
+    "tags": ["sofa","turkey","couch"]
+  },
+  {
+    "title": "Egypt Sofa",
+    "description": "Classic luxurious set — ideal for large living rooms.",
+    "image": "https://i.postimg.cc/3x2mxDNc/royal-sofa-set-with-table-1040x.jpg",
+    "link": "egypt-sofa.html",
+    "tags": ["sofa","egypt"]
+  },
+  {
+    "title": "Dining Sets",
+    "description": "Elegant and comfortable dining options.",
+    "image": "https://i.postimg.cc/NjfWJjzv/20241023-144516.avif",
+    "link": "dining.html",
+    "tags": ["dining","table","chairs"]
+  },
+  {
+    "title": "Office Furniture",
+    "description": "Professional desks and ergonomic office chairs.",
+    "image": "https://i.postimg.cc/0N6vQK5R/office.jpg",
+    "link": "office.html",
+    "tags": ["office","desk","chair","work"]
+  },
+  {
+    "title": "Outdoor Furniture",
+    "description": "Durable and stylish outdoor pieces.",
+    "image": "https://i.postimg.cc/tgGCzmY9/Seatorium-Auditorium-Seating-Reference-Projects-Auditorium-Seats-Manufacturer-4.jpg",
+    "link": "outdoor.html",
+    "tags": ["outdoor","patio","garden"]
+  },
+  {
+    "title": "All Products",
+    "description": "Explore our complete furniture collection.",
+    "image": "https://i.postimg.cc/yxGGYGDw/Ag-ACkq-HWp-Pyzt-HZ89-Sp-Vx-Y.jpg",
+    "link": "all.html",
+    "tags": ["all","products","furniture"]
+  }
+]

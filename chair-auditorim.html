@@ -71,7 +71,44 @@
     .product-card{background:var(--card);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;min-height:320px;text-align:left;box-shadow:0 2px 10px rgba(0,0,0,0.04);}    
     .thumb{width:100%;height:180px;background:#222;overflow:hidden;display:block;cursor:pointer;}
     .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.thumb { position: relative; display: inline-block; }
 
+.badge {
+  position: absolute;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  white-space: nowrap;
+  animation: zoomInOut 2s infinite alternate;
+}
+
+/* Stack badges vertically with a small gap */
+.save-badge {
+  top: 8px;
+  left: 8px;
+  background: #fff;
+  color: #7b3aed;
+  margin-bottom: 4px;
+}
+
+.negotiable-badge {
+  top: 8px;
+  right: 8px;
+  background: #7b3aed;
+  color: #fff;
+}
+
+/* If both exist, adjust top of the second badge */
+.thumb .save-badge + .negotiable-badge {
+  top: 36px; /* pushes down so no overlap */
+}
+
+@keyframes zoomInOut {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
     .product-body{padding:12px;display:flex;flex-direction:column;flex:1;}
     .product-body h3{margin:0 0 6px;font-size:15px;color:var(--text);}
     .meta-small{font-size:13px;color:#6b7280;margin-bottom:6px;}
@@ -296,34 +333,46 @@
         const inquiryHref = 'https://wa.me/2347080535579?text=' + encodeURIComponent(`Hello, I'm interested in ${p.name} priced at ${ p.hasDiscount ? p.discountStr : p.priceStr }.`);
         const addDisabled = p.hasImage ? '' : 'disabled';
         const imageArg = p.hasImage ? escJS(p.firstImage) : '';
-        const imgHtml = p.hasImage
-          ? `<span class="thumb" onclick="openDetails(${idx})" role="button" aria-label="Open ${escapeHtml(p.name)}"><img src="${escapeHtml(p.firstImage)}" alt="${escapeHtml(p.name)}"></span>`
-          : `<span class="thumb" onclick="openDetails(${idx})" role="button" aria-label="Open ${escapeHtml(p.name)}"><div style="width:100%;height:180px;display:flex;align-items:center;justify-content:center;background:#fff;color:#ff3b30;font-weight:800;font-size:10px;border-radius:6px;">Currently out of stock — please check back soon!</div></span>`;
+const badgeStackHtml = `
+  <div class="badge-left">
+    ${p.hasDiscount && p.saveNum > 0 ? `<div class="badge save-badge">Save ${formatNaira(p.saveNum)}</div>` : ''}
+  </div>
+  <div class="badge-right">
+    ${p.negotiable ? `<div class="badge negotiable-badge">Negotiable</div>` : ''}
+  </div>
+`;
 
-        const priceHtml = p.hasDiscount ? `<div class="old-price">${escapeHtml(p.priceStr)}</div><div class="price">${escapeHtml(p.discountStr)}</div>` : `<div class="price">${escapeHtml(p.priceStr)}</div>`;
-        const saveHtml = (p.hasDiscount && !isNaN(p.saveNum) && p.saveNum>0) ? `<div class="save-amount">Save ${formatNaira(p.saveNum)}</div>` : '';
+const imgHtml = p.hasImage
+  ? `<span class="thumb" onclick="openDetails(${idx})" role="button" aria-label="Open ${escapeHtml(p.name)}">
+       <img src="${escapeHtml(p.firstImage)}" alt="${escapeHtml(p.name)}">
+       ${badgeStackHtml}
+     </span>`
+  : `<span class="thumb" onclick="openDetails(${idx})" role="button" aria-label="Open ${escapeHtml(p.name)}">
+       <div style="width:100%;height:180px;display:flex;align-items:center;justify-content:center;background:#fff;color:#ff3b30;font-weight:800;font-size:10px;">Currently out of stock — please check back soon!</div>
+       ${badgeStackHtml}
+     </span>`;
 
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.setAttribute('role','article');
-        card.innerHTML = `
-          ${imgHtml}
-          <div class="product-body">
-            <a style="text-decoration:none;color:inherit;" onclick="openDetails(${idx})"><h3>${escapeHtml(p.name)}</h3></a>
-            <div class="meta-small">Category: ${escapeHtml(p.category || 'Auditorium')}</div>
-            <div class="price-row">${priceHtml}${saveHtml}</div>
-            <div class="discount-timer" data-product-index="${idx}"></div>
-            <div class="stars">${escapeHtml(p.stars)}</div>
-            ${(p.negotiable && ['yes','y','true','1','negotiable'].includes(String(p.negotiable).trim().toLowerCase())) ? '<div style="color:var(--green);font-weight:600;">Negotiable</div>' : ''}
-            <div class="btn-row">
-              <a class="inquiry-btn" href="${escapeHtml(inquiryHref)}" target="_blank" rel="noopener noreferrer">📩 Inquiry</a>
-              <button class="buy-btn" ${addDisabled} onclick="addToCart('${escJS(p.name)}','${escJS(p.hasDiscount?p.discountStr:p.priceStr)}','${imageArg}')">🛒 Add to Cart</button>
-            </div>
-          </div>`;
-        container.appendChild(card);
+const priceHtml = p.hasDiscount ? `<div class="old-price">${escapeHtml(p.priceStr)}</div><div class="price">${escapeHtml(p.discountStr)}</div>` : `<div class="price">${escapeHtml(p.priceStr)}</div>`;
+
+const card = document.createElement('div');
+card.className = 'product-card';
+card.setAttribute('role','article');
+card.innerHTML = `
+  ${imgHtml}
+  <div class="product-body">
+    <a style="text-decoration:none;color:inherit;" onclick="openDetails(${idx})"><h3>${escapeHtml(p.name)}</h3></a>
+    <div class="meta-small">Category: ${escapeHtml(p.category || 'Executive')}</div>
+    <div class="price-row">${priceHtml}</div>
+    <div class="discount-timer" data-product-index="${idx}"></div>
+    <div class="stars">${escapeHtml(p.stars)}</div>
+    <div class="btn-row">
+      <a class="inquiry-btn" href="${escapeHtml(inquiryHref)}" target="_blank" rel="noopener noreferrer">📩 Inquiry</a>
+      <button class="buy-btn" ${addDisabled} onclick="addToCart('${escJS(p.name)}','${escJS(p.hasDiscount?p.discountStr:p.priceStr)}','${imageArg}')">🛒 Add to Cart</button>
+    </div>
+  </div>`;
+container.appendChild(card);
       });
     }
-
     /* Cart */
     function addToCart(name, price, image){
       try{
@@ -517,5 +566,61 @@
 
     /* sync cart across tabs */
     window.addEventListener('storage', (e)=> { if (e.key === 'cart') updateCartCount(); });
-  </script></body>
+  </script>
+
+
+<div id="loader" style="
+  position:fixed;inset:0;z-index:9999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:white;font-family:system-ui,sans-serif;
+  color:#5b21b6;font-weight:600;font-size:18px;
+  transition:opacity .8s ease;">
+  <div id="loaderText" style="animation:zoom 2s ease-in-out infinite;">
+    Please wait<span id="dots">...</span>
+  </div>
+  <div id="loaderMsg" style="margin-top:8px;font-size:14px;color:#6b7280;animation:zoom 3s ease-in-out infinite;">
+    Preparing your cozy chairs 🪑
+  </div>
+</div>
+
+<style>
+body{opacity:1;transition:opacity 1s ease;} /* visible by default */
+@keyframes blink{0%,100%{opacity:.2;}50%{opacity:1;}}
+#dots{display:inline-block;animation:blink 1.2s infinite;}
+@keyframes zoom{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+</style>
+
+<script>
+(function(){
+  const loader=document.getElementById('loader');
+  const msg=document.getElementById('loaderMsg');
+
+  // ✅ Only show loader once per session
+  if(sessionStorage.getItem('loaderShown')){
+    loader.remove();
+    return;
+  }
+
+  const lines=[
+    "Polishing visuals ✨",
+    "Arranging comfy chairs 🪑",
+    "Almost ready 💫"
+  ];
+  let i=0;
+  const rot=setInterval(()=>{
+    i=(i+1)%lines.length;
+    msg.textContent=lines[i];
+  },1000); // text rotates every 1 second
+
+  setTimeout(()=>{
+    clearInterval(rot);
+    loader.style.opacity='0';
+    setTimeout(()=>{loader.remove();},800);
+
+    // mark loader as shown for this session
+    sessionStorage.setItem('loaderShown','true');
+  },3000); // loader visible 3 seconds
+})();
+</script>
+  </body>
 </html>
