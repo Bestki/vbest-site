@@ -108,29 +108,73 @@
   }
 
   /* ================= Reviews (light theme) ================= */
-  .vbest-highrev { margin-top: 8px; padding: 12px; background: var(--bg); color: var(--text); box-sizing:border-box; }
+/* Outer container — keep structure, no background */
+.vbest-highrev { 
+    margin-top: 8px; 
+    padding: 12px; 
+    /* background: var(--bg); */  /* header stays normal */
+    color: var(--text); 
+    box-sizing: border-box; 
+}
 
-  .vbest-highlights {
+/* Highlights section — keep white/transparent background */
+.vbest-highlights {
     display: flex;
     justify-content: space-between;
     align-items: center;
     max-width: 1160px;
-    margin: 6px auto 14px;
+    margin: 10px auto;
     width: 100%;
-  }
 
-  .vbest-hi {
+    background: white;           /* keep white background */
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* subtle shadow for depth */
+    color: var(--text);          /* text color stays default */
+    gap: 20px;
+}
+
+/* Individual highlight boxes */
+.vbest-hi {
     flex: 1;
     min-width: 0;
     text-align: center;
-    padding: 6px;
+    padding: 12px;
     box-sizing: border-box;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .vbest-icon { width:44px; height:44px; border-radius:10px; background:rgba(0,0,0,0.03); display:flex; align-items:center; justify-content:center; font-size:22px; color:var(--brand-blue); flex:0 0 auto; }
-  .vbest-hi-text { font-weight:700; font-size:14px; color:var(--text); white-space:normal; overflow-wrap:break-word; }
+    white-space: normal;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: transparent;      /* keep boxes transparent/white */
+    border-radius: 8px;
+}
+
+/* Icon styling — now orange background */
+.vbest-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: #FF9900;          /* bright orange behind icon */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: white;                 /* icon color white for contrast */
+    margin-bottom: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* subtle shadow */
+}
+
+/* Text styling */
+.vbest-hi-text {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text);           /* text matches header/default color */
+    overflow-wrap: break-word;
+    text-align: center;
+}
 
   /* Reviews layout - made readable on white */
   .vbest-reviews {
@@ -715,10 +759,125 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 .see-all button:hover {
   background-color: #1eb85c;
 }
+/* Base layout for category tile (image/video + label) */
+.category-box {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  background: var(--panel);
+  border-radius: 6px;
+  padding: 5px;
+  border: 1px solid var(--card-border);
+}
+
+/* Visual press feedback */
+.category-box:active {
+  transform: scale(0.97);
+  box-shadow: 0 0 8px rgba(0,0,0,0.3);
+}
+
+/* Unified image / video tile sizing and styles */
+.category-box .cat-video,
+.category-box img,
+.category-box img.cat-fallback {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+  border-radius: 6px;
+  background: #000;
+}
+
+/* Optional small visual label directly under image */
+.category-box .cat-label {
+  display: block;
+  padding: 6px 8px;
+  font-weight: 700;
+  color: var(--text, #111);
+  margin-top: 6px;
+  background: #fff;
+  border-radius: 0 0 6px 6px;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* Small orange discount badge */
+.category-box .discount-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 6;
+  background: linear-gradient(180deg,#ff9900,#e68a00);
+  color: #fff;
+  padding: 6px 9px;
+  font-size: 13px;
+  font-weight: 800;
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(230,138,0,0.18);
+  pointer-events: none;
+  opacity: .96;
+}
+
+/* Grid wrapper */
+.categories {
+  margin: 20px auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  max-width: 900px;
+  padding: 0;
+}
+
+/* Mobile tweak */
+@media (max-width:480px){
+  .shop-now { padding: 8px 10px; font-size: 13px; }
+  .category-box img,
+  .category-box .cat-video { height: 150px; }
+}
+.shop-now {
+  display: block;
+  margin-top: 8px;
+  padding: 9px 12px;
+  background: var(--btn, #FF9900); 
   </style>
 
   <!-- Most Viewed -->
   <div class="fs-block">
+  
+  
+  <section class="categories" id="categoryList" aria-label="Product categories">
+    <div class="category-box"
+       data-href="game.html"
+       data-video="https://cdn.pixabay.com/video/2020/10/06/16/01/gaming-room-5637119_1280.mp4"
+       data-poster="https://i.postimg.cc/GhBhTtX7/Magshion-Adjustable-Height-Gaming-Chair-with-Retractable-Footrest-and-Computer-Desk-Purple-2e356ae6.png"
+       data-badge="34% OFF"
+       aria-label="Gaming chairs category">
+    <div class="discount-badge" aria-hidden="true">34% OFF</div>
+    <img src="https://i.postimg.cc/GhBhTtX7/Magshion-Adjustable-Height-Gaming-Chair-with-Retractable-Footrest-and-Computer-Desk-Purple-2e356ae6.png"
+         alt="Gaming chair and desk in Lagos — Vbest Luxury Interiors" loading="lazy">
+    <span class="cat-label">🎮 GAMING CHAIRS & TABLE</span>
+    <a href="game.html" class="shop-now" aria-label="Shop Gaming Chairs">SHOP NOW</a>
+  </div>
+  <div class="category-box"
+       data-href="office.html"
+       data-video="https://cdn.pixabay.com/video/2021/07/28/05/45/office-6482338_1280.mp4"
+       data-poster="https://i.postimg.cc/vBybRLq7/Workstation-348.png"
+       data-badge="37% OFF"
+       aria-label="Office furniture category">
+    <div class="discount-badge" aria-hidden="true">37% OFF</div>
+    <img src="https://i.postimg.cc/vBybRLq7/Workstation-348.png"
+         alt="Office furniture and workstations in Lagos — Vbest Luxury Interiors" loading="lazy">
+    <span class="cat-label">OFFICE FURNITURES 🪑🖥️</span>
+    <a href="office.html" class="shop-now" aria-label="Shop Office Furniture">SHOP NOW</a>
+  </div>
+  </section>
+  
+  
     <h3 class="fs-title">👀 Most Viewed</h3>
     <p class="fs-sub">Trending now — items people are checking out</p>
     <div id="fsMostGrid" class="fs-grid" aria-live="polite"></div>
@@ -726,6 +885,32 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   <div class="see-all">
     <button onclick="window.location.href='all.html'">view All</button>
   </div>
+    <section class="categories" id="categoryList" aria-label="Product categories">
+    <div class="category-box"
+       data-href="outdoor.html"
+       data-video="https://cdn.pixabay.com/video/2019/12/03/05/28/garden-4671578_1280.mp4"
+       data-poster="https://i.postimg.cc/yxGGYGDw/Ag-ACkq-HWp-Pyzt-HZ89-Sp-Vx-Y.jpg"
+       data-badge="30% OFF"
+       aria-label="Outdoor & patio category">
+    <div class="discount-badge" aria-hidden="true">30% OFF</div>
+    <img src="https://i.postimg.cc/yxGGYGDw/Ag-ACkq-HWp-Pyzt-HZ89-Sp-Vx-Y.jpg"
+         alt="Outdoor and patio furniture in Lagos — Vbest Luxury Interiors" loading="lazy">
+    <span class="cat-label">🪑 OUTDOORS & PATIO</span>
+    <a href="outdoor.html" class="shop-now" aria-label="Shop Outdoor Furniture">SHOP NOW</a>
+  </div>
+    <div class="category-box"
+       data-href="snooker.html"
+       data-video="videos/best4.mp4"
+       data-poster="https://i.postimg.cc/7LbWQCnH/807531125-321-1024x1024.jpg"
+       data-badge="31% OFF"
+       aria-label="Snooker and pool category">
+    <div class="discount-badge" aria-hidden="true">31% OFF</div>
+    <img src="https://i.postimg.cc/7LbWQCnH/807531125-321-1024x1024.jpg"
+         alt="Snooker and pool tables in Lagos — Vbest Luxury Interiors" loading="lazy">
+    <span class="cat-label">SNOOKERS & POOL 🎱</span>
+    <a href="snooker.html" class="shop-now" aria-label="Shop Snooker & Pool">SHOP NOW</a>
+  </div>
+    </section>
 
   <!-- Top Selling -->
   <div class="fs-block">
