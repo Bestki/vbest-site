@@ -71,110 +71,7 @@
   .rewrite-side h2 { font-size: clamp(22px, 4.2vw, 34px); margin: 0 0 6px; font-weight:800; color:var(--text); }
   .rewrite-side p { font-size: clamp(16px, 2.2vw, 18px); color: var(--muted); margin: 0; }
 
-  /* Search bar */
-  .search-bar { margin: 20px auto; max-width: 500px; padding: 0 15px; }
-  .search-bar input {
-    width:100%;
-    padding:12px 15px;
-    border-radius:6px;
-    border:1px solid var(--card-border);
-    font-size:16px;
-    outline:none;
-    background:#fff;
-    color:var(--text);
-  }
-  .search-bar input::placeholder { color:#9aa0a6; }
 
-  /* Categories - keep 2 columns */
-
-
-  /* search results styling */
-  #searchResults { max-width:900px; margin:10px auto 20px; text-align:left; }
-  #searchResults .result {
-    background: var(--panel);
-    color: var(--text);
-    padding:12px;
-    margin-bottom:10px;
-    border-radius:6px;
-    display:flex;
-    gap:12px;
-    align-items:flex-start;
-    border: 1px solid var(--card-border);
-  }
-  #searchResults .result img { width:140px; max-width: 30%; height:auto; object-fit:cover; border-radius:4px; }
-  #searchResults .meta { flex:1; min-width:0; color:var(--text); }
-  #searchResults .wa {
-    display:inline-block; margin-top:8px; padding:8px 10px; background:var(--accent); color:#fff; text-decoration:none; border-radius:5px; font-weight:700;
-  }
-
-  /* ================= Reviews (light theme) ================= */
-/* Outer container — keep structure, no background */
-.vbest-highrev { 
-    margin-top: 8px; 
-    padding: 12px; 
-    /* background: var(--bg); */  /* header stays normal */
-    color: var(--text); 
-    box-sizing: border-box; 
-}
-
-/* Highlights section — keep white/transparent background */
-.vbest-highlights {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1160px;
-    margin: 10px auto;
-    width: 100%;
-
-    background: white;           /* keep white background */
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* subtle shadow for depth */
-    color: var(--text);          /* text color stays default */
-    gap: 20px;
-}
-
-/* Individual highlight boxes */
-.vbest-hi {
-    flex: 1;
-    min-width: 0;
-    text-align: center;
-    padding: 12px;
-    box-sizing: border-box;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: normal;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: transparent;      /* keep boxes transparent/white */
-    border-radius: 8px;
-}
-
-/* Icon styling — now orange background */
-.vbest-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
-    background: #FF9900;          /* bright orange behind icon */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    color: white;                 /* icon color white for contrast */
-    margin-bottom: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* subtle shadow */
-}
-
-/* Text styling */
-.vbest-hi-text {
-    font-weight: 700;
-    font-size: 14px;
-    color: var(--text);           /* text matches header/default color */
-    overflow-wrap: break-word;
-    text-align: center;
-}
 
   /* Reviews layout - made readable on white */
   .vbest-reviews {
@@ -490,36 +387,70 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 </script>
 <!-- Facebook Pixel Code --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js'); fbq('init', '677322691667443'); fbq('track', 'PageView');</script><noscript> <img height="1" width="1" src="https://www.facebook.com/tr?id=677322691667443&ev=PageView&noscript=1"/></noscript><!-- End Facebook Pixel Code -->
 </head>
+<body>
 
 
   <!-- TOP MEDIA:use an image by default; you can replace this <img> with a <video> tag when you want a video -->
-  <div class="top-media" aria-hidden="false">
-    <img src="images/logo.png" alt="V'Best Interiors Logo" class="logo-media">
-  </div>
-  <!-- ===== Horizontal Category Menu (Styled Fancy Banner Look) ===== -->
+<div class="top-media" aria-hidden="false">
+  <img src="images/logo.png" alt="V'Best Interiors Logo" class="logo-media">
+</div>
+<!-- ===== Horizontal Category Menu (Styled Fancy Banner Look) ===== -->
 <div class="top-category-banner">
   <div class="top-category-menu">
-    <a href="all.html" class="menu-item"><i class="fa-solid fa-layer-group"></i><span>All</span></a>
-    <a href="bed.html" class="menu-item"><i class="fa-solid fa-bed"></i><span>Beds</span></a>
-    <a href="sofa.html" class="menu-item"><i class="fa-solid fa-couch"></i><span>Sofas</span></a>
-    <a href="dining.html" class="menu-item"><i class="fa-solid fa-utensils"></i><span>Dining</span></a>
-    <a href="chair.html" class="menu-item"><i class="fa-solid fa-chair"></i><span>Chairs</span></a>
-    <a href="centertable.html" class="menu-item"><i class="fa-solid fa-table"></i><span>Tables</span></a>
+    <a href="all.html" class="menu-item"><i class="fa-solid fa-couch"></i><span>Home Furniture</span></a>
+    <a href="light.html" class="menu-item"><i class="fa-solid fa-lightbulb"></i><span>Lighting</span></a>
+    <a href="homedecor.html" class="menu-item"><i class="fa-solid fa-paint-roller"></i><span>Home Decor</span></a>
+    <a href="outdoor.html" class="menu-item"><i class="fa-solid fa-tree"></i><span>Outdoor</span></a>
+    <a href="office.html" class="menu-item"><i class="fa-solid fa-briefcase"></i><span>Office Furniture</span></a>
   </div>
 </div>
 
-
-  <!-- ================= Header with logo ================= -->
-  <div class="header-video-container">
+<!-- ================= Header with logo ================= -->
+<div class="header-video-container">
   <video autoplay muted loop playsinline preload="metadata" poster="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg" class="header-video">
     <source src="videos/best1.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
-  <header>
-
+</div>
 
 <style>
-/* ===== Banner Container ===== */
+.header-video-container {
+  position: relative;
+  width: 300px;       /* Set container width */
+  height: 200px;      /* You can freely change this */
+  overflow: hidden;   /* Hide any overflow */
+  border-radius: 8px; /* Rounded corners */
+  background-color: black; /* Fallback background */
+  border: 1px solid #ccc; /* Optional: for visibility */
+}
+
+.header-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;  /* Fill container completely */
+  display: block;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 600px) {
+  .header-video-container { 
+    width: 100%;      /* Responsive width */
+    height: auto;     /* Adjust height proportionally */
+    max-height: 320px; 
+  }
+}
+    
+
 .top-category-banner {
   width: 100%;
   background: linear-gradient(135deg, #fff8f0, #ffe6cc);
@@ -548,18 +479,19 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   text-decoration: none;
   color: #222;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px; /* smaller text */
   text-align: center;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* icon on top, text below */
   align-items: center;
   transition: all 0.3s ease;
+  margin: 0 2px; /* small spacing */
 }
 
 .top-category-menu .menu-item i {
-  font-size: 22px;
+  font-size: 18px; /* smaller icon */
   color: #ff9900;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
   transition: all 0.3s ease;
 }
 
@@ -581,12 +513,13 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     width: 98%;
   }
   .top-category-menu .menu-item i {
-    font-size: 18px;
+    font-size: 16px;
   }
   .top-category-menu .menu-item span {
-    font-size: 12px;
+    font-size: 10px;
   }
 }
+
 </style>
   
   
@@ -594,7 +527,74 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
 
   <!-- Shop Now Button Overlay -->
+<style>
+/* Search bar */
+.search-bar { 
+    margin: 0 auto; /* remove all top/bottom margin */
+    max-width: 500px; 
+    padding: 0 15px; 
+}
+.search-bar input {
+    width:100%;
+    padding:12px 15px;
+    border-radius:6px;
+    border:1px solid var(--card-border);
+    font-size:16px;
+    outline:none;
+    background:#fff;
+    color:var(--text);
+    margin-bottom: 2px; /* minimal bottom margin */
+}
+.search-bar input::placeholder { 
+    color:#9aa0a6; 
+}
 
+/* Highlights section - Fast Delivery */
+.vbest-highrev { 
+    margin-top: 0; /* remove space above */
+    padding: 4px 0; /* minimal padding */
+    box-sizing: border-box; 
+}
+
+.vbest-highlights {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1160px;
+    margin: 0 auto; /* remove top/bottom margin */
+    width: 100%;
+    background: white;
+    padding: 4px 0; /* minimal vertical padding */
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05); /* subtle shadow */
+    gap: 12px; /* minimal gap between icons */
+}
+
+/* Individual highlight boxes */
+.vbest-hi {
+    flex: 1;
+    text-align: center;
+    padding: 4px 0; /* reduce vertical padding */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Plain orange icon only */
+.vbest-icon {
+    font-size: 22px;
+    color: #FF9900;  /* orange icon */
+    margin-bottom: 2px; /* reduce spacing to text */
+}
+
+/* Text styling */
+.vbest-hi-text {
+    font-weight: 700;
+    font-size: 14px;
+    text-align: center;
+}
+</style>
 </div>
 <section class="search-bar">
   <input type="text" id="searchInput" placeholder="🔎 Search for what you want...">
@@ -602,37 +602,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
 <section id="searchResults"></section>
 
-<style>
-.header-video-container {
-  position: relative;
-  width: 100%;
-  max-height: 400px;
-  overflow: hidden;
-  border-radius: 8px;
-  background: #000;
-}
-.header-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.video-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-@media (max-width: 600px) {
-  .header-video-container { max-height: 320px; }
-}
-</style>
-    <!-- ===== Highlights + Reviews (placed directly under logo) ===== -->
+<!-- ===== Highlights + Reviews (placed directly under logo) ===== -->
     <div class="vbest-highrev" aria-label="Highlights and reviews">
       <!-- Highlights -->
       <div class="vbest-highlights" role="group" aria-label="Site highlights">
@@ -643,7 +613,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
         <div class="vbest-hi">
           <div class="vbest-icon"><i class="fa-solid fa-truck-fast" aria-hidden="true"></i></div>
-          <div class="vbest-hi-text">Fast Delivery</div>
+          <div class="vbest-hi-text">Fast Nationwide Delivery</div>
         </div>
 
         <div class="vbest-hi">
@@ -929,7 +899,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     const res = await fetch(sheetUrl);
     if(!res.ok) throw new Error('sheet fetch failed ' + res.status);
     const data = await res.json();
-    if(!Array.isArray(data) || !data.length){ document.getElementById('fsMsg').textContent='No products found.'; return; }
+    if(!Array.isArray(data) || !data.length){ document.getElementById('fsMsg').textContent='check again in 2 sec.'; return; }
 
 
 // Only match by Tag field (ignore category, description, etc.)
@@ -1981,6 +1951,7 @@ send.onclick=()=>{
     office: "office.html",
     outdoor: "outdoor.html",
     game: "game.html",
+    light: "light.html",
     all: "all.html"
   };
 
