@@ -24,17 +24,20 @@
 /* SHOP NOW button matching Dining (uses dining variable --btn) */
 
   /* ================= Base (Amazon-like ligh.t theme) ================= */
-  :root {
-    --bg: #ffffff;             /* page background */
-    --panel: #f9f9f9;          /* card / panel background */
-    --card-border: #e9e9e9;    /* subtle borders */
-    --muted: #565959;          /* muted paragraph / secondary text */
-    --accent: #ff9900;         /* Amazon orange (primary) */
-    --accent-2: #e68a00;       /* slightly darker orange for gradients */
-    --brand-blue: #146eb4;     /* blue used for headings/links */
-    --text: #111111;           /* primary text */
-    --star: #ffd54a;           /* star color */
-  }
+:root {
+  --bg: white;                 /* page background */
+  --panel: #f7f7f7;            /* cards / sections */
+  --card-border: #e3e6e6;      /* borders */
+
+  --text: #0f1111;             /* main text */
+  --muted: #565959;            /* secondary text */
+
+  --accent: #ff9900;           /* buttons (Amazon orange) */
+  --accent-2: #e68a00;
+
+  --brand-blue: #146eb4;       /* links only */
+  --star: #ffa41c;             /* Amazon star color */
+}
 
   /* ====== safe global fixes ====== */
   * { box-sizing: border-box; }
@@ -232,6 +235,19 @@
     .vbest-star { font-size:28px; padding:10px 6px; }
     .vbest-review-form-container.fullpage { padding-top: env(safe-area-inset-top,14px); padding-left:10px; padding-right:10px; }
   }
+  /* FIX homepage product text */
+.fs-card h3 a{
+  color:#000 !important;
+  font-weight:400 !important;
+  font-size:14px !important;
+  text-decoration:none !important;
+}
+
+.fs-card p{
+  color:#333 !important;
+  font-weight:400 !important;
+  font-size:13px !important;
+}
 
   /* keep layout the same, keep animation */
 
@@ -243,25 +259,8 @@
   body[data-theme="classic"]{
     --bg:#ffffff; --panel:#f9f9f9; --card-border:#e9e9e9; --muted:#565959;
     --accent:#ff9900; --accent-2:#e68a00; --brand-blue:#146eb4; --text:#111111; --star:#ffd54a;
-  }
-  body[data-theme="dark"]{
-    --bg:#0f1111; --panel:#131921; --card-border:rgba(255,255,255,0.04); --muted:#cfcfcf;
-    --accent:#ff9900; --accent-2:#e68a00; --brand-blue:#9ac8ff; --text:#ffffff; --star:#ffd54a;
-  }
-  body[data-theme="gold"]{
-    --bg:#fff8e7; --panel:#fff3d6; --card-border:#f1e1c7; --muted:#5a5a5a;
-    --accent:#c89200; --accent-2:#d4a017; --brand-blue:#146eb4; --text:#2e2e2e; --star:#ffd54a;
-  }
 
-  /* bottom nav (theme + cart) */
-  .bottom-nav{
-    position:fixed; left:0; right:0; bottom:0; z-index:99998; height:64px;
-    display:flex; justify-content:flex-end; align-items:center; gap:12px;
-    padding:8px 12px; background:var(--panel); border-top:1px solid rgba(0,0,0,0.06);
-    box-shadow:0 -6px 18px rgba(0,0,0,0.08);
-  }
-  .bottom-nav button, .bottom-nav a{ background:transparent; border:0; font-size:16px; color:var(--brand-blue); font-weight:800; text-decoration:none; cursor:pointer; display:flex; align-items:center; gap:8px; }
-  .cart-badge{ background:#ff3b30; color:#fff; border-radius:50%; padding:3px 8px; font-size:12px; margin-left:6px; display:inline-block; }
+
 
   /* Trusted line under header video */
 
@@ -387,140 +386,298 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 </script>
 <!-- Facebook Pixel Code --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js'); fbq('init', '677322691667443'); fbq('track', 'PageView');</script><noscript> <img height="1" width="1" src="https://www.facebook.com/tr?id=677322691667443&ev=PageView&noscript=1"/></noscript><!-- End Facebook Pixel Code -->
 </head>
-<body>
+<body><!-- Permanent cart + name bar above top category, no gap -->
+<div class="top-cart-bar" style="
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  background: #222; /* little dark color */
+  z-index: 9999; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  padding: 10px 20px; 
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  font-family: 'Poppins', sans-serif;
+">
+  <!-- Your name styled professionally -->
+  <span style="
+    font-weight: 700; 
+    font-size: 1.2rem; 
+    text-transform: uppercase; 
+    letter-spacing: 0.5px; 
+    background: linear-gradient(to right, #FFD700, #FF9900); 
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent; 
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3); 
+    white-space: nowrap;
+  ">
+    V-Best Luxury Interior
+  </span>
 
+  <!-- Cart -->
+  <a href="cart.html" id="nav-cart" aria-label="Cart" style="
+    color: #fff; 
+    text-decoration: none; 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 4px; 
+    font-weight: bold;
+    white-space: nowrap;
+  ">
+    🛒 Cart 
+    <span id="cart-count" class="cart-badge" style="
+      background: #FF3300; 
+      color: #fff; 
+      border-radius: 50%; 
+      padding: 2px 6px; 
+      font-size: 0.8rem; 
+      display: none;
+    ">0</span>
+  </a>
+</div>
+
+<script>
+  // Cart badge logic (localStorage 'cart' array)
+  (function(){
+    function updateCartCount(){
+      try{
+        const el = document.getElementById('cart-count');
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        if(cart && cart.length > 0){
+          el.style.display = 'inline-block';
+          el.textContent = cart.length;
+        } else {
+          el.style.display = 'none';
+        }
+      } catch(e){ }
+    }
+    updateCartCount();
+    window.addEventListener('storage', (e) => { if(e.key === 'cart') updateCartCount(); });
+  })();
+</script>
+
+<style>
+/* Remove extra space between cart and top category */
+body {
+  padding-top: 40px; /* matches height of cart bar */
+  margin: 0;
+}
+
+/* Top category directly touches cart bar */
+.top-category-banner {
+  margin-top: 0;
+}
+
+/* Cart badge style */
+.cart-badge {
+  background: #FF3300;
+  color: #fff;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.8rem;
+}
+
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap');
+</style>
 
   <!-- TOP MEDIA:use an image by default; you can replace this <img> with a <video> tag when you want a video -->
-<div class="top-media" aria-hidden="false">
-  <img src="https://i.postimg.cc/cJ1NMK1Y/Orange-and-White-Modern-Furniture-Promo-Mobile-Banner-Ads-20251117-095206-0000.png" alt="V'Best Interiors Logo" class="logo-media">
-</div>
-<!-- ===== Horizontal Category Menu (Styled Fancy Banner Look) ===== -->
+<!-- ===== Top Category Menu ===== -->
 <div class="top-category-banner">
   <div class="top-category-menu">
     <a href="all.html" class="menu-item"><i class="fa-solid fa-couch"></i><span>Home Furniture</span></a>
     <a href="light.html" class="menu-item"><i class="fa-solid fa-lightbulb"></i><span>Lighting</span></a>
-    <a hre="homedecor.html" class="menu-item"><i class="fa-solid fa-paint-roller"></i><span>Home Decor</span></a>
     <a href="outdoor.html" class="menu-item"><i class="fa-solid fa-tree"></i><span>Outdoor</span></a>
     <a href="office.html" class="menu-item"><i class="fa-solid fa-briefcase"></i><span>Office Furniture</span></a>
+
+    <!-- Right-end Menu -->
+    <div class="menu-dropdown">
+      <button class="menu-button"><i class="fa-solid fa-bars"></i><span>Menu</span></button>
+      <div class="dropdown-content">
+        <a href="sofa.html">Sofas</a>
+        <a href="bed.html">Beds</a>
+        <a href="dining.html">Dining</a>
+                <a href="centertable.html">Ceter tables</a>
+                        <a href="sidestool.html">Side Stool</a>
+                        <a href="chair.html">Chairs</a>
+        <a href="office.html">Office Furniture</a>
+        <a href="outdoor.html">Outdoor</a>
+        <a href="game.html">Game</a>
+      
+        <a href="snooker.html">Snooker</a>
+        <a href="winbar.html">Winbar</a>
+        <a href="sideboard.html">Sideboard</a>
+        <a href="console.html">Console</a>
+        <a href="cabinet.html">Cabinet</a>
+
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- ================= Header with logo ================= -->
-<div class="header-video-container">
-  <video autoplay muted loop playsinline preload="metadata" poster="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg" class="header-video">
-    <source src="videos/White.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
+<!-- ===== Header Video ===== -->
+<div class="top-media" aria-hidden="false">
+  <div class="header-video-container">
+    <video autoplay muted loop playsinline preload="metadata" poster="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg" class="header-video">
+      <source src="videos/White.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
 </div>
 
 <style>
-.header-video-container {
-  position: relative;
-  width: 300px;       /* Set container width */
-  height: 200px;      /* You can freely change this */
-  overflow: hidden;   /* Hide any overflow */
-  border-radius: 8px; /* Rounded corners */
-  background-color: black; /* Fallback background */
-  border: 1px solid #ccc; /* Optional: for visibility */
-}
-
-.header-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;  /* Fill container completely */
-  display: block;
-}
-
-.video-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-@media (max-width: 600px) {
-  .header-video-container { 
-    width: 100%;      /* Responsive width */
-    height: auto;     /* Adjust height proportionally */
-    max-height: 220px; 
-  }
-}
-    
-
+/* ===== Top Category Banner ===== */
 .top-category-banner {
+  position: sticky;
+  top: 0;
+  z-index: 999;
   width: 100%;
-  background: linear-gradient(135deg, #fff8f0, #ffe6cc);
-  padding: 10px 0;
+  background: #ffffff;
+  padding: 8px 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  border-radius: 8px;
   margin: 8px 0 12px;
 }
 
-/* ===== Menu Inside ===== */
+/* ===== Left Menu Items ===== */
 .top-category-menu {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-around; /* KEEP EXACT ORIGINAL SPACING */
   align-items: center;
   width: 95%;
-  background: #fff;
-  border-radius: 8px;
-  padding: 10px 0;
-  box-shadow: inset 0 0 8px rgba(255,153,0,0.15);
 }
-
 .top-category-menu .menu-item {
   text-decoration: none;
-  color: #222;
+  color: #0f1111;
   font-weight: 600;
-  font-size: 12px; /* smaller text */
+  font-size: 12px;
   text-align: center;
   display: flex;
-  flex-direction: column; /* icon on top, text below */
+  flex-direction: column;
   align-items: center;
-  transition: all 0.3s ease;
-  margin: 0 2px; /* small spacing */
+  transition: transform 0.2s ease;
 }
-
 .top-category-menu .menu-item i {
-  font-size: 18px; /* smaller icon */
-  color: #ff9900;
+  font-size: 18px;
+  color: #146eb4;
   margin-bottom: 2px;
-  transition: all 0.3s ease;
 }
-
 .top-category-menu .menu-item:hover {
   transform: scale(1.05);
 }
-
-.top-category-menu .menu-item:hover i {
-  color: #e68a00;
-}
-
+.top-category-menu .menu-item:hover i,
 .top-category-menu .menu-item:hover span {
-  color: #e68a00;
+  color: #ff9900;
 }
 
+/* ===== Menu Dropdown (Right-end) ===== */
+.menu-dropdown {
+  position: relative; /* relative for absolute dropdown */
+}
+.menu-button {
+  background: #ffffff;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  color: #0f1111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+.menu-button i {
+  font-size: 18px;
+  color: #146eb4;
+  margin-bottom: 2px;
+}
+
+/* ===== FIXED DROPDOWN ===== */
+.dropdown-content {
+  display: none;
+  position: absolute;  /* absolute to menu button */
+  top: 100%;           /* directly below button */
+  right: 0;            /* align right */
+  transform: translateX(30px); /* move dropdown 20px to the right */
+  background: #ffffff;
+  min-width: 160px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 10000;
+  flex-direction: column;
+  padding: 5px 0;
+}
+.dropdown-content a {
+  padding: 10px 16px;
+  text-decoration: none;
+  color: #0f1111;
+  font-size: 13px;
+}
+.dropdown-content a:hover {
+  background-color: #f5f5f5;
+  color: #ff9900;
+}
+.menu-dropdown.active .dropdown-content {
+  display: flex;
+}
+
+/* ===== Header Video ===== */
+.header-video-container {
+  position: relative;
+  width: 300px;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: black;
+  border: 1px solid #ccc;
+}
+.header-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ===== Responsive ===== */
 @media (max-width: 600px) {
-  .top-category-menu {
-    padding: 8px 0;
-    width: 98%;
+  .top-category-menu .menu-item i { font-size: 16px; }
+  .top-category-menu .menu-item span { font-size: 10px; }
+  /* mobile dropdown stays under button, aligned right */
+  .dropdown-content {
+    left: auto;
+    right: 0;
+    width: 180px;
+    border-radius: 6px;
   }
-  .top-category-menu .menu-item i {
-    font-size: 16px;
-  }
-  .top-category-menu .menu-item span {
-    font-size: 10px;
+  .header-video-container {
+    width: 100%;
+    height: auto;
+    max-height: 220px;
   }
 }
-
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const menuBtn = document.querySelector('.menu-button');
+  const menuDropdown = document.querySelector('.menu-dropdown');
+
+  menuBtn.addEventListener('click', () => {
+    menuDropdown.classList.toggle('active');
+  });
+
+  document.addEventListener('click', function(event) {
+    if (!menuDropdown.contains(event.target)) {
+      menuDropdown.classList.remove('active');
+    }
+  });
+});
+</script>
   
   
 <!-- ===== Video Header Section with Shop Now Button ===== -->
@@ -551,49 +708,46 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 }
 
 /* Highlights section - Fast Delivery */
-.vbest-highrev { 
-    margin-top: 0; /* remove space above */
-    padding: 4px 0; /* minimal padding */
-    box-sizing: border-box; 
+/* ===== Professional Highlights (Amazon style) ===== */
+
+.vbest-highrev {
+  margin-top: 6px;
+  padding: 0;
 }
 
 .vbest-highlights {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1160px;
-    margin: 0 auto; /* remove top/bottom margin */
-    width: 100%;
-    background: white;
-    padding: 4px 0; /* minimal vertical padding */
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05); /* subtle shadow */
-    gap: 12px; /* minimal gap between icons */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1160px;
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 10px 6px;
+  border: 1px solid #e3e6e6;
+  border-radius: 8px;
+  box-shadow: none;
+  gap: 8px;
 }
 
-/* Individual highlight boxes */
 .vbest-hi {
-    flex: 1;
-    text-align: center;
-    padding: 4px 0; /* reduce vertical padding */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  flex: 1;
+  text-align: center;
+  padding: 6px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Plain orange icon only */
 .vbest-icon {
-    font-size: 22px;
-    color: #FF9900;  /* orange icon */
-    margin-bottom: 2px; /* reduce spacing to text */
+  font-size: 20px;
+  color: #146eb4;          /* professional blue */
+  margin-bottom: 4px;
 }
 
-/* Text styling */
 .vbest-hi-text {
-    font-weight: 700;
-    font-size: 14px;
-    text-align: center;
+  font-weight: 600;
+  font-size: 13px;
+  color: #0f1111;          /* near-black text */
 }
 </style>
 </div>
@@ -634,115 +788,470 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 <!-- ======= Featured (Top / New / Most) — full ready block (paste after categories) ======= -->
 
 <section id="featSection" aria-label="Featured products" style="padding:20px 12px;">
-  <style>
-    /* Scoped styles */
-    #featSection { max-width:1160px; margin:0 auto; }
-    .fs-block { margin-bottom:26px; }
+<style>
+/* ================= FEATURED SECTION BASE ================= */
+#featSection { max-width:1160px; margin:0 auto; }
+#featSection .fs-block { margin-bottom:26px; }
 
-    /* Title banner: animated highlight + blinking dot, boxed so it reads like a banner */
-    .fs-title {
-      display:inline-block;
-      position:relative;
-      padding:8px 14px;
-      border-radius:10px;
-      background: linear-gradient(90deg, rgba(0,200,83,0.35), rgba(0,255,128,0.15) 40%, transparent 60%);
-      background-size:200% 100%;
-      animation: bannerSlide 6s linear infinite;
-      box-shadow:0 6px 18px rgba(0,0,0,0.03);
-      font-weight:800;
-      font-size:20px;
-      color:var(--accent,#111);
-      margin:0 0 6px;
-    }
-    @keyframes bannerSlide { 0%{background-position:0% 50%}100%{background-position:200% 50%} }
-    .fs-title::after{
-      content:'';
-      position:absolute;
-      right:-10px;
-      top:50%;
-      transform:translateY(-50%);
-      width:12px;height:12px;border-radius:50%;
-      background:#ff3b30; box-shadow:0 0 14px #ff3b30;
-      animation: blinkDot 1.4s infinite;
-    }
-    @keyframes blinkDot { 0%,50%{opacity:1}51%,100%{opacity:0.15} }
-
-    .fs-sub { color:var(--muted,#666); font-weight:700; font-size:13px; margin:0 0 12px; display:block; }
-
-    .fs-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
-    @media(min-width:1024px){ .fs-grid { grid-template-columns:repeat(3,1fr); } }
-
-    .fs-card {
-      background:var(--card,#f8f8f8); border-radius:10px; overflow:hidden; position:relative;
-      border:1px solid var(--card-border,#eee); box-shadow:0 6px 18px rgba(0,0,0,0.04);
-      display:flex; flex-direction:column; min-height:320px;
-    }
-    .fs-thumb{ width:100%; height:180px; overflow:hidden; cursor:pointer; display:block; }
-    .fs-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
-
-    .fs-badge {
-      position:absolute; left:12px; top:12px; z-index:12; padding:8px 12px; border-radius:999px;
-      color:#fff; font-weight:900; font-size:12px; box-shadow:0 8px 26px rgba(0,0,0,0.12);
-    }
-    .fs-orange{ background:linear-gradient(180deg,#ff9900,#e68a00); }
-    .fs-green{ background:linear-gradient(180deg,#27ae60,#1f8a3f); }
-    .fs-blink{ animation:fsPulse 1.4s ease-in-out infinite; }
-    @keyframes fsPulse { 0%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.03)}100%{transform:translateY(0) scale(1)} }
-
-    .fs-body{ padding:10px; display:flex; flex-direction:column; gap:6px; flex:1; text-align:left; }
-    .fs-body h3{ margin:0; font-size:15px; font-weight:800; color:var(--text,#111); cursor:pointer; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-    .fs-price-row{ display:flex; flex-direction:column; gap:4px; align-items:flex-start; flex-wrap:wrap; }
-    .fs-old{ text-decoration:line-through; color:#B12704; font-weight:800; font-size:13px; }
-    .fs-price{ color:#27ae60; font-weight:900; font-size:15px; }
-    .fs-timer{ color:#FF9900; font-weight:800; font-size:13px; margin-top:6px; }
-    .fs-stars{ color:#ffd54a; margin-top:6px; font-size:14px; }
-
-    /* Save style — changed to black per request */
-    .fs-save { color:#000; font-weight:700; font-size:13px; text-decoration:none; margin-top:2px; }
-
-    .fs-btns{ margin-top:auto; display:flex; gap:8px; }
-    .fs-btn{ flex:1; padding:10px; border-radius:8px; font-weight:800; border:0; cursor:pointer; color:#fff; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; }
-    .fs-inquiry{ background:var(--whatsapp,#25D366); }
-    .fs-add{ background:var(--btn,#FF9900); color:var(--btn-text,#fff); }
-
-    /* details overlay (self-contained IDs) */
-    #featDetails{ position:fixed; inset:0; display:none; align-items:flex-start; justify-content:center; background:rgba(0,0,0,0.9); z-index:99999; padding:18px; overflow:auto; }
-    #featDetailsInner{ width:100%; max-width:1100px; background:var(--card,#fff); color:var(--text,#111); border-radius:10px; padding:18px; display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap; max-height:calc(100vh - 40px); overflow:auto; }
-    #featClose{ position:absolute; right:18px; top:12px; background:transparent; border:2px solid rgba(0,0,0,0.08); color:var(--text,#111); padding:6px 10px; border-radius:8px; cursor:pointer; }
-    .feat-left{ flex:1 1 420px; text-align:center; }
-    .feat-left img{ max-width:100%; max-height:60vh; object-fit:contain; border-radius:8px; display:block; margin:0 auto; }
-    .feat-right{ flex:1 1 360px; }
-    .feat-right h2{ margin:0 0 8px; color:var(--accent,#111); font-size:22px; }
-    .feat-desc{ margin-top:12px; line-height:1.6; color:var(--text,#333); }
-    .see-all {
-  text-align: center;
-  margin-top: 10px;
+/* ================= TITLE ================= */
+#featSection .fs-title {
+  display:inline-block;
+  padding:8px 14px;
+  border-radius:6px;
+  background:#f3f3f3;
+  font-weight:800;
+  font-size:18px;
+  color:#111;
+  margin:0 0 6px;
 }
-.see-all button {
-  background-color: #25d366;
-  color: white;
+#featSection .fs-title::after{ display:none; }
+
+#featSection .fs-sub {
+  color:#555;
+  font-weight:600;
+  font-size:13px;
+  margin:0 0 12px;
+  display:block;
+}
+
+/* ================= PRODUCT GRID ================= */
+#featSection .fs-grid {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+@media(min-width:1024px){
+  #featSection .fs-grid { grid-template-columns:repeat(3,1fr); }
+}
+
+/* ================= PRODUCT CARD ================= */
+#featSection .fs-card {
+  background:#fff;
+  border-radius:8px;
+  overflow:hidden;
+  position:relative;
+  border:1px solid #e5e5e5;
+  box-shadow:0 2px 6px rgba(0,0,0,0.04);
+  display:flex;
+  flex-direction:column;
+  min-height:320px;
+}
+
+#featSection .fs-thumb {
+  width:100%;
+  height:180px;
+  overflow:hidden;
+  cursor:pointer;
+}
+#featSection .fs-thumb img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* ================= BADGES ================= */
+#featSection .fs-badge {
+  position:absolute;
+  left:10px;
+  top:10px;
+  z-index:10;
+  padding:5px 8px;
+  border-radius:4px;
+  color:#fff;
+  font-weight:700;
+  font-size:12px;
+}
+
+#featSection .fs-orange { background:#FF9900; }
+#featSection .fs-green  { background:#146EB4; }
+#featSection .fs-blink  { animation:none; }
+
+/* ================= CARD BODY ================= */
+#featSection .fs-body {
+  padding:10px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  flex:1;
+}
+
+#featSection .fs-body h3 {
+  margin:0;
+  font-size:15px;
+  font-weight:700;
+  color:#111;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+/* ================= PRICING ================= */
+#featSection .fs-price-row {
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+
+#featSection .fs-old {
+  text-decoration:line-through;
+  color:#B12704;
+  font-weight:700;
+  font-size:13px;
+}
+
+#featSection .fs-price {
+  color:#007600;
+  font-weight:800;
+  font-size:15px;
+}
+
+#featSection .fs-save {
+  color:#000;
+  font-weight:600;
+  font-size:13px;
+}
+
+#featSection .fs-stars {
+  color:#f0c14b;
+  font-size:14px;
+}
+
+/* ================= BUTTONS (STACKED) ================= */
+#featSection .fs-btns {
+  margin-top:auto;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+#featSection .fs-btn {
+  width:100%;
+  padding:10px;
+  border-radius:6px;
+  font-weight:800;
+  border:1px solid transparent;
+  cursor:pointer;
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* ADD TO CART – TOP (BLACK) */
+#featSection .fs-add {
+  background:#000;
+  color:#fff;
+}
+#featSection .fs-add:hover { background:#222; }
+
+/* INQUIRY – BELOW (GREEN) */
+#featSection .fs-inquiry {
+  background:#25D366;
+  color:#fff;
+}
+#featSection .fs-inquiry:hover { background:#1eb85c; }
+
+/* ================= DETAILS OVERLAY ================= */
+#featSection #featDetails {
+  position:fixed;
+  inset:0;
+  display:none;
+  justify-content:center;
+  background:rgba(0,0,0,0.85);
+  z-index:99999;
+  padding:18px;
+  overflow:auto;
+}
+
+#featSection #featDetailsInner {
+  width:100%;
+  max-width:1100px;
+  background:#fff;
+  border-radius:8px;
+  padding:18px;
+  display:flex;
+  gap:18px;
+  flex-wrap:wrap;
+}
+
+#featSection #featClose {
+  position:absolute;
+  right:18px;
+  top:12px;
+  background:#fff;
+  border:1px solid #ddd;
+  padding:6px 10px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+#featSection .feat-left {
+  flex:1 1 420px;
+  text-align:center;
+}
+#featSection .feat-left img {
+  max-width:100%;
+  max-height:60vh;
+  object-fit:contain;
+  border-radius:6px;
+}
+
+#featSection .feat-right {
+  flex:1 1 360px;
+}
+#featSection .feat-right h2 {
+  margin:0 0 8px;
+  font-size:22px;
+}
+#featSection .feat-desc {
+  margin-top:12px;
+  line-height:1.6;
+  color:#333;
+}
+
+/* ================= SEE ALL / SHOP NOW ================= */
+#featSection .see-all,
+#featSection .shop-now {
+  text-align:center;
+  margin-top:10px;
+  background:#25D366; /* green like Inquiry */
+  color:#fff;
+  border:none;
+  padding:10px 18px;
+  border-radius:6px;
+  font-weight:700;
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-block;
+}
+#featSection .see-all:hover,
+#featSection .shop-now:hover {
+  background:#1eb85c;
+}
+
+/* ================= CATEGORY GRID ================= */
+#featSection .categories {
+  margin:20px auto;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+  max-width:900px;
+}
+
+#featSection .category-box {
+  position:relative;
+  background:#fff;
+  border-radius:6px;
+  padding:5px;
+  border:1px solid #e5e5e5;
+}
+
+#featSection .category-box img {
+  width:100%;
+  height:180px;
+  object-fit:cover;
+  border-radius:6px;
+}
+
+#featSection .cat-label {
+  display:block;
+  padding:6px;
+  font-weight:700;
+  color:#111;
+  margin-top:6px;
+  background:#f3f3f3;
+  border-radius:4px;
+  font-size:13px;
+}
+
+#featSection .discount-badge {
+  position:absolute;
+  top:10px;
+  left:10px;
+  background:#FF9900;
+  color:#fff;
+  padding:5px 8px;
+  font-size:12px;
+  font-weight:700;
+  border-radius:4px;
+}
+
+@media(max-width:480px){
+  #featSection .category-box img { height:150px; }
+}
+/* CLAMP REVIEW TEXT (SHOW SEE-ALL AGAIN) */
+.vbest-review-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;      /* show only 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* RESTORE BRAND COLORS FOR SOCIAL ICONS */
+.social-icons .fa-whatsapp { color: #25D366; }
+.social-icons .fa-facebook { color: #1877F2; }
+.social-icons .fa-youtube  { color: #FF0000; }
+.social-icons a:nth-child(4) { color: #000000; } /* X / Twitter */
+.social-icons a:nth-child(5) { color: #E1306C; } /* Instagram */
+.social-icons a:nth-child(6) { color: #000000; } /* TikTok */
+/* FIX SOCIAL ICONS */
+.social-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.social-icons a {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  width: auto !important;
+  color: inherit !important;   /* restore original color */
+  font-weight: 600;
+}
+#featSection .fs-save,
+#featSection .fs-timer { 
+  display: none !important; 
+}
+/* ===== FIX MOST VIEWED PRODUCT POPUP ===== */
+
+/* hidden by default */
+#featDetails {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 10000;
+}
+
+/* when JS opens it */
+#featDetails.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+/* popup box */
+#featDetailsInner {
+  background: #ffffff;
+  max-width: 920px;
+  width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 10px;
+  position: relative;
+  pointer-events: auto;
+}
+
+/* close button */
+#featClose {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
   border: none;
-  padding: 10px 18px;
-  border-radius: 6px;
-  font-weight: bold;
+  font-size: 22px;
   cursor: pointer;
 }
-.see-all button:hover {
-  background-color: #1eb85c;
+/* ===== MOST VIEWED POPUP – FULL FINAL FIX ===== */
+
+/* BUTTON BASE (BOTH INQUIRY & ADD TO CART) */
+#featDetailsInner .fs-btn {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 100% !important;
+  height: 44px;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 6px;
+  text-decoration: none !important;
+  box-sizing: border-box;
 }
-/* Base layout for category tile (image/video + label) */
-    .category-box {
-      position: relative; overflow: hidden; display:flex; flex-direction:column; align-items:stretch; text-align:center; cursor:pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease; background: var(--panel); border-radius:6px; padding:5px; border:1px solid var(--card-border);
-    }
-    .category-box img { width:100%; height:180px; object-fit:cover; display:block; border-radius:6px; background:#000; }
-    .cat-label { display:block; padding:6px 8px; font-weight:700; color:var(--text); margin-top:6px; background:#fff; border-radius:0 0 6px 6px; font-size:13px; }
-    .discount-badge { position:absolute; top:10px; left:10px; z-index:6; background: linear-gradient(180deg,#ff9900,#e68a00); color:#fff; padding:6px 9px; font-size:13px; font-weight:800; border-radius:6px; box-shadow:0 6px 18px rgba(230,138,0,0.18); pointer-events:none; opacity:.96; }
-    .categories { margin:20px auto; display:grid; grid-template-columns: repeat(2, 1fr); gap:8px; max-width:900px; padding:0; }
-    @media (min-width:1024px) { .fs-grid { grid-template-columns:repeat(3,1fr); } }
-    @media (max-width:480px) { .category-box img { height:150px; } }
-    .shop-now { display:block; margin-top:8px; padding:9px 12px; background:var(--btn,#FF9900); color:#fff; border-radius:6px; text-decoration:none; font-weight:700; }
-  </style>
+
+/* INQUIRY — GREEN (ON TOP) */
+#featDetailsInner .fs-inquiry {
+  background: #25d366 !important;
+  color: #ffffff !important;
+  border: none;
+  margin-bottom: 8px;
+  order: 1;
+}
+
+/* ADD TO CART — BLACK (BELOW) */
+#featDetailsInner .fs-add {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: none;
+  order: 2;
+}
+
+/* FORCE STACKING */
+#featDetailsInner .fs-inquiry,
+#featDetailsInner .fs-add {
+  float: none !important;
+}
+
+/* ===== PRICE & DISCOUNT ===== */
+
+/* NEW PRICE — BLACK */
+#featDetailsInner .price,
+#featDetailsInner .feat-price {
+  color: #000000 !important;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+/* OLD PRICE — RED & CROSSED */
+#featDetailsInner .old-price,
+#featDetailsInner .feat-old-price {
+  color: #b12704 !important;
+  text-decoration: line-through;
+  font-size: 14px;
+  margin-left: 6px;
+}
+
+/* DISCOUNT — BLACK & VISIBLE */
+#featDetailsInner .discount,
+#featDetailsInner .feat-discount,
+#featDetailsInner .discount-badge {
+  display: inline-block !important;
+  color: #000000 !important;
+  font-weight: 700;
+}
+
+/* REMOVE OFFER END / COUNTDOWN COMPLETELY */
+#featDetailsInner .countdown,
+#featDetailsInner .feat-countdown,
+#featDetailsInner .offer-end {
+  display: none !important;
+}
+/* FORCE STRIKE ANY PRICE THAT IS NOT THE MAIN ONE */
+#featDetailsInner del,
+#featDetailsInner s {
+  color: #b12704 !important;
+  text-decoration: line-through !important;
+}
+/* PRICE STYLING */
+#featDetailsInner .fs-old {
+  color: #b12704;
+  text-decoration: line-through;
+  font-size: 14px;
+  margin-right: 8px;
+}
+
+#featDetailsInner .fs-price {
+  color: #000;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+#featDetailsInner .fs-price-wrap {
+  margin: 10px 0;
+}
+</style>
 
   <!-- Most Viewed -->
   <div class="fs-block">
@@ -843,58 +1352,33 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 </div>
 
 <script>
-/* ===== Full featured logic (self-contained, tolerant field matching + flexible parsing) ===== */
 (async function(){
   const sheetUrl = "https://opensheet.elk.sh/1FA4s21Je3ebeFXUXGu_xvqdo4gbM1v9Q9jOHt6LAH6Y/Sheet1";
   const limit = 40;
 
-  /* Utilities */
   function normKey(k){ return String(k||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
-
-  // tolerant findField: exact normalized match, partial contains match, and synonyms fallback
   function findField(item, candidates){
     if(!item) return '';
     const map = {};
-    for(const k in item){
-      if(!k) continue;
-      map[normKey(k)] = item[k];
-    }
-    // direct normalized match
-    for(const c of candidates){
-      const key = normKey(c);
-      if(map.hasOwnProperty(key)) return map[key];
-    }
-    // partial contains match (helps with "Price (₦)", "Selling Price")
-    const candKeys = candidates.map(c => normKey(c));
-    for(const key in map){
-      for(const ck of candKeys){
-        if(key.includes(ck) || ck.includes(key)) return map[key];
-      }
-    }
-    // synonyms fallback
+    for(const k in item){ if(!k) continue; map[normKey(k)] = item[k]; }
+    for(const c of candidates){ const key = normKey(c); if(map.hasOwnProperty(key)) return map[key]; }
+    for(const key in map){ for(const c of candidates){ const ck = normKey(c); if(key.includes(ck) || ck.includes(key)) return map[key]; } }
     const synonyms = ['price','amount','sellingprice','cost','discount','discountprice','image','imagelink','views','tag','category','productname','product'];
-    for(const s of synonyms){
-      if(map.hasOwnProperty(s)) return map[s];
-    }
+    for(const s of synonyms) if(map.hasOwnProperty(s)) return map[s];
     return '';
   }
-
-  // flexible number parsing (supports "₦120,000", "120k", "120 000", "120,000.00")
-  function parseNumberFlexible(s){
-    if(s === undefined || s === null) return NaN;
-    let t = String(s).trim();
-    if(t === '') return NaN;
-    t = t.replace(/[₦$€£]/g,'');
-    t = t.replace(/\s+/g,'');
-    t = t.replace(/k$/i,'000');
-    t = t.replace(/[^0-9.\-]/g,'');
-    const n = parseFloat(t);
-    return isNaN(n) ? NaN : n;
+  function parseNumberFlexible(s){ 
+    if(s===undefined||s===null) return NaN;
+    let t=String(s).trim();
+    if(t==='') return NaN;
+    t=t.replace(/[₦$€£]/g,'').replace(/\s+/g,'').replace(/k$/i,'000').replace(/[^0-9.\-]/g,'');
+    const n=parseFloat(t); return isNaN(n)?NaN:n;
   }
-
   function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function escJs(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"'); }
   function safe(u){ return u && String(u).trim() ? String(u).trim() : 'https://i.postimg.cc/yxGGYGDw/Ag-ACkq-HWp-Pyzt-HZ89-Sp-Vx-Y.jpg'; }
+
+  function getRandomBaseViews(){ return Math.floor(Math.random()*400)+100; } // start realistic 100–500
 
   try {
     const res = await fetch(sheetUrl);
@@ -902,267 +1386,112 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     const data = await res.json();
     if(!Array.isArray(data) || !data.length){ document.getElementById('fsMsg').textContent='check again in 2 sec.'; return; }
 
+    // Add original row index for each product
+    data.forEach((p, i)=> p.__row = i);
 
-// Only match by Tag field (ignore category, description, etc.)
-const useData = data.filter(item => {
-  const tagValue = String(findField(item, ['Tag', 'tag']) || '').toLowerCase();
-  return tagValue.includes('top') || tagValue.includes('new') || tagValue.includes('most');
-});
-    // helper to normalise tag field and split into tokens
+    const useData = data.filter(item => {
+      const tagValue = String(findField(item, ['Tag', 'tag']) || '').toLowerCase();
+      return tagValue.includes('top') || tagValue.includes('new') || tagValue.includes('most');
+    });
     function tagTokens(item){
       const raw = String(findField(item, ['Tag','tag','Category','category']) || item.Tag || item.tag || '').toLowerCase();
       if(!raw) return [];
       return raw.split(/[\s,;|]+/).map(s=>s.trim()).filter(Boolean);
     }
 
-    // compute lists (strict tag matching)
-    const top = useData.filter(i=> {
-      const tokens = tagTokens(i);
-      return tokens.includes('top');
-    }).slice(0,limit);
-
+    const top = useData.filter(i=> tagTokens(i).includes('top')).slice(0,limit);
     const newList = (function(){
       const hasDate = Object.keys(useData[0] || {}).some(k=> normKey(k) === 'dateadded' || normKey(k) === 'date');
       if(hasDate){
         return useData.map(it=> Object.assign({__date: (findField(it,['DateAdded','Date Added','dateadded','date','added'])||'')}, it))
-                   .filter(x=> x.__date )
-                   .sort((a,b)=> new Date(b.__date) - new Date(a.__date))
-                   .slice(0,limit);
-      } else {
-        return useData.filter(i=> {
-          const tokens = tagTokens(i);
-          return tokens.includes('new');
-        }).slice(0,limit);
-      }
+                      .filter(x=> x.__date )
+                      .sort((a,b)=> new Date(b.__date) - new Date(a.__date))
+                      .slice(0,limit);
+      } else return useData.filter(i=> tagTokens(i).includes('new')).slice(0,limit);
     })();
+    const most = useData.filter(i=> tagTokens(i).includes('most'))
+                        .slice().map(it=> Object.assign({__views: parseInt(String(findField(it,['Views','views','viewscount'])||it.Views||'0').replace(/\D/g,''),10)||getRandomBaseViews()}, it))
+                        .sort((a,b)=> b.__views - a.__views)
+                        .slice(0,limit);
 
-    const most = useData.filter(i=> {
-      const tokens = tagTokens(i);
-      return tokens.includes('most');
-    }).slice().map(it=> Object.assign({__views: parseInt(String(findField(it,['Views','views','viewscount'])||it.Views||'0').replace(/\D/g,''),10)||0}, it)).sort((a,b)=> b.__views - a.__views).slice(0,limit);
-
-    // render
-    const topGrid = document.getElementById('fsTopGrid'), newGrid = document.getElementById('fsNewGrid'), mostGrid = document.getElementById('fsMostGrid');
-    window.fsProducts = []; let gIdx = 0;
+    const topGrid = document.getElementById('fsTopGrid'),
+          newGrid = document.getElementById('fsNewGrid'),
+          mostGrid = document.getElementById('fsMostGrid');
+    window.fsProducts = []; let gIdx=0;
 
     function makeCard(p, idx, tag){
       const name = findField(p, ['ProductName','Product Name','product','name','title']) || 'Unnamed';
-      // tolerant field lookup for prices
       const priceTxt = findField(p, ['DiscountPrice','Discount Price','discount','Sale Price','saleprice','specialprice','PriceNow','NowPrice']) || '';
-      const oldTxt   = findField(p, ['Price','price','Amount','amount','Selling Price','SellingPrice','Cost']) || '';
+      const oldTxt = findField(p, ['Price','price','Amount','amount','Selling Price','SellingPrice','Cost']) || '';
       const priceStr = String(priceTxt || oldTxt || '').trim();
-      const oldStr   = String(oldTxt || '').trim();
+      const oldStr = String(oldTxt || '').trim();
       const img = safe(findField(p, ['ImageLink','Image','imageurl','images','photo','photos']));
       const hasDiscount = String(priceTxt||'').trim() !== '' && String(oldTxt||'').trim() !== '';
-
-      // numeric parse to compute save if possible
-      const priceNum = parseNumberFlexible(priceStr);
-      const oldNum = parseNumberFlexible(oldStr);
+      const priceNum = parseNumberFlexible(priceStr), oldNum = parseNumberFlexible(oldStr);
       let saveHtml = '';
-      if(!isNaN(oldNum) && !isNaN(priceNum) && oldNum > priceNum){
-        const save = Math.round(oldNum - priceNum);
-        saveHtml = `<div class="fs-save">Save ${'₦' + save.toLocaleString()}</div>`;
-      } else if((oldStr || priceStr) && hasDiscount && (isNaN(oldNum) || isNaN(priceNum))){
-        // cannot compute numeric save but show placeholder so users see Save position
-        saveHtml = `<div class="fs-save">Save: —</div>`;
-      }
-
-      const viewsVal = findField(p, ['Views','views','rating']) || '';
-      const stars = viewsVal && String(viewsVal).trim() !== '' ? (function(){
-        let v = parseInt(String(viewsVal).replace(/\D/g,''),10);
-        if(isNaN(v)) v = 5;
-        v = Math.max(1, Math.min(5, v));
-        return Array.from({length:5},(_,k)=> k<v ? '★' : '☆').join('');
-      })() : '★★★★★';
-
+      if(!isNaN(oldNum)&&!isNaN(priceNum)&&oldNum>priceNum) saveHtml=`<div class="fs-save">Save ₦${(oldNum-priceNum).toLocaleString()}</div>`;
+      else if((oldStr||priceStr)&&hasDiscount) saveHtml=`<div class="fs-save">Save: —</div>`;
+      const viewsVal = p.__views || getRandomBaseViews();
+      const stars = '★★★★★';
       const wa = (findField(p,['WhatsApp','WhatsApp Link','whatsapp']) || 'https://wa.me/2347080535579');
-      const badgeClass = tag==='top' ? 'fs-orange' : (tag==='new' ? 'fs-green' : 'fs-orange');
-      const badgeText = tag==='top' ? 'BESTSELLER' : (tag==='new' ? 'NEW' : 'TRENDING');
-
-      // priceHtml includes saveHtml so Save sits directly under price
-      const priceHtml = `${ hasDiscount ? `<div class="fs-old">${escHtml(oldStr)}</div>` : '' }<div class="fs-price">${escHtml(priceStr || oldStr)}</div>${saveHtml ? saveHtml : ''}`;
+      const badgeClass = tag==='top'?'fs-orange':(tag==='new'?'fs-green':'fs-orange');
+      const badgeText = tag==='top'?'BESTSELLER':(tag==='new'?'NEW':'TRENDING');
+      const priceHtml = `${ hasDiscount ? `<div class="fs-old">${escHtml(oldStr)}</div>` : '' }<div class="fs-price">${escHtml(priceStr || oldStr)}</div>${saveHtml?saveHtml:''}`;
 
       return `
         <div class="fs-card" data-idx="${idx}">
           <div class="fs-badge ${badgeClass} fs-blink">${badgeText}</div>
-          <span class="fs-thumb" onclick="fsOpenDetails(${idx})" role="button" aria-label="Open ${escHtml(name)}"><img src="${escHtml(img)}" alt="${escHtml(name)}" loading="lazy"></span>
-          <div class="fs-body">
-            <h3 onclick="fsOpenDetails(${idx})">${escHtml(name)}</h3>
-            <div class="fs-price-row">
-              ${ priceHtml }
-            </div>
-            <div class="fs-timer" id="fs-timer-${idx}" data-idx="${idx}"></div>
-            <div class="fs-stars">${escHtml(stars)}</div>
-            <div class="fs-btns">
-              <a class="fs-btn fs-inquiry" href="${(String(wa).startsWith('http')? wa : wa + '?text=' + encodeURIComponent('Hello, I am interested in ' + name))}" target="_blank" rel="noopener">📩 Inquiry</a>
-              <button class="fs-btn fs-add" onclick="fsAddToCart('${escJs(name)}','${escJs(priceStr || oldStr)}','${escJs(img)}')">🛒 Add to Cart</button>
-            </div>
+          <span class="fs-thumb">
+            <a href="product.html?row=${p.__row}">
+              <img src="${escHtml(img)}" alt="${escHtml(name)}" loading="lazy">
+            </a>
+          </span>
+          <h3><a href="product.html?row=${p.__row}">${escHtml(name)}</a></h3>
+          <div class="fs-price-row">${priceHtml}</div>
+          <div class="fs-timer" id="fs-timer-${idx}" data-idx="${idx}"></div>
+          <div class="fs-stars">${escHtml(stars)}</div>
+          <div class="fs-btns" style="display:flex;gap:6px;">
+            <button class="fs-btn fs-add" style="flex:1" onclick="fsAddToCart('${escJs(name)}','${escJs(priceStr||oldStr)}','${escJs(img)}');event.stopPropagation();">🛒 Add to Cart</button>
+            <a class="fs-btn fs-inquiry" style="flex:1;text-align:center;" href="${(String(wa).startsWith('http')?wa:wa+'?text='+encodeURIComponent('Hello, I am interested in '+name))}" target="_blank" rel="noopener">📩 Inquiry</a>
           </div>
         </div>
       `;
     }
 
     function appendList(list, grid, tag){
-      const out = [];
+      const out=[];
       for(const it of list){
         const idx = gIdx++;
         window.fsProducts[idx] = it;
         out.push(makeCard(it, idx, tag));
       }
-      grid.innerHTML = out.length ? out.join('') : `<div style="grid-column:1/-1;padding:12px;color:var(--muted,#666);border-radius:8px;background:var(--card,#fff)">No ${tag} items</div>`;
+      grid.innerHTML = out.length?out.join(''):`<div style="grid-column:1/-1;padding:12px;color:var(--muted,#666);border-radius:8px;background:var(--card,#fff)">No ${tag} items</div>`;
     }
 
     appendList(most, mostGrid, 'most');
     appendList(top, topGrid, 'top');
     appendList(newList, newGrid, 'new');
 
-    // set countdown metadata: prefer explicit OfferEnd/EndDate if present else 30-day from now or from DateAdded
-    window.fsProducts.forEach((p, idx) => {
-      if(!p) return;
-      const endField = findField(p, ['OfferEnds','Offer End','EndDate','End Date','OfferEndDate']);
-      const dateField = findField(p, ['DateAdded','Date Added','date','added']);
-      let endTime = null;
-      if(endField){
-        const d = new Date(endField);
-        if(!isNaN(d)) endTime = d.getTime();
-      }
-      if(!endTime && dateField){
-        const d = new Date(dateField);
-        if(!isNaN(d)) endTime = d.getTime() + (30 * 24 * 60 * 60 * 1000);
-      }
-      if(!endTime) endTime = Date.now() + (30 * 24 * 60 * 60 * 1000);
-      p._hasCountdown = !!( findField(p,['Price','price','DiscountPrice','discount','Offer']) || findField(p,['Price','DiscountPrice','Discount Price']) );
-      p._durationMs = 30 * 24 * 60 * 60 * 1000;
-      p._endTime = endTime;
-    });
-
-    // timers tick
-    setInterval(()=> {
-      (window.fsProducts||[]).forEach((p, idx) => {
-        if(!p || !p._hasCountdown) return;
-        const el = document.getElementById('fs-timer-' + idx);
-        if(!el) return;
-        let t = p._endTime - Date.now();
-        if(t <= 0){ p._endTime = Date.now() + p._durationMs; t = p._endTime - Date.now(); }
-        const s = Math.floor(t/1000); const d=Math.floor(s/86400); const h=Math.floor((s%86400)/3600); const m=Math.floor((s%3600)/60); const sec=s%60;
-        el.textContent = 'Offer ends in: ' + `${d}d ${h}h ${m}m ${sec}s`;
-      });
-    }, 1000);
-
-    // stop badge blink after 10s (attention then calm)
-    setTimeout(()=> document.querySelectorAll('.fs-blink').forEach(b=> b.classList.remove('fs-blink')), 10000);
-
   } catch(err){
-    console.error('feat error', err);
-    try{ document.getElementById('fsMsg').textContent = 'Error loading featured products.'; }catch(e){}
+    console.error('feat error',err);
+    try{ document.getElementById('fsMsg').textContent='Error loading featured products.'; }catch(e){}
   }
 
-  // Add-to-cart (robust + sync)
+  // Cart update
   window.fsAddToCart = function(name, price, image){
     try {
-      if(!image || String(image).trim()==='') { alert('Item image missing — cannot add'); return; }
-      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-      cart.push({ name: name || '', price: price || '', image: image || '', qty: 1 });
+      if(!image||String(image).trim()===''){ alert('Item image missing'); return; }
+      const cart = JSON.parse(localStorage.getItem('cart')||'[]');
+      cart.push({name, price, image, qty:1});
       localStorage.setItem('cart', JSON.stringify(cart));
-      try { const ev = new Event('storage'); ev.key = 'cart'; window.dispatchEvent(ev); } catch(e){}
       updateCartBadges(cart.length);
-    } catch (err) { console.error('fsAddToCart error', err); }
+    } catch(e){ console.error(e); }
   };
-
   function updateCartBadges(count){
-    const ids = ['cart-count-bottom','cart-count','cart-count-bottom'];
-    let found = false;
-    ids.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) {
-        el.style.display = count > 0 ? 'inline-block' : 'none';
-        el.textContent = count;
-        try { el.animate([{ transform: 'scale(1.2)' }, { transform: 'scale(1)' }], { duration: 220 }); } catch(e){}
-        found = true;
-      }
-    });
-    if (!found) {
-      setTimeout(()=> {
-        if (!updateCartBadges._tries) updateCartBadges._tries = 1; else updateCartBadges._tries++;
-        if (updateCartBadges._tries <= 8) updateCartBadges(count);
-        else updateCartBadges._tries = 0;
-      }, 300);
-    } else updateCartBadges._tries = 0;
+    const el = document.getElementById('cart-count');
+    if(el){ el.style.display='inline-block'; el.textContent=count; }
   }
-
-  (function syncCartUI(){
-    try {
-      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-      updateCartBadges(cart.length);
-      window.addEventListener('storage', (e) => {
-        if (e.key === 'cart' || !e.key) {
-          const c = JSON.parse(localStorage.getItem('cart')||'[]');
-          updateCartBadges(c.length);
-        }
-      });
-    } catch(e){ console.error('syncCartUI error', e); }
-  })();
-
-  // Details open/close + back behavior (single close on Back)
-  window.fsOpenDetails = function(idx){
-    const p = (window.fsProducts||[])[idx]; if(!p) return;
-    const img = escHtml(findField(p,['ImageLink','Image','image','imageurl','images']) || 'https://i.postimg.cc/yxGGYGDw/Ag-ACkq-HWp-Pyzt-HZ89-Sp-Vx-Y.jpg');
-    document.getElementById('featLeft').innerHTML = `<img src="${img}" alt="${escHtml(p.ProductName||p.product||'')}" />`;
-    const name = escHtml(findField(p,['ProductName','Product Name','product','name']) || 'Unnamed');
-    const priceTxt = findField(p, ['DiscountPrice','Discount Price','discount','Offer','Price','price']) || '';
-    const origTxt = findField(p, ['Price','price','Amount','amount']) || '';
-    const priceHtml = priceTxt ? `<div class="fs-old">${escHtml(origTxt)}</div><div class="fs-price">${escHtml(priceTxt)}</div>` : `<div class="fs-price">${escHtml(origTxt||priceTxt)}</div>`;
-    const desc = escHtml(findField(p,['Description','description','details']) || 'No description available.');
-    const wa = (findField(p,['WhatsApp','WhatsApp Link','whatsapp']) || 'https://wa.me/2347080535579');
-
-    document.getElementById('featRight').innerHTML = `
-      <h2>${name}</h2>
-      <div class="fs-price-row">${priceHtml}</div>
-      <div class="fs-timer" id="fs-details-timer">--</div>
-      <div class="fs-stars">${escHtml(findField(p,['Views','views','rating']) || '★★★★★')}</div>
-      <div style="margin-top:12px;display:flex;gap:8px;">
-        <a class="fs-btn fs-inquiry" href="${wa}?text=${encodeURIComponent('Hello, I am interested in ' + name)}" target="_blank">📩 Inquiry</a>
-        <button class="fs-btn fs-add" onclick="fsAddToCart('${escJs(name)}','${escJs(priceTxt||origTxt)}','${escJs(img)}')">🛒 Add to Cart</button>
-      </div>
-      <div class="feat-desc"><h3 style="margin-top:18px;color:var(--accent,#111)">Product description</h3><p style="margin-top:8px;">${desc}</p></div>
-    `;
-
-    // show overlay
-    const details = document.getElementById('featDetails');
-    details.style.display = 'flex'; details.setAttribute('aria-hidden','false'); document.body.style.overflow = 'hidden';
-
-    // set details timer
-    if(p._hasCountdown){
-      const dt = document.getElementById('fs-details-timer'); let t = p._endTime - Date.now();
-      if(t<=0){ p._endTime = Date.now() + p._durationMs; t = p._endTime - Date.now(); }
-      if(dt){
-        const s = Math.floor(t/1000); const d=Math.floor(s/86400); const h=Math.floor((s%86400)/3600); const m=Math.floor((s%3600)/60); const sec=s%60;
-        dt.textContent = 'Offer ends in: ' + `${d}d ${h}h ${m}m ${sec}s`;
-      }
-    }
-
-    try{ history.pushState({feat:'open', idx: idx}, '', '#fproduct-' + idx); } catch(e){}
-  };
-
-  // close button
-  document.getElementById('featClose').addEventListener('click', function(){
-    const details = document.getElementById('featDetails');
-    details.style.display = 'none'; details.setAttribute('aria-hidden','true'); document.body.style.overflow = '';
-  });
-
-  // popstate: if overlay is open -> close it (once)
-  window.addEventListener('popstate', function(){
-    try{
-      const details = document.getElementById('featDetails');
-      if(details && details.style.display === 'flex'){
-        const closeBtn = document.getElementById('featClose');
-        if(closeBtn) closeBtn.click();
-      }
-    }catch(e){ console.error('feat popstate', e); }
-  });
-
-  // utility shorthand used above (kept for compatibility)
-  function findField(it, names){ for(const n of names){ for(const k in it) if(normKey(k)===normKey(n)) return it[k]; } return ''; }
+  updateCartBadges(JSON.parse(localStorage.getItem('cart')||'[]').length);
 
 })();
 </script>
@@ -1776,48 +2105,6 @@ const useData = data.filter(item => {
       }, true);
     })();
   </script>
-
-<!-- ================= ADDED: Bottom nav (theme + cart) and scripts ================= -->
-<!-- bottom nav HTML (no home icon as requested) -->
-<nav class="bottom-nav" role="navigation" aria-label="Main nav">
-  <button id="themeSwitch" aria-label="Switch theme">🎨 Theme</button>
-  <a href="cart.html" id="nav-cart" aria-label="Cart">🛒 Cart <span id="cart-count" class="cart-badge" style="display:none">0</span></a>
-</nav>
-
-<script>
-  // Theme switcher (classic, dark, gold) — non-intrusive, uses CSS variables already present
-  (function(){
-    const themes = ['classic','dark','gold'];
-    let current = localStorage.getItem('vbest_theme') || 'classic';
-    if (!themes.includes(current)) current = 'classic';
-    document.body.setAttribute('data-theme', current);
-    let idx = themes.indexOf(current);
-    const btn = document.getElementById('themeSwitch');
-    if (btn){
-      btn.addEventListener('click', ()=> {
-        idx = (idx + 1) % themes.length;
-        const t = themes[idx];
-        document.body.setAttribute('data-theme', t);
-        localStorage.setItem('vbest_theme', t);
-      });
-    }
-  })();
-
-  // Cart badge (localStorage 'cart' array)
-  (function(){
-    function updateCartCount(){
-      try{
-        const el = document.getElementById('cart-count');
-        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        if (cart && cart.length > 0){ el.style.display = 'inline-block'; el.textContent = cart.length; }
-        else { el.style.display = 'none'; }
-      }catch(e){ /* ignore */ }
-    }
-    updateCartCount();
-    window.addEventListener('storage', (e) => { if(e.key === 'cart') updateCartCount(); });
-  })();
-</script>
-
 <!-- FULL-SCREEN WHATSAPP CHAT OVERLAY -->
 <style>
 #vChatBtn{
