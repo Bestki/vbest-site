@@ -459,71 +459,146 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 </script>
 
 <style>
-/* Remove extra space between cart and top category */
-body {
-  padding-top: 40px; /* matches height of cart bar */
-  margin: 0;
+body{
+  padding-top:40px;
+  margin:0;
 }
 
-/* Top category directly touches cart bar */
-.top-category-banner {
-  margin-top: 0;
+.top-category-banner{
+  margin-top:0;
 }
 
-/* Cart badge style */
-.cart-badge {
-  background: #FF3300;
-  color: #fff;
-  border-radius: 50%;
-  padding: 2px 6px;
-  font-size: 0.8rem;
+.top-category-menu{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  background:#fff;
+  padding:8px 10px;
 }
 
-/* Google Font */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap');
+.menu-item{
+  text-decoration:none;
+  color:#000;
+  font-size:14px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.menu-dropdown{
+  position:relative;
+  margin-left:auto;
+}
+
+.menu-button{
+  background:none;
+  border:none;
+  font-size:14px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.dropdown-content{
+  display:none;
+  position:absolute;
+  right:0;
+  top:100%;
+  background:#fff;
+  min-width:190px;
+  border:1px solid #ddd;
+  z-index:999999;
+}
+
+.dropdown-content a{
+  display:block;
+  padding:10px;
+  color:#000;
+  text-decoration:none;
+}
+
+.dropdown-content a:hover{
+  background:#f2f2f2;
+}
+
+.dropdown-content.show{
+  display:block;
+}
 </style>
 
-  <!-- TOP MEDIA:use an image by default; you can replace this <img> with a <video> tag when you want a video -->
-<!-- ===== Top Category Menu ===== -->
 <div class="top-category-banner">
   <div class="top-category-menu">
-    <a href="all.html" class="menu-item"><i class="fa-solid fa-couch"></i><span>Home Furniture</span></a>
-    <a href="light.html" class="menu-item"><i class="fa-solid fa-lightbulb"></i><span>Lighting</span></a>
-    <a href="outdoor.html" class="menu-item"><i class="fa-solid fa-tree"></i><span>Outdoor</span></a>
-    <a href="office.html" class="menu-item"><i class="fa-solid fa-briefcase"></i><span>Office Furniture</span></a>
+
+    <a href="all.html" class="menu-item">
+      <i class="fa-solid fa-couch"></i>
+      <span>Home Furniture</span>
+    </a>
+
+    <a href="light.html" class="menu-item">
+      <i class="fa-solid fa-lightbulb"></i>
+      <span>Lighting</span>
+    </a>
+
+    <a href="outdoor.html" class="menu-item">
+      <i class="fa-solid fa-tree"></i>
+      <span>Outdoor</span>
+    </a>
+
+    <a href="office.html" class="menu-item">
+      <i class="fa-solid fa-briefcase"></i>
+      <span>Office Furniture</span>
+    </a>
 
     <!-- Right-end Menu -->
     <div class="menu-dropdown">
-      <button class="menu-button"><i class="fa-solid fa-bars"></i><span>Menu</span></button>
-      <div class="dropdown-content">
+      <button class="menu-button" id="menuToggle" type="button">
+        <i class="fa-solid fa-bars"></i>
+        <span>Menu</span>
+      </button>
+
+      <div class="dropdown-content" id="menuContent">
         <a href="sofa.html">Sofas</a>
         <a href="bed.html">Beds</a>
         <a href="dining.html">Dining</a>
-                <a href="centertable.html">Ceter tables</a>
-                        <a href="sidestool.html">Side Stool</a>
-                        <a href="chair.html">Chairs</a>
+        <a href="centertable.html">Center Tables</a>
+        <a href="sidestool.html">Side Stool</a>
+        <a href="chair.html">Chairs</a>
         <a href="office.html">Office Furniture</a>
         <a href="outdoor.html">Outdoor</a>
         <a href="game.html">Game</a>
-      
         <a href="snooker.html">Snooker</a>
-        <a href="winbar.html">Winbar</a>
+        <a href="winbar.html">Wine Bar</a>
         <a href="sideboard.html">Sideboard</a>
         <a href="console.html">Console</a>
         <a href="cabinet.html">Cabinet</a>
-
       </div>
     </div>
+
   </div>
 </div>
 
+<script>
+(function(){
+  const toggle = document.getElementById("menuToggle");
+  const menu = document.getElementById("menuContent");
+
+  toggle.addEventListener("click", function(e){
+    e.stopPropagation();
+    menu.classList.toggle("show");
+  });
+
+  document.addEventListener("click", function(){
+    menu.classList.remove("show");
+  });
+})();
+</script>
+
 <!-- ===== Header Video ===== -->
-<div class="top-media" aria-hidden="false">
-  <div class="header-video-container">
-    <video autoplay muted loop playsinline preload="metadata" poster="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg" class="header-video">
-      <source src="videos/White.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
+<video autoplay muted loop playsinline preload="auto" poster="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg" class="header-video" style="width:100%; height:auto; object-fit:cover;">
+  <source src="videos/White.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
   </div>
 </div>
 

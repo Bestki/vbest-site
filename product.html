@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Page | V-Best Interiors</title>
+<style>
+body { margin:0; font-family:sans-serif; background:#f5f5f5; }
+.top-cart-bar {
+  position: fixed; top:0; left:0; width:100%; z-index:9999;
+  background:#222; color:#fff; display:flex; justify-content:center;
+  align-items:center; padding:10px 20px; box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+.top-cart-bar span, .top-cart-bar a { font-weight:bold; color:#fff; font-size:1.1rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
+.cart-badge { background:#FF3300; color:#fff; border-radius:50%; padding:2px 6px; font-size:0.8rem; display:inline-block; }
+
+.product-page { padding:80px 20px 40px; max-width:1200px; margin:0 auto; }
+.product-main { display:flex; gap:20px; flex-wrap:wrap; }
+.product-left img { width:100%; max-width:500px; border-radius:8px; }
+.product-right { flex:1; min-width:280px; }
+.product-right h1 { margin:0 0 10px; color:#222; font-size:1.8rem; }
+.product-right .fs-price-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; flex-wrap:wrap; }
+.product-right .fs-price { font-weight:bold; font-size:1.3rem; }
+.product-right .fs-old { text-decoration:line-through; color:#888; }
+.fs-views { font-size:0.95rem; color:#555; display:flex; align-items:center; gap:6px; margin-bottom:10px; }
+.fs-views b { font-weight:bold; }
+.fs-dot { width:10px; height:10px; border-radius:50%; background:#25D366; animation:pulse 1.2s infinite; }
+@keyframes pulse { 0%{transform:scale(0.8);opacity:0.7;}50%{transform:scale(1.2);opacity:1;}100%{transform:scale(0.8);opacity:0.7;} }
+
+.product-right .fs-btns { display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap; }
+.fs-btn { padding:10px; border-radius:6px; font-weight:bold; cursor:pointer; text-align:center; flex:1; text-decoration:none; display:inline-block; box-sizing:border-box; }
+.fs-btn.add { background:#000; color:#fff; border:none; }
+.fs-btn.inquiry { background:#25D366; color:#fff; border:none; }
+
+.product-desc { margin-bottom:20px; }
+.product-reviews { margin-top:20px; background:#fff; padding:15px; border-radius:8px; }
+.product-reviews h3 { margin:0 0 10px; }
+.review-item { border-top:1px solid #ddd; padding:8px 0; }
+.review-item strong { display:block; margin-bottom:4px; }
+.review-stars { color:#FFD700; margin-bottom:4px; }
+
+.review-form { margin-top:10px; display:flex; flex-direction:column; gap:8px; }
+.review-form input, .review-form textarea, .review-form select { width:100%; padding:8px; border-radius:6px; border:1px solid #ccc; font-size:0.95rem; }
+.review-form button { background:#25D366; color:#fff; border:none; padding:10px 14px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:1rem; }
+
+.product-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:15px; margin-top:20px; }
+.fs-card { background:#fff; border-radius:8px; padding:10px; display:flex; flex-direction:column; cursor:pointer; transition:0.2s; position:relative; }
+.fs-card:hover { box-shadow:0 2px 8px rgba(0,0,0,0.15); }
+.fs-thumb img { width:100%; border-radius:6px; }
+.fs-body h3 { margin:8px 0; font-size:1rem; color:#222; }
+.fs-price-row { display:flex; flex-direction:column; gap:4px; }
+.fs-btns-card { display:flex; flex-direction:column; gap:6px; margin-top:6px; }
+.fs-btns-card .fs-btn { width:100%; padding:10px; box-sizing:border-box; }
+
+.fs-badge { position:absolute; top:8px; left:8px; padding:2px 6px; font-size:0.7rem; color:#fff; border-radius:4px; }
+.fs-orange { background:#FF6600; }
+.fs-green { background:#2DB400; }
+</style>
+</head>
+<body>
+
+<!-- Top cart bar (centered) -->
+<div class="top-cart-bar">
+  <span>V-Best Luxury Interior</span>
+  <a href="cart.html">🛒 Cart <span id="cart-count" class="cart-badge">0</span></a>
+</div>
+
+<div class="product-page">
+
+  <div class="product-main">
+    <div class="product-left" id="productLeft"></div>
+    <div class="product-right" id="productRight"></div>
+  </div>
+
+  <h2>You May Also Like</h2>
+  <div id="relatedGrid" class="product-grid"></div>
+  <h2>Top Trending</h2>
+  <div id="topTrendingGrid" class="product-grid"></div>
+  <h2>Related Products</h2>
+  <div id="relatedTopGrid" class="product-grid"></div>
+
+</div>
+
+<script>
+const sheetUrl = "https://opensheet.elk.sh/1FA4s21Je3ebeFXUXGu_xvqdo4gbM1v9Q9jOHt6LAH6Y/Sheet1";
+
+function normKey(k){ return String(k||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
+function findField(it, names){ for(const n of names) for(const k in it) if(normKey(k)===normKey(n)) return it[k]; return ''; }
+function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escJs(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"'); }
+function safe(u){ return u && String(u).trim() ? String(u).trim() : 'https://i.postimg.cc/yxGGYGDw/Ag-ACkq-HWp-Pyzt-HZ89-Sp-Vx-Y.jpg'; }
+
+// Cart badge
+(function(){
+  const el = document.getElementById('cart-count');
+  const cart = JSON.parse(localStorage.getItem('cart')||'[]');
+  el.style.display='inline-block'; el.textContent=cart.length;
+  window.addEventListener('storage',()=>{ 
+    const c=JSON.parse(localStorage.getItem('cart')||'[]'); 
+    el.textContent=c.length; el.style.display='inline-block'; 
+  });
+})();
+
+// Random people viewing
+function getRandomViews(){ return Math.floor(Math.random()*4801)+200; }
+
+(async function(){
+  const res = await fetch(sheetUrl);
+  const data = await res.json();
+  const dataWithIndex = data.map((p,i)=>({ ...p, __row:i }));
+
+  const params = new URLSearchParams(window.location.search);
+  const rowNum = parseInt(params.get('row')) || 0;
+  const product = dataWithIndex[rowNum] || dataWithIndex[0];
+
+  const viewsCount = getRandomViews();
+  product.Views = viewsCount;
+
+  const img = safe(findField(product,['ImageLink','Image','imageurl']));
+  const name = findField(product,['ProductName','Product Name','product','name']);
+  const price = findField(product,['DiscountPrice','Discount Price','discount','Price','price']);
+  const oldPrice = findField(product,['Price','price','Amount','amount']);
+  const desc = findField(product,['Description','description','details']);
+  const wa = findField(product,['WhatsApp','WhatsApp Link','whatsapp']) || 'https://wa.me/2347080535579';
+
+  document.getElementById('productLeft').innerHTML = `<img src="${escHtml(img)}" alt="${escHtml(name)}">`;
+
+  document.getElementById('productRight').innerHTML = `
+    <h1>${escHtml(name)}</h1>
+    <div class="fs-price-row">
+      ${oldPrice && oldPrice!=price ? `<div class="fs-old">${escHtml(oldPrice)}</div>`:''}
+      <div class="fs-price">${escHtml(price||oldPrice)}</div>
+    </div>
+    <div class="fs-views"><span class="fs-dot"></span> <b>${viewsCount}</b> people viewing this now</div>
+    <div class="fs-btns">
+      <button class="fs-btn add" onclick="addToCart('${escJs(name)}','${escJs(price||oldPrice)}','${escJs(img)}')">🛒 Add to Cart</button>
+      <a class="fs-btn inquiry" href="${wa}?text=${encodeURIComponent('Hello, I am interested in ' + name)}" target="_blank">📩 Inquiry</a>
+    </div>
+    <div class="product-desc"><h3>Description</h3><p>${escHtml(desc)}</p></div>
+    <div class="product-reviews">
+      <h3>Be the first to review</h3>
+      <div id="reviewsList"></div>
+      <div class="review-form">
+        <input type="text" id="reviewName" placeholder="Your Name">
+        <select id="reviewStars">
+          <option value="5">★★★★★</option>
+          <option value="4">★★★★☆</option>
+          <option value="3">★★★☆☆</option>
+          <option value="2">★★☆☆☆</option>
+          <option value="1">★☆☆☆☆</option>
+        </select>
+        <textarea id="reviewText" placeholder="Write your review here"></textarea>
+        <button onclick="submitReview()">Submit</button>
+      </div>
+    </div>
+  `;
+
+  window.addToCart = function(name, price, img){
+    const cart = JSON.parse(localStorage.getItem('cart')||'[]');
+    cart.push({name, price, image:img, qty:1});
+    localStorage.setItem('cart', JSON.stringify(cart));
+    const el = document.getElementById('cart-count');
+    if(el){ el.textContent=cart.length; el.style.display='inline-block'; }
+    alert('Added to cart!');
+  }
+
+  window.submitReview = function(){
+    const name = document.getElementById('reviewName').value.trim() || 'Anonymous';
+    const stars = document.getElementById('reviewStars').value;
+    const text = document.getElementById('reviewText').value.trim();
+    if(!text){ alert('Enter review first'); return; }
+
+    const list = document.getElementById('reviewsList');
+    const div = document.createElement('div');
+    div.className='review-item';
+    div.innerHTML = `<strong>${escHtml(name)}</strong>
+                     <div class="review-stars">${'★'.repeat(stars)}</div>
+                     <div>${escHtml(text)}</div>
+                     <em>Waiting for admin approval</em>`;
+    list.prepend(div);
+
+    document.getElementById('reviewText').value='';
+    document.getElementById('reviewName').value='';
+  }
+
+  function shuffleArray(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+  function renderGrid(list, gridId){
+    const grid = document.getElementById(gridId);
+    const shuffled = shuffleArray(list);
+    grid.innerHTML = shuffled.slice(0,5).map(p=>{
+      const img=safe(findField(p,['ImageLink','Image','imageurl']));
+      const name=findField(p,['ProductName','Product Name','product','name']);
+      const price=findField(p,['DiscountPrice','Discount Price','discount','Price','price']);
+      return `
+      <div class="fs-card" onclick="window.location='product.html?row=${p.__row}'">
+        <span class="fs-thumb"><img src="${escHtml(img)}" alt="${escHtml(name)}"></span>
+        <div class="fs-body">
+          <h3>${escHtml(name)}</h3>
+          <div class="fs-price-row"><div class="fs-price">${escHtml(price)}</div></div>
+          <div class="fs-btns-card">
+            <button class="fs-btn add" onclick="addToCart('${escJs(name)}','${escJs(price)}','${escJs(img)}');event.stopPropagation();">🛒 Add to Cart</button>
+            <a class="fs-btn inquiry" href="${wa}?text=${encodeURIComponent('Hello, I am interested in ' + name)}" target="_blank">📩 Inquiry</a>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  renderGrid(dataWithIndex,'relatedGrid');
+  renderGrid(dataWithIndex,'topTrendingGrid');
+  renderGrid(dataWithIndex,'relatedTopGrid');
+
+})();
+</script>
+</body>
+</html>
