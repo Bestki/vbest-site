@@ -1,19 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Product Page | V-Best Interiors</title>
-<style>
-body { margin:0; font-family:sans-serif; background:#f5f5f5; }
-.top-cart-bar {
-  position: fixed; top:0; left:0; width:100%; z-index:9999;
-  background:#222; color:#fff; display:flex; justify-content:center;
-  align-items:center; padding:10px 20px; box-shadow:0 2px 5px rgba(0,0,0,0.1);
-}
-.top-cart-bar span, .top-cart-bar a { font-weight:bold; color:#fff; font-size:1.1rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
-.cart-badge { background:#FF3300; color:#fff; border-radius:50%; padding:2px 6px; font-size:0.8rem; display:inline-block; }
-
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<title>Product Page | V-Best Interiors</title>  
+<style>  
+body { margin:0; font-family:sans-serif; background:#f5f5f5; }  
+.top-cart-bar {  
+  position: fixed; top:0; left:0; width:100%; z-index:9999;  
+  background:#222; color:#fff; display:flex; justify-content:center;  
+  align-items:center; padding:10px 20px; box-shadow:0 2px 5px rgba(0,0,0,0.1);  
+}  
+.top-cart-bar span, .top-cart-bar a { font-weight:bold; color:#fff; font-size:1.1rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }  
+.cart-badge { background:#FF3300; color:#fff; border-radius:50%; padding:2px 6px; font-size:0.8rem; display:inline-block; }  
 .product-page { padding:80px 20px 40px; max-width:1200px; margin:0 auto; }
 .product-main { display:flex; gap:20px; flex-wrap:wrap; }
 .product-left img { width:100%; max-width:500px; border-radius:8px; }
@@ -55,163 +54,221 @@ body { margin:0; font-family:sans-serif; background:#f5f5f5; }
 .fs-badge { position:absolute; top:8px; left:8px; padding:2px 6px; font-size:0.7rem; color:#fff; border-radius:4px; }
 .fs-orange { background:#FF6600; }
 .fs-green { background:#2DB400; }
+
+.site-footer { background:#111; color:#ddd; margin-top:40px; }
+.footer-wrap { max-width:1200px; margin:0 auto; padding:40px 20px; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:25px; }
+.site-footer h3,.site-footer h4{ color:#fff; }
+.site-footer a{ color:#ccc; text-decoration:none; display:block; margin:6px 0; }
+.footer-bottom{ text-align:center; padding:12px; border-top:1px solid #222; font-size:0.85rem; }
 </style>
-</head>
-<body>
 
-<!-- Top cart bar (centered) -->
-<div class="top-cart-bar">
-  <span>V-Best Luxury Interior</span>
-  <a href="cart.html">🛒 Cart <span id="cart-count" class="cart-badge">0</span></a>
-</div>
+</head>  
+<body>  
 
-<div class="product-page">
+<div class="top-cart-bar">  
+  <span>V-Best Luxury Interior</span>  
+  <a href="cart.html">🛒 Cart <span id="cart-count" class="cart-badge">0</span></a>  
+</div>  
 
-  <div class="product-main">
-    <div class="product-left" id="productLeft"></div>
-    <div class="product-right" id="productRight"></div>
-  </div>
+<div class="product-page">  
+  <div class="product-main">  
+    <div class="product-left" id="productLeft"></div>  
+    <div class="product-right" id="productRight"></div>  
+  </div>  
 
-  <h2>You May Also Like</h2>
-  <div id="relatedGrid" class="product-grid"></div>
-  <h2>Top Trending</h2>
-  <div id="topTrendingGrid" class="product-grid"></div>
-  <h2>Related Products</h2>
-  <div id="relatedTopGrid" class="product-grid"></div>
+  <h2>You May Also Like</h2>  
+  <div id="relatedGrid" class="product-grid"></div>  
 
-</div>
+  <h2>Top Trending</h2>  
+  <div id="topTrendingGrid" class="product-grid"></div>  
 
-<script>
-const sheetUrl = "https://opensheet.elk.sh/1FA4s21Je3ebeFXUXGu_xvqdo4gbM1v9Q9jOHt6LAH6Y/Sheet1";
+  <h2>Related Products</h2>  
+  <div id="relatedTopGrid" class="product-grid"></div>  
+</div>  
 
-function normKey(k){ return String(k||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
-function findField(it, names){ for(const n of names) for(const k in it) if(normKey(k)===normKey(n)) return it[k]; return ''; }
-function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function escJs(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"'); }
-function safe(u){ return u && String(u).trim() ? String(u).trim() : 'https://i.postimg.cc/yxGGYGDw/Ag-ACkq-HWp-Pyzt-HZ89-Sp-Vx-Y.jpg'; }
+<footer class="site-footer">  
+  <div class="footer-wrap">  
+    <div>  
+      <h3>V-Best Interiors</h3>  
+      <p>Luxury furniture & modern interior solutions.</p>  
+    </div>  
+    <div>  
+      <h4>Contact</h4>  
+      <p>📞 +234 708 053 5579</p>  
+      <p>✉️ best28763@gmail.com</p>  
+    </div>  
+    <div>  
+      <h4>Support</h4>  
+      <a href="https://wa.me/2347080535579" target="_blank">Chat on WhatsApp</a>  
+    </div>  
+  </div>  
+<div class="footer-bottom">© 2023 V-Best Interiors</div>  
+</footer>  
 
-// Cart badge
-(function(){
-  const el = document.getElementById('cart-count');
-  const cart = JSON.parse(localStorage.getItem('cart')||'[]');
-  el.style.display='inline-block'; el.textContent=cart.length;
-  window.addEventListener('storage',()=>{ 
-    const c=JSON.parse(localStorage.getItem('cart')||'[]'); 
-    el.textContent=c.length; el.style.display='inline-block'; 
-  });
-})();
+<script>  
+const sheetUrl = "https://opensheet.elk.sh/1FA4s21Je3ebeFXUXGu_xvqdo4gbM1v9Q9jOHt6LAH6Y/Sheet1";  
 
-// Random people viewing
-function getRandomViews(){ return Math.floor(Math.random()*4801)+200; }
+function normKey(k){ return String(k||'').toLowerCase().replace(/[^a-z0-9]/g,''); }  
+function findField(it, names){ for(const n of names) for(const k in it) if(normKey(k)===normKey(n)) return it[k]; return ''; }  
+function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }  
+function escJs(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"'); }  
+function safe(u){ return u && String(u).trim() ? String(u).trim() : ''; }  
+function priceToNumber(p){ return Number(String(p||'').replace(/[^\d]/g,'')); }  
 
-(async function(){
-  const res = await fetch(sheetUrl);
-  const data = await res.json();
-  const dataWithIndex = data.map((p,i)=>({ ...p, __row:i }));
+// Cart badge  
+(function(){  
+  const el = document.getElementById('cart-count');  
+  const cart = JSON.parse(localStorage.getItem('cart')||'[]');  
+  el.style.display='inline-block'; el.textContent=cart.length;  
+  window.addEventListener('storage',()=>{   
+    const c=JSON.parse(localStorage.getItem('cart')||'[]');   
+    el.textContent=c.length; el.style.display='inline-block';   
+  });  
+})();  
 
-  const params = new URLSearchParams(window.location.search);
-  const rowNum = parseInt(params.get('row')) || 0;
-  const product = dataWithIndex[rowNum] || dataWithIndex[0];
+// Random people viewing  
+function getRandomViews(){ return Math.floor(Math.random()*4801)+200; }  
 
-  const viewsCount = getRandomViews();
-  product.Views = viewsCount;
+(async function(){  
+  const res = await fetch(sheetUrl);  
+  const data = await res.json();  
+  const dataWithIndex = data.map((p,i)=>({ ...p, __row:i }));  
 
-  const img = safe(findField(product,['ImageLink','Image','imageurl']));
-  const name = findField(product,['ProductName','Product Name','product','name']);
-  const price = findField(product,['DiscountPrice','Discount Price','discount','Price','price']);
-  const oldPrice = findField(product,['Price','price','Amount','amount']);
-  const desc = findField(product,['Description','description','details']);
-  const wa = findField(product,['WhatsApp','WhatsApp Link','whatsapp']) || 'https://wa.me/2347080535579';
+  const params = new URLSearchParams(window.location.search);  
 
-  document.getElementById('productLeft').innerHTML = `<img src="${escHtml(img)}" alt="${escHtml(name)}">`;
+  // ✅ Use id first, fallback to row if no id  
+  const productId = params.get('id');  
+  const rowNum = parseInt(params.get('row'));  
 
-  document.getElementById('productRight').innerHTML = `
-    <h1>${escHtml(name)}</h1>
-    <div class="fs-price-row">
-      ${oldPrice && oldPrice!=price ? `<div class="fs-old">${escHtml(oldPrice)}</div>`:''}
-      <div class="fs-price">${escHtml(price||oldPrice)}</div>
-    </div>
-    <div class="fs-views"><span class="fs-dot"></span> <b>${viewsCount}</b> people viewing this now</div>
-    <div class="fs-btns">
-      <button class="fs-btn add" onclick="addToCart('${escJs(name)}','${escJs(price||oldPrice)}','${escJs(img)}')">🛒 Add to Cart</button>
-      <a class="fs-btn inquiry" href="${wa}?text=${encodeURIComponent('Hello, I am interested in ' + name)}" target="_blank">📩 Inquiry</a>
-    </div>
-    <div class="product-desc"><h3>Description</h3><p>${escHtml(desc)}</p></div>
-    <div class="product-reviews">
-      <h3>Be the first to review</h3>
-      <div id="reviewsList"></div>
-      <div class="review-form">
-        <input type="text" id="reviewName" placeholder="Your Name">
-        <select id="reviewStars">
-          <option value="5">★★★★★</option>
-          <option value="4">★★★★☆</option>
-          <option value="3">★★★☆☆</option>
-          <option value="2">★★☆☆☆</option>
-          <option value="1">★☆☆☆☆</option>
-        </select>
-        <textarea id="reviewText" placeholder="Write your review here"></textarea>
-        <button onclick="submitReview()">Submit</button>
-      </div>
+  let product;  
+  if(productId){  
+    product = dataWithIndex.find(p => String(findField(p,['id','ID'])) === String(productId));  
+  } else if(!isNaN(rowNum)){  
+    product = dataWithIndex[rowNum];  
+  }  
+  if(!product) product = dataWithIndex[0];  
+
+  const viewsCount = getRandomViews();  
+  product.Views = viewsCount;  
+
+  const rawImg = findField(product,['ImageLink','Image','imageurl']);  
+  const hasImage = rawImg && String(rawImg).trim() !== '';  
+  const name = findField(product,['ProductName','Product Name','product','name']);  
+  const price = findField(product,['DiscountPrice','Discount Price','discount','Price','price']);  
+  const oldPrice = findField(product,['Price','price','Amount','amount']);  
+  const desc = findField(product,['Description','description','details']);  
+  const wa = findField(product,['WhatsApp','WhatsApp Link','whatsapp']) || 'https://wa.me/2347080535579';  
+
+  // ✅ Out of stock if no image  
+  if(!hasImage){  
+    document.getElementById('productLeft').innerHTML = `  
+      <div style="padding:40px;background:#fff;border-radius:8px;text-align:center">  
+        <h2 style="color:#b00020">Out of Stock</h2>  
+        <p>This product is currently unavailable.</p>  
+      </div>`;  
+    document.getElementById('productRight').innerHTML = `  
+      <h1>${escHtml(name)}</h1>  
+      <p style="color:#b00020;font-weight:600">This item is currently out of stock.</p>`;  
+    return;  
+  }  
+
+  document.getElementById('productLeft').innerHTML = `<img src="${escHtml(rawImg)}" alt="${escHtml(name)}">`;  
+
+  document.getElementById('productRight').innerHTML = `  
+    <h1>${escHtml(name)}</h1>  
+    <div class="fs-price-row">  
+      ${oldPrice && oldPrice!=price ? `<div class="fs-old">${escHtml(oldPrice)}</div>`:''}  
+      <div class="fs-price">${escHtml(price||oldPrice)}</div>  
+    </div>  
+    <div class="fs-views"><span class="fs-dot"></span> <b>${viewsCount}</b> people viewing this now</div>  
+    <div class="fs-btns">  
+      <button class="fs-btn add" onclick="addToCart('${escJs(name)}','${escJs(price||oldPrice)}','${escJs(rawImg)}')">🛒 Add to Cart</button>  
+      <a class="fs-btn inquiry" href="${wa}?text=${encodeURIComponent('Hello, I am interested in ' + name)}" target="_blank">📩 Inquiry</a>  
+    </div>  
+    <div class="product-desc"><h3>Description</h3><p>${escHtml(desc)}</p></div>  
+    <div class="product-reviews">  
+      <h3>Be the first to review</h3>  
+      <div id="reviewsList"></div>  
+      <div class="review-form">  
+        <input type="text" id="reviewName" placeholder="Your Name">  
+        <select id="reviewStars">  
+          <option value="5">★★★★★</option>  
+          <option value="4">★★★★☆</option>  
+          <option value="3">★★★☆☆</option>  
+          <option value="2">★★☆☆☆</option>  
+          <option value="1">★☆☆☆☆</option>  
+        </select>  
+        <textarea id="reviewText" placeholder="Write your review here"></textarea>  
+        <button onclick="submitReview()">Submit</button>  
+      </div>  
     </div>
   `;
 
-  window.addToCart = function(name, price, img){
-    const cart = JSON.parse(localStorage.getItem('cart')||'[]');
-    cart.push({name, price, image:img, qty:1});
-    localStorage.setItem('cart', JSON.stringify(cart));
-    const el = document.getElementById('cart-count');
-    if(el){ el.textContent=cart.length; el.style.display='inline-block'; }
-    alert('Added to cart!');
-  }
+window.addToCart = function(name, price, img){
+const cart = JSON.parse(localStorage.getItem('cart')||'[]');
+cart.push({name, price, image:img, qty:1});
+localStorage.setItem('cart', JSON.stringify(cart));
+const el = document.getElementById('cart-count');
+if(el){ el.textContent=cart.length; el.style.display='inline-block'; }
+alert('Added to cart!');
+}
 
-  window.submitReview = function(){
-    const name = document.getElementById('reviewName').value.trim() || 'Anonymous';
-    const stars = document.getElementById('reviewStars').value;
-    const text = document.getElementById('reviewText').value.trim();
-    if(!text){ alert('Enter review first'); return; }
+window.submitReview = function(){
+const name = document.getElementById('reviewName').value.trim() || 'Anonymous';
+const stars = document.getElementById('reviewStars').value;
+const text = document.getElementById('reviewText').value.trim();
+if(!text){ alert('Enter review first'); return; }
 
-    const list = document.getElementById('reviewsList');
-    const div = document.createElement('div');
-    div.className='review-item';
-    div.innerHTML = `<strong>${escHtml(name)}</strong>
-                     <div class="review-stars">${'★'.repeat(stars)}</div>
-                     <div>${escHtml(text)}</div>
-                     <em>Waiting for admin approval</em>`;
-    list.prepend(div);
+const list = document.getElementById('reviewsList');  
+const div = document.createElement('div');  
+div.className='review-item';  
+div.innerHTML = `<strong>${escHtml(name)}</strong>  
+                 <div class="review-stars">${'★'.repeat(stars)}</div>  
+                 <div>${escHtml(text)}</div>  
+                 <em>Waiting for admin approval</em>`;  
+list.prepend(div);  
 
-    document.getElementById('reviewText').value='';
-    document.getElementById('reviewName').value='';
-  }
+document.getElementById('reviewText').value='';  
+document.getElementById('reviewName').value='';
 
-  function shuffleArray(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+}
 
-  function renderGrid(list, gridId){
-    const grid = document.getElementById(gridId);
-    const shuffled = shuffleArray(list);
-    grid.innerHTML = shuffled.slice(0,5).map(p=>{
-      const img=safe(findField(p,['ImageLink','Image','imageurl']));
-      const name=findField(p,['ProductName','Product Name','product','name']);
-      const price=findField(p,['DiscountPrice','Discount Price','discount','Price','price']);
-      return `
-      <div class="fs-card" onclick="window.location='product.html?row=${p.__row}'">
-        <span class="fs-thumb"><img src="${escHtml(img)}" alt="${escHtml(name)}"></span>
-        <div class="fs-body">
-          <h3>${escHtml(name)}</h3>
-          <div class="fs-price-row"><div class="fs-price">${escHtml(price)}</div></div>
-          <div class="fs-btns-card">
-            <button class="fs-btn add" onclick="addToCart('${escJs(name)}','${escJs(price)}','${escJs(img)}');event.stopPropagation();">🛒 Add to Cart</button>
-            <a class="fs-btn inquiry" href="${wa}?text=${encodeURIComponent('Hello, I am interested in ' + name)}" target="_blank">📩 Inquiry</a>
-          </div>
-        </div>
-      </div>`;
-    }).join('');
-  }
+function shuffleArray(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 
-  renderGrid(dataWithIndex,'relatedGrid');
-  renderGrid(dataWithIndex,'topTrendingGrid');
-  renderGrid(dataWithIndex,'relatedTopGrid');
+function renderGrid(list, gridId){
+const grid = document.getElementById(gridId);
+const filtered = list.filter(p=>{
+const pr = findField(p,['DiscountPrice','Discount Price','discount','Price','price']);
+return priceToNumber(pr)>=1000;
+});
+const shuffled = shuffleArray(filtered);
+grid.innerHTML = shuffled.slice(0,5).map(p=>{
+const img=safe(findField(p,['ImageLink','Image','imageurl']));
+const name=findField(p,['ProductName','Product Name','product','name']);
+const price=findField(p,['DiscountPrice','Discount Price','discount','Price','price']);
+const id = findField(p,['id','ID']);
+return    `<div class="fs-card" onclick="window.location='product.html?id=${id}'">   
+   <span class="fs-thumb"><img src="${escHtml(img)}" alt="${escHtml(name)}"></span>   
+   <div class="fs-body">   
+   <h3>${escHtml(name)}</h3>   
+   <div class="fs-price-row"><div class="fs-price">${escHtml(price)}</div></div>   
+   <div class="fs-btns-card">   
+   <button class="fs-btn add" onclick="addToCart('${escJs(name)}','${escJs(price)}','${escJs(img)}');event.stopPropagation();">🛒 Add to Cart</button>   
+   <a class="fs-btn inquiry" href="${wa}?text=${encodeURIComponent('Hello, I am interested in ' + name)}" target="_blank">📩 Inquiry</a>   
+   </div>   
+   </div>   
+   </div>`;
+}).join('');
+}
+
+renderGrid(dataWithIndex,'relatedGrid');
+renderGrid(dataWithIndex,'topTrendingGrid');
+renderGrid(dataWithIndex,'relatedTopGrid');
+
+document.getElementById('year').textContent = new Date().getFullYear();
 
 })();
 </script>
-</body>
+
+</body>  
 </html>
