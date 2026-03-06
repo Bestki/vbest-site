@@ -14,26 +14,18 @@
 
   <style>
     /* THEMES: default is Classic (white) */
-    :root {
-      --bg: #ffffff;
-      --card: #f8f8f8;
-      --text: #111827;
-      --accent: #1f2937; /* dark heading color */
-      --btn: #FF9900;
-      --btn-text: #fff;
-      --price: #B12704;
-      --green: #27ae60;
-      --whatsapp: #25D366;
-    }
-    body[data-theme="classic"]{
-      --bg:#ffffff; --card:#f8f8f8; --text:#111827; --accent:#1f2937; --btn:#FF9900; --btn-text:#fff; --price:#B12704; --green:#27ae60; --whatsapp:#25D366;
-    }
-    body[data-theme="dark"]{
-      --bg:#0f1111; --card:#131921; --text:#fff; --accent:#FF9900; --btn:#FF9900; --btn-text:#fff; --price:#FF9900; --green:#25D366; --whatsapp:#25D366;
-    }
-    body[data-theme="gold"]{
-      --bg:#fff8e7; --card:#fff3d6; --text:#2e2e2e; --accent:#c89200; --btn:#d4a017; --btn-text:#fff; --price:#c47800; --green:#27ae60; --whatsapp:#25D366;
-    }
+:root {
+  --bg: #ffffff;
+  --card: #f8f8f8;
+  --text: #111827;
+  --accent: #1f2937;
+  --btn: #FF9900;
+  --btn-text: #fff;
+  --price: #B12704;
+  --green: #27ae60;
+  --whatsapp: #25D366;
+}
+    
 
     html,body{height:100%; margin:0; padding:0; box-sizing:border-box;}
     body{
@@ -47,8 +39,30 @@
     }
 
     /* top media (image or video) full-width */
-    .top-media { width:100%; display:block; max-height:220px; overflow:hidden; background:transparent; }
-    .logo-media { width:100%; height:auto; display:block; object-fit:cover; max-height:200px; }
+.top-media {
+  position: fixed;      /* stick at top */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;         /* adjust for logo size */
+  z-index: 9999;
+  background: #fff;     /* keeps background solid */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* subtle shadow */
+}
+
+.logo-media {
+  height: 60px;         /* your logo height */
+  width: auto;
+  object-fit: contain;
+}
+
+/* Push page content below the fixed top logo */
+body {
+  padding-top: 70px;    /* same as .top-media height */
+}
 
     h1{ margin:8px 0 4px; font-size:20px; color:var(--accent); }
     #count{ font-size:14px; color:var(--green); margin-bottom:8px; font-weight:700; }
@@ -288,418 +302,129 @@
 </head>
 <body data-theme="classic">
 
-  <!-- TOP MEDIA:use an image by default; you can replace this <img> with a <video> tag when you want a video -->
+  <!-- TOP MEDIA -->
   <div class="top-media" aria-hidden="false">
     <img src="images/logo.png" alt="V'Best Interiors Logo" class="logo-media">
   </div>
 
   <h1>Beds</h1>
-  <strong>Experience true comfort and elegance with our luxury beds.</strong>  
-Crafted with premium materials and stunning designs, our beds transform your bedroom into a masterpiece of relaxation.  
-<strong>Shop exclusive collections from V-Best Luxury Interiors today.</strong>
+  <strong>Experience true comfort and elegance with our luxury beds.</strong><br>
+  Crafted with premium materials and stunning designs, our beds transform your bedroom into a masterpiece of relaxation.<br>
+  <strong>Shop exclusive collections from V-Best Luxury Interiors today.</strong>
+
   <div id="count">Loading...</div>
 
   <div id="products" class="product-grid" aria-live="polite"></div>
 
-  <a href="chair.html" class="back" style="display:block;margin:12px 0;color:var(--accent);text-decoration:none;font-weight:700;">⬅ Back to Categories</a>
+  <a href="chair.html" class="back"
+     style="display:block;margin:12px 0;color:var(--accent);text-decoration:none;font-weight:700;">
+    ⬅ Back to Categories
+  </a>
 
-  <!-- DETAILS PANEL -->
-  <div id="detailsPanel" class="details-panel" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="details-inner" role="document">
-      <button id="detailsClose" class="close-btn" aria-label="Close details">✕</button>
-      <div class="details-left" id="detailsLeft"></div>
-      <div class="details-right" id="detailsRight"></div>
-    </div>
-  </div>
-
-  <!-- BOTTOM NAV -->
+  <!-- BOTTOM NAV (NO THEME SWITCH) -->
   <div class="bottom-nav" role="navigation" aria-label="Main navigation">
     <a href="index.html" id="nav-home">🏠 Home</a>
-    <button id="themeSwitch">🎨 Theme</button>
-    <a href="cart.html" id="nav-cart">🛒 Cart <span id="cart-count-bottom" class="cart-badge" style="display:none">0</span></a>
+    <a href="cart.html" id="nav-cart">
+      🛒 Cart <span id="cart-count-bottom" class="cart-badge" style="display:none">0</span>
+    </a>
   </div>
 
-  <script>
-    /* CONFIG */
-    const SHEET_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4YXFvxl_w447wVuWRrHv8EInZFg1lSIX2_KwxZQJL9n8YHEzIP5WmfBep4yBgfN7EbArsjPPHOzOh/pub?output=csv";
-    const DISCOUNT_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // 60 days
+<script>
+/* ================= CONFIG ================= */
+const SHEET_CSV =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4YXFvxl_w447wVuWRrHv8EInZFg1lSIX2_KwxZQJL9n8YHEzIP5WmfBep4yBgfN7EbArsjPPHOzOh/pub?output=csv";
+const DISCOUNT_DURATION_MS = 30*24*60*60*1000;
 
-    /* UTILITIES */
-    function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-    function escJS(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,'\\n').replace(/\r/g,''); }
-    function parseCSVRow(text){
-      const fields = []; let cur=''; let inQuotes=false;
-      for (let i=0;i<text.length;i++){
-        const ch = text[i];
-        if (inQuotes){
-          if (ch === '"'){
-            if (text[i+1] === '"'){ cur += '"'; i++; }
-            else { inQuotes = false; }
-          } else cur += ch;
-        } else {
-          if (ch === '"') inQuotes = true;
-          else if (ch === ','){ fields.push(cur); cur=''; }
-          else cur += ch;
-        }
-      }
-      fields.push(cur);
-      return fields;
-    }
-    function normKey(k){ return String(k||'').toLowerCase().replace(/[^\w]/g,''); }
-    function findIndexByNames(map,cands){
-      for (const c of cands) if (map[c] !== undefined) return map[c];
-      return -1;
-    }
-    function parseNumber(s){ if(!s) return NaN; const n = String(s).replace(/[^\d.-]/g,''); return n===''?NaN:parseFloat(n); }
-    function formatNaira(n){ if (isNaN(n)) return ''; return '₦' + Math.round(n).toLocaleString(); }
+/* ================= HELPERS ================= */
+const $ = id => document.getElementById(id);
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escJS(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+function norm(k){ return String(k||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
+function parseCSVRow(t){ const r=[]; let c='',q=false; for(let i=0;i<t.length;i++){ const x=t[i]; if(q){ if(x==='"'){ if(t[i+1]==='"'){ c+='"'; i++; } else q=false; } else c+=x; }else{ if(x==='"') q=true; else if(x===','){ r.push(c); c=''; } else c+=x; } } r.push(c); return r; }
+function parseNumber(s){ const n=String(s||'').replace(/[^\d.-]/g,''); return n===''?NaN:parseFloat(n); }
+function formatNaira(n){ if(isNaN(n)) return ''; return '₦'+Math.round(n).toLocaleString(); }
+function formatTime(ms){ if(isNaN(ms)||ms<=0) return '0s'; const t=Math.floor(ms/1000); const d=Math.floor(t/86400); const h=Math.floor((t%86400)/3600); const m=Math.floor((t%3600)/60); const s=t%60; return `${d}d ${h}h ${m}m ${s}s`; }
 
-    /* DOM refs */
-    const container = document.getElementById('products');
-    const detailsPanel = document.getElementById('detailsPanel');
-    const detailsLeft = document.getElementById('detailsLeft');
-    const detailsRight = document.getElementById('detailsRight');
-    const detailsClose = document.getElementById('detailsClose');
-    const bottomNav = document.querySelector('.bottom-nav');
-    const cartBadge = document.getElementById('cart-count-bottom');
-    const themeBtn = document.getElementById('themeSwitch');
+/* ================= CART ================= */
+function updateCart(){ const cart = JSON.parse(localStorage.getItem('cart')||'[]'); const badge=$('cart-count-bottom'); if(cart.length){ badge.style.display='inline-block'; badge.textContent=cart.length; } else badge.style.display='none'; }
+function addToCart(name,price,image){ if(!image) return; const cart = JSON.parse(localStorage.getItem('cart')||'[]'); cart.push({name,price,image,qty:1}); localStorage.setItem('cart',JSON.stringify(cart)); updateCart(); }
+updateCart();
 
-    /* state */
-    let products = [];
-    let detailsOpenIndex = null;
-    let currentImageIndex = 0;
-    // history-management flags for back-button behavior
-    let pushedState = false;
-    let ignorePopstate = false;
+/* ================= LOAD BEDS ================= */
+fetch(SHEET_CSV).then(r=>r.text()).then(csv=>{
+  const lines = csv.replace(/^\uFEFF/,'').split(/\r?\n/).filter(l=>l.trim());
+  if(!lines.length){ $('count').textContent='No products'; return; }
+  const headers=parseCSVRow(lines[0]); const map={}; headers.forEach((h,i)=> map[norm(h)]=i); const gi=n=>map[norm(n)];
+  const idI=gi('id'); const catI=gi('category'); const nameI=gi('productname'); const descI=gi('description'); const priceI=gi('price'); const discI=gi('discountprice'); const negI=gi('negotiable'); const imgI=gi('imagelink'); const viewI=gi('views');
 
-    /* FETCH & RENDER */
-    fetch(SHEET_CSV).then(r => r.text()).then(csv => {
-      const text = csv.replace(/^\uFEFF/,'');
-      const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
-      if (!lines.length){ document.getElementById('count').textContent = 'No data in sheet'; return; }
-      const headerCols = parseCSVRow(lines[0]);
-      const headerMap = {}; headerCols.forEach((h,i)=> headerMap[normKey(h)] = i);
-
-      // columns detection
-      const categoryIdx = findIndexByNames(headerMap,['category','cat','type']) !== -1 ? findIndexByNames(headerMap,['category','cat','type']) : 0;
-      const nameIdx = findIndexByNames(headerMap,['productname','product','name']) !== -1 ? findIndexByNames(headerMap,['productname','product','name']) : 1;
-      const descIdx = findIndexByNames(headerMap,['description','desc','details']) !== -1 ? findIndexByNames(headerMap,['description','desc','details']) : 2;
-      const priceIdx = findIndexByNames(headerMap,['price','priceraw','amount']) !== -1 ? findIndexByNames(headerMap,['price','priceraw','amount']) : 3;
-      const discountIdx = findIndexByNames(headerMap,['discountprice','discount','offer']) !== -1 ? findIndexByNames(headerMap,['discountprice','discount','offer']) : 4;
-      const negotiableIdx = findIndexByNames(headerMap,['negotiable','neg','isnegotiable']) !== -1 ? findIndexByNames(headerMap,['negotiable','neg','isnegotiable']) : 5;
-      const imageIdx = findIndexByNames(headerMap, ['imagelink','imagelinks','image','imageurl','image1','images','imagelink1']) !== -1 ? findIndexByNames(headerMap, ['imagelink','imagelinks','image','imageurl','image1','images','imagelink1']) : 6;
-      const regionIdx = findIndexByNames(headerMap,['region','categorytype','type']) !== -1 ? findIndexByNames(headerMap,['region','categorytype','type']) : 4;
-      const viewsIdx = findIndexByNames(headerMap,['views','rating','stars']) !== -1 ? findIndexByNames(headerMap,['views','rating','stars']) : 7;
-
-      for (let i=1;i<lines.length;i++){
-        const cols = parseCSVRow(lines[i]);
-        if (!cols || cols.length === 0) continue;
-        const get = idx => (typeof cols[idx] !== 'undefined' ? String(cols[idx]).trim() : '');
-        const category = get(categoryIdx);
-        const name = get(nameIdx);
-        const description = get(descIdx);
-        const priceStr = get(priceIdx);
-        const discountStr = get(discountIdx);
-        const negotiable = get(negotiableIdx);
-        const imageField = get(imageIdx);
-        const region = get(regionIdx);
-        const viewsRaw = get(viewsIdx);
-
-        const catNorm = (category||'').toLowerCase();
-        const regionNorm = (region||'').toLowerCase();
-        const nameNorm = (name||'').toLowerCase();
-
-        // FILTER: include beds (bed, beds, bedframe, bed-frame, bed frame, mattress)
-        if (!(catNorm.includes('bed') || catNorm.includes('beds') || catNorm.includes('bedframe') || catNorm.includes('bed-frame') || catNorm.includes('bed frame') || catNorm.includes('mattress') ||
-              regionNorm.includes('bed') || regionNorm.includes('bed') || nameNorm.includes('bed') || nameNorm.includes('bed') )) continue;
-
-        const rawImgs = String(imageField || '').replace(/^"|"$/g,'');
-        const imageLinks = rawImgs.split(/[\r\n,]+/).map(s=>s.trim()).filter(Boolean);
-        const cleaned = imageLinks.filter(u => u && u.toLowerCase()!=='sold');
-        const hasImage = cleaned.length > 0;
-        const firstImage = hasImage ? cleaned[0] : '';
-
-        const priceNum = parseNumber(priceStr);
-        const discNum = parseNumber(discountStr);
-        const hasDiscount = !(String(discountStr||'').trim().toLowerCase()==='no' || String(discountStr||'').trim()==='') && !isNaN(discNum);
-        const saveNum = (hasDiscount && !isNaN(priceNum)) ? (priceNum - discNum) : NaN;
-
-        const stars = (viewsRaw && viewsRaw.trim()!=='') ? (function(){ let p=parseInt(viewsRaw,10); if(isNaN(p)) p=5; p=Math.max(1,Math.min(5,p)); return Array.from({length:5},(_,k)=>k<p?'★':'☆').join(''); })() : '★★★★★';
-
-        const product = {
-          name, category, description, priceStr, discountStr, negotiable, imageLinks: cleaned, hasImage, firstImage,
-          priceNum, discNum, hasDiscount, saveNum, stars
-        };
-
-        if (!isNaN(product.priceNum)){
-          product._durationMs = DISCOUNT_DURATION_MS;
-          product._endTime = Date.now() + product._durationMs;
-          product._hasCountdown = true;
-        } else product._hasCountdown = false;
-
-        const idxForOpen = products.length;
-        products.push(product);
-
-        // card html (no short description) - inquiry left, add to cart right
-        const inquiryHref = 'https://wa.me/2347080535579?text=' + encodeURIComponent(`Hello, I'm interested in ${name} priced at ${ product.hasDiscount ? discountStr : priceStr }.`);
-const addDisabled = product.hasImage ? '' : 'disabled';
-const imageArg = product.hasImage ? escJS(product.firstImage) : '';
-
-const badgeStackHtml = `
-  <div class="badge-left">
-    ${product.hasDiscount && product.saveNum > 0 ? `<div class="badge save-badge">Save ${formatNaira(product.saveNum)}</div>` : ''}
-  </div>
-  <div class="badge-right">
-    ${product.negotiable && ['yes','y','true','1','negotiable'].includes(String(product.negotiable).trim().toLowerCase()) ? `<div class="badge negotiable-badge">Negotiable</div>` : ''}
-  </div>
-`;
-
-const imgHtml = product.hasImage
-  ? `<span class="thumb" onclick="openDetails(${idxForOpen})" role="button" aria-label="Open ${escapeHtml(name)}">
-       <img src="${escapeHtml(product.firstImage)}" alt="${escapeHtml(name)}">
-       ${badgeStackHtml}
-     </span>`
-  : `<span class="thumb" onclick="openDetails(${idxForOpen})" role="button" aria-label="Open ${escapeHtml(name)}">
-       <div style="width:100%;height:180px;display:flex;align-items:center;justify-content:center;background:#fff;color:#ff3b30;font-weight:800;font-size:10px;">Currently out of stock — please check back soon!</div>
-       ${badgeStackHtml}
-     </span>`;
-
-const priceHtml = product.hasDiscount
-  ? `<div class="old-price">${escapeHtml(priceStr)}</div><div class="price">${escapeHtml(discountStr)}</div>`
-  : `<div class="price">${escapeHtml(priceStr)}</div>`;
-
-const card = document.createElement('div');
-card.className = 'product-card';
-card.setAttribute('role','article');
-card.innerHTML = `
-  ${imgHtml}
-  <div class="product-body">
-    <a style="text-decoration:none;color:inherit;" onclick="openDetails(${idxForOpen})"><h3>${escapeHtml(name)}</h3></a>
-    <div class="price-row">${priceHtml}</div>
-    <div class="discount-timer" data-product-index="${idxForOpen}"></div>
-    <div class="stars">${escapeHtml(product.stars)}</div>
-    <div class="btn-row">
-      <a class="inquiry-btn" href="${escapeHtml(inquiryHref)}" target="_blank" rel="noopener noreferrer">📩 Inquiry</a>
-      <button class="buy-btn" ${addDisabled} onclick="addToCart('${escJS(name)}','${escJS(product.hasDiscount?discountStr:priceStr)}','${imageArg}')">🛒 Add to Cart</button>
-    </div>
-  </div>
-`;
-container.appendChild(card);
-} // end rows
-
-      document.getElementById('count').textContent = `Total Beds Available: ${products.length}`;
-      updateCartCount();
-    }).catch(err => {
-      console.error('Failed to load sheet',err);
-      document.getElementById('count').textContent = 'Failed to load products';
+  const products=[];
+  for(let i=1;i<lines.length;i++){
+    const c=parseCSVRow(lines[i]); const g=i=>c[i]?c[i].trim():'';
+    const cat=g(catI).toLowerCase(); if(!cat.includes('bed')) continue;
+    const priceNum=parseNumber(g(priceI)), discNum=parseNumber(g(discI));
+    products.push({
+      id:g(idI), name:g(nameI), desc:g(descI), price:g(priceI), disc:g(discI),
+      img:(g(imgI).split(/[\n,]+/)[0]||''), negotiable:g(negI),
+      hasDiscount:!isNaN(discNum)&&discNum>0, saveNum:(!isNaN(priceNum)&&!isNaN(discNum)?priceNum-discNum:0),
+      endTime:Date.now()+DISCOUNT_DURATION_MS, hasCountdown:!isNaN(priceNum)
     });
+  }
 
-    /* CART */
-    function addToCart(name, price, image){
-      try{
-        if (!image || !String(image).trim()) return;
-        let cart = JSON.parse(localStorage.getItem('cart')||'[]');
-        cart.push({ name, price, image, qty:1 });
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCartCount();
-        // no toast popup (user requested removal)
-      }catch(e){ console.error('addToCart error',e); }
-    }
-    function updateCartCount(){
-      const cart = JSON.parse(localStorage.getItem('cart')||'[]');
-      if (cart.length>0){ cartBadge.style.display='inline-block'; cartBadge.textContent = cart.length; } else cartBadge.style.display='none';
-    }
-    updateCartCount();
+  $('count').textContent=`Total Beds: ${products.length}`;
+  $('products').innerHTML='';
 
-    /* COUNTDOWN: single interval updates visible timers */
-    setInterval(()=> {
-      const now = Date.now();
-      document.querySelectorAll('.discount-timer').forEach(el => {
-        const idx = parseInt(el.dataset.productIndex,10);
-        const p = products[idx];
-        if (!p || !p._hasCountdown) return;
-        let timeLeft = p._endTime - now;
-        if (timeLeft <= 0){ p._endTime = Date.now() + p._durationMs; timeLeft = p._endTime - Date.now(); }
-        el.textContent = 'Offer ends in: ' + formatTimeRemaining(timeLeft);
-      });
-      // details timer update
-      const dTimer = document.getElementById('details-timer');
-      if (dTimer && detailsOpenIndex !== null){
-        const p = products[detailsOpenIndex];
-        if (p && p._hasCountdown){ let t = p._endTime - now; if (t<=0){ p._endTime = Date.now()+p._durationMs; t = p._endTime - Date.now(); } dTimer.textContent = 'Offer ends in: ' + formatTimeRemaining(t); }
-      }
-    }, 1000);
-
-    function formatTimeRemaining(ms){
-      if (isNaN(ms) || ms <= 0) return '0s';
-      const total = Math.floor(ms/1000);
-      const days = Math.floor(total/86400);
-      const hours = Math.floor((total%86400)/3600);
-      const mins = Math.floor((total%3600)/60);
-      const secs = total%60;
-      return `${days}d ${hours}h ${mins}m ${secs}s`;
-    }
-
-    /* DETAILS (gallery + info) */
-    detailsClose.addEventListener('click', ()=> closeDetails());
-    function openDetails(idx){
-      if (typeof idx !== 'number' || !products[idx]) return;
-      detailsOpenIndex = idx;
-      currentImageIndex = 0;
-      renderDetails(products[idx]);
-      detailsPanel.style.display = 'flex';
-      detailsPanel.setAttribute('aria-hidden','false');
-      document.body.style.overflow = 'hidden';
-      // hide bottom nav to prevent overlap with description/buttons
-      bottomNav.style.display = 'none';
-      document.addEventListener('keydown', detailsKeyHandler);
-
-      // push a history state so the browser Back button closes details instead of leaving the page
-      try {
-        history.pushState({ vbest: 'details', idx: idx }, '', '#product-' + idx);
-        pushedState = true;
-      } catch (e) {
-        // ignore any pushState errors
-      }
-    }
-    function closeDetails(fromPopstate = false){
-      detailsPanel.style.display = 'none';
-      detailsPanel.setAttribute('aria-hidden','true');
-      detailsLeft.innerHTML = '';
-      detailsRight.innerHTML = '';
-      detailsOpenIndex = null;
-      currentImageIndex = 0;
-      document.body.style.overflow = '';
-      bottomNav.style.display = '';
-      document.removeEventListener('keydown', detailsKeyHandler);
-
-      // If we opened a history entry when showing details and the close was initiated by UI (not popstate),
-      // go back one step to remove that pushed state so Back behaves naturally.
-      if (pushedState && !fromPopstate){
-        ignorePopstate = true;
-        try { history.back(); } catch(e) { /* ignore */ }
-      }
-      pushedState = false;
-    }
-    function detailsKeyHandler(e){
-      if (e.key === 'Escape') closeDetails();
-      if (e.key === 'ArrowLeft') showImageIndex(-1);
-      if (e.key === 'ArrowRight') showImageIndex(1);
-    }
-
-    // popstate handling: when user presses Back, close the details panel instead of leaving the page
-    window.addEventListener('popstate', (event) => {
-      if (ignorePopstate) { ignorePopstate = false; return; }
-      if (detailsPanel.style.display === 'flex') {
-        // closing because user pressed back
-        closeDetails(true);
-      }
-    });
-
-    function renderDetails(p){
-      // left (main image + thumbs)
-      const mainImg = p.hasImage ? `<img id="detailsMainImage" class="main-image" src="${escapeHtml(p.imageLinks[0])}" alt="${escapeHtml(p.name)}">` : `<div style="width:100%;height:60vh;display:flex;align-items:center;justify-content:center;background:#111;color:#ff3b30;font-weight:800;font-size:28px;border-radius:8px;">SOLD</div>`;
-      const hasMultiple = p.imageLinks && p.imageLinks.length>1;
-      const leftArrow = hasMultiple ? `<div class="img-nav left" id="imgPrev">‹</div>` : '';
-      const rightArrow = hasMultiple ? `<div class="img-nav right" id="imgNext">›</div>` : '';
-      let thumbsHtml = '';
-      if (p.imageLinks && p.imageLinks.length){ thumbsHtml = '<div class="thumbs" id="thumbsContainer">'; p.imageLinks.forEach((u,i)=> thumbsHtml += `<button data-idx="${i}" class="thumb-btn" style="border:2px solid transparent;background:transparent;padding:0;margin:0;"><img src="${escapeHtml(u)}" alt="thumb ${i+1}"></button>`); thumbsHtml += '</div>'; }
-      detailsLeft.innerHTML = `${leftArrow}${mainImg}${rightArrow}${thumbsHtml}`;
-
-      if (hasMultiple){
-        document.getElementById('imgPrev').addEventListener('click', ()=> showImageIndex(-1));
-        document.getElementById('imgNext').addEventListener('click', ()=> showImageIndex(1));
-      }
-      const thumbsContainer = document.getElementById('thumbsContainer');
-      if (thumbsContainer){
-        thumbsContainer.querySelectorAll('button.thumb-btn').forEach(btn => btn.addEventListener('click', ()=> { goToImage(parseInt(btn.getAttribute('data-idx'),10)); }));
-        highlightThumb(currentImageIndex);
-      }
-      const main = document.getElementById('detailsMainImage');
-      if (main){
-        let touchStartX = null;
-        main.addEventListener('touchstart', (ev)=> { touchStartX = ev.touches[0].clientX; }, {passive:true});
-        main.addEventListener('touchend', (ev)=> {
-          if (touchStartX===null) return;
-          const endX = ev.changedTouches[0].clientX; const diff = endX - touchStartX;
-          if (Math.abs(diff) > 40){ if (diff < 0) showImageIndex(1); else showImageIndex(-1); }
-          touchStartX = null;
-        }, {passive:true});
-      }
-
-      // right (info)
-      const saveHtml = (p.hasDiscount && !isNaN(p.saveNum) && p.saveNum>0) ? `<div class="save-amount">Save ${formatNaira(p.saveNum)}</div>` : '';
-      const negotiableHtml = (p.negotiable && ['yes','y','true','1','negotiable'].includes(String(p.negotiable).trim().toLowerCase())) ? `<div class="negotiable">Negotiable</div>` : '';
-      const priceHtml = p.hasDiscount ? `<div class="old-price">${escapeHtml(p.priceStr)}</div><div class="price">${escapeHtml(p.discountStr)}</div>` : `<div class="price">${escapeHtml(p.priceStr)}</div>`;
-      const inquiryHref = 'https://wa.me/2347080535579?text=' + encodeURIComponent(`Hello, I'm interested in ${p.name} priced at ${ p.hasDiscount ? p.discountStr : p.priceStr }.`);
-
-      const detailsTimerHtml = p._hasCountdown ? `<div id="details-timer" class="discount-timer">Offer ends in: --d --h --m --s</div>` : '';
-
-      detailsRight.innerHTML = `
-        <h2>${escapeHtml(p.name)}</h2>
-        <div class="meta">Category: ${escapeHtml(p.category || '')}</div>
-        <div class="price-row">${priceHtml} ${saveHtml}</div>
-        ${detailsTimerHtml}
-        ${negotiableHtml}
-        <div class="stars">${escapeHtml(p.stars)}</div>
-        <div class="details-actions">
-          <a class="inquiry-btn" href="${escapeHtml(inquiryHref)}" target="_blank" rel="noopener noreferrer">📩 Inquiry on WhatsApp</a>
-          <button class="buy-btn" ${p.hasImage ? '' : 'disabled'} onclick="addToCart('${escJS(p.name)}','${escJS(p.hasDiscount?p.discountStr:p.priceStr)}','${escJS(p.hasImage?p.firstImage:'')}')">🛒 Add to Cart</button>
+  products.forEach((p,idx)=>{
+    const link=`product.html?id=${encodeURIComponent(p.id)}`;
+    const inquiry=`https://wa.me/2347080535579?text=${encodeURIComponent('Hello, I am interested in '+p.name)}`;
+    const card=document.createElement('div');
+    card.className='product-card';
+    card.innerHTML=`
+      <div class="thumb" onclick="location.href='${link}'">
+        <img src="${esc(p.img)}" alt="${esc(p.name)}">
+        <div class="badge-left">
+          ${p.hasDiscount && p.saveNum>0? `<div class="badge save-badge">Save ${formatNaira(p.saveNum)}</div>` : ''}
         </div>
-        <div class="desc"><h3 style="margin-top:14px;color:var(--accent);">Product description</h3><p style="margin:8px 0 0;line-height:1.6;color:var(--text);">${escapeHtml(p.description || 'No description available.')}</p></div>
-      `;
-      // trigger initial timer update if count exists
-      if (p._hasCountdown){
-        const now = Date.now(); let timeLeft = p._endTime - now; if (timeLeft<=0){ p._endTime = Date.now()+p._durationMs; timeLeft = p._endTime - Date.now(); }
-        const dt = document.getElementById('details-timer'); if (dt) dt.textContent = 'Offer ends in: ' + formatTimeRemaining(timeLeft);
-      }
-    }
+        <div class="badge-right">
+          ${p.negotiable && ['yes','y','true','1','negotiable'].includes(String(p.negotiable||'').trim().toLowerCase())? `<div class="badge negotiable-badge">Negotiable</div>` : ''}
+        </div>
+      </div>
 
-    function showImageIndex(delta){
-      if (detailsOpenIndex === null) return;
-      const p = products[detailsOpenIndex]; if(!p||!p.imageLinks||!p.imageLinks.length) return;
-      currentImageIndex = (currentImageIndex + delta + p.imageLinks.length) % p.imageLinks.length;
-      const main = document.getElementById('detailsMainImage'); if (main) main.src = p.imageLinks[currentImageIndex];
-      highlightThumb(currentImageIndex);
-    }
-    function goToImage(i){
-      if (detailsOpenIndex === null) return;
-      const p = products[detailsOpenIndex]; if(!p||!p.imageLinks||!p.imageLinks[i]) return;
-      currentImageIndex = i;
-      const main = document.getElementById('detailsMainImage'); if (main) main.src = p.imageLinks[currentImageIndex];
-      highlightThumb(currentImageIndex);
-    }
-    function highlightThumb(i){
-      const thumbs = document.querySelectorAll('#thumbsContainer button.thumb-btn');
-      thumbs.forEach((b,idx)=> b.style.border = (idx===i)?'2px solid var(--green)':'2px solid transparent');
-      const sel = thumbs[i]; if (sel && sel.scrollIntoView) sel.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
-    }
+      <div class="product-body">
+        <h3 onclick="location.href='${link}'">${esc(p.name)}</h3>
+        <div class="price-row">
+          ${p.hasDiscount ? `<div class="old-price">${esc(p.price)}</div><div class="price">${esc(p.disc)}</div>` : `<div class="price">${esc(p.price)}</div>`}
+        </div>
 
-    /* THEME SWITCHER: default Classic */
-    (function(){
-      const themes = ['classic','dark','gold'];
-      let current = localStorage.getItem('vbest_theme') || 'classic';
-      if (!themes.includes(current)) current = 'classic';
-      document.body.setAttribute('data-theme', current);
-      let idx = themes.indexOf(current);
-      themeBtn.addEventListener('click', ()=> {
-        idx = (idx + 1) % themes.length;
-        const t = themes[idx];
-        document.body.setAttribute('data-theme', t);
-        localStorage.setItem('vbest_theme', t);
-      });
-    })();
+        ${p.hasCountdown ? `<div class="discount-timer" data-index="${idx}">Offer ends in: ${formatTime(p.endTime-Date.now())}</div>` : ''}
 
-    /* close details on backdrop click */
-    detailsPanel.addEventListener('click', function(e){ if (e.target === detailsPanel) closeDetails(); });
+        <div class="btn-row" style="display:flex;flex-direction:column;gap:6px;">
+          <button class="buy-btn" onclick="addToCart('${escJS(p.name)}','${escJS(p.disc||p.price)}','${escJS(p.img)}')">🛒 Add to Cart</button>
+          <a class="inquiry-btn" href="${inquiry}" target="_blank">📩 Inquiry</a>
+        </div>
 
-    /* ensure bottom nav reappears on history/popstate or manual close
-       (handled by popstate listener above) */
-    window.addEventListener('popstate', ()=> { if (detailsPanel.style.display === 'flex') closeDetails(); });
+      </div>
+    `;
+    $('products').appendChild(card);
+  });
 
-    // keep cart count in sync (other tabs)
-    window.addEventListener('storage', (e)=> { if (e.key === 'cart') updateCartCount(); });
+  /* ================= COUNTDOWN ================= */
+  setInterval(()=>{
+    const now=Date.now();
+    document.querySelectorAll('.discount-timer').forEach(el=>{
+      const idx=parseInt(el.dataset.index,10);
+      const p=products[idx];
+      if(!p||!p.hasCountdown) return;
+      let t=p.endTime-now; if(t<=0){ p.endTime=Date.now()+DISCOUNT_DURATION_MS; t=p.endTime-Date.now(); }
+      el.textContent='Offer ends in: '+formatTime(t);
+    });
+  },1000);
 
-  </script>
+})
+.catch(()=>{$('count').textContent='Failed to load products';});
+</script>
+
+
+
     <footer class="shilpi-footer">
     <div class="shilpi-container" style="max-width:1150px;margin:0 auto;">
       <div class="footer-extra">

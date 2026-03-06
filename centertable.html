@@ -229,421 +229,183 @@
   </style>
   <!-- Facebook Pixel Code --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js'); fbq('init', '677322691667443'); fbq('track', 'PageView');</script><noscript> <img height="1" width="1" src="https://www.facebook.com/tr?id=677322691667443&ev=PageView&noscript=1"/></noscript><!-- End Facebook Pixel Code -->
   </head>
-<body data-theme="classic">  <!-- Header / Logo -->  <div class="top-media" aria-hidden="false">
+<body data-theme="classic">
+
+  <!-- logo -->
+  <div class="top-media" aria-hidden="false">
     <img src="images/logo.png" alt="V'Best Interiors logo" class="logo-media">
-  </div>  <h1>Center Tables — Classic & Modern</h1>
-<strong>Elegant center tables that add style and balance to every living room — from VBest Luxury Interiors.</strong>
-  <div id="count"><span class="spinner" aria-hidden="true"></span> Loading products...</div>  <!-- Products grid -->  <div id="products" class="product-grid" aria-live="polite"></div><a href="furniture.html" class="back" style="display:block;margin:14px 0;color:var(--accent);text-decoration:none;font-weight:700;">⬅ Back to Categories</a>
+  </div>
 
-  <!-- DETAILS PANEL -->  <div id="detailsPanel" class="details-panel" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="details-inner" role="document">
-      <button id="detailsClose" class="close-btn" aria-label="Close details">✕</button>
-      <div class="details-left" id="detailsLeft"></div>
-      <div class="details-right" id="detailsRight"></div>
-    </div>
-  </div>  <!-- BOTTOM NAV -->  <div class="bottom-nav" role="navigation" aria-label="Main navigation">
+  <h1>Center Tables</h1>
+  <strong>Stylish center tables to complete your living room.</strong><br>
+  Modern designs in wood, glass and metal for luxury interiors.<br>
+  <strong>Shop exclusive collections from V-Best Luxury Interiors today.</strong>
+
+  <div id="count"><span class="spinner" aria-hidden="true"></span> Loading products...</div>
+
+  <div id="products" class="product-grid" aria-live="polite"></div>
+
+  <a href="furniture.html" class="back" style="display:block;margin:14px 0;color:var(--accent);text-decoration:none;font-weight:700;">
+    ⬅ Back to Categories
+  </a>
+
+  <!-- bottom nav -->
+  <div class="bottom-nav" role="navigation" aria-label="Main navigation">
     <a href="index.html" id="nav-home">🏠 Home</a>
-    <button id="themeSwitch">🎨 Theme</button>
     <a href="cart.html" id="nav-cart">🛒 Cart <span id="cart-count-bottom" class="cart-badge" style="display:none">0</span></a>
-  </div>  <script>
-    /* CONFIG — replace with your sheet CSV if different */
-    const SHEET_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4YXFvxl_w447wVuWRrHv8EInZFg1lSIX2_KwxZQJL9n8YHEzIP5WmfBep4yBgfN7EbArsjPPHOzOh/pub?output=csv";
-    const FETCH_TIMEOUT_MS = 10000; // 10 seconds
-    const DISCOUNT_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // cosmetic 60 days
-
-    /* SMALL UTILITIES */
-    function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-    function escJS(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,'\\n').replace(/\r/g,''); }
-    function normKey(k){ return String(k||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
-
-    // CSV parser with quoted-field support
-    function parseCSVRow(text){
-      const fields = []; let cur=''; let inQuotes=false;
-      for (let i=0;i<text.length;i++){
-        const ch = text[i];
-        if (inQuotes){
-          if (ch === '"'){
-            if (text[i+1] === '"'){ cur += '"'; i++; } else { inQuotes = false; }
-          } else cur += ch;
-        } else {
-          if (ch === '"') inQuotes = true;
-          else if (ch === ','){ fields.push(cur); cur=''; }
-          else cur += ch;
-        }
-      }
-      fields.push(cur);
-      return fields;
-    }
-
-    function findIndexByNames(headerMap, candidates){
-      for (const c of candidates){
-        const k = normKey(c);
-        if (headerMap[k] !== undefined) return headerMap[k];
-      }
-      return -1;
-    }
-
-    function parseNumber(s){ if (!s) return NaN; const n = String(s).replace(/[^\\d.-]/g,''); return n===''?NaN:parseFloat(n); }
-    function formatNaira(n){ if (isNaN(n)) return ''; return '₦' + Math.round(n).toLocaleString(); }
-
-    /* DOM refs & state */
-    const countEl = document.getElementById('count');
-    const container = document.getElementById('products');
-    const detailsPanel = document.getElementById('detailsPanel');
-    const detailsLeft = document.getElementById('detailsLeft');
-    const detailsRight = document.getElementById('detailsRight');
-    const detailsClose = document.getElementById('detailsClose');
-    const bottomNav = document.querySelector('.bottom-nav');
-    const cartBadge = document.getElementById('cart-count-bottom');
-    const themeBtn = document.getElementById('themeSwitch');
-
-    let products = [];
-    let detailsOpenIndex = null;
-    let currentImageIndex = 0;
-    let pushedState = false;
-    let ignorePopstate = false;
-
-    /* fetch with timeout helper */
-    async function fetchWithTimeout(url, ms){
-      const controller = new AbortController();
-      const id = setTimeout(()=> controller.abort(), ms);
-      try {
-        const resp = await fetch(url, { signal: controller.signal });
-        clearTimeout(id);
-        if (!resp.ok) throw new Error('Network response was not ok: ' + resp.status);
-        return await resp.text();
-      } catch (err) {
-        clearTimeout(id);
-        throw err;
-      }
-    }
-
-    /* Load products and filter by category 'centertable' (case-insensitive) */
-    (async function loadProducts(){
-      try {
-        const csv = await fetchWithTimeout(SHEET_CSV, FETCH_TIMEOUT_MS);
-        const text = csv.replace(/^\uFEFF/,'');
-        const lines = text.split(/\r?\n/).filter(l=>l.trim() !== '');
-        if (!lines.length){ countEl.innerHTML = 'No data found in the sheet.'; return; }
-
-        const headerCols = parseCSVRow(lines[0]);
-        const headerMap = {};
-        headerCols.forEach((h,i)=> headerMap[normKey(h)] = i);
-
-        const categoryIdx = findIndexByNames(headerMap, ['category','cat','type','group']);
-        const nameIdx     = findIndexByNames(headerMap, ['productname','product','name','title','item']);
-        const descIdx     = findIndexByNames(headerMap, ['description','desc','details','longdescription']);
-        const priceIdx    = findIndexByNames(headerMap, ['price','priceraw','amount','cost']);
-        const discountIdx = findIndexByNames(headerMap, ['discountprice','discount','offer','specialprice']);
-        const negotiableIdx = findIndexByNames(headerMap, ['negotiable','neg','isnegotiable']);
-        const imageIdx    = findIndexByNames(headerMap, ['imagelink','imagelinks','image','imageurl','image1','images','photo','photos']);
-        const viewsIdx    = findIndexByNames(headerMap, ['views','rating','stars']);
-
-        for (let i=1;i<lines.length;i++){
-          const cols = parseCSVRow(lines[i]);
-          if (!cols || cols.length === 0) continue;
-          const get = idx => (idx >= 0 && typeof cols[idx] !== 'undefined') ? String(cols[idx]).trim() : '';
-
-          const category = get(categoryIdx);
-          const name = get(nameIdx);
-          const description = get(descIdx);
-          const priceStr = get(priceIdx);
-          const discountStr = get(discountIdx);
-          const negotiable = get(negotiableIdx);
-          const imageField = get(imageIdx);
-          const viewsRaw = get(viewsIdx);
-
-          const catNorm = (category||'').toLowerCase();
-
-          // Accept items whose category contains the word 'centertable'
-          if (!catNorm.includes('centertable')) continue;
-
-          const rawImgs = String(imageField || '').replace(/^"|"$/g,'');
-          const imageLinks = rawImgs.split(/[\r\n,]+/).map(s=>s.trim()).filter(Boolean);
-          const cleaned = imageLinks.filter(u => u && u.toLowerCase() !== 'sold');
-          const hasImage = cleaned.length > 0;
-          const firstImage = hasImage ? cleaned[0] : '';
-
-          const priceNum = parseNumber(priceStr);
-          const discNum = parseNumber(discountStr);
-          const hasDiscount = !(String(discountStr||'').trim().toLowerCase()==='no' || String(discountStr||'').trim()==='') && !isNaN(discNum);
-          const saveNum = (hasDiscount && !isNaN(priceNum)) ? (priceNum - discNum) : NaN;
-
-          const stars = (viewsRaw && viewsRaw.trim() !== '') ? (function(){ let p = parseInt(viewsRaw,10); if (isNaN(p)) p = 5; p = Math.max(1,Math.min(5,p)); return Array.from({length:5},(_,k)=>k<p?'★':'☆').join(''); })() : '★★★★★';
-
-          const product = {
-            name, category, description, priceStr, discountStr, negotiable,
-            imageLinks: cleaned, hasImage, firstImage, priceNum, discNum, hasDiscount, saveNum, stars
-          };
-
-          if (!isNaN(product.priceNum)){
-            product._durationMs = DISCOUNT_DURATION_MS;
-            product._endTime = Date.now() + product._durationMs;
-            product._hasCountdown = true;
-          } else product._hasCountdown = false;
-
-          products.push(product);
-        }
-
-        countEl.innerHTML = `Total Center Tables: ${products.length}`;
-        if (products.length === 0){
-          countEl.innerHTML = 'No products found in category "centertable". Make sure your Category column includes the token <strong>centertable</strong>.';
-          return;
-        }
-
-        renderGrid();
-        updateCartCount();
-      } catch (err) {
-        console.error('Failed to load CSV:', err);
-        if (err.name === 'AbortError'){
-          countEl.innerHTML = 'Failed to load products: request timed out. Ensure the Google Sheet is published to the web (CSV) and the link is correct.';
-        } else {
-          countEl.innerHTML = 'Failed to load products. Verify your SHEET_CSV link and that the sheet is published (File → Publish to web → CSV).';
-        }
-      }
-    })();
-
-    /* Render cards */
-    function renderGrid(){
-      container.innerHTML = '';
-      products.forEach((p, idx) => {
-        const inquiryHref = 'https://wa.me/2347080535579?text=' + encodeURIComponent(`Hello, I'm interested in ${p.name} priced at ${ p.hasDiscount ? p.discountStr : p.priceStr }.`);
-        const addDisabled = p.hasImage ? '' : 'disabled';
-        const imageArg = p.hasImage ? escJS(p.firstImage) : '';
-        const badgeStackHtml = `
-  <div class="badge-left">
-    ${p.hasDiscount && p.saveNum > 0 ? `<div class="badge save-badge">Save ${formatNaira(p.saveNum)}</div>` : ''}
   </div>
-  <div class="badge-right">
-    ${p.negotiable ? `<div class="badge negotiable-badge">Negotiable</div>` : ''}
-  </div>
-`;
 
-const imgHtml = p.hasImage
-  ? `<span class="thumb" onclick="openDetails(${idx})" role="button" aria-label="Open ${escapeHtml(p.name)}">
-       <img src="${escapeHtml(p.firstImage)}" alt="${escapeHtml(p.name)}">
-       ${badgeStackHtml}
-     </span>`
-  : `<span class="thumb" onclick="openDetails(${idx})" role="button" aria-label="Open ${escapeHtml(p.name)}">
-       <div style="width:100%;height:180px;display:flex;align-items:center;justify-content:center;background:#fff;color:#ff3b30;font-weight:800;font-size:10px;">Currently out of stock — please check back soon!</div>
-       ${badgeStackHtml}
-     </span>`;
+<script>
+const SHEET_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4YXFvxl_w447wVuWRrHv8EInZFg1lSIX2_KwxZQJL9n8YHEzIP5WmfBep4yBgfN7EbArsjPPHOzOh/pub?output=csv";
+const DISCOUNT_DURATION_MS = 30 * 24 * 60 * 60 * 1000;
 
-const priceHtml = p.hasDiscount ? `<div class="old-price">${escapeHtml(p.priceStr)}</div><div class="price">${escapeHtml(p.discountStr)}</div>` : `<div class="price">${escapeHtml(p.priceStr)}</div>`;
+/* helpers */
+function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escJS(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,'\\n'); }
+function normKey(k){ return String(k||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
+function parseCSVRow(t){
+  const r=[]; let c='',q=false;
+  for(let i=0;i<t.length;i++){
+    const x=t[i];
+    if(q){
+      if(x==='"'){ if(t[i+1]==='"'){ c+='"'; i++; } else q=false; }
+      else c+=x;
+    }else{
+      if(x==='"') q=true;
+      else if(x===','){ r.push(c); c=''; }
+      else c+=x;
+    }
+  }
+  r.push(c); return r;
+}
+function parseNumber(s){ if(!s) return NaN; const n=String(s).replace(/[^\d.-]/g,''); return n===''?NaN:parseFloat(n); }
+function formatNaira(n){ return isNaN(n)?'':'₦'+Math.round(n).toLocaleString(); }
 
-const card = document.createElement('div');
-card.className = 'product-card';
-card.setAttribute('role','article');
-card.innerHTML = `
-  ${imgHtml}
-  <div class="product-body">
-    <a style="text-decoration:none;color:inherit;" onclick="openDetails(${idx})"><h3>${escapeHtml(p.name)}</h3></a>
-    <div class="meta-small">Category: ${escapeHtml(p.category || 'Executive')}</div>
-    <div class="price-row">${priceHtml}</div>
-    <div class="discount-timer" data-product-index="${idx}"></div>
-    <div class="stars">${escapeHtml(p.stars)}</div>
-    <div class="btn-row">
-      <a class="inquiry-btn" href="${escapeHtml(inquiryHref)}" target="_blank" rel="noopener noreferrer">📩 Inquiry</a>
-      <button class="buy-btn" ${addDisabled} onclick="addToCart('${escJS(p.name)}','${escJS(p.hasDiscount?p.discountStr:p.priceStr)}','${imageArg}')">🛒 Add to Cart</button>
-    </div>
-  </div>`;
-container.appendChild(card);
+/* dom */
+const countEl = document.getElementById('count');
+const container = document.getElementById('products');
+const cartBadge = document.getElementById('cart-count-bottom');
+
+/* cart */
+function updateCartCount(){
+  const cart = JSON.parse(localStorage.getItem('cart')||'[]');
+  if(cart.length){ cartBadge.style.display='inline-block'; cartBadge.textContent=cart.length; }
+  else cartBadge.style.display='none';
+}
+function addToCart(name,price,image){
+  if(!image) return;
+  const cart = JSON.parse(localStorage.getItem('cart')||'[]');
+  cart.push({name,price,image,qty:1});
+  localStorage.setItem('cart',JSON.stringify(cart));
+  updateCartCount();
+}
+updateCartCount();
+
+/* load products */
+(async function(){
+  try{
+    const csv = await fetch(SHEET_CSV).then(r=>r.text());
+    const lines = csv.replace(/^\uFEFF/,'').split(/\r?\n/).filter(l=>l.trim());
+    const headers = parseCSVRow(lines[0]);
+    const map = {}; headers.forEach((h,i)=>map[normKey(h)]=i);
+    const gi = n => map[normKey(n)];
+
+    const idI = gi('id');
+    const catI = gi('category');
+    const nameI = gi('productname');
+    const descI = gi('description');
+    const priceI = gi('price');
+    const discI = gi('discountprice');
+    const negI = gi('negotiable');
+    const imgI = gi('imagelink');
+
+    const products=[];
+
+    for(let i=1;i<lines.length;i++){
+      const c=parseCSVRow(lines[i]);
+      const g=i=>c[i]?c[i].trim():'';
+      const category=g(catI).toLowerCase();
+      if(!category.includes('centertable') && !category.includes('center table')) continue;
+
+      const imgs=g(imgI).split(/[\n,]+/).map(s=>s.trim()).filter(Boolean);
+      const hasImage = imgs.length > 0;
+      const firstImage = hasImage ? imgs[0] : '';
+
+      const priceNum=parseNumber(g(priceI));
+      const discNum=parseNumber(g(discI));
+      const hasDiscount=!isNaN(discNum);
+      const saveNum=(hasDiscount&&!isNaN(priceNum))?priceNum-discNum:NaN;
+
+      products.push({
+        id:g(idI),
+        name:g(nameI),
+        desc:g(descI),
+        priceStr:g(priceI),
+        discStr:g(discI),
+        negotiable:g(negI),
+        firstImage,
+        hasImage,
+        hasDiscount,
+        saveNum,
+        endTime:Date.now()+DISCOUNT_DURATION_MS
       });
     }
-    /* Cart */
-    function addToCart(name, price, image){
-      try{
-        let cart = JSON.parse(localStorage.getItem('cart')||'[]');
-        cart.push({ name, price, image, qty:1 });
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCartCount();
-      } catch(e){ console.error('addToCart error', e); }
-    }
-    function updateCartCount(){
-      const cart = JSON.parse(localStorage.getItem('cart')||'[]');
-      if (cart.length > 0){ cartBadge.style.display = 'inline-block'; cartBadge.textContent = cart.length; } else cartBadge.style.display = 'none';
-    }
 
-    /* Countdown updater */
-    setInterval(()=> {
-      const now = Date.now();
-      document.querySelectorAll('.discount-timer').forEach(el=>{
-        const idx = parseInt(el.dataset.productIndex, 10);
-        const p = products[idx];
-        if (!p || !p._hasCountdown) return;
-        let timeLeft = p._endTime - now;
-        if (timeLeft <= 0){ p._endTime = Date.now() + p._durationMs; timeLeft = p._endTime - Date.now(); }
-        el.textContent = 'Offer ends in: ' + formatTimeRemaining(timeLeft);
-      });
-      const dTimer = document.getElementById('details-timer');
-      if (dTimer && detailsOpenIndex !== null){
-        const p = products[detailsOpenIndex];
-        if (p && p._hasCountdown){
-          let t = p._endTime - now;
-          if (t <= 0){ p._endTime = Date.now() + p._durationMs; t = p._endTime - Date.now(); }
-          dTimer.textContent = 'Offer ends in: ' + formatTimeRemaining(t);
-        }
-      }
-    }, 1000);
+    countEl.textContent=`Total Center Tables Available: ${products.length}`;
+    container.innerHTML='';
 
-    function formatTimeRemaining(ms){
-      if (isNaN(ms) || ms <= 0) return '0s';
-      const total = Math.floor(ms/1000);
-      const days = Math.floor(total/86400);
-      const hours = Math.floor((total%86400)/3600);
-      const mins = Math.floor((total%3600)/60);
-      const secs = total%60;
-      return `${days}d ${hours}h ${mins}m ${secs}s`;
-    }
+    products.forEach((p,idx)=>{
+      const inquiry=`https://wa.me/2347080535579?text=`+encodeURIComponent(`Hello, I'm interested in ${p.name}`);
+      const link=`product.html?id=${p.id}`;
 
-    /* DETAILS PANEL + back-button handling */
-    detailsClose.addEventListener('click', ()=> closeDetails());
-    function openDetails(idx){
-      if (typeof idx !== 'number' || !products[idx]) return;
-      detailsOpenIndex = idx;
-      currentImageIndex = 0;
-      renderDetails(products[idx]);
-      detailsPanel.style.display = 'flex';
-      detailsPanel.setAttribute('aria-hidden','false');
-      document.body.style.overflow = 'hidden';
-      bottomNav.style.display = 'none';
-      document.addEventListener('keydown', detailsKeyHandler);
+      const thumbHtml = p.hasImage
+        ? `<img src="${escapeHtml(p.firstImage)}" alt="${escapeHtml(p.name)}">`
+        : `<div style="width:100%;height:180px;display:flex;align-items:center;justify-content:center;background:#fff;color:#ff3b30;font-weight:800;font-size:12px;">Product out of stock</div>`;
 
-      // push state so browser Back closes overlay rather than navigating away
-      try {
-        history.pushState({ vbest:'details', idx: idx }, '', '#product-' + idx);
-        pushedState = true;
-      } catch(e){ /* ignore */ }
-    }
-    function closeDetails(fromPopstate = false){
-      detailsPanel.style.display = 'none';
-      detailsPanel.setAttribute('aria-hidden','true');
-      detailsLeft.innerHTML = '';
-      detailsRight.innerHTML = '';
-      detailsOpenIndex = null;
-      currentImageIndex = 0;
-      document.body.style.overflow = '';
-      bottomNav.style.display = '';
-      document.removeEventListener('keydown', detailsKeyHandler);
+      const card=document.createElement('div');
+      card.className='product-card';
+      card.innerHTML=`
+        <span class="thumb" onclick="location.href='${link}'">
+          ${thumbHtml}
+          <div class="badge-left">${p.hasDiscount?`<div class="badge save-badge">Save ${formatNaira(p.saveNum)}</div>`:''}</div>
+          <div class="badge-right">${['yes','true','1','negotiable'].includes(String(p.negotiable).toLowerCase())?`<div class="badge negotiable-badge">Negotiable</div>`:''}</div>
+        </span>
 
-      if (pushedState && !fromPopstate){
-        ignorePopstate = true;
-        try { history.back(); } catch(e){ /* ignore */ }
-      }
-      pushedState = false;
-    }
-    function detailsKeyHandler(e){
-      if (e.key === 'Escape') closeDetails();
-      if (e.key === 'ArrowLeft') showImageIndex(-1);
-      if (e.key === 'ArrowRight') showImageIndex(1);
-    }
-    window.addEventListener('popstate', (event) => {
-      if (ignorePopstate){ ignorePopstate = false; return; }
-      if (detailsPanel.style.display === 'flex') closeDetails(true);
+        <div class="product-body">
+          <a href="${link}" style="color:inherit;text-decoration:none"><h3>${escapeHtml(p.name)}</h3></a>
+          ${p.hasDiscount?`<div class="old-price">${escapeHtml(p.priceStr)}</div><div class="price">${escapeHtml(p.discStr)}</div>`:`<div class="price">${escapeHtml(p.priceStr)}</div>`}
+          ${p.hasImage?`<div class="discount-timer" data-i="${idx}"></div>`:''}
+
+          <div class="btn-row" style="display:flex;flex-direction:column;gap:6px;">
+            <button class="buy-btn" ${p.hasImage?'':'disabled'} onclick="addToCart('${escJS(p.name)}','${escJS(p.hasDiscount?p.discStr:p.priceStr)}','${escJS(p.firstImage)}')">🛒 Add to Cart</button>
+            <a class="inquiry-btn" href="${inquiry}" target="_blank">📩 Inquiry</a>
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
     });
 
-    function renderDetails(p){
-      const mainImg = p.hasImage ? `<img id="detailsMainImage" class="main-image" src="${escapeHtml(p.imageLinks[0])}" alt="${escapeHtml(p.name)}">` : `<div style="width:100%;height:60vh;display:flex;align-items:center;justify-content:center;background:#111;color:#fff;font-weight:800;font-size:20px;border-radius:8px;">No image available</div>`;
-      const hasMultiple = p.imageLinks && p.imageLinks.length > 1;
-      const leftArrow = hasMultiple ? `<div class="img-nav left" id="imgPrev">‹</div>` : '';
-      const rightArrow = hasMultiple ? `<div class="img-nav right" id="imgNext">›</div>` : '';
-      let thumbsHtml = '';
-      if (p.imageLinks && p.imageLinks.length){
-        thumbsHtml = '<div class="thumbs" id="thumbsContainer">';
-        p.imageLinks.forEach((u,i)=> thumbsHtml += `<button data-idx="${i}" class="thumb-btn" style="border:2px solid transparent;background:transparent;padding:0;margin:0;"><img src="${escapeHtml(u)}" alt="thumb ${i+1}"></button>`);
-        thumbsHtml += '</div>';
-      }
-      detailsLeft.innerHTML = `${leftArrow}${mainImg}${rightArrow}${thumbsHtml}`;
-
-      if (hasMultiple){
-        document.getElementById('imgPrev').addEventListener('click', ()=> showImageIndex(-1));
-        document.getElementById('imgNext').addEventListener('click', ()=> showImageIndex(1));
-      }
-      const thumbsContainer = document.getElementById('thumbsContainer');
-      if (thumbsContainer){
-        thumbsContainer.querySelectorAll('button.thumb-btn').forEach(btn => btn.addEventListener('click', ()=> { goToImage(parseInt(btn.getAttribute('data-idx'),10)); }));
-        highlightThumb(currentImageIndex);
-      }
-
-      const main = document.getElementById('detailsMainImage');
-      if (main){
-        let touchStartX = null;
-        main.addEventListener('touchstart', (ev)=> { touchStartX = ev.touches[0].clientX; }, {passive:true});
-        main.addEventListener('touchend', (ev)=> {
-          if (touchStartX===null) return;
-          const endX = ev.changedTouches[0].clientX; const diff = endX - touchStartX;
-          if (Math.abs(diff) > 40){ if (diff < 0) showImageIndex(1); else showImageIndex(-1); }
-          touchStartX = null;
-        }, {passive:true});
-      }
-
-      const saveHtml = (p.hasDiscount && !isNaN(p.saveNum) && p.saveNum>0) ? `<div class="save-amount">Save ${formatNaira(p.saveNum)}</div>` : '';
-      const negotiableHtml = (p.negotiable && ['yes','y','true','1','negotiable'].includes(String(p.negotiable).trim().toLowerCase())) ? `<div class="negotiable">Negotiable</div>` : '';
-      const priceHtml = p.hasDiscount ? `<div class="old-price">${escapeHtml(p.priceStr)}</div><div class="price">${escapeHtml(p.discountStr)}</div>` : `<div class="price">${escapeHtml(p.priceStr)}</div>`;
-      const inquiryHref = 'https://wa.me/2347080535579?text=' + encodeURIComponent(`Hello, I'm interested in ${p.name} priced at ${ p.hasDiscount ? p.discountStr : p.priceStr }.`);
-      const detailsTimerHtml = p._hasCountdown ? `<div id="details-timer" class="discount-timer">Offer ends in: --d --h --m --s</div>` : '';
-
-      detailsRight.innerHTML = `
-        <h2>${escapeHtml(p.name)}</h2>
-        <div class="meta-small">Category: ${escapeHtml(p.category || '')}</div>
-        <div class="price-row">${priceHtml} ${saveHtml}</div>
-        ${detailsTimerHtml}
-        ${negotiableHtml}
-        <div class="stars">${escapeHtml(p.stars)}</div>
-        <div class="details-actions" style="margin-top:12px;display:flex;gap:10px;">
-          <a class="inquiry-btn" href="${escapeHtml(inquiryHref)}" target="_blank" rel="noopener noreferrer">📩 Inquiry on WhatsApp</a>
-          <button class="buy-btn" ${p.hasImage ? '' : 'disabled'} onclick="addToCart('${escJS(p.name)}','${escJS(p.hasDiscount?p.discountStr:p.priceStr)}','${escJS(p.hasImage?p.firstImage:'')}')">🛒 Add to Cart</button>
-        </div>
-        <div class="desc"><h3 style="margin-top:14px;color:var(--accent);">Product description</h3><p style="margin:8px 0 0;line-height:1.6;color:var(--text);">${escapeHtml(p.description || 'No description available.')}</p></div>
-      `;
-
-      if (p._hasCountdown){
-        const now = Date.now(); let timeLeft = p._endTime - now; if (timeLeft<=0){ p._endTime = Date.now() + p._durationMs; timeLeft = p._endTime - Date.now(); }
-        const dt = document.getElementById('details-timer'); if (dt) dt.textContent = 'Offer ends in: ' + formatTimeRemaining(timeLeft);
-      }
-    }
-
-    function showImageIndex(delta){
-      if (detailsOpenIndex === null) return;
-      const p = products[detailsOpenIndex]; if(!p||!p.imageLinks||!p.imageLinks.length) return;
-      currentImageIndex = (currentImageIndex + delta + p.imageLinks.length) % p.imageLinks.length;
-      const main = document.getElementById('detailsMainImage'); if (main) main.src = p.imageLinks[currentImageIndex];
-      highlightThumb(currentImageIndex);
-    }
-    function goToImage(i){
-      if (detailsOpenIndex === null) return;
-      const p = products[detailsOpenIndex]; if(!p||!p.imageLinks||!p.imageLinks[i]) return;
-      currentImageIndex = i;
-      const main = document.getElementById('detailsMainImage'); if (main) main.src = p.imageLinks[currentImageIndex];
-      highlightThumb(currentImageIndex);
-    }
-    function highlightThumb(i){
-      const thumbs = document.querySelectorAll('#thumbsContainer button.thumb-btn');
-      thumbs.forEach((b,idx)=> b.style.border = (idx===i)?'2px solid var(--green)':'2px solid transparent');
-      const sel = thumbs[i]; if (sel && sel.scrollIntoView) sel.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
-    }
-
-    /* Theme switcher */
-    (function(){
-      const themes = ['classic','dark','gold'];
-      let current = localStorage.getItem('vbest_theme') || 'classic';
-      if (!themes.includes(current)) current = 'classic';
-      document.body.setAttribute('data-theme', current);
-      let idx = themes.indexOf(current);
-      themeBtn.addEventListener('click', ()=> {
-        idx = (idx + 1) % themes.length;
-        const t = themes[idx];
-        document.body.setAttribute('data-theme', t);
-        localStorage.setItem('vbest_theme', t);
+    setInterval(()=>{
+      document.querySelectorAll('.discount-timer').forEach(el=>{
+        const p=products[el.dataset.i];
+        const diff=p.endTime-Date.now();
+        if(diff<=0){ el.textContent='Offer ended'; return; }
+        const d=Math.floor(diff/86400000);
+        const h=Math.floor(diff%86400000/3600000);
+        const m=Math.floor(diff%3600000/60000);
+        const s=Math.floor(diff%60000/1000);
+        el.textContent=`Ends in ${d}d ${h}h ${m}m ${s}s`;
       });
-    })();
+    },1000);
 
-    /* close details on backdrop click */
-    detailsPanel.addEventListener('click', function(e){ if (e.target === detailsPanel) closeDetails(); });
+  }catch(e){
+    console.error(e);
+    countEl.textContent='Failed to load products';
+  }
+})();
+</script>
 
-    /* sync cart across tabs */
-    window.addEventListener('storage', (e)=> { if (e.key === 'cart') updateCartCount(); });
-  </script>
+
     </script>
     <footer class="shilpi-footer">
     <div class="shilpi-container" style="max-width:1150px;margin:0 auto;">

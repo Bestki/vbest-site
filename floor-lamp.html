@@ -155,403 +155,338 @@
 </head>
 <body data-theme="classic">
 
-  <!-- TOP MEDIA -->
-  <div class="top-media" aria-hidden="false">
-    <img src="images/logo.png" alt="V'Best Interiors Logo" class="logo-media">
-  </div>
+<style>
 
-  <h1>Floor Lamps</h1>
-  <strong>Elegant standing lamps and modern floor lights.</strong>
-  <p>Discover tall floor lamps, reading lamps and decorative standing lights perfect for living rooms and reading corners.</p>
-  <div id="count">Loading...</div>
+.buy-btn,
+.inquiry-btn{
+display:block;
+width:100%;
+text-align:center;
+padding:10px;
+border:none;
+border-radius:6px;
+font-weight:700;
+text-decoration:none;
+cursor:pointer;
+}
 
-  <div id="products" class="product-grid" aria-live="polite"></div>
+.buy-btn{
+background:#000;
+color:#fff;
+}
 
-  <a href="lighting.html" class="back" style="display:block;margin:12px 0;color:var(--accent);text-decoration:none;font-weight:700;">⬅ Back to Categories</a>
+.inquiry-btn{
+background:#25D366;
+color:#fff;
+}
 
-  <!-- DETAILS PANEL -->
-  <div id="detailsPanel" class="details-panel" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="details-inner" role="document">
-      <button id="detailsClose" class="close-btn" aria-label="Close details">✕</button>
-      <div class="details-left" id="detailsLeft"></div>
-      <div class="details-right" id="detailsRight"></div>
-    </div>
-  </div>
+.buy-btn:hover,
+.inquiry-btn:hover{
+opacity:0.9;
+}
 
-  <!-- BOTTOM NAV -->
-  <div class="bottom-nav" role="navigation" aria-label="Main navigation">
-    <a href="index.html" id="nav-home">🏠 Home</a>
-    <button id="themeSwitch">🎨 Theme</button>
-    <a href="cart.html" id="nav-cart">🛒 Cart <span id="cart-count-bottom" class="cart-badge" style="display:none">0</span></a>
-  </div>
+/* badges */
+.badge-left{
+position:absolute;
+top:8px;
+left:8px;
+}
 
-  <script>
-    /* CONFIG */
-    const SHEET_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4YXFvxl_w447wVuWRrHv8EInZFg1lSIX2_KwxZQJL9n8YHEzIP5WmfBep4yBgfN7EbArsjPPHOzOh/pub?output=csv";
-    const DISCOUNT_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
+.badge-right{
+position:absolute;
+top:8px;
+right:8px;
+}
 
-    /* UTILITIES */
-    function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-    function escJS(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,'\\n').replace(/\r/g,''); }
-    function parseCSVRow(text){
-      const fields = []; let cur=''; let inQuotes=false;
-      for (let i=0;i<text.length;i++){
-        const ch = text[i];
-        if (inQuotes){
-          if (ch === '"'){
-            if (text[i+1] === '"'){ cur += '"'; i++; }
-            else { inQuotes = false; }
-          } else cur += ch;
-        } else {
-          if (ch === '"') inQuotes = true;
-          else if (ch === ','){ fields.push(cur); cur=''; }
-          else cur += ch;
-        }
-      }
-      fields.push(cur);
-      return fields;
-    }
-    function normKey(k){ return String(k||'').toLowerCase().replace(/[^\w]/g,''); }
-    function findIndexByNames(map,cands){
-      for (const c of cands) if (map[c] !== undefined) return map[c];
-      return -1;
-    }
-    function parseNumber(s){ if(!s) return NaN; const n = String(s).replace(/[^\d.-]/g,''); return n===''?NaN:parseFloat(n); }
-    function formatNaira(n){ if (isNaN(n)) return ''; return '₦' + Math.round(n).toLocaleString(); }
+.badge{
+padding:4px 8px;
+font-size:12px;
+font-weight:700;
+border-radius:4px;
+color:#fff;
+}
 
-    /* DOM refs */
-    const container = document.getElementById('products');
-    const detailsPanel = document.getElementById('detailsPanel');
-    const detailsLeft = document.getElementById('detailsLeft');
-    const detailsRight = document.getElementById('detailsRight');
-    const detailsClose = document.getElementById('detailsClose');
-    const bottomNav = document.querySelector('.bottom-nav');
-    const cartBadge = document.getElementById('cart-count-bottom');
-    const themeBtn = document.getElementById('themeSwitch');
+.save-badge{
+background:#ff3b30;
+}
 
-    /* state */
-    let products = [];
-    let detailsOpenIndex = null;
-    let currentImageIndex = 0;
-    let pushedState = false;
-    let ignorePopstate = false;
+.negotiable-badge{
+background:#007aff;
+}
 
-    /* FETCH & RENDER */
-    fetch(SHEET_CSV).then(r => r.text()).then(csv => {
-      const text = csv.replace(/^\uFEFF/,'');
-      const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
-      if (!lines.length){ document.getElementById('count').textContent = 'No data in sheet'; return; }
-      const headerCols = parseCSVRow(lines[0]);
-      const headerMap = {}; headerCols.forEach((h,i)=> headerMap[normKey(h)] = i);
+.thumb{
+position:relative;
+display:block;
+}
 
-      // columns detection
-      const categoryIdx = findIndexByNames(headerMap,['category','cat','type']) !== -1 ? findIndexByNames(headerMap,['category','cat','type']) : 0;
-      const nameIdx = findIndexByNames(headerMap,['productname','product','name']) !== -1 ? findIndexByNames(headerMap,['productname','product','name']) : 1;
-      const descIdx = findIndexByNames(headerMap,['description','desc','details']) !== -1 ? findIndexByNames(headerMap,['description','desc','details']) : 2;
-      const priceIdx = findIndexByNames(headerMap,['price','priceraw','amount']) !== -1 ? findIndexByNames(headerMap,['price','priceraw','amount']) : 3;
-      const discountIdx = findIndexByNames(headerMap,['discountprice','discount','offer']) !== -1 ? findIndexByNames(headerMap,['discountprice','discount','offer']) : 4;
-      const negotiableIdx = findIndexByNames(headerMap,['negotiable','neg','isnegotiable']) !== -1 ? findIndexByNames(headerMap,['negotiable','neg','isnegotiable']) : 5;
-      const imageIdx = findIndexByNames(headerMap, ['imagelink','imagelinks','image','imageurl','image1','images','imagelink1']) !== -1 ? findIndexByNames(headerMap, ['imagelink','imagelinks','image','imageurl','image1','images','imagelink1']) : 6;
-      const regionIdx = findIndexByNames(headerMap,['region','categorytype','type']) !== -1 ? findIndexByNames(headerMap,['region','categorytype','type']) : 4;
-      const viewsIdx = findIndexByNames(headerMap,['views','rating','stars']) !== -1 ? findIndexByNames(headerMap,['views','rating','stars']) : 7;
+</style>
 
-      for (let i=1;i<lines.length;i++){
-        const cols = parseCSVRow(lines[i]);
-        if (!cols || cols.length === 0) continue;
-        const get = idx => (typeof cols[idx] !== 'undefined' ? String(cols[idx]).trim() : '');
-        const category = get(categoryIdx);
-        const name = get(nameIdx);
-        const description = get(descIdx);
-        const priceStr = get(priceIdx);
-        const discountStr = get(discountIdx);
-        const negotiable = get(negotiableIdx);
-        const imageField = get(imageIdx);
-        const region = get(regionIdx);
-        const viewsRaw = get(viewsIdx);
+<div class="top-media">
+<img src="images/logo.png" alt="V'Best Interiors logo" class="logo-media">
+</div>
 
-        const catNorm = (category||'').toLowerCase().replace(/[^\w]/g,'');
-        const regionNorm = (region||'').toLowerCase().replace(/[^\w]/g,'');
-        const nameNorm = (name||'').toLowerCase().replace(/[^\w]/g,'');
+<h1>Floor Lamps</h1>
+<strong>Illuminate your home with our stylish floor lamps.</strong><br>
+Perfect for modern and cozy interiors.<br>
+<strong>Shop exclusive collections from V-Best Luxury Interiors today.</strong>
 
-        // FILTER: include only exact "floorlamp" in category or name (strict)
-        const isFloorLamp = (
-          catNorm === 'floorlamp' ||
-          nameNorm === 'floorlamp'
-        );
-        if (!isFloorLamp) continue;
+<div id="count"><span class="spinner"></span> Loading products...</div>
 
-        const rawImgs = String(imageField || '').replace(/^"|"$/g,'');
-        const imageLinks = rawImgs.split(/[\r\n,]+/).map(s=>s.trim()).filter(Boolean);
-        const cleaned = imageLinks.filter(u => u && u.toLowerCase()!=='sold');
-        const hasImage = cleaned.length > 0;
-        const firstImage = hasImage ? cleaned[0] : '';
+<div id="products" class="product-grid"></div>
 
-        const priceNum = parseNumber(priceStr);
-        const discNum = parseNumber(discountStr);
-        const hasDiscount = !(String(discountStr||'').trim().toLowerCase()==='no' || String(discountStr||'').trim()==='') && !isNaN(discNum);
-        const saveNum = (hasDiscount && !isNaN(priceNum)) ? (priceNum - discNum) : NaN;
+<a href="lighting.html" style="display:block;margin:14px 0;color:var(--accent);text-decoration:none;font-weight:700;">
+⬅ Back to Categories
+</a>
 
-        const stars = (viewsRaw && viewsRaw.trim()!=='') ? (function(){ let p=parseInt(viewsRaw,10); if(isNaN(p)) p=5; p=Math.max(1,Math.min(5,p)); return Array.from({length:5},(_,k)=>k<p?'★':'☆').join(''); })() : '★★★★★';
+<div class="bottom-nav">
+<a href="index.html">🏠 Home</a>
+<a href="cart.html">🛒 Cart <span id="cart-count-bottom" class="cart-badge" style="display:none">0</span></a>
+</div>
 
-        const product = {
-          name, category, description, priceStr, discountStr, negotiable, imageLinks: cleaned, hasImage, firstImage,
-          priceNum, discNum, hasDiscount, saveNum, stars
-        };
+<script>
 
-        if (!isNaN(product.priceNum)){
-          product._durationMs = DISCOUNT_DURATION_MS;
-          product._endTime = Date.now() + product._durationMs;
-          product._hasCountdown = true;
-        } else product._hasCountdown = false;
+const SHEET_CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4YXFvxl_w447wVuWRrHv8EInZFg1lSIX2_KwxZQJL9n8YHEzIP5WmfBep4yBgfN7EbArsjPPHOzOh/pub?output=csv";
+const DISCOUNT_DURATION_MS=30*24*60*60*1000;
 
-        const idxForOpen = products.length;
-        products.push(product);
+function escapeHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function escJS(s){return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+function normKey(k){return String(k||'').toLowerCase().replace(/[^a-z0-9]/g,'');}
 
-        // card html
-        const inquiryHref = 'https://wa.me/2347080535579?text=' + encodeURIComponent(`Hello, I'm interested in ${name} priced at ${ product.hasDiscount ? discountStr : priceStr }.`);
-        const addDisabled = product.hasImage ? '' : 'disabled';
-        const imageArg = product.hasImage ? escJS(product.firstImage) : '';
+function parseCSVRow(t){
+const r=[];let c='',q=false;
+for(let i=0;i<t.length;i++){
+const x=t[i];
+if(q){
+if(x==='"'){if(t[i+1]==='"'){c+='"';i++;}else q=false;}
+else c+=x;
+}else{
+if(x==='"')q=true;
+else if(x===','){r.push(c);c='';}
+else c+=x;
+}}
+r.push(c);
+return r;
+}
 
-        const badgeStackHtml = `
-          <div class="badge-left">
-            ${product.hasDiscount && product.saveNum > 0 ? `<div class="badge save-badge">Save ${formatNaira(product.saveNum)}</div>` : ''}
-          </div>
-          <div class="badge-right">
-            ${product.negotiable && ['yes','y','true','1','negotiable'].includes(String(product.negotiable).trim().toLowerCase()) ? `<div class="badge negotiable-badge">Negotiable</div>` : ''}
-          </div>
-        `;
+function parseNumber(s){
+if(!s)return NaN;
+const n=String(s).replace(/[^\d.-]/g,'');
+return n===''?NaN:parseFloat(n);
+}
 
-        const imgHtml = product.hasImage
-          ? `<span class="thumb" onclick="openDetails(${idxForOpen})" role="button" aria-label="Open ${escapeHtml(name)}">
-               <img src="${escapeHtml(product.firstImage)}" alt="${escapeHtml(name)}">
-               ${badgeStackHtml}
-             </span>`
-          : `<span class="thumb" onclick="openDetails(${idxForOpen})" role="button" aria-label="Open ${escapeHtml(name)}">
-               <div style="width:100%;height:180px;display:flex;align-items:center;justify-content:center;background:#fff;color:#ff3b30;font-weight:800;font-size:10px;">Currently out of stock — please check back soon!</div>
-               ${badgeStackHtml}
-             </span>`;
+function formatNaira(n){
+return isNaN(n)?'':'₦'+Math.round(n).toLocaleString();
+}
 
-        const priceHtml = product.hasDiscount
-          ? `<div class="old-price">${escapeHtml(priceStr)}</div><div class="price">${escapeHtml(discountStr)}</div>`
-          : `<div class="price">${escapeHtml(priceStr)}</div>`;
+const countEl=document.getElementById('count');
+const container=document.getElementById('products');
+const cartBadge=document.getElementById('cart-count-bottom');
 
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.setAttribute('role','article');
-        card.innerHTML = `
-          ${imgHtml}
-          <div class="product-body">
-            <a style="text-decoration:none;color:inherit;" onclick="openDetails(${idxForOpen})"><h3>${escapeHtml(name)}</h3></a>
-            <div class="price-row">${priceHtml}</div>
-            <div class="discount-timer" data-product-index="${idxForOpen}"></div>
-            <div class="stars">${escapeHtml(product.stars)}</div>
-            <div class="btn-row">
-              <a class="inquiry-btn" href="${escapeHtml(inquiryHref)}" target="_blank" rel="noopener noreferrer">📩 Inquiry</a>
-              <button class="buy-btn" ${addDisabled} onclick="addToCart('${escJS(name)}','${escJS(product.hasDiscount?discountStr:priceStr)}','${imageArg}')">🛒 Add to Cart</button>
-            </div>
-          </div>
-        `;
-        container.appendChild(card);
-      } // end rows
+function updateCartCount(){
+const cart=JSON.parse(localStorage.getItem('cart')||'[]');
+if(cart.length){
+cartBadge.style.display='inline-block';
+cartBadge.textContent=cart.length;
+}else cartBadge.style.display='none';
+}
 
-      document.getElementById('count').textContent = `Total Floor Lamps Available: ${products.length}`;
-      updateCartCount();
-    }).catch(err => {
-      console.error('Failed to load sheet',err);
-      document.getElementById('count').textContent = 'Failed to load products';
-    });
+function addToCart(name,price,image){
+if(!image)return;
+const cart=JSON.parse(localStorage.getItem('cart')||'[]');
+cart.push({name,price,image,qty:1});
+localStorage.setItem('cart',JSON.stringify(cart));
+updateCartCount();
+}
 
-    /* CART */
-    function addToCart(name, price, image){
-      try{
-        if (!image || !String(image).trim()) return;
-        let cart = JSON.parse(localStorage.getItem('cart')||'[]');
-        cart.push({ name, price, image, qty:1 });
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCartCount();
-      }catch(e){ console.error('addToCart error',e); }
-    }
-    function updateCartCount(){
-      const cart = JSON.parse(localStorage.getItem('cart')||'[]');
-      if (cart.length>0){ cartBadge.style.display='inline-block'; cartBadge.textContent = cart.length; } else cartBadge.style.display='none';
-    }
-    updateCartCount();
+updateCartCount();
 
-    /* COUNTDOWN */
-    setInterval(()=> {
-      const now = Date.now();
-      document.querySelectorAll('.discount-timer').forEach(el => {
-        const idx = parseInt(el.dataset.productIndex,10);
-        const p = products[idx];
-        if (!p || !p._hasCountdown) return;
-        let timeLeft = p._endTime - now;
-        if (timeLeft <= 0){ p._endTime = Date.now() + p._durationMs; timeLeft = p._endTime - Date.now(); }
-        el.textContent = 'Offer ends in: ' + formatTimeRemaining(timeLeft);
-      });
-      const dTimer = document.getElementById('details-timer');
-      if (dTimer && detailsOpenIndex !== null){
-        const p = products[detailsOpenIndex];
-        if (p && p._hasCountdown){ let t = p._endTime - now; if (t<=0){ p._endTime = Date.now()+p._durationMs; t = p._endTime - Date.now(); } dTimer.textContent = 'Offer ends in: ' + formatTimeRemaining(t); }
-      }
-    }, 1000);
+(async function(){
 
-    function formatTimeRemaining(ms){
-      if (isNaN(ms) || ms <= 0) return '0s';
-      const total = Math.floor(ms/1000);
-      const days = Math.floor(total/86400);
-      const hours = Math.floor((total%86400)/3600);
-      const mins = Math.floor((total%3600)/60);
-      const secs = total%60;
-      return `${days}d ${hours}h ${mins}m ${secs}s`;
-    }
+try{
 
-    /* DETAILS (gallery + info) */
-    detailsClose.addEventListener('click', ()=> closeDetails());
-    function openDetails(idx){
-      if (typeof idx !== 'number' || !products[idx]) return;
-      detailsOpenIndex = idx;
-      currentImageIndex = 0;
-      renderDetails(products[idx]);
-      detailsPanel.style.display = 'flex';
-      detailsPanel.setAttribute('aria-hidden','false');
-      document.body.style.overflow = 'hidden';
-      bottomNav.style.display = 'none';
-      document.addEventListener('keydown', detailsKeyHandler);
+const csv=await fetch(SHEET_CSV).then(r=>r.text());
+const lines=csv.replace(/^\uFEFF/,'').split(/\r?\n/).filter(l=>l.trim());
+const headers=parseCSVRow(lines[0]);
 
-      try {
-        history.pushState({ vbest: 'details', idx: idx }, '', '#product-' + idx);
-        pushedState = true;
-      } catch (e) {}
-    }
-    function closeDetails(fromPopstate = false){
-      detailsPanel.style.display = 'none';
-      detailsPanel.setAttribute('aria-hidden','true');
-      detailsLeft.innerHTML = '';
-      detailsRight.innerHTML = '';
-      detailsOpenIndex = null;
-      currentImageIndex = 0;
-      document.body.style.overflow = '';
-      bottomNav.style.display = '';
-      document.removeEventListener('keydown', detailsKeyHandler);
+const map={};
+headers.forEach((h,i)=>map[normKey(h)]=i);
+const gi=n=>map[normKey(n)];
 
-      if (pushedState && !fromPopstate){
-        ignorePopstate = true;
-        try { history.back(); } catch(e) { /* ignore */ }
-      }
-      pushedState = false;
-    }
-    function detailsKeyHandler(e){
-      if (e.key === 'Escape') closeDetails();
-      if (e.key === 'ArrowLeft') showImageIndex(-1);
-      if (e.key === 'ArrowRight') showImageIndex(1);
-    }
+const idI=gi('id');
+const catI=gi('category');
+const nameI=gi('productname');
+const priceI=gi('price');
+const discI=gi('discountprice');
+const negI=gi('negotiable');
+const imgI=gi('imagelink');
 
-    window.addEventListener('popstate', (event) => {
-      if (ignorePopstate) { ignorePopstate = false; return; }
-      if (detailsPanel.style.display === 'flex') { closeDetails(true); }
-    });
+const products=[];
 
-    function renderDetails(p){
-      const mainImg = p.hasImage ? `<img id="detailsMainImage" class="main-image" src="${escapeHtml(p.imageLinks[0])}" alt="${escapeHtml(p.name)}">` : `<div style="width:100%;height:60vh;display:flex;align-items:center;justify-content:center;background:#111;color:#ff3b30;font-weight:800;font-size:28px;border-radius:8px;">SOLD</div>`;
-      const hasMultiple = p.imageLinks && p.imageLinks.length>1;
-      const leftArrow = hasMultiple ? `<div class="img-nav left" id="imgPrev">‹</div>` : '';
-      const rightArrow = hasMultiple ? `<div class="img-nav right" id="imgNext">›</div>` : '';
-      let thumbsHtml = '';
-      if (p.imageLinks && p.imageLinks.length){ thumbsHtml = '<div class="thumbs" id="thumbsContainer">'; p.imageLinks.forEach((u,i)=> thumbsHtml += `<button data-idx="${i}" class="thumb-btn" style="border:2px solid transparent;background:transparent;padding:0;margin:0;"><img src="${escapeHtml(u)}" alt="thumb ${i+1}"></button>`); thumbsHtml += '</div>'; }
-      detailsLeft.innerHTML = `${leftArrow}${mainImg}${rightArrow}${thumbsHtml}`;
+for(let i=1;i<lines.length;i++){
 
-      if (hasMultiple){
-        document.getElementById('imgPrev').addEventListener('click', ()=> showImageIndex(-1));
-        document.getElementById('imgNext').addEventListener('click', ()=> showImageIndex(1));
-      }
-      const thumbsContainer = document.getElementById('thumbsContainer');
-      if (thumbsContainer){
-        thumbsContainer.querySelectorAll('button.thumb-btn').forEach(btn => btn.addEventListener('click', ()=> { goToImage(parseInt(btn.getAttribute('data-idx'),10)); }));
-        highlightThumb(currentImageIndex);
-      }
-      const main = document.getElementById('detailsMainImage');
-      if (main){
-        let touchStartX = null;
-        main.addEventListener('touchstart', (ev)=> { touchStartX = ev.touches[0].clientX; }, {passive:true});
-        main.addEventListener('touchend', (ev)=> {
-          if (touchStartX===null) return;
-          const endX = ev.changedTouches[0].clientX; const diff = endX - touchStartX;
-          if (Math.abs(diff) > 40){ if (diff < 0) showImageIndex(1); else showImageIndex(-1); }
-          touchStartX = null;
-        }, {passive:true});
-      }
+const c=parseCSVRow(lines[i]);
+const g=i=>c[i]?c[i].trim():'';
 
-      const saveHtml = (p.hasDiscount && !isNaN(p.saveNum) && p.saveNum>0) ? `<div class="save-amount">Save ${formatNaira(p.saveNum)}</div>` : '';
-      const negotiableHtml = (p.negotiable && ['yes','y','true','1','negotiable'].includes(String(p.negotiable).trim().toLowerCase())) ? `<div class="negotiable">Negotiable</div>` : '';
-      const priceHtml = p.hasDiscount ? `<div class="old-price">${escapeHtml(p.priceStr)}</div><div class="price">${escapeHtml(p.discountStr)}</div>` : `<div class="price">${escapeHtml(p.priceStr)}</div>`;
-      const inquiryHref = 'https://wa.me/2347080535579?text=' + encodeURIComponent(`Hello, I'm interested in ${p.name} priced at ${ p.hasDiscount ? p.discountStr : p.priceStr }.`);
+const category=g(catI).toLowerCase();
+if(!category.includes('floorlamp')) continue;
 
-      const detailsTimerHtml = p._hasCountdown ? `<div id="details-timer" class="discount-timer">Offer ends in: --d --h --m --s</div>` : '';
+const priceNum=parseNumber(g(priceI));
+const discNum=parseNumber(g(discI));
 
-      detailsRight.innerHTML = `
-        <h2>${escapeHtml(p.name)}</h2>
-        <div class="meta">Category: ${escapeHtml(p.category || '')}</div>
-        <div class="price-row">${priceHtml} ${saveHtml}</div>
-        ${detailsTimerHtml}
-        ${negotiableHtml}
-        <div class="stars">${escapeHtml(p.stars)}</div>
-        <div class="details-actions">
-          <a class="inquiry-btn" href="${escapeHtml(inquiryHref)}" target="_blank" rel="noopener noreferrer">📩 Inquiry on WhatsApp</a>
-          <button class="buy-btn" ${p.hasImage ? '' : 'disabled'} onclick="addToCart('${escJS(p.name)}','${escJS(p.hasDiscount?p.discountStr:p.priceStr)}','${escJS(p.hasImage?p.firstImage:'')}')">🛒 Add to Cart</button>
-        </div>
-        <div class="desc"><h3 style="margin-top:14px;color:var(--accent);">Product description</h3><p style="margin:8px 0 0;line-height:1.6;color:var(--text);">${escapeHtml(p.description || 'No description available.')}</p></div>
-      `;
-      if (p._hasCountdown){
-        const now = Date.now(); let timeLeft = p._endTime - now; if (timeLeft<=0){ p._endTime = Date.now()+p._durationMs; timeLeft = p._endTime - Date.now(); }
-        const dt = document.getElementById('details-timer'); if (dt) dt.textContent = 'Offer ends in: ' + formatTimeRemaining(timeLeft);
-      }
-    }
+const hasPrice=!isNaN(priceNum);
+const hasDiscount=!isNaN(discNum);
 
-    function showImageIndex(delta){
-      if (detailsOpenIndex === null) return;
-      const p = products[detailsOpenIndex]; if(!p||!p.imageLinks||!p.imageLinks.length) return;
-      currentImageIndex = (currentImageIndex + delta + p.imageLinks.length) % p.imageLinks.length;
-      const main = document.getElementById('detailsMainImage'); if (main) main.src = p.imageLinks[currentImageIndex];
-      highlightThumb(currentImageIndex);
-    }
-    function goToImage(i){
-      if (detailsOpenIndex === null) return;
-      const p = products[detailsOpenIndex]; if(!p||!p.imageLinks||!p.imageLinks[i]) return;
-      currentImageIndex = i;
-      const main = document.getElementById('detailsMainImage'); if (main) main.src = p.imageLinks[currentImageIndex];
-      highlightThumb(currentImageIndex);
-    }
-    function highlightThumb(i){
-      const thumbs = document.querySelectorAll('#thumbsContainer button.thumb-btn');
-      thumbs.forEach((b,idx)=> b.style.border = (idx===i)?'2px solid var(--green)':'2px solid transparent');
-      const sel = thumbs[i]; if (sel && sel.scrollIntoView) sel.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
-    }
+const imgs=g(imgI).split(/[\n,]+/).map(s=>s.trim()).filter(Boolean);
+const hasImage=imgs.length>0;
 
-    /* THEME SWITCHER */
-    (function(){
-      const themes = ['classic','dark','gold'];
-      let current = localStorage.getItem('vbest_theme') || 'classic';
-      if (!themes.includes(current)) current = 'classic';
-      document.body.setAttribute('data-theme', current);
-      let idx = themes.indexOf(current);
-      themeBtn.addEventListener('click', ()=> {
-        idx = (idx + 1) % themes.length;
-        const t = themes[idx];
-        document.body.setAttribute('data-theme', t);
-        localStorage.setItem('vbest_theme', t);
-      });
-    })();
+const saveAmount=(hasPrice && hasDiscount)?priceNum-discNum:NaN;
+const showSave=(hasPrice && hasDiscount);
 
-    /* close details on backdrop click */
-    detailsPanel.addEventListener('click', function(e){ if (e.target === detailsPanel) closeDetails(); });
+const negotiableValue=g(negI).toLowerCase();
+const isNegotiable=['yes','true','1','negotiable'].includes(negotiableValue);
 
-    /* ensure bottom nav reappears on history/popstate or manual close */
-    window.addEventListener('popstate', ()=> { if (detailsPanel.style.display === 'flex') closeDetails(); });
+const showTimer=(hasImage && hasPrice && hasDiscount);
 
-    // keep cart count in sync (other tabs)
-    window.addEventListener('storage', (e)=> { if (e.key === 'cart') updateCartCount(); });
+products.push({
+id:g(idI),
+name:g(nameI),
+priceStr:g(priceI),
+discStr:g(discI),
+firstImage:imgs[0]||'',
+hasImage,
+hasDiscount,
+showTimer,
+showSave,
+saveAmount,
+isNegotiable,
+endTime:Date.now()+DISCOUNT_DURATION_MS
+});
+}
 
-  </script>
+countEl.textContent=`Total Floor Lamps Available: ${products.length}`;
+container.innerHTML='';
+
+products.forEach((p,idx)=>{
+
+const inquiry=`https://wa.me/2347080535579?text=`+encodeURIComponent(`Hello, I'm interested in ${p.name}`);
+const link=`product.html?id=${p.id}`;
+
+const card=document.createElement('div');
+card.className='product-card';
+
+if(p.hasImage){
+
+card.innerHTML=`
+
+<span class="thumb" onclick="location.href='${link}'">
+
+<img src="${escapeHtml(p.firstImage)}">
+
+<div class="badge-left">
+${p.showSave?`<div class="badge save-badge">Save ${formatNaira(p.saveAmount)}</div>`:''}
+</div>
+
+<div class="badge-right">
+${p.isNegotiable?`<div class="badge negotiable-badge">Negotiable</div>`:''}
+</div>
+
+</span>
+
+<div class="product-body">
+
+<a href="${link}" style="text-decoration:none;color:inherit">
+<h3>${escapeHtml(p.name)}</h3>
+</a>
+
+${p.hasDiscount
+?`<div class="old-price">${escapeHtml(p.priceStr)}</div><div class="price">${escapeHtml(p.discStr)}</div>`
+:`<div class="price">${escapeHtml(p.priceStr)}</div>`}
+
+${p.showTimer?`<div class="discount-timer" data-i="${idx}"></div>`:''}
+
+<div style="display:flex;flex-direction:column;gap:6px">
+
+<button class="buy-btn"
+onclick="addToCart('${escJS(p.name)}','${escJS(p.hasDiscount?p.discStr:p.priceStr)}','${escJS(p.firstImage)}')">
+🛒 Add to Cart
+</button>
+
+<a class="inquiry-btn" href="${inquiry}" target="_blank">
+📩 Inquiry
+</a>
+
+</div>
+
+</div>
+`;
+
+}else{
+
+card.innerHTML=`
+
+<span style="display:flex;align-items:center;justify-content:center;background:#f0f0f0;height:180px;color:#ff3b30;font-weight:700;">
+Product out of stock
+</span>
+
+<div class="product-body">
+
+<h3>${escapeHtml(p.name)}</h3>
+
+<div class="price">${p.priceStr?escapeHtml(p.priceStr):''}</div>
+
+<div style="display:flex;flex-direction:column;gap:6px">
+
+<button class="buy-btn" disabled>🛒 Add to Cart</button>
+
+<a class="inquiry-btn" href="${inquiry}" target="_blank">
+📩 Inquiry
+</a>
+
+</div>
+
+</div>
+`;
+}
+
+container.appendChild(card);
+
+});
+
+setInterval(()=>{
+
+document.querySelectorAll('.discount-timer').forEach(el=>{
+
+const p=products[el.dataset.i];
+if(!p.showTimer) return;
+
+const diff=p.endTime-Date.now();
+
+if(diff<=0){
+el.textContent='Offer ended';
+return;
+}
+
+const d=Math.floor(diff/86400000);
+const h=Math.floor(diff%86400000/3600000);
+const m=Math.floor(diff%3600000/60000);
+const s=Math.floor(diff%60000/1000);
+
+el.textContent=`Ends in ${d}d ${h}h ${m}m ${s}s`;
+
+});
+
+},1000);
+
+}catch(e){
+
+console.error(e);
+countEl.textContent='Failed to load products';
+
+}
+
+})();
+
+</script>
 
   <footer class="shilpi-footer">
     <div class="shilpi-container" style="max-width:1150px;margin:0 auto;">
