@@ -10,15 +10,16 @@
   <meta property="og:description" content="Explore premium 6-seater dining sets at V-Best Interiors. Comfort, quality and elegant designs for your dining room.">
   <meta property="og:image" content="https://i.postimg.cc/yNXsb9Q8/IMG-20250822-WA0058.jpg">
   <meta property="og:url" content="https://vbest-site.vercel.app/dining-6.html">
-  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:card" 
+    content="summary_large_image">
+  <link rel="canonical" href="https://vbest-site.vercel.app/dining-6.html">
 
   <style>
-    /* THEMES: default is Classic (white) */
     :root {
       --bg: #ffffff;
       --card: #f8f8f8;
       --text: #111827;
-      --accent: #1f2937; /* dark heading color */
+      --accent: #1f2937;
       --btn: #FF9900;
       --btn-text: #fff;
       --price: #B12704;
@@ -43,20 +44,17 @@
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
       text-align:center;
-      padding-bottom:84px; /* space for bottom nav */
+      padding-bottom:84px;
     }
 
-    /* top media (image or video) full-width */
     .top-media { width:100%; display:block; max-height:220px; overflow:hidden; background:transparent; }
     .logo-media { width:100%; height:auto; display:block; object-fit:cover; max-height:200px; }
 
     h1{ margin:8px 0 4px; font-size:20px; color:var(--accent); }
     #count{ font-size:14px; color:var(--green); margin-bottom:8px; font-weight:700; }
 
-    /* product grid */
     .product-grid{
       display:grid;
-      /* mobile-first: 2 columns on mobile/tablet/laptops by default */
       grid-template-columns: repeat(2,1fr);
       gap:10px;
       padding:10px;
@@ -65,7 +63,6 @@
       box-sizing:border-box;
     }
 
-    /* desktop: 3 columns */
     @media (min-width: 1024px) {
       .product-grid{
         grid-template-columns: repeat(3,1fr);
@@ -95,7 +92,6 @@
   animation: zoomInOut 2s infinite alternate;
 }
 
-/* Stack badges vertically with a small gap */
 .save-badge {
   top: 8px;
   left: 8px;
@@ -111,9 +107,8 @@
   color: #fff;
 }
 
-/* If both exist, adjust top of the second badge */
 .thumb .save-badge + .negotiable-badge {
-  top: 36px; /* pushes down so no overlap */
+  top: 36px;
 }
 
 @keyframes zoomInOut {
@@ -163,7 +158,6 @@
     .buy-btn{ background:var(--btn); color:var(--btn-text); }
     .buy-btn[disabled]{ opacity:0.55; cursor:not-allowed; }
 
-    /* details overlay */
     .details-panel{
       position:fixed; inset:0; display:none; align-items:flex-start; justify-content:center;
       background: rgba(0,0,0,0.9); z-index:99999; padding:18px; box-sizing:border-box; overflow:auto;
@@ -188,7 +182,6 @@
 
     .close-btn{ position:absolute; right:18px; top:12px; background:transparent; border:2px solid rgba(0,0,0,0.08); color:var(--text); padding:6px 10px; border-radius:8px; cursor:pointer; }
 
-    /* bottom nav (always visible) */
     .bottom-nav{
       position:fixed; left:0; right:0; bottom:0; z-index:99998; height:64px;
       display:flex; justify-content:space-around; align-items:center; background:var(--card);
@@ -215,13 +208,18 @@
 
 .buy-btn,
 .inquiry-btn{
-display:block;
+display:flex;
+align-items:center;
+justify-content:center;
 width:100%;
+box-sizing:border-box;
 text-align:center;
 padding:10px;
 border:none;
 border-radius:6px;
 font-weight:700;
+font-size:14px;
+line-height:1;
 text-decoration:none;
 cursor:pointer;
 }
@@ -241,7 +239,6 @@ color:#fff;
 opacity:0.9;
 }
 
-/* badges */
 .badge-left{
 position:absolute;
 top:8px;
@@ -255,11 +252,12 @@ right:8px;
 }
 
 .badge{
-padding:4px 8px;
-font-size:12px;
+padding:2px 6px;
+font-size:10px;
 font-weight:700;
 border-radius:4px;
 color:#fff;
+line-height:1.4;
 }
 
 .save-badge{
@@ -291,8 +289,32 @@ Perfect for larger homes and stylish interiors.<br>
 <div id="products" class="product-grid"></div>
 
 <a href="dining.html" style="display:block;margin:14px 0;color:var(--accent);text-decoration:none;font-weight:700;">
-⬅ Back to Categories
-</a>
+
+  </a>
+<footer style="background:#f3f3f3;padding:30px 20px 90px;margin-top:20px;text-align:center;font-family:Arial, sans-serif;">
+  <h3 style="margin:0 0 4px;color:#1f2937;font-size:17px;">V-Best Luxury Interiors</h3>
+  <p style="color:#666;font-size:13px;margin:0 0 16px;">Since 2025</p>
+
+  <div style="display:flex;justify-content:center;align-items:center;gap:14px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch;">
+    <a href="https://www.instagram.com/vbest_luxury_interior?stkn=aTY0MGRnNjJ2enlt" target="_blank" rel="noopener noreferrer" style="text-decoration:none;color:#E1306C;font-weight:700;font-size:13px;white-space:nowrap;">📸 Instagram</a>
+    <a href="https://www.tiktok.com/@vbest_luxury_interior?_r=1&_d=elh2f5ef7ml7e0&sec_uid=MS4wLjABAAAAy8UQs2EhAeF__dkfm2xiVb-iReVs3Lmm4UTneuzzXfkkKPcvvLGWmEOsDfi0svZ6&share_author_id=7200817955289056261&sharer_language=en&source=h5_m&u_code=e6dab6jg2al2bm&timestamp=1788729750&user_id=7200817955289056261&sec_user_id=MS4wLjABAAAAy8UQs2EhAeF__dkfm2xiVb-iReVs3Lmm4UTneuzzXfkkKPcvvLGWmEOsDfi0svZ6&item_author_type=1&utm_source=copy&utm_campaign=client_share&utm_medium=android&share_iid=7674794423725164306&share_link_id=e2088467-4e56-4c7e-9243-80767c8dd57a&share_app_id=1233&ugbiz_name=ACCOUNT&ug_btm=b8727%2Cb9716&social_share_type=5&enable_checksum=1" target="_blank" rel="noopener noreferrer" style="text-decoration:none;color:#010101;font-weight:700;font-size:13px;white-space:nowrap;">🎵 TikTok</a>
+    <a href="https://www.facebook.com/share/1D29ENJ92b/" target="_blank" rel="noopener noreferrer" style="text-decoration:none;color:#1877F2;font-weight:700;font-size:13px;white-space:nowrap;">📘 Facebook</a>
+    <a href="https://x.com/V_Best_" target="_blank" rel="noopener noreferrer" style="text-decoration:none;color:#000;font-weight:700;font-size:13px;white-space:nowrap;">𝕏 X</a>
+  </div>
+
+  <div style="margin-top:20px;">
+    <h4 style="margin:0 0 10px;color:#1f2937;font-size:15px;">Furniture Blog</h4>
+    <div style="display:flex;flex-direction:column;gap:8px;max-width:260px;margin:0 auto;">
+      <a href="blog/bed-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;font-size:13px;">Beds</a>
+      <a href="blog/chair-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;font-size:13px;">Chairs</a>
+      <a href="blog/sofa-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;font-size:13px;">Sofas</a>
+      <a href="blog/dining-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;font-size:13px;">Dining</a>
+      <a href="blog/table-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;font-size:13px;">Tables</a>
+      <a href="blog/office-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;font-size:13px;">Office Furniture</a>
+      <a href="blog/outdoor-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;font-size:13px;">Outdoors</a>
+    </div>
+  </div>
+  </footer>
 
 <div class="bottom-nav">
 <a href="index.html">🏠 Home</a>
@@ -396,7 +418,7 @@ const imgs=g(imgI).split(/[\n,]+/).map(s=>s.trim()).filter(Boolean);
 const hasImage=imgs.length>0;
 
 const saveAmount=(hasPrice && hasDiscount)?priceNum-discNum:NaN;
-const showSave=(hasPrice && hasDiscount); // only show save badge if both exist
+const showSave=(hasPrice && hasDiscount);
 
 const negotiableValue=g(negI).toLowerCase();
 const isNegotiable=['yes','true','1','negotiable'].includes(negotiableValue);
@@ -409,6 +431,7 @@ name:g(nameI),
 priceStr:g(priceI),
 discStr:g(discI),
 firstImage:imgs[0]||'',
+imageLinks:imgs,
 hasImage,
 hasDiscount,
 showTimer,
@@ -422,9 +445,31 @@ endTime:Date.now()+DISCOUNT_DURATION_MS
 countEl.textContent=`Total 6 Seaters Dining Sets Available: ${products.length}`;
 container.innerHTML='';
 
+window.setGalleryImage=function(idx,i){
+  const p=products[idx];
+  if(!p||!p.imageLinks||!p.imageLinks[i])return;
+  p._curImg=i;
+  const mainImg=document.getElementById('mainImg-'+idx);
+  if(mainImg)mainImg.src=p.imageLinks[i];
+  const row=document.getElementById('thumbRow-'+idx);
+  if(row){
+    Array.from(row.children).forEach((el,k)=>{
+      el.style.border=(k===i)?'2px solid #25D366':'2px solid transparent';
+    });
+  }
+};
+window.nextGalleryImage=function(idx){
+  const p=products[idx];
+  if(!p||!p.imageLinks||p.imageLinks.length<2)return;
+  const cur=(p._curImg||0);
+  const next=(cur+1)%p.imageLinks.length;
+  window.setGalleryImage(idx,next);
+};
+
 products.forEach((p,idx)=>{
 
-const inquiry=`https://wa.me/2347080535579?text=`+encodeURIComponent(`Hello, I'm interested in ${p.name}`);
+const inquiryMsg=(p.hasImage?p.firstImage+'\n\n':'')+`Hello, I'm interested in ${p.name}`+(p.hasDiscount?(' priced at '+p.discStr):(p.priceStr?(' priced at '+p.priceStr):''));
+const inquiry=`https://wa.me/2347080535579?text=`+encodeURIComponent(inquiryMsg);
 const link=`product.html?id=${p.id}`;
 
 const card=document.createElement('div');
@@ -436,7 +481,9 @@ card.innerHTML=`
 
 <span class="thumb" onclick="location.href='${link}'">
 
-<img src="${escapeHtml(p.firstImage)}">
+<img id="mainImg-${idx}" src="${escapeHtml(p.firstImage)}" alt="${escapeHtml(p.name)}" loading="lazy">
+
+${p.imageLinks.length>1?`<button onclick="nextGalleryImage(${idx});event.stopPropagation();" style="position:absolute;top:50%;right:6px;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:#fff;border:none;border-radius:50%;width:26px;height:26px;font-size:16px;line-height:26px;cursor:pointer;z-index:3;padding:0;">›</button>`:''}
 
 <div class="badge-left">
 ${p.showSave?`<div class="badge save-badge">Save ${formatNaira(p.saveAmount)}</div>`:''}
@@ -448,6 +495,7 @@ ${p.isNegotiable?`<div class="badge negotiable-badge">Negotiable</div>`:''}
 
 </span>
 
+${p.imageLinks.length>1?`<div class="thumb-row" id="thumbRow-${idx}" style="display:flex;gap:4px;padding:6px 10px 0;overflow-x:auto;">${p.imageLinks.map((im,i)=>`<img src="${escapeHtml(im)}" onclick="setGalleryImage(${idx},${i});event.stopPropagation();" style="width:26px;height:26px;object-fit:cover;border-radius:4px;cursor:pointer;flex:0 0 auto;border:2px solid ${i===0?'#25D366':'transparent'};">`).join('')}</div>`:''}
 <div class="product-body">
 
 <a href="${link}" style="text-decoration:none;color:inherit">
@@ -468,7 +516,7 @@ onclick="addToCart('${escJS(p.name)}','${escJS(p.hasDiscount?p.discStr:p.priceSt
 </button>
 
 <a class="inquiry-btn" href="${inquiry}" target="_blank">
-📩 Inquiry
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="#fff" style="margin-right:4px;"><path d="M16.001 2.667c-7.363 0-13.334 5.97-13.334 13.333 0 2.353.615 4.66 1.782 6.686L2.667 29.333l6.8-1.756a13.27 13.27 0 0 0 6.533 1.755h.001c7.363 0 13.333-5.97 13.333-13.333S23.364 2.667 16.001 2.667zm0 24.4a11.05 11.05 0 0 1-5.632-1.542l-.404-.24-4.034 1.043 1.077-3.93-.263-.404a11.06 11.06 0 0 1-1.71-5.927c0-6.124 4.983-11.107 11.11-11.107 2.967 0 5.756 1.156 7.854 3.256a11.03 11.03 0 0 1 3.253 7.85c0 6.124-4.983 11.106-11.11 11.106zm6.09-8.317c-.334-.167-1.978-.977-2.285-1.088-.307-.112-.53-.167-.754.167-.223.334-.865 1.088-1.06 1.312-.196.223-.39.25-.724.084-.334-.167-1.41-.52-2.686-1.66-.993-.885-1.664-1.98-1.86-2.314-.195-.333-.02-.514.147-.68.15-.15.334-.39.5-.585.167-.196.223-.334.334-.557.112-.223.056-.418-.028-.585-.084-.167-.754-1.815-1.033-2.487-.272-.653-.549-.565-.754-.575l-.643-.011c-.223 0-.585.084-.892.418-.307.334-1.171 1.144-1.171 2.79 0 1.646 1.198 3.237 1.365 3.46.167.223 2.357 3.6 5.71 5.05.798.344 1.42.55 1.905.703.8.254 1.53.218 2.106.132.643-.096 1.978-.808 2.257-1.588.278-.78.278-1.45.195-1.588-.084-.14-.307-.223-.64-.39z"/></svg>Inquiry
 </a>
 
 </div>
@@ -495,7 +543,7 @@ Product out of stock
 <button class="buy-btn" disabled>🛒 Add to Cart</button>
 
 <a class="inquiry-btn" href="${inquiry}" target="_blank">
-📩 Inquiry
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="#fff" style="margin-right:4px;"><path d="M16.001 2.667c-7.363 0-13.334 5.97-13.334 13.333 0 2.353.615 4.66 1.782 6.686L2.667 29.333l6.8-1.756a13.27 13.27 0 0 0 6.533 1.755h.001c7.363 0 13.333-5.97 13.333-13.333S23.364 2.667 16.001 2.667zm0 24.4a11.05 11.05 0 0 1-5.632-1.542l-.404-.24-4.034 1.043 1.077-3.93-.263-.404a11.06 11.06 0 0 1-1.71-5.927c0-6.124 4.983-11.107 11.11-11.107 2.967 0 5.756 1.156 7.854 3.256a11.03 11.03 0 0 1 3.253 7.85c0 6.124-4.983 11.106-11.11 11.106zm6.09-8.317c-.334-.167-1.978-.977-2.285-1.088-.307-.112-.53-.167-.754.167-.223.334-.865 1.088-1.06 1.312-.196.223-.39.25-.724.084-.334-.167-1.41-.52-2.686-1.66-.993-.885-1.664-1.98-1.86-2.314-.195-.333-.02-.514.147-.68.15-.15.334-.39.5-.585.167-.196.223-.334.334-.557.112-.223.056-.418-.028-.585-.084-.167-.754-1.815-1.033-2.487-.272-.653-.549-.565-.754-.575l-.643-.011c-.223 0-.585.084-.892.418-.307.334-1.171 1.144-1.171 2.79 0 1.646 1.198 3.237 1.365 3.46.167.223 2.357 3.6 5.71 5.05.798.344 1.42.55 1.905.703.8.254 1.53.218 2.106.132.643-.096 1.978-.808 2.257-1.588.278-.78.278-1.45.195-1.588-.084-.14-.307-.223-.64-.39z"/></svg>Inquiry
 </a>
 
 </div>
@@ -561,7 +609,7 @@ countEl.textContent='Failed to load products';
 </div>
 
 <style>
-body{opacity:1;transition:opacity 1s ease;} /* visible by default */
+body{opacity:1;transition:opacity 1s ease;}
 @keyframes blink{0%,100%{opacity:.2;}50%{opacity:1;}}
 #dots{display:inline-block;animation:blink 1.2s infinite;}
 @keyframes zoom{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
@@ -572,7 +620,6 @@ body{opacity:1;transition:opacity 1s ease;} /* visible by default */
   const loader=document.getElementById('loader');
   const msg=document.getElementById('loaderMsg');
 
-  // Only show loader once per session
   if(sessionStorage.getItem('loaderShown')){
     loader.remove();
     return;
@@ -587,16 +634,15 @@ body{opacity:1;transition:opacity 1s ease;} /* visible by default */
   const rot=setInterval(()=>{
     i=(i+1)%lines.length;
     msg.textContent=lines[i];
-  },1000); // text rotates every 1 second
+  },1000);
 
   setTimeout(()=>{
     clearInterval(rot);
     loader.style.opacity='0';
     setTimeout(()=>{loader.remove();},800);
 
-    // mark loader as shown for this session
     sessionStorage.setItem('loaderShown','true');
-  },3000); // loader visible 3 seconds
+  },3000);
 })();
 </script>
 </body>
