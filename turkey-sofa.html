@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>Egyptian Royal Sofas | V-Best Interiors</title>
-  <meta name="description" content="Shop Egyptian-inspired royal sofas at V-Best Interiors. Regal design, opulent comfort, and timeless elegance fit for a palace, delivered across Nigeria.">
-  <meta name="keywords" content="Egypt sofa, Egyptian sofa Lagos, royal sofa Nigeria, luxury sofa set, palace sofa, V'Best furniture">
-  <meta property="og:title" content="Egyptian Royal Sofas - V-Best Interiors">
-  <meta property="og:description" content="Discover Egyptian royal sofas — bold carvings, plush upholstery, and a majestic presence for a living room fit for royalty.">
+  <title>Turkish Luxury Sofas | V-Best Interiors</title>
+  <meta name="description" content="Shop premium Turkish sofas at V-Best Interiors. Exceptional craftsmanship, plush comfort, and refined European-inspired design, delivered across Nigeria.">
+  <meta name="keywords" content="Turkey sofa, Turkish sofa Lagos, luxury sofa Nigeria, high quality sofa set, royal Turkish furniture, V'Best furniture">
+  <meta property="og:title" content="Turkish Luxury Sofas - V-Best Interiors">
+  <meta property="og:description" content="Discover Turkish luxury sofas — masterfully upholstered, elegantly finished, and designed to bring refined comfort into your home.">
   <meta property="og:image" content="https://i.postimg.cc/yNXsb9Q8/IMG-20250822-WA0058.jpg">
-  <meta property="og:url" content="https://vbest-site.vercel.app/egypt-sofa.html">
+  <meta property="og:url" content="https://vbest-site.vercel.app/turkey-sofa.html">
   <meta name="twitter:card" content="summary_large_image">
 
   <style>
@@ -449,9 +449,9 @@ display:block;
 <img src="images/logo.png" alt="V'Best Interiors logo" class="logo-media">
 </div>
 
-<h1>Egyptian Royal Sofas</h1>
-<strong>Step into royalty with our Egyptian-inspired sofas.</strong><br>
-Opulent carvings, rich upholstery, and a majestic ambiance — furniture fit for a palace, made for your home.<br>
+<h1>Turkish Luxury Sofas</h1>
+<strong>Experience the finest in Turkish craftsmanship.</strong><br>
+Renowned for exceptional quality and timeless sophistication, our Turkish sofas bring an unmistakable air of luxury to any living space.<br>
 <strong>Shop exclusive collections from V-Best Luxury Interiors today.</strong>
 
 <div id="count" class="loading-wrap"><span class="spinner"></span><span style="font-size:15px;">Loading products...</span></div>
@@ -689,13 +689,13 @@ function vbGet(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null
 function vbSet(k,v){ try{ sessionStorage.setItem(k,v); }catch(e){} }
 function vbDel(k){ try{ sessionStorage.removeItem(k); }catch(e){} }
 var vbLast = +vbGet('vb_active') || 0;
-if(vbLast && Date.now()-vbLast > VB_TTL){ vbDel('vbpage_egypt_csv_v1'); vbDel('vbpage_egypt_picks_v1'); vbDel('vbpage_egypt_page_v1'); }
+if(vbLast && Date.now()-vbLast > VB_TTL){ vbDel('vbpage_turkey_csv_v1'); vbDel('vbpage_turkey_picks_v1'); vbDel('vbpage_turkey_page_v1'); }
 vbSet('vb_active', String(Date.now()));
 
-let csv = vbGet('vbpage_egypt_csv_v1');
+let csv = vbGet('vbpage_turkey_csv_v1');
 if(!csv){
   csv = await fetch(SHEET_CSV).then(r=>r.text());
-  vbSet('vbpage_egypt_csv_v1', csv);
+  vbSet('vbpage_turkey_csv_v1', csv);
 }
 const lines=csv.replace(/^\uFEFF/,'').split(/\r?\n/).filter(l=>l.trim());
 const headers=parseCSVRow(lines[0]);
@@ -720,7 +720,7 @@ const c=parseCSVRow(lines[i]);
 const g=i=>c[i]?c[i].trim():'';
 
 const category=g(catI).toLowerCase();
-if(!category.includes('egypt')) continue;
+if(!category.includes('turkey')) continue;
 
 const priceNum=parseNumber(g(priceI));
 const discNum=parseNumber(g(discI));
@@ -765,10 +765,10 @@ const catBuckets={}; // category(lowercase, first word match) -> array of items
    IMPORTANT: these category strings must match words that actually appear in your Google Sheet's Category column.
    Add or adjust entries here as you build more pages. */
 const ROOM_MAP = {
-  'egypt': ["centertable", "chair-accent", "cabinet", "rug", "decor"],
+  'turkey': ["centertable", "chair-accent", "cabinet", "rug", "decor"],
   'default': ['sofa','chair','dining']
 };
-const currentCategoryKey='egypt';
+const currentCategoryKey='turkey';
 const relatedCatsWanted = ROOM_MAP[currentCategoryKey] || ROOM_MAP.default;
 
 for(let i=1;i<lines.length;i++){
@@ -832,7 +832,7 @@ relatedCatsWanted.forEach(rc=>{
 relatedPool = relatedPool.filter(it=>it.id && __idCount[it.id]===1);
 
 let vbPicksCache = {};
-try{ vbPicksCache = JSON.parse(vbGet('vbpage_egypt_picks_v1')) || {}; }catch(e){ vbPicksCache = {}; }
+try{ vbPicksCache = JSON.parse(vbGet('vbpage_turkey_picks_v1')) || {}; }catch(e){ vbPicksCache = {}; }
 function pickCached(key, pool, n){
   const savedIds = vbPicksCache[key];
   if(savedIds && savedIds.length){
@@ -842,7 +842,7 @@ function pickCached(key, pool, n){
   }
   const fresh = shuffledSample(pool, n);
   vbPicksCache[key] = fresh.map(p=>p.id);
-  vbSet('vbpage_egypt_picks_v1', JSON.stringify(vbPicksCache));
+  vbSet('vbpage_turkey_picks_v1', JSON.stringify(vbPicksCache));
   return fresh;
 }
 
@@ -874,7 +874,7 @@ if(newToShow.length){
   newToShow.forEach(p=>newScroll.appendChild(buildMiniCard(p)));
 }
 
-countEl.textContent=`Total Egyptian Royal Sofas Available: ${products.length}`;
+countEl.textContent=`Total Turkish Luxury Sofas Available: ${products.length}`;
 container.innerHTML='';
 
 window.setGalleryImage=function(idx,i){
@@ -991,12 +991,12 @@ return card;
 
 /* ================= PAGINATION ================= */
 const PAGE_SIZE=12;
-let currentPage=+vbGet('vbpage_egypt_page_v1')||1;
+let currentPage=+vbGet('vbpage_turkey_page_v1')||1;
 const paginationEl=document.getElementById('pagination');
 
 function renderPage(page){
   currentPage=page;
-  vbSet('vbpage_egypt_page_v1', String(page));
+  vbSet('vbpage_turkey_page_v1', String(page));
   container.innerHTML='<div class="loading-wrap" style="padding:30px 0;"><span class="spinner"></span></div>';
   setTimeout(()=>{
     container.innerHTML='';
@@ -1057,7 +1057,7 @@ countEl.textContent='Failed to load products';
     Please wait<span id="dots">...</span>
   </div>
   <div id="loaderMsg" style="margin-top:8px;font-size:14px;color:#6b7280;animation:zoom 3s ease-in-out infinite;">
-    Preparing your Egyptian Royal Sofas 🛍️
+    Preparing your Turkish Luxury Sofas 🛍️
   </div>
 </div>
 
@@ -1081,7 +1081,7 @@ body{opacity:1;transition:opacity 1s ease;} /* visible by default */
 
   const lines=[
     "Polishing visuals ✨",
-    "Arranging your Egyptian Royal Sofas 🛍️",
+    "Arranging your Turkish Luxury Sofas 🛍️",
     "Almost ready 💫"
   ];
   let i=0;
@@ -1103,7 +1103,7 @@ body{opacity:1;transition:opacity 1s ease;} /* visible by default */
 <script>
 window.VBP = (function(){
   var TTL = 30 * 60 * 1000;
-  var K_ACTIVE = 'vb_active', K_CACHE = 'vbpage_egypt_v1';
+  var K_ACTIVE = 'vb_active', K_CACHE = 'vbpage_turkey_v1';
   function get(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } }
   function set(k,v){ try{ sessionStorage.setItem(k,v); }catch(e){} }
   function del(k){ try{ sessionStorage.removeItem(k); }catch(e){} }

@@ -3,98 +3,22 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>Outdoor & Patio Furniture | V-Best Interiors</title>
-  <meta name="description" content="Shop premium outdoor and patio furniture at V-Best Interiors. Durable, stylish pieces for your garden, patio, or veranda — delivered across Nigeria.">
-  <meta name="keywords" content="outdoor furniture, patio furniture, garden furniture, veranda furniture, V'Best Interiors">
-  <meta property="og:title" content="Outdoor & Patio Furniture - V-Best Interiors">
-  <meta property="og:description" content="Discover premium outdoor and patio furniture at V-Best Interiors. Durable and stylish pieces for comfortable outdoor living.">
+  <title>Outdoor Furniture | V-Best Interiors</title>
+  <meta name="description" content="Shop durable outdoor furniture at V-Best Interiors. Weather-resistant patio sets, garden chairs, and outdoor loungers built to last, delivered across Nigeria.">
+  <meta name="keywords" content="outdoor furniture, patio furniture Lagos, garden chair Nigeria, outdoor lounger, weather resistant furniture, V'Best furniture">
+  <meta property="og:title" content="Outdoor Furniture - V-Best Interiors">
+  <meta property="og:description" content="Discover outdoor furniture built for real weather — durable materials, comfortable seating, and a stylish look for your patio, garden, or balcony.">
   <meta property="og:image" content="https://i.postimg.cc/yNXsb9Q8/IMG-20250822-WA0058.jpg">
   <meta property="og:url" content="https://vbest-site.vercel.app/outdoor.html">
   <meta name="twitter:card" content="summary_large_image">
 
   <style>
-    .shilpi-footer {
-    background: #f3f3f3;
-    color: var(--text);
-    padding: 40px 20px;
-    font-family: Arial, sans-serif;
-  }
-  .shilpi-footer .about h2 { font-size:22px; font-weight:bold; margin-bottom:6px; color:var(--text); }
-  .shilpi-footer .about .tagline { font-size:14px; font-weight:300; margin-bottom:10px; color:var(--muted); }
-  .shilpi-footer .about-text { font-size:13px; max-width:600px; margin:0 auto 15px; line-height:1.6; color:var(--muted); }
-
-  .social-icons { display:flex; gap:15px; justify-content:center; margin-top:10px; }
-  .social-icons a { text-decoration:none; color:var(--brand-blue); font-weight:bold; font-size:16px; transition:0.3s; }
-  .social-icons a:hover { color:var(--accent); }
-
-  .footer-bottom { display:flex; flex-wrap:wrap; justify-content:space-between; text-align:left; gap:20px; }
-  .footer-col { flex:1; min-width:200px; }
-  .footer-col h3 { font-size:16px; margin-bottom:10px; color:var(--text); }
-  .footer-col ul li { font-size:14px; margin:4px 0; color:var(--muted); }
-  
-
-  .accordion-btn { background:none; border:none; outline:none; font-size:14px; font-weight:bold; color:var(--accent); text-align:left; padding:6px 0; cursor:pointer; width:100%; }
-  .accordion-content { display:none; font-size:13px; margin-bottom:10px; line-height:1.5; color:var(--muted); }
-
-  @media (max-width: 768px) {
-    .footer-bottom { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:12px; padding-left:12px; padding-right:12px; box-sizing:border-box; }
-    .footer-bottom .footer-col { width:100%; max-width:420px; margin:8px auto; text-align:center; box-sizing:border-box; }
-    .accordion-btn { text-align:center; display:block; width:100%; }
-  }
-    /* Footer social brand colors (keeps existing icons but colors them) */
-/* --- Minimal fix: shrink social icons and keep labels but tighter --- */
-.social-icons {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: nowrap;        /* keep in one row */
-  white-space: nowrap;
-  overflow-x: auto;        /* small horizontal scroll on tiny screens */
-  -webkit-overflow-scrolling: touch;
-}
-
-/* reduce anchor padding and make text smaller so everything fits */
-.social-icons a {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 6px;
-  font-weight:700;
-  font-size: 13px;         /* slightly smaller label text */
-  text-decoration: none;
-  color: inherit;
-}
-
-/* shrink icons (font-awesome) */
-.social-icons a i {
-  font-size: 18px;         /* icon size */
-  line-height: 1;
-  width: 20px;
-  text-align: center;
-  display: inline-block;
-}
-
-/* brand colors (override earlier coloring) */
-.social-icons a .fa-whatsapp { color: #25D366; }
-.social-icons a .fa-facebook { color: #1877F2; }
-.social-icons a .fa-youtube  { color: #FF0000; }
-.social-icons a .fa-twitter  { color: #1DA1F2; }
-.social-icons a .fa-instagram{ color: #E1306C; }
-.social-icons a .fa-tiktok   { color: #010101; }
-
-/* On very small narrow screens allow wrapping instead of clipping */
-@media (max-width:420px) {
-  .social-icons { flex-wrap: wrap; gap:6px; padding:4px 6px; }
-  .social-icons a { font-size: 12px; padding:4px 6px; }
-  .social-icons a i { font-size:16px; width:18px; }
-}
     /* THEMES: default is Classic (white) */
     :root {
       --bg: #ffffff;
       --card: #f8f8f8;
       --text: #111827;
-      --accent: #1f2937;
+      --accent: #1f2937; /* dark heading color */
       --btn: #FF9900;
       --btn-text: #fff;
       --price: #B12704;
@@ -122,16 +46,27 @@
       padding-bottom:84px; /* space for bottom nav */
     }
 
+    /* top media (image or video) full-width */
     .top-media { width:100%; display:block; max-height:220px; overflow:hidden; background:transparent; }
     .logo-media { width:100%; height:auto; display:block; object-fit:cover; max-height:200px; }
 
     h1{ margin:8px 0 4px; font-size:20px; color:var(--accent); }
     #count{ font-size:14px; color:var(--green); margin-bottom:8px; font-weight:700; }
+    .loading-wrap{ display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 0; gap:12px; }
+    .spinner{
+      width:36px; height:36px;
+      border:4px solid rgba(0,0,0,0.1);
+      border-top:4px solid var(--accent);
+      border-radius:50%;
+      animation:spin 0.8s linear infinite;
+      display:inline-block;
+    }
+    @keyframes spin{ to{ transform:rotate(360deg); } }
 
     /* product grid */
     .product-grid{
       display:grid;
-      /* mobile-first: 2 columns on phones/tablets */
+      /* mobile-first: 2 columns on mobile/tablet/laptops by default */
       grid-template-columns: repeat(2,1fr);
       gap:10px;
       padding:10px;
@@ -158,9 +93,6 @@
     }
     .thumb{ width:100%; height:180px; background:#222; display:block; overflow:hidden; }
     .thumb img{ width:100%; height:100%; object-fit:cover; display:block; cursor:pointer; }
-.thumb { position: relative; }
-
-/* --- overlay badges --- */
 .thumb { position: relative; display: inline-block; }
 
 .badge {
@@ -198,20 +130,6 @@
   0% { transform: scale(1); }
   50% { transform: scale(1.1); }
   100% { transform: scale(1); }
-}
-
-/* Pulse + glow keyframes */
-@keyframes pulseLight {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
-    box-shadow: 0 0 0px rgba(123, 58, 237, 0);
-  }
-  50% {
-    transform: scale(1.15);
-    opacity: 0.95;
-    box-shadow: 0 0 12px rgba(123, 58, 237, 0.5);
-  }
 }
     .product-body{ padding:10px; display:flex; flex-direction:column; flex:1; }
     .product-body h3{ margin:0 0 6px; font-size:15px; color:var(--text); }
@@ -280,15 +198,15 @@
 
     .close-btn{ position:absolute; right:18px; top:12px; background:transparent; border:2px solid rgba(0,0,0,0.08); color:var(--text); padding:6px 10px; border-radius:8px; cursor:pointer; }
 
-    /* bottom nav (always visible) */
+    /* bottom nav (always visible) — sized to match light.html */
     .bottom-nav{
-      position:fixed; left:0; right:0; bottom:0; z-index:99998; height:64px;
+      position:fixed; left:0; right:0; bottom:0; z-index:99998; height:48px; box-sizing:border-box;
       display:flex; justify-content:space-around; align-items:center; background:var(--card);
-      border-top:1px solid rgba(0,0,0,0.06); box-shadow:0 -6px 18px rgba(0,0,0,0.08); padding:6px 10px;
+      border-top:1px solid rgba(0,0,0,0.06); box-shadow:0 -4px 14px rgba(0,0,0,0.08); padding:0 10px;
     }
     .bottom-nav a, .bottom-nav button{
-      background:transparent; border:0; font-size:16px; color:var(--accent); font-weight:700; cursor:pointer;
-      display:flex; align-items:center; gap:8px;
+      background:transparent; border:0; font-size:13px; color:var(--accent); font-weight:600; cursor:pointer;
+      display:flex; align-items:center; gap:6px; text-decoration:none;
     }
     .cart-badge{ background:#ff3b30; color:#fff; border-radius:50%; padding:2px 7px; font-size:12px; margin-left:6px; display:inline-block; }
 
@@ -302,575 +220,831 @@
   <!-- Facebook Pixel Code --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js'); fbq('init', '677322691667443'); fbq('track', 'PageView');</script><noscript> <img height="1" width="1" src="https://www.facebook.com/tr?id=677322691667443&ev=PageView&noscript=1"/></noscript><!-- End Facebook Pixel Code -->
 </head>
 <body data-theme="classic">
-
-  <div class="top-media" aria-hidden="false">
-    <img src="images/logo.png" alt="V'Best Interiors Logo" class="logo-media">
-  </div>
-
-  <h1>Outdoor & Patio Furniture</h1>
-  <strong>Explore premium outdoor furniture built for comfort and style.</strong>  
-Perfect for gardens, patios, and terraces — designed to withstand every season with elegance.  
-<strong>Transform your outdoor space with V-Best Luxury Interiors.</strong>
-  <div id="count">Loading...</div>
-
-  <div id="products" class="product-grid" aria-live="polite"></div>
-
-  <a href="chair.html" class="back" style="display:block;margin:12px 0;color:var(--accent);text-decoration:none;font-weight:700;">⬅ Back to Categories</a>
-
-  <!-- DETAILS PANEL -->
-  <div id="detailsPanel" class="details-panel" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="details-inner" role="document">
-      <button id="detailsClose" class="close-btn" aria-label="Close details">✕</button>
-      <div class="details-left" id="detailsLeft"></div>
-      <div class="details-right" id="detailsRight"></div>
+  <!-- ===== Welcome bar + Menu (sits above the logo, never scrolls away) ===== -->
+  <div class="vb-top-bar">
+    <button class="vb-menu-btn" id="megaMenuToggle" type="button" aria-label="Menu">
+      <i class="fa-solid fa-bars"></i><span>Menu</span>
+    </button>
+    <div class="vb-marquee-wrap">
+      <div class="vb-marquee">WELCOME TO V-BEST LUXURY INTERIOR &amp; FURNITURE</div>
     </div>
   </div>
 
-  <!-- BOTTOM NAV -->
-  <div class="bottom-nav" role="navigation" aria-label="Main navigation">
-    <a href="index.html" id="nav-home">🏠 Home</a>
-    <button id="themeSwitch">🎨 Theme</button>
-    <a href="cart.html" id="nav-cart">🛒 Cart <span id="cart-count-bottom" class="cart-badge" style="display:none">0</span></a>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body{ padding-top:46px; }
+    .vb-top-bar{ position:fixed; top:0; left:0; right:0; z-index:9999; display:flex; align-items:center; gap:10px; background:#fff; padding:7px 12px; border-bottom:1px solid #eee; box-shadow:0 2px 6px rgba(0,0,0,0.06); }
+    .vb-menu-btn{ background:#f3f3f3; border:1px solid #ddd; color:#111; font-weight:700; font-size:14px; display:flex; align-items:center; gap:7px; cursor:pointer; flex:0 0 auto; white-space:nowrap; padding:8px 14px; border-radius:8px; }
+    .vb-menu-btn i{ font-size:15px; }
+    .vb-marquee-wrap{ flex:1; overflow:hidden; min-width:0; }
+    .vb-marquee{ white-space:nowrap; display:inline-block; padding-left:100%; animation:vbMarquee 14s linear infinite; font-weight:700; font-size:13px; letter-spacing:0.3px; color:#111; }
+    @keyframes vbMarquee{ 0%{ transform:translateX(0%); } 100%{ transform:translateX(-220%); } }
+
+    #megaMenuPanel{ display:none; position:fixed; inset:0; background:#fff; z-index:999999; overflow-y:auto; padding:14px; box-sizing:border-box; }
+    #megaMenuPanel.show{ display:block; }
+    .mega-close{ display:flex; justify-content:flex-end; margin-bottom:10px; }
+    .mega-close button{ background:#eee; border:none; border-radius:6px; padding:8px 14px; font-weight:700; font-size:16px; cursor:pointer; }
+    .mega-search{ margin-bottom:14px; position:relative; }
+    .mega-search input{ width:100%; box-sizing:border-box; padding:10px 12px; border-radius:8px; border:1px solid #ddd; font-size:14px; }
+    #megaSearchResults{ position:absolute; left:0; right:0; top:100%; background:#fff; border:1px solid #ddd; border-radius:0 0 8px 8px; max-height:300px; overflow-y:auto; z-index:5; display:none; text-align:left; }
+    #megaSearchResults .sres-item{ display:flex; gap:8px; align-items:center; padding:8px; border-bottom:1px solid #eee; cursor:pointer; color:inherit; text-decoration:none; }
+    #megaSearchResults .sres-item img{ width:40px; height:40px; object-fit:cover; border-radius:4px; }
+    .mega-cat-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+    .mega-cat-box{ background:#f9f9f9; border-radius:8px; overflow:hidden; border:1px solid #eee; text-align:left; position:relative; cursor:pointer; }
+    .mega-cat-box img{ width:100%; height:110px; object-fit:cover; display:block; }
+    .mega-cat-box .mcb-title{ font-weight:800; font-size:13px; padding:8px 8px 2px; }
+    .mega-cat-box .mcb-sub{ display:flex; flex-direction:column; gap:2px; padding:2px 8px 8px; counter-reset:mcbnum; }
+    .mega-cat-box .mcb-sub a{ color:#146eb4; text-decoration:none; font-size:11.5px; counter-increment:mcbnum; position:relative; z-index:1; }
+    .mega-cat-box .mcb-sub a::before{ content: counter(mcbnum) ". "; font-weight:700; color:#111; }
+    .mega-cat-box a.mcb-main{ position:absolute; inset:0; z-index:0; }
+    .mega-extra{ margin-top:20px; text-align:left; }
+    .mega-extra .accordion-btn{ background:none; border:none; outline:none; font-size:14px; font-weight:bold; color:#ff9900; text-align:left; padding:8px 0; cursor:pointer; width:100%; border-top:1px solid #eee; }
+    .mega-extra .accordion-content{ display:none; font-size:13px; margin-bottom:6px; line-height:1.5; color:#565959; }
+  </style>
+
+  <div id="megaMenuPanel">
+    <div class="mega-close"><button id="megaMenuClose" type="button">✕ Close</button></div>
+    <div class="mega-search">
+      <input type="text" id="megaSearchInput" placeholder="🔎 Search for any product...">
+      <div id="megaSearchResults"></div>
+    </div>
+    <div class="mega-cat-grid" id="megaCatGrid">
+      <div class="mega-cat-box"><img src="https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg" alt="Sofas"><div class="mcb-title">🛋 Sofas</div><div class="mcb-sub"><a href="sofa.html">All Sofas</a><a href="china-sofa.html">China Sofa</a><a href="egypt-sofa.html">Egyptian Royal Sofa</a><a href="turkey-sofa.html">Turkish Sofa</a></div></div>
+      <div class="mega-cat-box"><img src="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg" alt="Beds"><div class="mcb-title">🛏 Beds</div><div class="mcb-sub"><a href="bed.html">All Beds</a></div></div>
+      <div class="mega-cat-box"><img src="https://i.postimg.cc/rFrmWTqS/Screenshot-20250213-113547-Instagram.jpg" alt="Chairs"><div class="mcb-title">🪑 Chairs</div><div class="mcb-sub"><a href="chair.html">All Chairs</a><a href="chair-accent.html">Accent Chairs</a><a href="chair-bar.html">Bar Chairs</a><a href="chair-recliner.html">Recliner Chairs</a><a href="chair-auditorim.html">Auditorium Chairs</a><a href="chair-visitors.html">Banquet &amp; Visitor Chairs</a><a href="chair-meyou.html">Me &amp; You Loveseat Chairs</a><a href="diningchairs.html">Dining Chairs</a></div></div>
+      <div class="mega-cat-box"><img src="https://i.postimg.cc/Sxm8NRJJ/1756750928967.jpg" alt="Dining"><div class="mcb-title">🍽 Dining 3–6 Seaters</div><div class="mcb-sub"><a href="dining.html">All Dining Sets</a><a href="dining-3.html">3 Seaters</a><a href="dining-4.html">4 Seaters</a><a href="dining-6.html">6 Seaters</a></div></div>
+      <div class="mega-cat-box"><img src="https://i.postimg.cc/Px5XJLDr/IMG-20250822-WA0064.jpg" alt="Center Tables"><div class="mcb-title">🪞 Center Tables</div><div class="mcb-sub"><a href="centertable.html">All Center Tables</a></div></div>
+      <div class="mega-cat-box"><img src="https://i.postimg.cc/vBybRLq7/Workstation-348.png" alt="Office Furniture"><div class="mcb-title">Office Furniture 🪑🖥️</div><div class="mcb-sub"><a href="office.html">All Office Furniture</a><a href="officeset.html">Office Tables &amp; Workstations</a><a href="a-office.html">Executive &amp; VIP Chairs</a><a href="office-chair.html">Visitor &amp; Guest Chairs</a><a href="officesofa.html">Office Sofas</a><a href="officecabinet.html">Cabinets &amp; Strongrooms</a></div></div>
+      <div class="mega-cat-box"><img src="https://i.postimg.cc/yxGGYGDw/AgACkqHWpPyztHZ89SpVxY.jpg" alt="Outdoors"><div class="mcb-title">🪑 Outdoors &amp; Patio</div><div class="mcb-sub"><a href="outdoor.html">All Outdoor Furniture</a></div></div>
+      <div class="mega-cat-box"><img src="https://i.postimg.cc/GhBhTtX7/Magshion-Adjustable-Height-Gaming-Chair-with-Retractable-Footrest-and-Computer-Desk-Purple-2e356ae6.png" alt="Gaming"><div class="mcb-title">🎮 Gaming Chairs &amp; Table</div><div class="mcb-sub"><a href="gaming.html">All Gaming Furniture</a></div></div>
+      <div class="mega-cat-box"><img src="https://i.postimg.cc/7LbWQCnH/807531125-321-1024x1024.jpg" alt="Snooker"><div class="mcb-title">Snookers &amp; Pool 🎱</div><div class="mcb-sub"><a href="snooker.html">All Snooker &amp; Pool</a></div></div>
+      <div class="mega-cat-box"><img src="https://i.postimg.cc/J01rXcj7/Wine-Bar-1.webp" alt="Wine Bar"><div class="mcb-title">Wine Bar 🍷🥂🍾</div><div class="mcb-sub"><a href="winebar.html">All Wine Bar</a></div></div>
+      <div class="mega-cat-box"><img src="https://i.postimg.cc/BnRRj3SZ/PDINCBT32-Glossy-White-Gold-1.jpg" alt="Sideboard"><div class="mcb-title">Dressing, Vanity &amp; Sideboards</div><div class="mcb-sub"><a href="sideboard.html">Sideboards &amp; Buffets</a><a href="vanity.html">Vanity Dressing Tables</a><a href="consoletable.html">Console Tables</a></div></div>
+      <div class="mega-cat-box"><img src="https://i.postimg.cc/d3HMkLJw/c6dcbbe659c10b00e4126e14dcd4021c.jpg" alt="TV Console"><div class="mcb-title">📺 TV Consoles &amp; Stands</div><div class="mcb-sub"><a href="tvconsole.html">All TV Consoles</a></div></div>
+      <div class="mega-cat-box"><img src="https://i.postimg.cc/m2XvGMKH/71-Lqo-G6liv-L-AC-SL1500.jpg" alt="Cabinet"><div class="mcb-title">Cabinet | Wardrobe &amp; Dresser</div><div class="mcb-sub"><a href="officecabinet.html">Office Cabinets &amp; Strongrooms</a></div></div>
+      <div class="mega-cat-box"><img src="https://i.postimg.cc/Sxrz34QC/ec8f0881dd3292db1a7655c79506473c.jpg" alt="Side Stools"><div class="mcb-title">🪑 Side Stools &amp; Tables</div><div class="mcb-sub"><a href="sidestools.html">All Side Stools</a></div></div>
+      <div class="mega-cat-box"><img src="https://i.postimg.cc/yNKdMXNc/download.jpg" alt="Lighting"><div class="mcb-title">💡 Lighting</div><div class="mcb-sub"><a href="light.html">All Lighting</a><a href="ceilinglight.html">Ceiling Lights</a><a href="walllight.html">Wall Lights</a><a href="tablelight.html">Table Lights</a><a href="floorlamp.html">Floor Lamps</a><a href="doorlight.html">Outdoor Lights</a><a href="ledlight.html">LED &amp; Pendant Lights</a><a href="chandelier.html">Chandeliers</a></div></div>
+    </div>
+    <div class="mega-extra">
+      <button class="accordion-btn" type="button">About Us</button>
+      <div class="accordion-content"><p>We bring world-class premium furniture pieces to elevate your lifestyle with modern and timeless designs.</p></div>
+      <button class="accordion-btn" type="button">Privacy Policy</button>
+      <div class="accordion-content"><p>Your privacy is our priority. We never share customer data with third parties.</p></div>
+      <button class="accordion-btn" type="button">Terms &amp; Conditions</button>
+      <div class="accordion-content"><p>All purchases are subject to our company's standard terms and conditions.</p></div>
+    </div>
   </div>
 
   <script>
-    /* CONFIG */
-    const SHEET_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4YXFvxl_w447wVuWRrHv8EInZFg1lSIX2_KwxZQJL9n8YHEzIP5WmfBep4yBgfN7EbArsjPPHOzOh/pub?output=csv";
-    const DISCOUNT_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // 60 days
+  (function(){
+    var toggle = document.getElementById("megaMenuToggle");
+    var panel = document.getElementById("megaMenuPanel");
+    var closeBtn = document.getElementById("megaMenuClose");
+    toggle.addEventListener("click", function(){ panel.classList.add("show"); });
+    closeBtn.addEventListener("click", function(){ panel.classList.remove("show"); });
 
-    /* UTILITIES */
-    function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-    function escJS(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,'\\n').replace(/\r/g,''); }
-    function parseCSVRow(text){
-      const fields = []; let cur=''; let inQuotes=false;
-      for (let i=0;i<text.length;i++){
-        const ch = text[i];
-        if (inQuotes){
-          if (ch === '"'){
-            if (text[i+1] === '"'){ cur += '"'; i++; }
-            else { inQuotes = false; }
-          } else cur += ch;
-        } else {
-          if (ch === '"') inQuotes = true;
-          else if (ch === ','){ fields.push(cur); cur=''; }
-          else cur += ch;
-        }
-      }
-      fields.push(cur);
-      return fields;
-    }
-    function normKey(k){ return String(k||'').toLowerCase().replace(/[^\w]/g,''); }
-    function findIndexByNames(map,cands){
-      for (const c of cands) if (map[c] !== undefined) return map[c];
-      return -1;
-    }
-    function parseNumber(s){ if(!s) return NaN; const n = String(s).replace(/[^\d.-]/g,''); return n===''?NaN:parseFloat(n); }
-    function formatNaira(n){ if (isNaN(n)) return ''; return '₦' + Math.round(n).toLocaleString(); }
-
-    /* DOM refs */
-    const container = document.getElementById('products');
-    const detailsPanel = document.getElementById('detailsPanel');
-    const detailsLeft = document.getElementById('detailsLeft');
-    const detailsRight = document.getElementById('detailsRight');
-    const detailsClose = document.getElementById('detailsClose');
-    const bottomNav = document.querySelector('.bottom-nav');
-    const cartBadge = document.getElementById('cart-count-bottom');
-    const themeBtn = document.getElementById('themeSwitch');
-
-    /* state */
-    let products = [];
-    let detailsOpenIndex = null;
-    let currentImageIndex = 0;
-    let pushedState = false;
-    let ignorePopstate = false;
-
-    /* FETCH & RENDER */
-    fetch(SHEET_CSV).then(r => r.text()).then(csv => {
-      const text = csv.replace(/^\uFEFF/,'');
-      const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
-      if (!lines.length){ document.getElementById('count').textContent = 'No data in sheet'; return; }
-      const headerCols = parseCSVRow(lines[0]);
-      const headerMap = {}; headerCols.forEach((h,i)=> headerMap[normKey(h)] = i);
-
-      // columns detection
-      const categoryIdx = findIndexByNames(headerMap,['category','cat','type']) !== -1 ? findIndexByNames(headerMap,['category','cat','type']) : 0;
-      const nameIdx = findIndexByNames(headerMap,['productname','product','name']) !== -1 ? findIndexByNames(headerMap,['productname','product','name']) : 1;
-      const descIdx = findIndexByNames(headerMap,['description','desc','details']) !== -1 ? findIndexByNames(headerMap,['description','desc','details']) : 2;
-      const priceIdx = findIndexByNames(headerMap,['price','priceraw','amount']) !== -1 ? findIndexByNames(headerMap,['price','priceraw','amount']) : 3;
-      const discountIdx = findIndexByNames(headerMap,['discountprice','discount','offer']) !== -1 ? findIndexByNames(headerMap,['discountprice','discount','offer']) : 4;
-      const negotiableIdx = findIndexByNames(headerMap,['negotiable','neg','isnegotiable']) !== -1 ? findIndexByNames(headerMap,['negotiable','neg','isnegotiable']) : 5;
-      const imageIdx = findIndexByNames(headerMap, ['imagelink','imagelinks','image','imageurl','image1','images','imagelink1']) !== -1 ? findIndexByNames(headerMap, ['imagelink','imagelinks','image','imageurl','image1','images','imagelink1']) : 6;
-      const regionIdx = findIndexByNames(headerMap,['region','categorytype','type']) !== -1 ? findIndexByNames(headerMap,['region','categorytype','type']) : 4;
-      const viewsIdx = findIndexByNames(headerMap,['views','rating','stars']) !== -1 ? findIndexByNames(headerMap,['views','rating','stars']) : 7;
-
-      for (let i=1;i<lines.length;i++){
-        const cols = parseCSVRow(lines[i]);
-        if (!cols || cols.length === 0) continue;
-        const get = idx => (typeof cols[idx] !== 'undefined' ? String(cols[idx]).trim() : '');
-        const category = get(categoryIdx);
-        const name = get(nameIdx);
-        const description = get(descIdx);
-        const priceStr = get(priceIdx);
-        const discountStr = get(discountIdx);
-        const negotiable = get(negotiableIdx);
-        const imageField = get(imageIdx);
-        const region = get(regionIdx);
-        const viewsRaw = get(viewsIdx);
-
-        const catNorm = (category||'').toLowerCase();
-
-        // FILTER: include only category entries that contain 'outdoor'
-        if (!catNorm.includes('outdoor')) continue;
-
-        const rawImgs = String(imageField || '').replace(/^"|"$/g,'');
-        const imageLinks = rawImgs.split(/[\r\n,]+/).map(s=>s.trim()).filter(Boolean);
-        const cleaned = imageLinks.filter(u => u && u.toLowerCase()!=='sold');
-        const hasImage = cleaned.length > 0;
-        const firstImage = hasImage ? cleaned[0] : '';
-
-        const priceNum = parseNumber(priceStr);
-        const discNum = parseNumber(discountStr);
-        const hasDiscount = !(String(discountStr||'').trim().toLowerCase()==='no' || String(discountStr||'').trim()==='') && !isNaN(discNum);
-        const saveNum = (hasDiscount && !isNaN(priceNum)) ? (priceNum - discNum) : NaN;
-
-        const stars = (viewsRaw && viewsRaw.trim()!=='') ? (function(){ let p=parseInt(viewsRaw,10); if(isNaN(p)) p=5; p=Math.max(1,Math.min(5,p)); return Array.from({length:5},(_,k)=>k<p?'★':'☆').join(''); })() : '★★★★★';
-
-        const product = {
-          name, category, description, priceStr, discountStr, negotiable, imageLinks: cleaned, hasImage, firstImage,
-          priceNum, discNum, hasDiscount, saveNum, stars
-        };
-
-        if (!isNaN(product.priceNum)){
-          product._durationMs = DISCOUNT_DURATION_MS;
-          product._endTime = Date.now() + product._durationMs;
-          product._hasCountdown = true;
-        } else product._hasCountdown = false;
-
-        const idxForOpen = products.length;
-        products.push(product);
-
-        // card html (no short description) - inquiry left, add to cart right
-const inquiryHref = 'https://wa.me/2347080535579?text=' + encodeURIComponent(`Hello, I'm interested in ${name} priced at ${ product.hasDiscount ? discountStr : priceStr }.`);
-const addDisabled = product.hasImage ? '' : 'disabled';
-const imageArg = product.hasImage ? escJS(product.firstImage) : '';
-
-const badgeStackHtml = `
-  <div class="badge-left">
-    ${product.hasDiscount && product.saveNum > 0 ? `<div class="badge save-badge">Save ${formatNaira(product.saveNum)}</div>` : ''}
-  </div>
-  <div class="badge-right">
-    ${product.negotiable && ['yes','y','true','1','negotiable'].includes(String(product.negotiable).trim().toLowerCase()) ? `<div class="badge negotiable-badge">Negotiable</div>` : ''}
-  </div>
-`;
-
-const imgHtml = product.hasImage
-  ? `<span class="thumb" onclick="openDetails(${idxForOpen})" role="button" aria-label="Open ${escapeHtml(name)}">
-       <img src="${escapeHtml(product.firstImage)}" alt="${escapeHtml(name)}">
-       ${badgeStackHtml}
-     </span>`
-  : `<span class="thumb" onclick="openDetails(${idxForOpen})" role="button" aria-label="Open ${escapeHtml(name)}">
-       <div style="width:100%;height:180px;display:flex;align-items:center;justify-content:center;background:#fff;color:#ff3b30;font-weight:800;font-size:10px;">Currently out of stock — please check back soon!</div>
-       ${badgeStackHtml}
-     </span>`;
-
-const priceHtml = product.hasDiscount
-  ? `<div class="old-price">${escapeHtml(priceStr)}</div><div class="price">${escapeHtml(discountStr)}</div>`
-  : `<div class="price">${escapeHtml(priceStr)}</div>`;
-
-const card = document.createElement('div');
-card.className = 'product-card';
-card.setAttribute('role','article');
-card.innerHTML = `
-  ${imgHtml}
-  <div class="product-body">
-    <a style="text-decoration:none;color:inherit;" onclick="openDetails(${idxForOpen})"><h3>${escapeHtml(name)}</h3></a>
-    <div class="price-row">${priceHtml}</div>
-    <div class="discount-timer" data-product-index="${idxForOpen}"></div>
-    <div class="stars">${escapeHtml(product.stars)}</div>
-    <div class="btn-row">
-      <a class="inquiry-btn" href="${escapeHtml(inquiryHref)}" target="_blank" rel="noopener noreferrer">📩 Inquiry</a>
-      <button class="buy-btn" ${addDisabled} onclick="addToCart('${escJS(name)}','${escJS(product.hasDiscount?discountStr:priceStr)}','${imageArg}')">🛒 Add to Cart</button>
-    </div>
-  </div>
-`;
-container.appendChild(card);
-} // end rows
-
-      document.getElementById('count').textContent = `Total Outdoor Items Available: ${products.length}`;
-      updateCartCount();
-    }).catch(err => {
-      console.error('Failed to load sheet',err);
-      document.getElementById('count').textContent = 'Failed to load products';
+    document.querySelectorAll(".mega-extra .accordion-btn").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var c = this.nextElementSibling;
+        c.style.display = c.style.display === "block" ? "none" : "block";
+      });
     });
 
-    /* CART */
-    function addToCart(name, price, image){
-      try{
-        if (!image || !String(image).trim()) return;
-        let cart = JSON.parse(localStorage.getItem('cart')||'[]');
-        cart.push({ name, price, image, qty:1 });
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCartCount();
-      }catch(e){ console.error('addToCart error',e); }
-    }
-    function updateCartCount(){
-      const cart = JSON.parse(localStorage.getItem('cart')||'[]');
-      if (cart.length>0){ cartBadge.style.display='inline-block'; cartBadge.textContent = cart.length; } else cartBadge.style.display='none';
-    }
-    updateCartCount();
-
-    /* COUNTDOWN: single interval updates visible timers */
-    setInterval(()=> {
-      const now = Date.now();
-      document.querySelectorAll('.discount-timer').forEach(el => {
-        const idx = parseInt(el.dataset.productIndex,10);
-        const p = products[idx];
-        if (!p || !p._hasCountdown) return;
-        let timeLeft = p._endTime - now;
-        if (timeLeft <= 0){ p._endTime = Date.now() + p._durationMs; timeLeft = p._endTime - Date.now(); }
-        el.textContent = 'Offer ends in: ' + formatTimeRemaining(timeLeft);
-      });
-      // details timer update
-      const dTimer = document.getElementById('details-timer');
-      if (dTimer && detailsOpenIndex !== null){
-        const p = products[detailsOpenIndex];
-        if (p && p._hasCountdown){ let t = p._endTime - now; if (t<=0){ p._endTime = Date.now()+p._durationMs; t = p._endTime - Date.now(); } dTimer.textContent = 'Offer ends in: ' + formatTimeRemaining(t); }
-      }
-    }, 1000);
-
-    function formatTimeRemaining(ms){
-      if (isNaN(ms) || ms <= 0) return '0s';
-      const total = Math.floor(ms/1000);
-      const days = Math.floor(total/86400);
-      const hours = Math.floor((total%86400)/3600);
-      const mins = Math.floor((total%3600)/60);
-      const secs = total%60;
-      return `${days}d ${hours}h ${mins}m ${secs}s`;
-    }
-
-    /* DETAILS (gallery + info) */
-    detailsClose.addEventListener('click', ()=> closeDetails());
-    function openDetails(idx){
-      if (typeof idx !== 'number' || !products[idx]) return;
-      detailsOpenIndex = idx;
-      currentImageIndex = 0;
-      renderDetails(products[idx]);
-      detailsPanel.style.display = 'flex';
-      detailsPanel.setAttribute('aria-hidden','false');
-      document.body.style.overflow = 'hidden';
-      bottomNav.style.display = 'none';
-      document.addEventListener('keydown', detailsKeyHandler);
-
-      // push a history state so the browser Back button closes details instead of leaving the page
-      try {
-        history.pushState({ vbest: 'details', idx: idx }, '', '#product-' + idx);
-        pushedState = true;
-      } catch (e) {
-        // ignore pushState errors
-      }
-    }
-    function closeDetails(fromPopstate = false){
-      detailsPanel.style.display = 'none';
-      detailsPanel.setAttribute('aria-hidden','true');
-      detailsLeft.innerHTML = '';
-      detailsRight.innerHTML = '';
-      detailsOpenIndex = null;
-      currentImageIndex = 0;
-      document.body.style.overflow = '';
-      bottomNav.style.display = '';
-      document.removeEventListener('keydown', detailsKeyHandler);
-
-      // If we opened a history entry and the close was initiated by UI (not popstate),
-      // go back one step to remove that pushed state so Back behaves naturally.
-      if (pushedState && !fromPopstate){
-        ignorePopstate = true;
-        try { history.back(); } catch(e) { /* ignore */ }
-      }
-      pushedState = false;
-    }
-    function detailsKeyHandler(e){
-      if (e.key === 'Escape') closeDetails();
-      if (e.key === 'ArrowLeft') showImageIndex(-1);
-      if (e.key === 'ArrowRight') showImageIndex(1);
-    }
-
-    // popstate handling: when user presses Back, close the details panel instead of leaving the page
-    window.addEventListener('popstate', (event) => {
-      if (ignorePopstate) { ignorePopstate = false; return; }
-      if (detailsPanel.style.display === 'flex') {
-        closeDetails(true);
-      }
+    document.querySelectorAll(".mega-cat-box").forEach(function(box){
+      var first = box.querySelector(".mcb-sub a");
+      if (!first) return;
+      var a = document.createElement("a");
+      a.className = "mcb-main"; a.href = first.getAttribute("href");
+      a.setAttribute("aria-label", "View category");
+      box.insertBefore(a, box.firstChild);
     });
 
-    function renderDetails(p){
-      const mainImg = p.hasImage ? `<img id="detailsMainImage" class="main-image" src="${escapeHtml(p.imageLinks[0])}" alt="${escapeHtml(p.name)}">` : `<div style="width:100%;height:60vh;display:flex;align-items:center;justify-content:center;background:#111;color:#ff3b30;font-weight:800;font-size:28px;border-radius:8px;">Currently out of stock — please check back soon!</div>`;
-      const hasMultiple = p.imageLinks && p.imageLinks.length>1;
-      const leftArrow = hasMultiple ? `<div class="img-nav left" id="imgPrev">‹</div>` : '';
-      const rightArrow = hasMultiple ? `<div class="img-nav right" id="imgNext">›</div>` : '';
-      let thumbsHtml = '';
-      if (p.imageLinks && p.imageLinks.length){ thumbsHtml = '<div class="thumbs" id="thumbsContainer">'; p.imageLinks.forEach((u,i)=> thumbsHtml += `<button data-idx="${i}" class="thumb-btn" style="border:2px solid transparent;background:transparent;padding:0;margin:0;"><img src="${escapeHtml(u)}" alt="thumb ${i+1}"></button>`); thumbsHtml += '</div>'; }
-      detailsLeft.innerHTML = `${leftArrow}${mainImg}${rightArrow}${thumbsHtml}`;
+    var searchInput = document.getElementById("megaSearchInput");
+    var resultsBox = document.getElementById("megaSearchResults");
+    var searchTimer = null;
+    searchInput.addEventListener("input", function(){
+      var q = this.value.trim().toLowerCase();
+      clearTimeout(searchTimer);
+      if (!q){ resultsBox.style.display = "none"; resultsBox.innerHTML = ""; return; }
+      searchTimer = setTimeout(async function(){
+        var items = await VBP.loadAll();
+        var matches = items.filter(function(p){ return p.id && !p.dup && p.name.toLowerCase().includes(q); }).slice(0, 20);
+        if (!matches.length){ resultsBox.innerHTML = '<div style="padding:10px;color:#888;">No products found</div>'; resultsBox.style.display = "block"; return; }
+        resultsBox.innerHTML = matches.map(function(p){
+          return '<a class="sres-item" href="product.html?id=' + encodeURIComponent(p.id) + '"><img src="' + p.firstImage + '" alt="" loading="lazy"><div><div style="font-weight:700;font-size:12px;">' + p.name + '</div><div style="color:#27ae60;font-size:12px;">' + (p.discStr || p.priceStr) + '</div></div></a>';
+        }).join("");
+        resultsBox.style.display = "block";
+      }, 300);
+    });
+  })();
+  </script>
 
-      if (hasMultiple){
-        document.getElementById('imgPrev').addEventListener('click', ()=> showImageIndex(-1));
-        document.getElementById('imgNext').addEventListener('click', ()=> showImageIndex(1));
-      }
-      const thumbsContainer = document.getElementById('thumbsContainer');
-      if (thumbsContainer){
-        thumbsContainer.querySelectorAll('button.thumb-btn').forEach(btn => btn.addEventListener('click', ()=> { goToImage(parseInt(btn.getAttribute('data-idx'),10)); }));
-        highlightThumb(currentImageIndex);
-      }
-      const main = document.getElementById('detailsMainImage');
-      if (main){
-        let touchStartX = null;
-        main.addEventListener('touchstart', (ev)=> { touchStartX = ev.touches[0].clientX; }, {passive:true});
-        main.addEventListener('touchend', (ev)=> {
-          if (touchStartX===null) return;
-          const endX = ev.changedTouches[0].clientX; const diff = endX - touchStartX;
-          if (Math.abs(diff) > 40){ if (diff < 0) showImageIndex(1); else showImageIndex(-1); }
-          touchStartX = null;
-        }, {passive:true});
-      }
+<style>
 
-      const saveHtml = (p.hasDiscount && !isNaN(p.saveNum) && p.saveNum>0) ? `<div class="save-amount">Save ${formatNaira(p.saveNum)}</div>` : '';
-      const negotiableHtml = (p.negotiable && ['yes','y','true','1','negotiable'].includes(String(p.negotiable).trim().toLowerCase())) ? `<div class="negotiable">Negotiable</div>` : '';
-      const priceHtml = p.hasDiscount ? `<div class="old-price">${escapeHtml(p.priceStr)}</div><div class="price">${escapeHtml(p.discountStr)}</div>` : `<div class="price">${escapeHtml(p.priceStr)}</div>`;
-      const inquiryHref = 'https://wa.me/2347080535579?text=' + encodeURIComponent(`Hello, I'm interested in ${p.name} priced at ${ p.hasDiscount ? p.discountStr : p.priceStr }.`);
-
-      const detailsTimerHtml = p._hasCountdown ? `<div id="details-timer" class="discount-timer">Offer ends in: --d --h --m --s</div>` : '';
-
-      detailsRight.innerHTML = `
-        <h2>${escapeHtml(p.name)}</h2>
-        <div class="meta">Category: ${escapeHtml(p.category || '')}</div>
-        <div class="price-row">${priceHtml} ${saveHtml}</div>
-        ${detailsTimerHtml}
-        ${negotiableHtml}
-        <div class="stars">${escapeHtml(p.stars)}</div>
-        <div class="details-actions">
-          <a class="inquiry-btn" href="${escapeHtml(inquiryHref)}" target="_blank" rel="noopener noreferrer">📩 Inquiry on WhatsApp</a>
-          <button class="buy-btn" ${p.hasImage ? '' : 'disabled'} onclick="addToCart('${escJS(p.name)}','${escJS(p.hasDiscount?p.discountStr:p.priceStr)}','${escJS(p.hasImage?p.firstImage:'')}')">🛒 Add to Cart</button>
-        </div>
-        <div class="desc"><h3 style="margin-top:14px;color:var(--accent);">Product description</h3><p style="margin:8px 0 0;line-height:1.6;color:var(--text);">${escapeHtml(p.description || 'No description available.')}</p></div>
-      `;
-      if (p._hasCountdown){
-        const now = Date.now(); let timeLeft = p._endTime - now; if (timeLeft<=0){ p._endTime = Date.now()+p._durationMs; timeLeft = p._endTime - Date.now(); }
-        const dt = document.getElementById('details-timer'); if (dt) dt.textContent = 'Offer ends in: ' + formatTimeRemaining(timeLeft);
-      }
-    }
-
-    function showImageIndex(delta){
-      if (detailsOpenIndex === null) return;
-      const p = products[detailsOpenIndex]; if(!p||!p.imageLinks||!p.imageLinks.length) return;
-      currentImageIndex = (currentImageIndex + delta + p.imageLinks.length) % p.imageLinks.length;
-      const main = document.getElementById('detailsMainImage'); if (main) main.src = p.imageLinks[currentImageIndex];
-      highlightThumb(currentImageIndex);
-    }
-    function goToImage(i){
-      if (detailsOpenIndex === null) return;
-      const p = products[detailsOpenIndex]; if(!p||!p.imageLinks||!p.imageLinks[i]) return;
-      currentImageIndex = i;
-      const main = document.getElementById('detailsMainImage'); if (main) main.src = p.imageLinks[currentImageIndex];
-      highlightThumb(currentImageIndex);
-    }
-    function highlightThumb(i){
-      const thumbs = document.querySelectorAll('#thumbsContainer button.thumb-btn');
-      thumbs.forEach((b,idx)=> b.style.border = (idx===i)?'2px solid var(--green)':'2px solid transparent');
-      const sel = thumbs[i]; if (sel && sel.scrollIntoView) sel.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
-    }
-
-    /* THEME SWITCHER: default Classic */
-    (function(){
-      const themes = ['classic','dark','gold'];
-      let current = localStorage.getItem('vbest_theme') || 'classic';
-      if (!themes.includes(current)) current = 'classic';
-      document.body.setAttribute('data-theme', current);
-      let idx = themes.indexOf(current);
-      themeBtn.addEventListener('click', ()=> {
-        idx = (idx + 1) % themes.length;
-        const t = themes[idx];
-        document.body.setAttribute('data-theme', t);
-        localStorage.setItem('vbest_theme', t);
-      });
-    })();
-
-    /* close details on backdrop click */
-    detailsPanel.addEventListener('click', function(e){ if (e.target === detailsPanel) closeDetails(); });
-
-    // keep cart count in sync (other tabs)
-    window.addEventListener('storage', (e)=> { if (e.key === 'cart') updateCartCount(); });
-
-  </script>  </script>
-    <footer class="shilpi-footer">
-    <div class="shilpi-container" style="max-width:1150px;margin:0 auto;">
-      <div class="footer-extra">
-        <p><strong>Didn’t find the exact furniture you had in mind? Simply share the reference image with us on WhatsApp — our team will guide you to the perfect match or customize it just for you.</strong></p>
-        <p><a href="https://wa.me/2347080535579" target="_blank">💬 Chat with us on WhatsApp</a></p>
-        <p>💫 Your dream home starts here with V’Best Luxury Interiors.</p>
-      </div>
-
-      <div class="about" style="margin-top:18px;">
-        <h2>V'best Luxury Interiors</h2>
-        <p class="tagline">We're the best</p>
-        <p class="about-text">Designed to elevate your home, our premium pieces combine comfort, durability, and style that speaks volumes.</p>
-
-        <div class="social-icons" aria-label="social">
-          <!-- Added WhatsApp, Facebook, YouTube (brand colored icons) -->
-          <a href="https://wa.me/2347080535579" target="_blank" rel="noopener noreferrer" title="WhatsApp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-          <a href="https://www.facebook.com/share/179pLbZtXk/" target="_blank" rel="noopener noreferrer" title="Facebook"><i class="fab fa-facebook"></i> Facebook</a>
-          <a href="https://youtube.com/@best-tm7bm?si=w23wMA5R7ii3gmfM" target="_blank" rel="noopener noreferrer" title="YouTube"><i class="fab fa-youtube"></i> YouTube</a>
-          <a href="https://x.com/V_Best_?s=09" target="_blank" rel="noopener noreferrer">𝕏 Twitter</a>
-          <a href="https://www.instagram.com/vbest_luxury_interiors?igsh=MWFxcmN4eTd6dndnNQ==" target="_blank" rel="noopener noreferrer">📸 Instagram</a>
-          <a href="https://www.tiktok.com/@vbestluxuryinterior?_t=ZS-90f23kWVIJh&_r=1" target="_blank" rel="noopener noreferrer">🎵 TikTok</a>
-        </div>
-      </div>
-
-      <div class="footer-bottom" style="margin-top:18px;">
-        <div class="footer-col">
-          <h3>Categories</h3>
-          <ul>
-            <li>Living Room</li><li>Bedroom</li><li>Dining Room</li><li>Home Office</li><li>Kids & Baby</li><li>Outdoor & Patio</li><li>Storage & Organization</li><li>Accent & Decor</li>
-        
-        
-<p><p> bedroom door</p>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h3>Quick Links</h3>
-          <div class="accordion">
-            <button class="accordion-btn">About Us</button>
-            <div class="accordion-content"><p>We bring world-class premium items to elevate your lifestyle with modern and timeless designs.</p></div>
-
-            <button class="accordion-btn">Privacy Policy</button>
-            <div class="accordion-content"><p>Your privacy is our priority. We never share customer data with third parties.</p></div>
-
-            <button class="accordion-btn">Terms & Conditions</button>
-            <div class="accordion-content"><p>All purchases are subject to our company’s standard terms and conditions.</p></div>
-
-            <button class="accordion-btn">FAQ</button>
-            <div class="accordion-content"><p>Find answers to the most common questions about delivery, warranty, and payments.</p></div>
-
-            <button class="accordion-btn" data-action="backtotop">Back to Top</button>
-            <div class="accordion-content"><p><a href="#" class="shilpi-top-link">Go to top</a></p></div>
-          </div>
-        </div>
-
-        <div class="footer-col">
-          <h3>Customer Service</h3>
-          <p>📞 2347080535579</p>
-          <p>✉️ <a href="mailto:best28763@gmail.com">contactus@vbest.com</a></p>
-          <p>📍 
-          <strong> visit our showroom:</strong>156 Olojo Drive, Ojo Alaba International Market, Lagos</p>
-          <p>🕑 24/7 Support</p>
-          <section style="text-align:center;padding:30px 15px;background:#fff;">
-  <h2 style="font-size:20px;font-weight:700;color:#111;margin-bottom:10px;">
-    V-Best Luxury Interiors
-  </h2>
-  <p style="color:#444;font-size:15px;margin-bottom:15px;">
-    Learn more about how to choose the best luxury furniture for your home and lifestyle:
-  </p>
-  <div style="display:flex;flex-direction:column;gap:8px;">
-    <a href="blog/bed-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;">Beds</a>
-    <a href="blog/chair-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;">Chairs</a>
-    <a href="blog/sofa-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;">Sofas</a>
-    <a href="blog/dining-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;">Dining</a>
-    <a href="blog/table-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;">Tables</a>
-        <a href="blog/office-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;">office furniture</a>
-              <a href="blog/outdoor-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;">Outdoors</a>  
-  </div>
-</section>
-          <iframe
-  src="https://www.google.com/maps/embed?pb=!1m0!3m2!1sen!2sng!4v0!cid=7368111619021559737"
-  width="100%" height="180"
-  style="border:0; border-radius:10px; margin-top:8px; margin-bottom:0;"
-  allowfullscreen
-  loading="lazy"
-  title="V-Best Luxury Interiors on Google Maps">
-</iframe>
-        </div>
-      </div>
-    </div>
-    </div>
-    
-  </footer>
-  <style>
-#vChatBtn{
-  position:fixed; left:10px;bottom:90px;
-  width:50px;height:50px;border-radius:50%;
-  background:#25D366;color:#fff;font-size:18px;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 18px rgba(0,0,0,.25);
-  cursor:pointer;z-index:10000;
-  animation:pulse 1.4s infinite;
+.buy-btn,
+.inquiry-btn{
+display:flex;
+align-items:center;
+justify-content:center;
+width:100%;
+box-sizing:border-box;
+text-align:center;
+padding:10px;
+border:none;
+border-radius:6px;
+font-weight:700;
+font-size:14px;
+line-height:1;
+text-decoration:none;
+cursor:pointer;
 }
-@keyframes pulse{
-  0%,100%{transform:scale(1);opacity:1}
-  50%{transform:scale(1.15);opacity:.9}
+
+.buy-btn{
+background:#000;
+color:#fff;
 }
-#vChatOverlay{
-  position:fixed;inset:0;z-index:9999;
-  background:#fff;display:none;flex-direction:column;
-  font-family:Arial,Helvetica,sans-serif;
+
+.inquiry-btn{
+background:#25D366;
+color:#fff;
 }
-#vChatOverlay header{
-  background:#25D366;color:#fff;
-  padding:10px;font-size:10px;font-weight:700;
-  display:flex;justify-content:space-between;align-items:center;
+
+.buy-btn:hover,
+.inquiry-btn:hover{
+opacity:0.9;
 }
-#vChatOverlay header button{
-  background:none;border:none;color:#fff;
-  font-size:22px;cursor:pointer;
+
+/* badges */
+.badge-left{
+position:absolute;
+top:8px;
+left:8px;
 }
-#vChatOverlay .body{
-  flex:1;padding:10px;overflow:auto;
-  display:flex;flex-direction:column;justify-content:center;
-  text-align:center;font-size:16px;color:#333;
+
+.badge-right{
+position:absolute;
+top:8px;
+right:8px;
 }
-#vChatOverlay textarea{
-  width:90%;max-width:500px;height:100px;
-  margin:0 auto 20px;border-radius:8px;
-  border:1px solid #ccc;padding:10px;resize:none;
-  font-size:15px;
+
+.badge{
+padding:2px 6px;
+font-size:10px;
+font-weight:700;
+border-radius:4px;
+color:#fff;
+line-height:1.4;
 }
-#vChatOverlay .send{
-  background:#25D366;color:#fff;border:none;
-  padding:10px 20px;border-radius:8px;
-  font-size:16px;font-weight:700;cursor:pointer;
+
+.save-badge{
+background:#ff3b30;
 }
+
+.negotiable-badge{
+background:#007aff;
+}
+
+.thumb{
+position:relative;
+display:block;
+}
+
+.mini-card{
+  flex:0 0 130px;
+  background:var(--card);
+  border-radius:8px;
+  overflow:hidden;
+  text-align:left;
+  cursor:pointer;
+}
+.mini-card img{ width:100%; height:100px; object-fit:cover; display:block; }
+.mini-card .mini-body{ padding:6px 8px; }
+.mini-card h4{ margin:0 0 2px; font-size:11px; color:var(--text); font-weight:700; line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mini-card .mini-price{ font-size:11px; color:#27ae60; font-weight:800; }
+
+.page-btn{
+  min-width:34px;
+  padding:8px 10px;
+  border-radius:6px;
+  border:1px solid rgba(0,0,0,0.1);
+  background:var(--card);
+  color:var(--accent);
+  font-weight:700;
+  font-size:13px;
+  cursor:pointer;
+}
+.page-btn.active{
+  background:var(--accent);
+  color:#fff;
+  border-color:var(--accent);
+}
+.page-btn[disabled]{
+  opacity:0.4;
+  cursor:not-allowed;
+}
+
 </style>
 
-<div id="vChatBtn" title="Chat with us">💬</div>
+<div class="top-media">
+<img src="images/logo.png" alt="V'Best Interiors logo" class="logo-media">
+</div>
 
-<div id="vChatOverlay">
-  <header>
-    <span>Chat with VBest</span>
-    <button id="vClose">×</button>
-  </header>
-  <div class="body">
-    <textarea id="vMsg" placeholder="Hi! Tell us what you need (size, budget, color …)"></textarea>
-    <button class="send" id="vSend">Send on WhatsApp</button>
+<h1>Outdoor Furniture</h1>
+<strong>Bring comfort and style to your outdoor space.</strong><br>
+Built to withstand the elements without sacrificing comfort or good looks — perfect for patios, gardens, and balconies.<br>
+<strong>Shop exclusive collections from V-Best Luxury Interiors today.</strong>
+
+<div id="count" class="loading-wrap"><span class="spinner"></span><span style="font-size:15px;">Loading products...</span></div>
+
+<div id="products" class="product-grid"></div>
+
+<div id="pagination" style="display:flex;justify-content:center;align-items:center;gap:6px;margin:14px 0;flex-wrap:wrap;"></div>
+
+<div id="relatedSection" style="display:none;margin:24px 0 0;text-align:left;">
+  <h2 style="font-size:17px;color:var(--accent);padding:0 14px;">Related Products</h2>
+  <div id="relatedGrid" style="display:flex;gap:10px;overflow-x:auto;padding:0 14px 10px;-webkit-overflow-scrolling:touch;"></div>
+</div>
+
+<div id="similarSection" style="display:none;margin:14px 0 0;text-align:left;">
+  <h2 style="font-size:17px;color:var(--accent);padding:0 14px;">You May Also Like</h2>
+  <div id="similarGrid" style="display:flex;gap:10px;overflow-x:auto;padding:0 14px 10px;-webkit-overflow-scrolling:touch;"></div>
+</div>
+
+<div id="hotSection" style="display:none;margin:24px 0 0;text-align:left;">
+  <h2 style="font-size:17px;color:var(--accent);padding:0 14px;">🔥 Hot Selling</h2>
+  <div id="hotScroll" style="display:flex;gap:10px;overflow-x:auto;padding:0 14px 10px;-webkit-overflow-scrolling:touch;"></div>
+</div>
+
+<div id="newSection" style="display:none;margin:14px 0 0;text-align:left;">
+  <h2 style="font-size:17px;color:var(--accent);padding:0 14px;">✨ New Arrivals</h2>
+  <div id="newScroll" style="display:flex;gap:10px;overflow-x:auto;padding:0 14px 10px;-webkit-overflow-scrolling:touch;"></div>
+</div>
+
+<div style="display:flex;justify-content:center;gap:10px;margin:14px 0;flex-wrap:wrap;">
+  <a href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" style="display:inline-block;padding:10px 18px;background:var(--card);border:1px solid rgba(0,0,0,0.1);border-radius:8px;color:var(--accent);text-decoration:none;font-weight:700;">⬆ Back to Top</a>
+  <a href="index.html" style="display:inline-block;padding:10px 18px;background:var(--card);border:1px solid rgba(0,0,0,0.1);border-radius:8px;color:var(--accent);text-decoration:none;font-weight:700;">🏠 Back to Home</a>
+</div>
+
+<footer class="shilpi-footer">
+  <div class="shilpi-container" style="max-width:1150px;margin:0 auto;">
+    <div class="footer-extra" style="text-align:center;">
+      <p style="max-width:560px;margin:0 auto 10px;line-height:1.6;">Didn't find the exact furniture you had in mind? Simply share the reference image with us on WhatsApp — our team will guide you to the perfect match or customize it just for you.</p>
+      <p style="margin:0 0 10px;">
+        <a href="https://wa.me/2347080535579" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;text-decoration:none;font-weight:700;padding:9px 18px;border-radius:24px;font-size:14px;">
+          <i class="fab fa-whatsapp" style="font-size:18px;"></i> Chat with us on WhatsApp
+        </a>
+      </p>
+      <p style="margin:0;">💫 Your dream home starts here with V'Best Luxury Interiors.</p>
+    </div>
+
+    <div class="about" style="margin-top:18px;text-align:center;">
+      <h2>V'best Luxury Interiors</h2>
+      <p class="tagline">We're the best</p>
+      <p class="about-text">Designed to elevate your home, our premium pieces combine comfort, durability, and style that speaks volumes.</p>
+    </div>
+
+    <div class="footer-dark-zone">
+    <div class="social-icons" aria-label="social">
+        <a href="https://wa.me/2347080535579" target="_blank" rel="noopener noreferrer" title="WhatsApp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        <a href="https://www.facebook.com/share/1D29ENJ92b/" target="_blank" rel="noopener noreferrer" title="Facebook"><i class="fab fa-facebook"></i> Facebook</a>
+        <a href="https://youtube.com/@best-tm7bm?si=w23wMA5R7ii3gmfM" target="_blank" rel="noopener noreferrer" title="YouTube"><i class="fab fa-youtube"></i> YouTube</a>
+        <a href="https://x.com/V_Best_" target="_blank" rel="noopener noreferrer">𝕏 Twitter</a>
+        <a href="https://www.instagram.com/vbest_luxury_interior?stkn=aTY0MGRnNjJ2enlt" target="_blank" rel="noopener noreferrer">📸 Instagram</a>
+        <a href="https://www.tiktok.com/@vbest_luxury_interior?_r=1&_d=elh2f5ef7ml7e0&sec_uid=MS4wLjABAAAAy8UQs2EhAeF__dkfm2xiVb-iReVs3Lmm4UTneuzzXfkkKPcvvLGWmEOsDfi0svZ6&share_author_id=7200817955289056261&sharer_language=en&source=h5_m&u_code=e6dab6jg2al2bm&timestamp=1788729750&user_id=7200817955289056261&sec_user_id=MS4wLjABAAAAy8UQs2EhAeF__dkfm2xiVb-iReVs3Lmm4UTneuzzXfkkKPcvvLGWmEOsDfi0svZ6&item_author_type=1&utm_source=copy&utm_campaign=client_share&utm_medium=android&share_iid=7674794423725164306&share_link_id=e2088467-4e56-4c7e-9243-80767c8dd57a&share_app_id=1233&ugbiz_name=ACCOUNT&ug_btm=b8727%2Cb9716&social_share_type=5&enable_checksum=1" target="_blank" rel="noopener noreferrer">🎵 TikTok</a>
+    </div>
+
+    <div class="footer-bottom" style="margin-top:18px;">
+      <div class="footer-col">
+        <h3>Categories</h3>
+        <ul>
+          <li>Living Room</li><li>Bedroom</li><li>Dining Room</li><li>Home Office</li><li>Kids & Baby</li><li>Outdoor & Patio</li><li>Storage & Organization</li><li>Accent & Decor</li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h3>Quick Links</h3>
+        <div class="accordion">
+          <button class="accordion-btn">About Us</button>
+          <div class="accordion-content"><p>We bring world-class premium items to elevate your lifestyle with modern and timeless designs.</p></div>
+
+          <button class="accordion-btn">Privacy Policy</button>
+          <div class="accordion-content"><p>Your privacy is our priority. We never share customer data with third parties.</p></div>
+
+          <button class="accordion-btn">Terms & Conditions</button>
+          <div class="accordion-content"><p>All purchases are subject to our company's standard terms and conditions.</p></div>
+
+          <button class="accordion-btn">FAQ</button>
+          <div class="accordion-content"><p>Find answers to the most common questions about delivery, warranty, and payments.</p></div>
+
+          <button class="accordion-btn" data-action="backtotop">Back to Top</button>
+          <div class="accordion-content"><p><a href="#" class="shilpi-top-link">Go to top</a></p></div>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h3>Customer Service</h3>
+        <p>📞 2347080535579</p>
+        <p>✉️ <a href="mailto:best28763@gmail.com">contactus@vbest.com</a></p>
+        <p>🕑 24/7 Support</p>
+        <section style="text-align:center;padding:30px 15px;background:#fff;">
+          <h2 style="font-size:20px;font-weight:700;color:#111;margin-bottom:10px;">V-Best Luxury Interiors</h2>
+          <p style="color:#444;font-size:15px;margin-bottom:15px;">Learn more about how to choose the best luxury furniture for your home and lifestyle:</p>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <a href="blog/bed-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;">Beds</a>
+            <a href="blog/light-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;">Lights</a>
+            <a href="blog/sofa-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;">Sofas</a>
+            <a href="blog/dining-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;">Dining</a>
+            <a href="blog/table-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;">Tables</a>
+            <a href="blog/office-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;">office furniture</a>
+            <a href="blog/outdoor-in-lagos.html" style="color:orange;text-decoration:none;font-weight:500;">Outdoors</a>
+          </div>
+        </section>
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m0!3m2!1sen!2sng!4v0!cid=7368111619021559737"
+          width="100%" height="180"
+          style="border:0; border-radius:10px; margin-top:8px; margin-bottom:0;"
+          allowfullscreen
+          loading="lazy"
+          title="V-Best Luxury Interiors on Google Maps">
+        </iframe>
+      </div>
+    </div>
+    </div>
   </div>
+</footer>
+
+<style>
+.shilpi-footer { background:#f3f3f3; color:var(--text); padding:40px 20px; font-family:Arial, sans-serif; }
+.shilpi-footer .about h2 { font-size:22px; font-weight:bold; margin-bottom:6px; color:var(--text); }
+.shilpi-footer .about .tagline { font-size:14px; font-weight:300; margin-bottom:10px; color:#666; }
+.shilpi-footer .about-text { font-size:13px; max-width:600px; margin:0 auto 15px; line-height:1.6; color:#666; }
+.social-icons { display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:nowrap; white-space:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+.social-icons a { display:inline-flex; align-items:center; gap:6px; padding:4px 6px; font-weight:700; font-size:13px; text-decoration:none; color:inherit; }
+.social-icons a i { font-size:18px; line-height:1; width:20px; text-align:center; display:inline-block; }
+.social-icons a .fa-whatsapp { color:#25D366; }
+.social-icons a .fa-facebook { color:#1877F2; }
+.social-icons a .fa-youtube { color:#FF0000; }
+@media (max-width:420px){ .social-icons{ flex-wrap:wrap; gap:6px; padding:4px 6px; } .social-icons a{ font-size:12px; padding:4px 6px; } .social-icons a i{ font-size:16px; width:18px; } }
+.footer-bottom { display:flex; flex-wrap:wrap; justify-content:space-between; text-align:left; gap:20px; }
+.footer-col { flex:1; min-width:200px; }
+.footer-col h3 { font-size:16px; margin-bottom:10px; color:var(--text); }
+.footer-col ul li { font-size:14px; margin:4px 0; color:#666; }
+.accordion-btn { background:none; border:none; outline:none; font-size:14px; font-weight:bold; color:var(--accent); text-align:left; padding:6px 0; cursor:pointer; width:100%; }
+.accordion-content { display:none; font-size:13px; margin-bottom:10px; line-height:1.5; color:#666; }
+.footer-dark-zone{ background:#2f3338; color:#e6e8eb; margin:18px -20px 0; padding:18px 20px 4px; }
+.footer-dark-zone .footer-bottom{ margin-top:18px; }
+.footer-dark-zone .footer-col h3{ color:#ffffff; }
+.footer-dark-zone .footer-col ul li, .footer-dark-zone .footer-col p{ color:#c5c9ce; }
+.footer-dark-zone .footer-col a{ color:#ffb74d; }
+.footer-dark-zone .accordion-content, .footer-dark-zone .accordion-content p{ color:#c5c9ce; }
+.footer-dark-zone .accordion-content a{ color:#ffb74d; }
+.footer-dark-zone .social-icons a{ color:#f1f3f4 !important; }
+.footer-dark-zone .social-icons a .fa-whatsapp{ color:#25D366 !important; }
+.footer-dark-zone .social-icons a .fa-facebook{ color:#1877F2 !important; }
+.footer-dark-zone .social-icons a .fa-youtube{ color:#FF0000 !important; }
+.footer-dark-zone section{ background:transparent !important; padding:18px 0 6px !important; }
+.footer-dark-zone section h2{ color:#ffffff !important; }
+.footer-dark-zone section p{ color:#c5c9ce !important; }
+@media (max-width:768px){ .footer-bottom{ display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:12px; padding-left:12px; padding-right:12px; box-sizing:border-box; } .footer-bottom .footer-col{ width:100%; max-width:420px; margin:8px auto; text-align:center; box-sizing:border-box; } .accordion-btn{ text-align:center; display:block; width:100%; } }
+</style>
+
+<script>
+document.querySelectorAll('.shilpi-footer .accordion-btn').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    if(this.getAttribute('data-action')==='backtotop'){ window.scrollTo({top:0,behavior:'smooth'}); return; }
+    var c = this.nextElementSibling;
+    c.style.display = c.style.display === 'block' ? 'none' : 'block';
+  });
+});
+</script>
+
+<div class="bottom-nav">
+<a href="index.html">🏠 Home</a>
+<a href="cart.html">🛒 Cart <span id="cart-count-bottom" class="cart-badge" style="display:none">0</span></a>
 </div>
 
 <script>
-const btn=document.getElementById('vChatBtn');
-const overlay=document.getElementById('vChatOverlay');
-const close=document.getElementById('vClose');
-const send=document.getElementById('vSend');
-const msg=document.getElementById('vMsg');
-const phone="2347080535579"; // your WhatsApp number
 
-btn.onclick=()=>overlay.style.display="flex";
-close.onclick=()=>overlay.style.display="none";
-send.onclick=()=>{
-  const text=msg.value.trim();
-  if(!text){alert("Please type a message.");return;}
-  const url="https://wa.me/"+phone+"?text="+encodeURIComponent(text);
-  window.open(url,"_blank");
-  msg.value="";
-  overlay.style.display="none";
+const SHEET_CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4YXFvxl_w447wVuWRrHv8EInZFg1lSIX2_KwxZQJL9n8YHEzIP5WmfBep4yBgfN7EbArsjPPHOzOh/pub?output=csv";
+const DISCOUNT_DURATION_MS=30*24*60*60*1000;
+
+function escapeHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function escJS(s){return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+function normKey(k){return String(k||'').toLowerCase().replace(/[^a-z0-9]/g,'');}
+
+function parseCSVRow(t){
+const r=[];let c='',q=false;
+for(let i=0;i<t.length;i++){
+const x=t[i];
+if(q){
+if(x==='"'){if(t[i+1]==='"'){c+='"';i++;}else q=false;}
+else c+=x;
+}else{
+if(x==='"')q=true;
+else if(x===','){r.push(c);c='';}
+else c+=x;
+}}
+r.push(c);
+return r;
+}
+
+function parseNumber(s){
+if(!s)return NaN;
+const n=String(s).replace(/[^\d.-]/g,'');
+return n===''?NaN:parseFloat(n);
+}
+
+function formatNaira(n){
+return isNaN(n)?'':'₦'+Math.round(n).toLocaleString();
+}
+
+const countEl=document.getElementById('count');
+const container=document.getElementById('products');
+const cartBadge=document.getElementById('cart-count-bottom');
+
+function updateCartCount(){
+const cart=JSON.parse(localStorage.getItem('cart')||'[]');
+if(cart.length){
+cartBadge.style.display='inline-block';
+cartBadge.textContent=cart.length;
+}else cartBadge.style.display='none';
+}
+
+function addToCart(name,price,image){
+if(!image)return;
+const cart=JSON.parse(localStorage.getItem('cart')||'[]');
+cart.push({name,price,image,qty:1});
+localStorage.setItem('cart',JSON.stringify(cart));
+updateCartCount();
+}
+
+updateCartCount();
+
+(async function(){
+
+try{
+
+const VB_TTL = 30*60*1000;
+function vbGet(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } }
+function vbSet(k,v){ try{ sessionStorage.setItem(k,v); }catch(e){} }
+function vbDel(k){ try{ sessionStorage.removeItem(k); }catch(e){} }
+var vbLast = +vbGet('vb_active') || 0;
+if(vbLast && Date.now()-vbLast > VB_TTL){ vbDel('vbpage_outdoor_csv_v1'); vbDel('vbpage_outdoor_picks_v1'); vbDel('vbpage_outdoor_page_v1'); }
+vbSet('vb_active', String(Date.now()));
+
+let csv = vbGet('vbpage_outdoor_csv_v1');
+if(!csv){
+  csv = await fetch(SHEET_CSV).then(r=>r.text());
+  vbSet('vbpage_outdoor_csv_v1', csv);
+}
+const lines=csv.replace(/^\uFEFF/,'').split(/\r?\n/).filter(l=>l.trim());
+const headers=parseCSVRow(lines[0]);
+
+const map={};
+headers.forEach((h,i)=>map[normKey(h)]=i);
+const gi=n=>map[normKey(n)];
+
+const idI=gi('id');
+const catI=gi('category');
+const nameI=gi('productname');
+const priceI=gi('price');
+const discI=gi('discountprice');
+const negI=gi('negotiable');
+const imgI=gi('imagelink');
+
+const products=[];
+
+for(let i=1;i<lines.length;i++){
+
+const c=parseCSVRow(lines[i]);
+const g=i=>c[i]?c[i].trim():'';
+
+const category=g(catI).toLowerCase();
+if(!category.includes('outdoor')) continue;
+
+const priceNum=parseNumber(g(priceI));
+const discNum=parseNumber(g(discI));
+
+const hasPrice=!isNaN(priceNum);
+const hasDiscount=!isNaN(discNum);
+
+const imgs=g(imgI).split(/[\n,]+/).map(s=>s.trim()).filter(Boolean);
+const hasImage=imgs.length>0;
+
+const saveAmount=(hasPrice && hasDiscount)?priceNum-discNum:NaN;
+const showSave=(hasPrice && hasDiscount); // only show save badge if both exist
+
+const negotiableValue=g(negI).toLowerCase();
+const isNegotiable=['yes','true','1','negotiable'].includes(negotiableValue);
+
+const showTimer=(hasImage && hasPrice && hasDiscount);
+
+products.push({
+id:g(idI),
+name:g(nameI),
+priceStr:g(priceI),
+discStr:g(discI),
+firstImage:imgs[0]||'',
+imageLinks:imgs,
+hasImage,
+hasDiscount,
+showTimer,
+showSave,
+saveAmount,
+isNegotiable,
+priceUnclear:(hasDiscount ? (isNaN(discNum) || discNum<1000) : (!hasPrice || priceNum<1000)),
+endTime:Date.now()+DISCOUNT_DURATION_MS
+});
+}
+
+/* ================= HOT SELLING / NEW ARRIVALS / RELATED / SIMILAR (scan ALL rows) ================= */
+const allItems=[];
+const catBuckets={}; // category(lowercase, first word match) -> array of items
+
+/* Room-aware related category map: current page category -> categories that go well in the same room.
+   IMPORTANT: these category strings must match words that actually appear in your Google Sheet's Category column.
+   Add or adjust entries here as you build more pages. */
+const ROOM_MAP = {
+  'outdoor': ["centertable", "decor", "rug"],
+  'default': ['sofa','chair','dining']
 };
+const currentCategoryKey='outdoor';
+const relatedCatsWanted = ROOM_MAP[currentCategoryKey] || ROOM_MAP.default;
+
+for(let i=1;i<lines.length;i++){
+  const c=parseCSVRow(lines[i]);
+  const g=i=>c[i]?c[i].trim():'';
+  const cat=g(catI).toLowerCase();
+  const imgs=g(imgI).split(/[\n,]+/).map(s=>s.trim()).filter(Boolean);
+  if(!imgs.length) continue;
+  const priceStr=g(priceI);
+  const discStr=g(discI);
+  const hasDiscount=!isNaN(parseNumber(discStr));
+  const priceNum2=parseNumber(priceStr), discNum2=parseNumber(discStr);
+  const hasPrice2=!isNaN(priceNum2);
+  const item={
+    name:g(nameI), priceStr, discStr,
+    hasDiscount, firstImage:imgs[0],
+    id:g(idI), cat,
+    priceUnclear:(hasDiscount ? (isNaN(discNum2) || discNum2<1000) : (!hasPrice2 || priceNum2<1000))
+  };
+  allItems.push(item);
+  if(!catBuckets[cat]) catBuckets[cat]=[];
+  catBuckets[cat].push(item);
+}
+
+var __idCount={}; allItems.forEach(function(it){ if(it.id) __idCount[it.id]=(__idCount[it.id]||0)+1; });
+const eligibleItems = allItems.filter(it=>it.hasDiscount && it.priceStr && it.id && __idCount[it.id]===1);
+
+function shuffledSample(arr, n){
+  const copy=arr.slice();
+  for(let i=copy.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [copy[i],copy[j]]=[copy[j],copy[i]];
+  }
+  return copy.slice(0,n);
+}
+
+function buildMiniCard(p){
+  const link=`product.html?id=${p.id}`;
+  const el=document.createElement('div');
+  el.className='mini-card';
+  el.onclick=()=>location.href=link;
+  el.innerHTML=`
+    <img src="${escapeHtml(p.firstImage)}" alt="${escapeHtml(p.name)}" loading="lazy">
+    <div class="mini-body">
+      <h4>${escapeHtml(p.name)}</h4>
+      <div class="mini-price"${p.priceUnclear?' style="color:#e67e22;"':''}>${p.priceUnclear?'Updating price &#8358;..<br>Click inquiry✅':escapeHtml(p.hasDiscount?p.discStr:p.priceStr)}</div>
+    </div>
+  `;
+  return el;
+}
+
+/* Related Products + You May Also Like: both pull from room-aware categories (things that belong in the same room), 14 items each, independently shuffled */
+let relatedPool=[];
+relatedCatsWanted.forEach(rc=>{
+  Object.keys(catBuckets).forEach(cat=>{
+    if(cat.includes(rc) && !cat.includes(currentCategoryKey)){
+      relatedPool=relatedPool.concat(catBuckets[cat]);
+    }
+  });
+});
+relatedPool = relatedPool.filter(it=>it.id && __idCount[it.id]===1);
+
+let vbPicksCache = {};
+try{ vbPicksCache = JSON.parse(vbGet('vbpage_outdoor_picks_v1')) || {}; }catch(e){ vbPicksCache = {}; }
+function pickCached(key, pool, n){
+  const savedIds = vbPicksCache[key];
+  if(savedIds && savedIds.length){
+    const byId = {}; pool.forEach(p=>{ byId[p.id]=p; });
+    const restored = savedIds.map(id=>byId[id]).filter(Boolean);
+    if(restored.length === savedIds.length && restored.length){ return restored; }
+  }
+  const fresh = shuffledSample(pool, n);
+  vbPicksCache[key] = fresh.map(p=>p.id);
+  vbSet('vbpage_outdoor_picks_v1', JSON.stringify(vbPicksCache));
+  return fresh;
+}
+
+const relatedToShow = pickCached('related', relatedPool, 14);
+if(relatedToShow.length){
+  document.getElementById('relatedSection').style.display='block';
+  const relatedGrid=document.getElementById('relatedGrid');
+  relatedToShow.forEach(p=>relatedGrid.appendChild(buildMiniCard(p)));
+}
+
+const similarToShow = pickCached('similar', relatedPool, 14);
+if(similarToShow.length){
+  document.getElementById('similarSection').style.display='block';
+  const similarGrid=document.getElementById('similarGrid');
+  similarToShow.forEach(p=>similarGrid.appendChild(buildMiniCard(p)));
+}
+
+const hotToShow = pickCached('hot', eligibleItems.length?eligibleItems:allItems, 14);
+if(hotToShow.length){
+  document.getElementById('hotSection').style.display='block';
+  const hotScroll=document.getElementById('hotScroll');
+  hotToShow.forEach(p=>hotScroll.appendChild(buildMiniCard(p)));
+}
+
+const newToShow = pickCached('new', eligibleItems.length?eligibleItems:allItems, 14);
+if(newToShow.length){
+  document.getElementById('newSection').style.display='block';
+  const newScroll=document.getElementById('newScroll');
+  newToShow.forEach(p=>newScroll.appendChild(buildMiniCard(p)));
+}
+
+countEl.textContent=`Total Outdoor Furniture Available: ${products.length}`;
+container.innerHTML='';
+
+window.setGalleryImage=function(idx,i){
+  const p=products[idx];
+  if(!p||!p.imageLinks||!p.imageLinks[i])return;
+  p._curImg=i;
+  const mainImg=document.getElementById('mainImg-'+idx);
+  if(mainImg)mainImg.src=p.imageLinks[i];
+  const row=document.getElementById('thumbRow-'+idx);
+  if(row){
+    Array.from(row.children).forEach((el,k)=>{
+      el.style.border=(k===i)?'2px solid #25D366':'2px solid transparent';
+    });
+  }
+};
+window.nextGalleryImage=function(idx){
+  const p=products[idx];
+  if(!p||!p.imageLinks||p.imageLinks.length<2)return;
+  const cur=(p._curImg||0);
+  const next=(cur+1)%p.imageLinks.length;
+  window.setGalleryImage(idx,next);
+};
+
+function buildCard(p, idx){
+
+const inquiryMsg=(p.hasImage?p.firstImage+'\n\n':'')+`Hello, I'm interested in ${p.name}`+(p.hasDiscount?(' priced at '+p.discStr):(p.priceStr?(' priced at '+p.priceStr):''));
+const inquiry=`https://wa.me/2347080535579?text=`+encodeURIComponent(inquiryMsg);
+const link=`product.html?id=${p.id}`;
+
+const card=document.createElement('div');
+card.className='product-card';
+
+if(p.hasImage){
+
+card.innerHTML=`
+
+<span class="thumb" onclick="location.href='${link}'">
+
+<img id="mainImg-${idx}" src="${escapeHtml(p.firstImage)}" alt="${escapeHtml(p.name)}" loading="lazy">
+
+${p.imageLinks.length>1?`<button onclick="nextGalleryImage(${idx});event.stopPropagation();" style="position:absolute;top:50%;right:6px;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:#fff;border:none;border-radius:50%;width:26px;height:26px;font-size:16px;line-height:26px;cursor:pointer;z-index:3;padding:0;">›</button>`:''}
+
+<div class="badge-left">
+${p.showSave?`<div class="badge save-badge">Save ${formatNaira(p.saveAmount)}</div>`:''}
+</div>
+
+</span>
+
+${p.imageLinks.length>1?`<div class="thumb-row" id="thumbRow-${idx}" style="display:flex;gap:4px;padding:6px 10px 0;overflow-x:auto;">${p.imageLinks.map((im,i)=>`<img src="${escapeHtml(im)}" loading="lazy" onclick="setGalleryImage(${idx},${i});event.stopPropagation();" style="width:26px;height:26px;object-fit:cover;border-radius:4px;cursor:pointer;flex:0 0 auto;border:2px solid ${i===0?'#25D366':'transparent'};">`).join('')}</div>`:''}
+
+<div class="product-body">
+
+<a href="${link}" style="text-decoration:none;color:inherit">
+<h3>${escapeHtml(p.name)}</h3>
+</a>
+
+<div style="display:flex;align-items:center;flex-wrap:nowrap;gap:6px;">
+<div>
+${p.priceUnclear
+?`<div style="color:#e67e22;font-weight:700;font-size:12px;line-height:1.4;">Updating price &#8358;..<br>Click inquiry✅</div>`
+:(p.hasDiscount
+?`<div class="old-price">${escapeHtml(p.priceStr)}</div><div class="price">${escapeHtml(p.discStr)}</div>`
+:`<div class="price">${escapeHtml(p.priceStr)}</div>`)}
+</div>
+${p.isNegotiable?`<span style="display:inline-block;flex:0 0 auto;background:#007aff;color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:8px;white-space:nowrap;">Negotiable</span>`:''}
+</div>
+
+<div style="display:flex;flex-direction:column;gap:6px">
+
+<button class="buy-btn"
+onclick="addToCart('${escJS(p.name)}','${escJS(p.hasDiscount?p.discStr:p.priceStr)}','${escJS(p.firstImage)}')">
+🛒 Add to Cart
+</button>
+
+<a class="inquiry-btn" href="${inquiry}" target="_blank">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="#fff" style="margin-right:4px;"><path d="M16.001 2.667c-7.363 0-13.334 5.97-13.334 13.333 0 2.353.615 4.66 1.782 6.686L2.667 29.333l6.8-1.756a13.27 13.27 0 0 0 6.533 1.755h.001c7.363 0 13.333-5.97 13.333-13.333S23.364 2.667 16.001 2.667zm0 24.4a11.05 11.05 0 0 1-5.632-1.542l-.404-.24-4.034 1.043 1.077-3.93-.263-.404a11.06 11.06 0 0 1-1.71-5.927c0-6.124 4.983-11.107 11.11-11.107 2.967 0 5.756 1.156 7.854 3.256a11.03 11.03 0 0 1 3.253 7.85c0 6.124-4.983 11.106-11.11 11.106zm6.09-8.317c-.334-.167-1.978-.977-2.285-1.088-.307-.112-.53-.167-.754.167-.223.334-.865 1.088-1.06 1.312-.196.223-.39.25-.724.084-.334-.167-1.41-.52-2.686-1.66-.993-.885-1.664-1.98-1.86-2.314-.195-.333-.02-.514.147-.68.15-.15.334-.39.5-.585.167-.196.223-.334.334-.557.112-.223.056-.418-.028-.585-.084-.167-.754-1.815-1.033-2.487-.272-.653-.549-.565-.754-.575l-.643-.011c-.223 0-.585.084-.892.418-.307.334-1.171 1.144-1.171 2.79 0 1.646 1.198 3.237 1.365 3.46.167.223 2.357 3.6 5.71 5.05.798.344 1.42.55 1.905.703.8.254 1.53.218 2.106.132.643-.096 1.978-.808 2.257-1.588.278-.78.278-1.45.195-1.588-.084-.14-.307-.223-.64-.39z"/></svg>Inquiry
+</a>
+
+</div>
+
+</div>
+`;
+
+}else{
+
+card.innerHTML=`
+
+<span style="display:flex;align-items:center;justify-content:center;background:#f0f0f0;height:180px;color:#ff3b30;font-weight:700;font-size:11px;text-align:center;padding:10px;line-height:1.4;">
+Currently out of stock — please check back soon!
+</span>
+
+<div class="product-body">
+
+<h3>${escapeHtml(p.name)}</h3>
+
+${p.priceUnclear?`<div style="color:#e67e22;font-weight:700;font-size:12px;line-height:1.4;">Updating price &#8358;..<br>Click inquiry✅</div>`:`<div class="price">${escapeHtml(p.priceStr)}</div>`}
+
+<div style="display:flex;flex-direction:column;gap:6px">
+
+<button class="buy-btn" disabled>🛒 Add to Cart</button>
+
+<a class="inquiry-btn" href="${inquiry}" target="_blank">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="#fff" style="margin-right:4px;"><path d="M16.001 2.667c-7.363 0-13.334 5.97-13.334 13.333 0 2.353.615 4.66 1.782 6.686L2.667 29.333l6.8-1.756a13.27 13.27 0 0 0 6.533 1.755h.001c7.363 0 13.333-5.97 13.333-13.333S23.364 2.667 16.001 2.667zm0 24.4a11.05 11.05 0 0 1-5.632-1.542l-.404-.24-4.034 1.043 1.077-3.93-.263-.404a11.06 11.06 0 0 1-1.71-5.927c0-6.124 4.983-11.107 11.11-11.107 2.967 0 5.756 1.156 7.854 3.256a11.03 11.03 0 0 1 3.253 7.85c0 6.124-4.983 11.106-11.11 11.106zm6.09-8.317c-.334-.167-1.978-.977-2.285-1.088-.307-.112-.53-.167-.754.167-.223.334-.865 1.088-1.06 1.312-.196.223-.39.25-.724.084-.334-.167-1.41-.52-2.686-1.66-.993-.885-1.664-1.98-1.86-2.314-.195-.333-.02-.514.147-.68.15-.15.334-.39.5-.585.167-.196.223-.334.334-.557.112-.223.056-.418-.028-.585-.084-.167-.754-1.815-1.033-2.487-.272-.653-.549-.565-.754-.575l-.643-.011c-.223 0-.585.084-.892.418-.307.334-1.171 1.144-1.171 2.79 0 1.646 1.198 3.237 1.365 3.46.167.223 2.357 3.6 5.71 5.05.798.344 1.42.55 1.905.703.8.254 1.53.218 2.106.132.643-.096 1.978-.808 2.257-1.588.278-.78.278-1.45.195-1.588-.084-.14-.307-.223-.64-.39z"/></svg>Inquiry
+</a>
+
+</div>
+
+</div>
+`;
+}
+
+return card;
+}
+
+/* ================= PAGINATION ================= */
+const PAGE_SIZE=12;
+let currentPage=+vbGet('vbpage_outdoor_page_v1')||1;
+const paginationEl=document.getElementById('pagination');
+
+function renderPage(page){
+  currentPage=page;
+  vbSet('vbpage_outdoor_page_v1', String(page));
+  container.innerHTML='<div class="loading-wrap" style="padding:30px 0;"><span class="spinner"></span></div>';
+  setTimeout(()=>{
+    container.innerHTML='';
+    const start=(page-1)*PAGE_SIZE;
+    const end=start+PAGE_SIZE;
+    for(let i=start;i<end && i<products.length;i++){
+      container.appendChild(buildCard(products[i], i));
+    }
+    renderPagination();
+    container.scrollIntoView({behavior:'smooth', block:'start'});
+  }, 350);
+}
+
+function renderPagination(){
+  const totalPages=Math.ceil(products.length/PAGE_SIZE);
+  if(totalPages<=1){ paginationEl.innerHTML=''; return; }
+  let html='';
+  if(currentPage===1){
+    html+=`<button class="page-btn" onclick="location.href='index.html'">‹ Back</button>`;
+  } else {
+    html+=`<button class="page-btn" onclick="goToPage(${currentPage-1})">‹ Back</button>`;
+  }
+  for(let p=1;p<=totalPages;p++){
+    html+=`<button class="page-btn ${p===currentPage?'active':''}" onclick="goToPage(${p})">${p}</button>`;
+  }
+  html+=`<button class="page-btn" ${currentPage===totalPages?'disabled':''} onclick="goToPage(${currentPage+1})">Next ›</button>`;
+  paginationEl.innerHTML=html;
+}
+
+window.goToPage=function(page){
+  const totalPages=Math.ceil(products.length/PAGE_SIZE);
+  if(page<1||page>totalPages)return;
+  renderPage(page);
+};
+
+renderPage(currentPage);
+
+}catch(e){
+
+console.error(e);
+countEl.textContent='Failed to load products';
+
+}
+
+})();
+
 </script>
+
 
 
 <div id="loader" style="
@@ -883,7 +1057,7 @@ send.onclick=()=>{
     Please wait<span id="dots">...</span>
   </div>
   <div id="loaderMsg" style="margin-top:8px;font-size:14px;color:#6b7280;animation:zoom 3s ease-in-out infinite;">
-    Preparing your outdoors collection 🌿
+    Preparing your Outdoor Furniture 🛍️
   </div>
 </div>
 
@@ -907,7 +1081,7 @@ body{opacity:1;transition:opacity 1s ease;} /* visible by default */
 
   const lines=[
     "Polishing visuals ✨",
-    "Arranging outdoor furniture 🌿",
+    "Arranging your Outdoor Furniture 🛍️",
     "Almost ready 💫"
   ];
   let i=0;
@@ -924,6 +1098,60 @@ body{opacity:1;transition:opacity 1s ease;} /* visible by default */
     // mark loader as shown for this session
     sessionStorage.setItem('loaderShown','true');
   },3000); // loader visible 3 seconds
+})();
+</script>
+<script>
+window.VBP = (function(){
+  var TTL = 30 * 60 * 1000;
+  var K_ACTIVE = 'vb_active', K_CACHE = 'vbpage_outdoor_v1';
+  function get(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } }
+  function set(k,v){ try{ sessionStorage.setItem(k,v); }catch(e){} }
+  function del(k){ try{ sessionStorage.removeItem(k); }catch(e){} }
+
+  var last = +get(K_ACTIVE) || 0;
+  if (last && Date.now() - last > TTL){ del(K_CACHE); }
+  set(K_ACTIVE, String(Date.now()));
+
+  function parseCSVRow(t){const r=[];let c='',q=false;for(let i=0;i<t.length;i++){const x=t[i];if(q){if(x==='"'){if(t[i+1]==='"'){c+='"';i++;}else q=false;}else c+=x;}else{if(x==='"')q=true;else if(x===','){r.push(c);c='';}else c+=x;}}r.push(c);return r;}
+  function normKey(k){return String(k||'').toLowerCase().replace(/[^a-z0-9]/g,'');}
+  function parseNum(s){if(!s)return NaN;const n=String(s).replace(/[^\d.-]/g,'');return n===''?NaN:parseFloat(n);}
+  const SITE_BASE='https://vbest-site.vercel.app/';
+  function fixImgSrc(src){if(!src)return src;if(src.startsWith('http'))return src;return SITE_BASE+src.replace(/^\/+/,'');}
+  const SHEET_CSV="https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4YXFvxl_w447wVuWRrHv8EInZFg1lSIX2_KwxZQJL9n8YHEzIP5WmfBep4yBgfN7EbArsjPPHOzOh/pub?output=csv";
+
+  var allPromise = null;
+  function loadAll(){
+    if (allPromise) return allPromise;
+    var cached = null;
+    try{ cached = JSON.parse(get(K_CACHE)); }catch(e){}
+    if (cached && cached.items && cached.items.length){
+      allPromise = Promise.resolve(cached.items);
+      return allPromise;
+    }
+    allPromise = fetch(SHEET_CSV).then(r=>r.text()).then(csv=>{
+      const lines=csv.replace(/^\uFEFF/,'').split(/\r?\n/).filter(l=>l.trim());
+      const headers=parseCSVRow(lines[0]);
+      const map={};headers.forEach((h,i)=>map[normKey(h)]=i);
+      const gi=n=>map[normKey(n)];
+      const idI=gi('id'),nameI=gi('productname'),priceI=gi('price'),discI=gi('discountprice'),imgI=gi('imagelink');
+      const items=[];
+      for(let i=1;i<lines.length;i++){
+        const c=parseCSVRow(lines[i]);
+        const g=idx=>c[idx]?c[idx].trim():'';
+        const imgs=g(imgI).split(/[\n,]+/).map(s=>s.trim()).filter(Boolean);
+        if(!imgs.length)continue;
+        const priceStr=g(priceI),discStr=g(discI);
+        items.push({id:g(idI), name:g(nameI), priceStr, discStr, hasDiscount:!isNaN(parseNum(discStr)), firstImage:fixImgSrc(imgs[0])});
+      }
+      var count={}; items.forEach(p=>{ if(p.id) count[p.id]=(count[p.id]||0)+1; });
+      items.forEach(p=>{ p.dup = !!(p.id && count[p.id]>1); });
+      set(K_CACHE, JSON.stringify({items:items}));
+      return items;
+    }).catch(()=>[]);
+    return allPromise;
+  }
+
+  return { loadAll: loadAll };
 })();
 </script>
 </body>

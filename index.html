@@ -19,7 +19,35 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" type="/image/jpeg" href="/blog/logo.jpg">
+  <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/QxhVxzPd/file-0000000021808210b73ade8eb53b5ba4-1.jpg">
+  <link rel="apple-touch-icon" href="https://i.postimg.cc/QxhVxzPd/file-0000000021808210b73ade8eb53b5ba4-1.jpg">
+  <script>
+    // Make the favicon actually circular (crop it on a canvas), not just a square photo.
+    (function(){
+      try{
+        var img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = function(){
+          try{
+            var size = 64;
+            var canvas = document.createElement('canvas');
+            canvas.width = size; canvas.height = size;
+            var ctx = canvas.getContext('2d');
+            ctx.beginPath();
+            ctx.arc(size/2, size/2, size/2, 0, Math.PI*2);
+            ctx.closePath();
+            ctx.clip();
+            ctx.drawImage(img, 0, 0, size, size);
+            var dataUrl = canvas.toDataURL('image/png');
+            document.querySelectorAll('link[rel="icon"], link[rel="apple-touch-icon"]').forEach(function(link){
+              link.href = dataUrl;
+            });
+          }catch(e){ /* canvas tainted by CORS - keep the plain square favicon */ }
+        };
+        img.src = "https://i.postimg.cc/QxhVxzPd/file-0000000021808210b73ade8eb53b5ba4-1.jpg";
+      }catch(e){}
+    })();
+  </script>
 <style>
 /* SHOP NOW button matching Dining (uses dining variable --btn) */
 
@@ -259,8 +287,7 @@
   body[data-theme="classic"]{
     --bg:#ffffff; --panel:#f9f9f9; --card-border:#e9e9e9; --muted:#565959;
     --accent:#ff9900; --accent-2:#e68a00; --brand-blue:#146eb4; --text:#111111; --star:#ffd54a;
-
-
+  }
 
   /* Trusted line under header video */
 
@@ -376,9 +403,9 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
   "url": "https://vbest-site.vercel.app/",
   "logo": "https://vbest-site.vercel.app/blog/logo.jpg",
   "sameAs": [
-    "https://www.instagram.com/vbest_luxury_interiors?igsh=MWFxcmN4eTd6dndnNQ==",
+    "https://www.instagram.com/vbest_luxury_interior?stkn=aTY0MGRnNjJ2enlt",
     "https://x.com/V_Best_?t=OYXpZ6gww4RebrF4oJgWYw&s=09",
-    "https://www.facebook.com/share/179pLbZtXk/",
+    "https://www.facebook.com/share/1D29ENJ92b/",
     "https://www.tiktok.com/@vbestluxuryinterior?_t=ZS-90f109MDGZ2&_r=1",
     "https://youtube.com/@best-tm7bm?si=PGsKnKWxqbG0cmRt"
   ]
@@ -386,60 +413,280 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 </script>
 <!-- Facebook Pixel Code --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js'); fbq('init', '677322691667443'); fbq('track', 'PageView');</script><noscript> <img height="1" width="1" src="https://www.facebook.com/tr?id=677322691667443&ev=PageView&noscript=1"/></noscript><!-- End Facebook Pixel Code -->
 </head>
-<body><!-- Permanent cart + name bar above top category, no gap -->
-<div class="top-cart-bar" style="
-  position: fixed; 
-  top: 0; 
-  left: 0; 
-  width: 100%; 
-  background: #222; /* little dark color */
-  z-index: 9999; 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  padding: 10px 20px; 
+<body><script>
+/* ===== V-Best shared core =====
+   - Products are fetched ONCE per visit and kept in sessionStorage, so going Back / opening Home again never re-downloads or reshuffles.
+   - A "new visit" (fresh tab, or away 30+ minutes) clears everything, so returning customers get fresh content. */
+window.VB = (function(){
+  var SHEET_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4YXFvxl_w447wVuWRrHv8EInZFg1lSIX2_KwxZQJL9n8YHEzIP5WmfBep4yBgfN7EbArsjPPHOzOh/pub?output=csv";
+  var TTL = 30 * 60 * 1000;                       // minutes of inactivity before content is refreshed
+  var K_PRODUCTS = 'vb_products_v2', K_HOME = 'vb_home_v2', K_SPLASH = 'vb_splash', K_ACTIVE = 'vb_active';
+  function get(k){ try{ return window.sessionStorage.getItem(k); }catch(e){ return null; } }
+  function set(k,v){ try{ window.sessionStorage.setItem(k,v); }catch(e){} }
+  function del(k){ try{ window.sessionStorage.removeItem(k); }catch(e){} }
+
+  // "last" is stamped once, when the PREVIOUS page loaded — never touched again on this page,
+  // so it measures the real gap since the customer was last on the site (not the instant they click away).
+  var last = +get(K_ACTIVE) || 0;
+  if (last && Date.now() - last > TTL){ del(K_PRODUCTS); del(K_HOME); del(K_SPLASH); }
+  set(K_ACTIVE, String(Date.now()));
+
+  function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function normKey(k){ return String(k || '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
+  function parseNum(s){ if (!s) return NaN; var n = String(s).replace(/[^\d.-]/g, ''); return n === '' ? NaN : parseFloat(n); }
+  var SITE_BASE = 'https://vbest-site.vercel.app/';
+  function fixImg(src){ if (!src) return src; if (/^https?:/i.test(src)) return src; return SITE_BASE + String(src).replace(/^\/+/, ''); }
+
+  // Real CSV parser (handles quotes, commas and line-breaks inside cells) so row numbers always match the sheet
+  function parseCSV(text){
+    var rows = [], row = [], cur = '', q = false, i = 0, n = text.length;
+    if (text.charCodeAt(0) === 0xFEFF) i = 1;
+    for (; i < n; i++){
+      var ch = text[i];
+      if (q){
+        if (ch === '"'){ if (text[i+1] === '"'){ cur += '"'; i++; } else q = false; } else cur += ch;
+      } else if (ch === '"') q = true;
+      else if (ch === ','){ row.push(cur); cur = ''; }
+      else if (ch === '\n' || ch === '\r'){ if (ch === '\r' && text[i+1] === '\n') i++; row.push(cur); cur = ''; rows.push(row); row = []; }
+      else cur += ch;
+    }
+    if (cur !== '' || row.length){ row.push(cur); rows.push(row); }
+    return rows;
+  }
+
+  function build(csv){
+    var recs = parseCSV(csv), items = [];
+    if (!recs.length) return items;
+    var map = {}; recs[0].forEach(function(h, i){ map[normKey(h)] = i; });
+    var idI = map.id, nameI = map.productname, priceI = map.price, discI = map.discountprice, imgI = map.imagelink;
+    for (var r = 1; r < recs.length; r++){
+      var c = recs[r];
+      var g = function(ix){ return (ix !== undefined && c[ix] != null) ? String(c[ix]).trim() : ''; };
+      var imgs = g(imgI).split(/[\n,]+/).map(function(s){ return s.trim(); }).filter(Boolean);
+      if (!imgs.length) continue;
+      var discStr = g(discI);
+      items.push({ id: g(idI), row: r - 1, name: g(nameI), priceStr: g(priceI), discStr: discStr, hasDiscount: !isNaN(parseNum(discStr)), firstImage: imgs[0] });
+    }
+    var count = {};
+    items.forEach(function(p){ if (p.id) count[p.id] = (count[p.id] || 0) + 1; });
+    items.forEach(function(p){ p.dup = !!(p.id && count[p.id] > 1); });
+    return items;
+  }
+
+  // Every product opens: by its ID, or (blank / duplicated ID) by its sheet row number.
+  function href(p){ return (p.id && !p.dup) ? 'product.html?id=' + encodeURIComponent(p.id) : 'product.html?row=' + p.row; }
+
+  var promise = null;
+  function load(){
+    if (promise) return promise;
+    promise = new Promise(function(resolve){
+      try{ var c = JSON.parse(get(K_PRODUCTS)); if (c && c.items && c.items.length){ resolve(c.items); return; } }catch(e){}
+      fetch(SHEET_CSV).then(function(r){ return r.text(); }).then(function(t){
+        var items = build(t);
+        if (items.length) set(K_PRODUCTS, JSON.stringify({ items: items }));
+        resolve(items);
+      }).catch(function(){ resolve([]); });
+    });
+    promise.then(debugPanel);
+    return promise;
+  }
+
+  function addToCart(name, price, image){
+    try{
+      var c = JSON.parse(localStorage.getItem('cart') || '[]');
+      c.push({ name: name, price: price, image: image, qty: 1 });
+      localStorage.setItem('cart', JSON.stringify(c));
+      var b = document.getElementById('cart-count');
+      if (b){ b.style.display = 'inline-block'; b.textContent = c.length; }
+      if (window.vbShowToast) window.vbShowToast('✓ ' + (name || 'Item') + ' added to cart');
+    }catch(e){ console.error(e); }
+  }
+
+  // Open  index.html?debug=1  to list products that have a blank or duplicated ID (with their Google-Sheet row number)
+  var shown = false;
+  function debugPanel(items){
+    if (shown || !/[?&]debug=1/.test(location.search)) return; shown = true;
+    var bad = items.filter(function(p){ return !p.id || p.dup; });
+    var box = document.createElement('div');
+    box.style.cssText = 'position:fixed;left:8px;right:8px;bottom:8px;max-height:45vh;overflow:auto;background:#111;color:#fff;font:12px/1.5 Arial;padding:10px 12px;border-radius:8px;z-index:100000;text-align:left;';
+    box.innerHTML = '<b>' + bad.length + ' of ' + items.length + ' products have a blank or duplicate ID</b> <span style="float:right;cursor:pointer" onclick="this.parentNode.remove()">✕</span><br>' +
+      bad.slice(0, 300).map(function(p){ return 'Sheet row ' + (p.row + 2) + ' — ' + esc(p.name) + ' — ' + (p.id ? 'DUPLICATE id "' + esc(p.id) + '"' : 'BLANK id'); }).join('<br>');
+    document.body.appendChild(box);
+  }
+
+  return { get: get, set: set, del: del, load: load, href: href, esc: esc, fixImg: fixImg, addToCart: addToCart, parseNum: parseNum };
+})();
+</script>
+<div id="loader" style="
+  position:fixed;inset:0;z-index:99990;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:white;font-family:system-ui,sans-serif;
+  color:#5b21b6;font-weight:600;font-size:18px;
+  transition:opacity .45s ease;">
+  <div id="loaderText" style="animation:zoom 2s ease-in-out infinite;">
+    Please wait<span id="dots">...</span>
+  </div>
+  <div id="loaderMsg" style="margin-top:8px;font-size:14px;color:#6b7280;animation:zoom 3s ease-in-out infinite;">
+    Loading your furniture experience ✨
+  </div>
+</div>
+<style>
+@keyframes blink{0%,100%{opacity:.2;}50%{opacity:1;}}
+#dots{display:inline-block;animation:blink 1.2s infinite;}
+@keyframes zoom{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+</style>
+<script>
+(function(){
+  var loader = document.getElementById('loader');
+  if (!loader) return;
+  var msg = document.getElementById('loaderMsg');
+  var gone = false;
+  function hide(){
+    if (gone) return; gone = true;
+    loader.style.pointerEvents = 'none';
+    loader.style.opacity = '0';
+    setTimeout(function(){ if (loader.parentNode) loader.parentNode.removeChild(loader); }, 500);
+  }
+  function killNow(){ gone = true; if (loader.parentNode) loader.parentNode.removeChild(loader); }
+
+  setTimeout(hide, 2500);                                   // hard failsafe: never longer than 2.5s
+
+  // Splash only on the FIRST page of a visit. Home again / Back = no loader, no reload feeling.
+  try{
+    if (window.VB){
+      if (VB.get('vb_splash')) { killNow(); return; }
+      VB.set('vb_splash', '1');
+    }
+  }catch(e){}
+  try{
+    var nav = performance.getEntriesByType('navigation');
+    if (nav && nav[0] && nav[0].type === 'back_forward') { killNow(); return; }
+  }catch(e){}
+  window.addEventListener('pageshow', function(e){ if (e.persisted) killNow(); });
+
+  try{
+    var lines = ["Polishing visuals ✨", "Arranging comfy chairs 🪑", "Almost ready 💫"], i = 0;
+    var rot = setInterval(function(){ i = (i + 1) % lines.length; if (msg) msg.textContent = lines[i]; }, 800);
+    setTimeout(function(){ clearInterval(rot); }, 2600);
+  }catch(e){}
+  var t0 = Date.now();
+  function whenReady(){ setTimeout(hide, Math.max(0, 800 - (Date.now() - t0))); }
+  if (document.readyState === 'complete') whenReady(); else window.addEventListener('load', whenReady);
+})();
+</script>
+<!-- Permanent cart + name bar above top category, no gap -->
+<div class="top-cart-bar" id="vbTopBar" style="
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #222;
+  z-index: 9999;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 14px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   font-family: 'Poppins', sans-serif;
+  gap:10px;
 ">
-  <!-- Your name styled professionally -->
-  <span style="
-    font-weight: 700; 
-    font-size: 1.2rem; 
-    text-transform: uppercase; 
-    letter-spacing: 0.5px; 
-    background: linear-gradient(to right, #FFD700, #FF9900); 
-    -webkit-background-clip: text; 
-    -webkit-text-fill-color: transparent; 
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.3); 
-    white-space: nowrap;
-  ">
-    V-Best Luxury Interior
-  </span>
+  <div style="flex:1; overflow:hidden; min-width:0;">
+    <div class="marquee-track" style="white-space:nowrap; display:inline-block; padding-left:100%; animation: vbestMarquee 14s linear infinite; font-weight:800; font-size:1rem; letter-spacing:0.5px; color:#2196f3;">
+      WELCOME TO V-BEST LUXURY INTERIOR &amp; FURNITURE
+    </div>
+  </div>
 
-  <!-- Cart -->
   <a href="cart.html" id="nav-cart" aria-label="Cart" style="
-    color: #fff; 
-    text-decoration: none; 
-    display: inline-flex; 
-    align-items: center; 
-    gap: 4px; 
+    color: #fff;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     font-weight: bold;
     white-space: nowrap;
+    flex:0 0 auto;
   ">
-    🛒 Cart 
+    🛒 Cart
     <span id="cart-count" class="cart-badge" style="
-      background: #FF3300; 
-      color: #fff; 
-      border-radius: 50%; 
-      padding: 2px 6px; 
-      font-size: 0.8rem; 
+      background: #FF3300;
+      color: #fff;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 0.8rem;
       display: none;
     ">0</span>
   </a>
 </div>
 
+<style>@keyframes vbestMarquee{ 0%{ transform:translateX(0%); } 100%{ transform:translateX(-220%); } }</style>
+
+<!-- ===== Global tap feedback: every clickable thing shows ITS OWN press state, never the whole card ===== -->
+<style id="vb-tap-feedback">
+  .mega-cat-box a.mcb-main{ -webkit-tap-highlight-color:transparent; transition:background-color .15s ease; }
+  .mega-cat-box a.mcb-main:active{ background-color:rgba(0,0,0,0.08); }
+  .mega-cat-box .mcb-sub a{ display:inline-block; border-radius:4px; padding:1px 3px; margin:-1px -3px; transition:background-color .15s ease, color .15s ease; -webkit-tap-highlight-color:transparent; }
+  .mega-cat-box .mcb-sub a:active{ background-color:#fff3cd; color:#a15c00; }
+
+  .vbest-mini-card{ transition:transform .12s ease; }
+  .vbest-mini-card a.vmc-link:active{ background-color:rgba(0,0,0,0.06); }
+  .vbest-mini-card.vb-pressed{ transform:scale(0.98); }
+  .vmc-add{ transition:transform .12s ease, background-color .12s ease; -webkit-tap-highlight-color:transparent; }
+  .vmc-add:active{ transform:scale(0.95); background-color:#333 !important; }
+  .vmc-inq{ transition:transform .12s ease, filter .12s ease; -webkit-tap-highlight-color:transparent; }
+  .vmc-inq:active{ transform:scale(0.95); filter:brightness(0.9); }
+
+  .sr-card{ transition:background-color .15s ease; }
+  .sr-thumb:active, .sr-name:active{ background-color:rgba(0,0,0,0.06); }
+  .sr-add, .sr-inquiry{ transition:transform .12s ease, filter .12s ease; -webkit-tap-highlight-color:transparent; }
+  .sr-add:active, .sr-inquiry:active{ transform:scale(0.95); filter:brightness(0.9); }
+
+  .vbest-catbox{ transition:transform .12s ease; }
+  .vbest-catbox.vb-pressed{ transform:scale(0.98); }
+  .vbest-catbox a.shop-now{ transition:transform .12s ease, filter .12s ease; -webkit-tap-highlight-color:transparent; }
+  .vbest-catbox a.shop-now:active{ transform:scale(0.95); filter:brightness(0.9); }
+
+  /* Cart confirmation toast */
+  #vbToast{ position:fixed; left:50%; bottom:70px; transform:translateX(-50%) translateY(20px); background:#1c1c1c; color:#fff; padding:11px 20px; border-radius:24px; font-size:13px; font-weight:700; z-index:999999; box-shadow:0 4px 14px rgba(0,0,0,0.25); opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease; display:flex; align-items:center; gap:8px; white-space:nowrap; }
+  #vbToast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  #vbToast .vbToastCheck{ color:#4caf50; font-size:16px; }
+</style>
+<div id="vbToast"><span class="vbToastCheck">✓</span><span id="vbToastMsg">Added to cart</span></div>
 <script>
-  // Cart badge logic (localStorage 'cart' array)
+  window.vbShowToast = function(msg){
+    try{
+      var t = document.getElementById('vbToast');
+      var m = document.getElementById('vbToastMsg');
+      if (!t || !m) return;
+      m.textContent = msg || 'Added to cart';
+      t.classList.add('show');
+      clearTimeout(window._vbToastTimer);
+      window._vbToastTimer = setTimeout(function(){ t.classList.remove('show'); }, 1800);
+    }catch(e){}
+  };
+
+  // A card's own "pressed" look should only show when the BODY itself is pressed —
+  // never when a button or link inside it (Add to Cart, Inquiry, Shop Now) is pressed.
+  (function(){
+    var SELECTOR = '.vbest-mini-card, .vbest-catbox';
+    var pressedEl = null;
+    function start(e){
+      var card = e.target.closest(SELECTOR);
+      if (!card) return;
+      if (e.target.closest('a, button')) return; // a button/link handles its own feedback
+      pressedEl = card;
+      card.classList.add('vb-pressed');
+    }
+    function end(){
+      if (pressedEl){ pressedEl.classList.remove('vb-pressed'); pressedEl = null; }
+    }
+    document.addEventListener('pointerdown', start, true);
+    document.addEventListener('pointerup', end, true);
+    document.addEventListener('pointercancel', end, true);
+    document.addEventListener('pointerleave', end, true);
+  })();
+</script>
+
+<script>
   (function(){
     function updateCartCount(){
       try{
@@ -460,36 +707,29 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
 
 <style>
 body{
-  padding-top:40px;
+  padding-top:41px;
   margin:0;
 }
-
-.top-category-banner{
-  margin-top:0;
-}
-
+.top-category-banner{ margin-top:0; }
 .top-category-menu{
   display:flex;
   align-items:center;
-  gap:14px;
+  justify-content:space-around;
+  gap:12px;
   background:#fff;
   padding:8px 10px;
 }
-
 .menu-item{
   text-decoration:none;
   color:#000;
-  font-size:14px;
+  font-size:12px;
   display:flex;
+  flex-direction:column;
   align-items:center;
-  gap:6px;
+  gap:3px;
+  flex:0 0 auto;
 }
-
-.menu-dropdown{
-  position:relative;
-  margin-left:auto;
-}
-
+.menu-item img{ width:28px; height:28px; border-radius:8px; object-fit:cover; }
 .menu-button{
   background:none;
   border:none;
@@ -498,109 +738,163 @@ body{
   display:flex;
   align-items:center;
   gap:6px;
-}
-
-.dropdown-content{
-  display:none;
-  position:absolute;
-  right:0;
-  top:100%;
-  background:#fff;
-  min-width:190px;
-  border:1px solid #ddd;
-  z-index:999999;
-}
-
-.dropdown-content a{
-  display:block;
-  padding:10px;
+  font-weight:700;
   color:#000;
-  text-decoration:none;
+  flex:0 0 auto;
 }
-
-.dropdown-content a:hover{
-  background:#f2f2f2;
+#megaMenuPanel{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#fff;
+  z-index:999999;
+  overflow-y:auto;
+  padding:14px;
+  box-sizing:border-box;
 }
-
-.dropdown-content.show{
-  display:block;
-}
+#megaMenuPanel.show{ display:block; }
+.mega-close{ display:flex; justify-content:flex-end; margin-bottom:10px; }
+.mega-close button{ background:#eee; border:none; border-radius:6px; padding:8px 14px; font-weight:700; font-size:16px; cursor:pointer; }
+.mega-search{ margin-bottom:14px; position:relative; }
+.mega-search input{ width:100%; box-sizing:border-box; padding:10px 12px; border-radius:8px; border:1px solid #ddd; font-size:14px; }
+#megaSearchResults{ position:absolute; left:0; right:0; top:100%; background:#fff; border:1px solid #ddd; border-radius:0 0 8px 8px; max-height:300px; overflow-y:auto; z-index:5; display:none; text-align:left; }
+#megaSearchResults .sres-item{ display:flex; gap:8px; align-items:center; padding:8px; border-bottom:1px solid #eee; cursor:pointer; }
+#megaSearchResults .sres-item img{ width:40px; height:40px; object-fit:cover; border-radius:4px; }
+.mega-cat-box a.mcb-main{ display:block; color:inherit; text-decoration:none; }
+#megaSearchResults a.sres-item{ color:inherit; text-decoration:none; }
+.mega-cat-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+.mega-cat-box{ background:#f9f9f9; border-radius:8px; overflow:hidden; border:1px solid #eee; text-align:left; }
+.mega-cat-box img{ width:100%; height:110px; object-fit:cover; display:block; }
+.mega-cat-box .mcb-title{ font-weight:800; font-size:13px; padding:8px 8px 2px; }
+.mega-cat-box .mcb-sub{ display:flex; flex-direction:column; gap:2px; padding:2px 8px 8px; counter-reset:mcbnum; }
+.mega-cat-box .mcb-sub a{ color:#146eb4; text-decoration:none; font-size:11.5px; counter-increment:mcbnum; }
+.mega-cat-box .mcb-sub a::before{ content: counter(mcbnum) ". "; font-weight:700; color:#111; }
+.mega-extra{ margin-top:20px; text-align:left; }
+.mega-extra .accordion-btn{ background:none; border:none; outline:none; font-size:14px; font-weight:bold; color:#ff9900; text-align:left; padding:8px 0; cursor:pointer; width:100%; border-top:1px solid #eee; }
+.mega-extra .accordion-content{ display:none; font-size:13px; margin-bottom:6px; line-height:1.5; color:#565959; }
 </style>
 
 <div class="top-category-banner">
   <div class="top-category-menu">
 
-    <a href="all.html" class="menu-item">
-      <i class="fa-solid fa-couch"></i>
-      <span>Home Furniture</span>
-    </a>
+    <button class="menu-button" id="megaMenuToggle" type="button">
+      <i class="fa-solid fa-bars"></i>
+      <span>All Categories</span>
+    </button>
 
     <a href="light.html" class="menu-item">
-      <i class="fa-solid fa-lightbulb"></i>
+      <img src="https://i.postimg.cc/yNKdMXNc/download.jpg" alt="Lighting">
       <span>Lighting</span>
     </a>
 
     <a href="outdoor.html" class="menu-item">
-      <i class="fa-solid fa-tree"></i>
+      <img src="https://i.postimg.cc/yxGGYGDw/AgACkqHWpPyztHZ89SpVxY.jpg" alt="Outdoor">
       <span>Outdoor</span>
     </a>
 
     <a href="office.html" class="menu-item">
-      <i class="fa-solid fa-briefcase"></i>
-      <span>Office Furniture</span>
+      <img src="https://i.postimg.cc/vBybRLq7/Workstation-348.png" alt="Office">
+      <span>Office</span>
     </a>
 
-    <!-- Right-end Menu -->
-    <div class="menu-dropdown">
-      <button class="menu-button" id="menuToggle" type="button">
-        <i class="fa-solid fa-bars"></i>
-        <span>Menu</span>
-      </button>
+  </div>
+</div>
 
-      <div class="dropdown-content" id="menuContent">
-        <a href="sofa.html">Sofas</a>
-        <a href="bed.html">Beds</a>
-        <a href="dining.html">Dining</a>
-        <a href="centertable.html">Center Tables</a>
-        <a href="sidestool.html">Side Stool</a>
-        <a href="chair.html">Chairs</a>
-        <a href="office.html">Office Furniture</a>
-        <a href="outdoor.html">Outdoor</a>
-        <a href="game.html">Game</a>
-        <a href="snooker.html">Snooker</a>
-        <a href="winbar.html">Wine Bar</a>
-        <a href="sideboard.html">Sideboard</a>
-        <a href="console.html">Console</a>
-        <a href="cabinet.html">Cabinet</a>
-      </div>
-    </div>
+<div id="megaMenuPanel">
+  <div class="mega-close"><button id="megaMenuClose" type="button">✕ Close</button></div>
 
+  <div class="mega-search">
+    <input type="text" id="megaSearchInput" placeholder="🔎 Search for any product...">
+    <div id="megaSearchResults"></div>
+  </div>
+
+  <div class="mega-cat-grid" id="megaCatGrid">
+    <div class="mega-cat-box"><img src="https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg" alt="Sofas"><div class="mcb-title">🛋 Sofas</div><div class="mcb-sub"><a href="sofa.html">All Sofas</a><a href="china-sofa.html">China Sofa</a><a href="egypt-sofa.html">Egyptian Royal Sofa</a><a href="turkey-sofa.html">Turkish Sofa</a></div></div>
+    <div class="mega-cat-box"><img src="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg" alt="Beds"><div class="mcb-title">🛏 Beds</div><div class="mcb-sub"><a href="bed.html">All Beds</a></div></div>
+    <div class="mega-cat-box"><img src="https://i.postimg.cc/rFrmWTqS/Screenshot-20250213-113547-Instagram.jpg" alt="Chairs"><div class="mcb-title">🪑 Chairs</div><div class="mcb-sub"><a href="chair.html">All Chairs</a><a href="chair-accent.html">Accent Chairs</a><a href="chair-bar.html">Bar Chairs</a><a href="chair-recliner.html">Recliner Chairs</a><a href="chair-auditorim.html">Auditorium Chairs</a><a href="chair-visitors.html">Banquet &amp; Visitor Chairs</a><a href="chair-meyou.html">Me &amp; You Loveseat Chairs</a><a href="diningchairs.html">Dining Chairs</a></div></div>
+    <div class="mega-cat-box"><img src="https://i.postimg.cc/Sxm8NRJJ/1756750928967.jpg" alt="Dining"><div class="mcb-title">🍽 Dining 3–6 Seaters</div><div class="mcb-sub"><a href="dining.html">All Dining Sets</a><a href="dining-3.html">3 Seaters</a><a href="dining-4.html">4 Seaters</a><a href="dining-6.html">6 Seaters</a></div></div>
+    <div class="mega-cat-box"><img src="https://i.postimg.cc/Px5XJLDr/IMG-20250822-WA0064.jpg" alt="Center Tables"><div class="mcb-title">🪞 Center Tables</div><div class="mcb-sub"><a href="centertable.html">All Center Tables</a></div></div>
+    <div class="mega-cat-box"><img src="https://i.postimg.cc/vBybRLq7/Workstation-348.png" alt="Office Furniture"><div class="mcb-title">Office Furniture 🪑🖥️</div><div class="mcb-sub"><a href="office.html">All Office Furniture</a><a href="officeset.html">Office Tables &amp; Workstations</a><a href="a-office.html">Executive &amp; VIP Chairs</a><a href="office-chair.html">Visitor &amp; Guest Chairs</a><a href="officesofa.html">Office Sofas</a><a href="officecabinet.html">Cabinets &amp; Strongrooms</a></div></div>
+    <div class="mega-cat-box"><img src="https://i.postimg.cc/yxGGYGDw/AgACkqHWpPyztHZ89SpVxY.jpg" alt="Outdoors"><div class="mcb-title">🪑 Outdoors &amp; Patio</div><div class="mcb-sub"><a href="outdoor.html">All Outdoor Furniture</a></div></div>
+    <div class="mega-cat-box"><img src="https://i.postimg.cc/GhBhTtX7/Magshion-Adjustable-Height-Gaming-Chair-with-Retractable-Footrest-and-Computer-Desk-Purple-2e356ae6.png" alt="Gaming"><div class="mcb-title">🎮 Gaming Chairs &amp; Table</div><div class="mcb-sub"><a href="gaming.html">All Gaming Furniture</a></div></div>
+    <div class="mega-cat-box"><img src="https://i.postimg.cc/7LbWQCnH/807531125-321-1024x1024.jpg" alt="Snooker"><div class="mcb-title">Snookers &amp; Pool 🎱</div><div class="mcb-sub"><a href="snooker.html">All Snooker &amp; Pool</a></div></div>
+    <div class="mega-cat-box"><img src="https://i.postimg.cc/J01rXcj7/Wine-Bar-1.webp" alt="Wine Bar"><div class="mcb-title">Wine Bar 🍷🥂🍾</div><div class="mcb-sub"><a href="winebar.html">All Wine Bar</a></div></div>
+    <div class="mega-cat-box"><img src="https://i.postimg.cc/BnRRj3SZ/PDINCBT32-Glossy-White-Gold-1.jpg" alt="Sideboard"><div class="mcb-title">Dressing, Vanity &amp; Sideboards</div><div class="mcb-sub"><a href="sideboard.html">Sideboards &amp; Buffets</a><a href="vanity.html">Vanity Dressing Tables</a><a href="consoletable.html">Console Tables</a></div></div>
+    <div class="mega-cat-box"><img src="https://i.postimg.cc/d3HMkLJw/c6dcbbe659c10b00e4126e14dcd4021c.jpg" alt="TV Console"><div class="mcb-title">📺 TV Consoles &amp; Stands</div><div class="mcb-sub"><a href="tvconsole.html">All TV Consoles</a></div></div>
+    <div class="mega-cat-box"><img src="https://i.postimg.cc/m2XvGMKH/71-Lqo-G6liv-L-AC-SL1500.jpg" alt="Cabinet"><div class="mcb-title">Cabinet | Wardrobe &amp; Dresser</div><div class="mcb-sub"><a href="officecabinet.html">Office Cabinets &amp; Strongrooms</a></div></div>
+    <div class="mega-cat-box"><img src="https://i.postimg.cc/Sxrz34QC/ec8f0881dd3292db1a7655c79506473c.jpg" alt="Side Stools"><div class="mcb-title">🪑 Side Stools &amp; Tables</div><div class="mcb-sub"><a href="sidestools.html">All Side Stools</a></div></div>
+    <div class="mega-cat-box"><img src="https://i.postimg.cc/yNKdMXNc/download.jpg" alt="Lighting"><div class="mcb-title">💡 Lighting</div><div class="mcb-sub"><a href="light.html">All Lighting</a><a href="ceilinglight.html">Ceiling Lights</a><a href="walllight.html">Wall Lights</a><a href="tablelight.html">Table Lights</a><a href="floorlamp.html">Floor Lamps</a><a href="doorlight.html">Outdoor Lights</a><a href="ledlight.html">LED &amp; Pendant Lights</a><a href="chandelier.html">Chandeliers</a></div></div>
+  </div>
+
+  <div class="mega-extra">
+    <button class="accordion-btn" type="button">About Us</button>
+    <div class="accordion-content"><p>We bring world-class premium furniture pieces to elevate your lifestyle with modern and timeless designs.</p></div>
+    <button class="accordion-btn" type="button">Privacy Policy</button>
+    <div class="accordion-content"><p>Your privacy is our priority. We never share customer data with third parties.</p></div>
+    <button class="accordion-btn" type="button">Terms &amp; Conditions</button>
+    <div class="accordion-content"><p>All purchases are subject to our company's standard terms and conditions.</p></div>
   </div>
 </div>
 
 <script>
 (function(){
-  const toggle = document.getElementById("menuToggle");
-  const menu = document.getElementById("menuContent");
+  var toggle = document.getElementById("megaMenuToggle");
+  var panel = document.getElementById("megaMenuPanel");
+  var closeBtn = document.getElementById("megaMenuClose");
+  toggle.addEventListener("click", function(){ panel.classList.add("show"); });
+  closeBtn.addEventListener("click", function(){ panel.classList.remove("show"); });
 
-  toggle.addEventListener("click", function(e){
-    e.stopPropagation();
-    menu.classList.toggle("show");
+  document.querySelectorAll(".mega-extra .accordion-btn").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var c = this.nextElementSibling;
+      c.style.display = c.style.display === "block" ? "none" : "block";
+    });
   });
 
-  document.addEventListener("click", function(){
-    menu.classList.remove("show");
+  // Category boxes: picture, title AND the empty body of the box now open the category (first link in the box)
+  document.querySelectorAll(".mega-cat-box").forEach(function(box){
+    var first = box.querySelector(".mcb-sub a");
+    if (!first) return;
+    var url = first.getAttribute("href");
+    var img = box.querySelector("img"), title = box.querySelector(".mcb-title");
+    var a = document.createElement("a");
+    a.className = "mcb-main"; a.href = url;
+    a.setAttribute("aria-label", (title ? title.textContent.trim() : "Category") + " - view all");
+    box.insertBefore(a, box.firstChild);
+    if (img) a.appendChild(img);
+    if (title) a.appendChild(title);
+    box.style.cursor = "pointer";
+    box.addEventListener("click", function(e){
+      if (e.target.closest("a")) return;          // real links handle themselves
+      location.href = url;
+    });
+  });
+
+  var searchInput = document.getElementById("megaSearchInput");
+  var resultsBox = document.getElementById("megaSearchResults");
+  var searchTimer = null;
+  searchInput.addEventListener("input", function(){
+    var q = this.value.trim().toLowerCase();
+    clearTimeout(searchTimer);
+    if (!q){ resultsBox.style.display = "none"; resultsBox.innerHTML = ""; return; }
+    searchTimer = setTimeout(async function(){
+      var items = await VB.load();
+      var matches = items.filter(function(p){ return p.id && !p.dup && p.name.toLowerCase().includes(q); }).slice(0, 20);
+      if (!matches.length){ resultsBox.innerHTML = '<div style="padding:10px;color:#888;">No products found</div>'; resultsBox.style.display = "block"; return; }
+      resultsBox.innerHTML = matches.map(function(p){
+        return '<a class="sres-item" href="' + VB.esc(VB.href(p)) + '"><img src="' + VB.esc(VB.fixImg(p.firstImage)) + '" alt="" loading="lazy"><div><div style="font-weight:700;font-size:12px;">' + VB.esc(p.name) + '</div><div style="color:#27ae60;font-size:12px;">' + VB.esc(p.discStr || p.priceStr) + '</div></div></a>';
+      }).join("");
+      resultsBox.style.display = "block";
+    }, 300);
   });
 })();
 </script>
 
 <!-- ===== Header Video ===== -->
-<video autoplay muted loop playsinline preload="auto" poster="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg" class="header-video" style="width:100%; height:auto; object-fit:cover;">
+<video autoplay muted loop playsinline preload="metadata" poster="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg" class="header-video" style="width:100%; height:auto; object-fit:cover;">
   <source src="videos/White.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
-  </div>
-</div>
 
 <style>
 /* ===== Top Category Banner ===== */
@@ -610,13 +904,13 @@ body{
   z-index: 999;
   width: 100%;
   background: #ffffff;
-  padding: 8px 0;
+  padding: 6px 0;
   display: flex;
   justify-content: center;
   align-items: center;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   border-radius: 8px;
-  margin: 8px 0 12px;
+  margin: 0 0 8px;
 }
 
 /* ===== Left Menu Items ===== */
@@ -630,7 +924,7 @@ body{
   text-decoration: none;
   color: #0f1111;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 11px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -638,7 +932,7 @@ body{
   transition: transform 0.2s ease;
 }
 .top-category-menu .menu-item i {
-  font-size: 18px;
+  font-size: 16px;
   color: #146eb4;
   margin-bottom: 2px;
 }
@@ -648,6 +942,15 @@ body{
 .top-category-menu .menu-item:hover i,
 .top-category-menu .menu-item:hover span {
   color: #ff9900;
+}
+.top-category-menu .menu-button{
+  flex-direction: row !important;
+  gap: 5px !important;
+  font-size: 12px !important;
+}
+.top-category-menu .menu-button i{
+  font-size: 15px !important;
+  margin-bottom: 0 !important;
 }
 
 /* ===== Menu Dropdown (Right-end) ===== */
@@ -737,24 +1040,6 @@ body{
 }
 </style>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const menuBtn = document.querySelector('.menu-button');
-  const menuDropdown = document.querySelector('.menu-dropdown');
-
-  menuBtn.addEventListener('click', () => {
-    menuDropdown.classList.toggle('active');
-  });
-
-  document.addEventListener('click', function(event) {
-    if (!menuDropdown.contains(event.target)) {
-      menuDropdown.classList.remove('active');
-    }
-  });
-});
-</script>
-  
-  
 <!-- ===== Video Header Section with Shop Now Button ===== -->
 
 
@@ -825,7 +1110,6 @@ document.addEventListener('DOMContentLoaded', function() {
   color: #0f1111;          /* near-black text */
 }
 </style>
-</div>
 <section class="search-bar">
   <input type="text" id="searchInput" placeholder="🔎 Search for what you want...">
 </section>
@@ -862,7 +1146,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <!-- ======= Featured (Top / New / Most) — full ready block (paste after categories) ======= -->
 
-<section id="featSection" aria-label="Featured products" style="padding:20px 12px;">
+<section id="featSection" aria-label="Featured products" style="display:none;padding:20px 12px;">
 <style>
 /* ================= FEATURED SECTION BASE ================= */
 #featSection { max-width:1160px; margin:0 auto; }
@@ -1334,7 +1618,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   <section class="categories" id="categoryList" aria-label="Product categories">
     <div class="category-box"
-       data-href="game.html"
+       data-href="gaming.html"
        data-video="https://cdn.pixabay.com/video/2020/10/06/16/01/gaming-room-5637119_1280.mp4"
        data-poster="https://i.postimg.cc/GhBhTtX7/Magshion-Adjustable-Height-Gaming-Chair-with-Retractable-Footrest-and-Computer-Desk-Purple-2e356ae6.png"
        data-badge="34% OFF"
@@ -1343,7 +1627,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <img src="https://i.postimg.cc/GhBhTtX7/Magshion-Adjustable-Height-Gaming-Chair-with-Retractable-Footrest-and-Computer-Desk-Purple-2e356ae6.png"
          alt="Gaming chair and desk in Lagos — Vbest Luxury Interiors" loading="lazy">
     <span class="cat-label">🎮 GAMING CHAIRS & TABLE</span>
-    <a href="game.html" class="shop-now" aria-label="Shop Gaming Chairs">SHOP NOW</a>
+    <a href="gaming.html" class="shop-now" aria-label="Shop Gaming Chairs">SHOP NOW</a>
   </div>
   <div class="category-box"
        data-href="office.html"
@@ -1508,7 +1792,10 @@ document.addEventListener('DOMContentLoaded', function() {
       else if((oldStr||priceStr)&&hasDiscount) saveHtml=`<div class="fs-save">Save: —</div>`;
       const viewsVal = p.__views || getRandomBaseViews();
       const stars = '★★★★★';
-      const wa = (findField(p,['WhatsApp','WhatsApp Link','whatsapp']) || 'https://wa.me/2347080535579');
+      const waRaw = (function(){ for(const k in p){ if(!k) continue; const nk = String(k).toLowerCase().replace(/[^a-z0-9]/g,''); if(nk==='whatsapp'||nk==='whatsapplink') return p[k]; } return ''; })();
+const waBase = (waRaw && String(waRaw).trim()) ? String(waRaw).trim() : 'https://wa.me/2347080535579';
+const inquiryMsg = img + '\n\nHello, I am interested in ' + name + (priceStr ? (' priced at ' + priceStr) : '') + '.';
+const inquiryHref = waBase + (waBase.includes('?') ? '&' : '?') + 'text=' + encodeURIComponent(inquiryMsg);
       const badgeClass = tag==='top'?'fs-orange':(tag==='new'?'fs-green':'fs-orange');
       const badgeText = tag==='top'?'BESTSELLER':(tag==='new'?'NEW':'TRENDING');
       const priceHtml = `${ hasDiscount ? `<div class="fs-old">${escHtml(oldStr)}</div>` : '' }<div class="fs-price">${escHtml(priceStr || oldStr)}</div>${saveHtml?saveHtml:''}`;
@@ -1527,7 +1814,7 @@ document.addEventListener('DOMContentLoaded', function() {
           <div class="fs-stars">${escHtml(stars)}</div>
           <div class="fs-btns" style="display:flex;gap:6px;">
             <button class="fs-btn fs-add" style="flex:1" onclick="fsAddToCart('${escJs(name)}','${escJs(priceStr||oldStr)}','${escJs(img)}');event.stopPropagation();">🛒 Add to Cart</button>
-            <a class="fs-btn fs-inquiry" style="flex:1;text-align:center;" href="${(String(wa).startsWith('http')?wa:wa+'?text='+encodeURIComponent('Hello, I am interested in '+name))}" target="_blank" rel="noopener">📩 Inquiry</a>
+            <a class="fs-btn fs-inquiry" style="flex:1;text-align:center;" href="${inquiryHref}" target="_blank" rel="noopener">📩 Inquiry</a>
           </div>
         </div>
       `;
@@ -1560,6 +1847,7 @@ document.addEventListener('DOMContentLoaded', function() {
       cart.push({name, price, image, qty:1});
       localStorage.setItem('cart', JSON.stringify(cart));
       updateCartBadges(cart.length);
+      if (window.vbShowToast) window.vbShowToast('✓ ' + (name || 'Item') + ' added to cart');
     } catch(e){ console.error(e); }
   };
   function updateCartBadges(count){
@@ -1573,6 +1861,284 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 <!-- ======= end featured block ======= --><!-- ===== Footer (merged, very black) ===== -->
+<style>
+.vbest-catbox{ flex:0 0 130px; text-align:center; cursor:pointer; }
+.vbest-catbox .cat-media{ width:118px; height:118px; border-radius:12px; overflow:hidden; background:#000; margin:0 auto; position:relative; }
+.vbest-catbox .cat-video, .vbest-catbox img.cat-fallback{ width:100%; height:100%; object-fit:cover; display:block; }
+.vbest-catbox .cat-label{ display:block; padding:6px 2px 2px; font-weight:800; font-size:13px; color:#111; text-align:center; }
+.vbest-catbox .shop-now{ display:inline-block; margin-top:2px; padding:5px 12px; background:#FF9900; color:#fff; text-decoration:none; border-radius:14px; font-weight:800; font-size:10px; }
+.vbest-allcat-circle{ flex:0 0 130px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; cursor:pointer; }
+.vbest-allcat-circle .circ{ width:100px; height:100px; border-radius:12px; background:#FF9900; display:flex; align-items:center; justify-content:center; font-size:32px; color:#fff; }
+.vbest-allcat-circle span{ font-weight:800; font-size:13px; color:#111; }
+</style>
+<section style="padding:14px 0;text-align:left;">
+  <h2 style="font-size:17px;color:#1f2937;padding:0 14px;margin:0 0 8px;">Shop by Category</h2>
+  <div style="display:flex;gap:10px;overflow-x:auto;padding:0 14px 10px;-webkit-overflow-scrolling:touch;">
+
+    <div class="vbest-catbox" data-video="videos/best3.mp4" data-poster="https://i.postimg.cc/rFrmWTqS/Screenshot-20250213-113547-Instagram.jpg" data-href="chair.html">
+      <div class="cat-media"><img class="cat-fallback" src="https://i.postimg.cc/rFrmWTqS/Screenshot-20250213-113547-Instagram.jpg" alt="Chairs"></div>
+      <span class="cat-label">🪑 Chairs</span><br>
+      <a href="chair.html" class="shop-now">SHOP NOW</a>
+    </div>
+
+    <div class="vbest-catbox" data-video="videos/best8.mp4" data-poster="https://i.postimg.cc/Sxm8NRJJ/1756750928967.jpg" data-href="dining.html">
+      <div class="cat-media"><img class="cat-fallback" src="https://i.postimg.cc/Sxm8NRJJ/1756750928967.jpg" alt="Dining"></div>
+      <span class="cat-label">🍽 Dining</span><br>
+      <a href="dining.html" class="shop-now">SHOP NOW</a>
+    </div>
+
+    <div class="vbest-catbox" data-video="videos/best9.mp4" data-poster="https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg" data-href="sofa.html">
+      <div class="cat-media"><img class="cat-fallback" src="https://i.postimg.cc/KzjR3g28/bugobestfurniture-252467766.jpg" alt="Sofa"></div>
+      <span class="cat-label">🛋 Sofa</span><br>
+      <a href="sofa.html" class="shop-now">SHOP NOW</a>
+    </div>
+
+    <div class="vbest-catbox" data-video="https://cdn.pixabay.com/video/2020/10/06/16/01/gaming-room-5637119_1280.mp4" data-poster="https://i.postimg.cc/GhBhTtX7/Magshion-Adjustable-Height-Gaming-Chair-with-Retractable-Footrest-and-Computer-Desk-Purple-2e356ae6.png" data-href="gaming.html">
+      <div class="cat-media"><img class="cat-fallback" src="https://i.postimg.cc/GhBhTtX7/Magshion-Adjustable-Height-Gaming-Chair-with-Retractable-Footrest-and-Computer-Desk-Purple-2e356ae6.png" alt="Game"></div>
+      <span class="cat-label">🎮 Game</span><br>
+      <a href="gaming.html" class="shop-now">SHOP NOW</a>
+    </div>
+
+    <div class="vbest-catbox" data-video="https://cdn.pixabay.com/video/2021/07/28/05/45/office-6482338_1280.mp4" data-poster="https://i.postimg.cc/vBybRLq7/Workstation-348.png" data-href="office.html">
+      <div class="cat-media"><img class="cat-fallback" src="https://i.postimg.cc/vBybRLq7/Workstation-348.png" alt="Office"></div>
+      <span class="cat-label">🖥️ Office</span><br>
+      <a href="office.html" class="shop-now">SHOP NOW</a>
+    </div>
+
+    <div class="vbest-catbox" data-poster="https://i.postimg.cc/yNKdMXNc/download.jpg" data-href="light.html">
+      <div class="cat-media"><img class="cat-fallback" src="https://i.postimg.cc/yNKdMXNc/download.jpg" alt="Light"></div>
+      <span class="cat-label">💡 Light</span><br>
+      <a href="light.html" class="shop-now">SHOP NOW</a>
+    </div>
+
+    <div class="vbest-allcat-circle" id="shopByCatAllBtn">
+      <div class="circ">➕</div>
+      <span>All Categories</span>
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function(){
+  /* Category videos: load ONLY when scrolled into view, pause when out of view,
+     and release all video downloads the moment the customer taps a product/link,
+     so the next page gets the full connection instead of waiting behind video data. */
+  var conn = navigator.connection || {};
+  var lowData = conn.saveData === true || /(^|-)2g$/.test(conn.effectiveType || '');   // Data Saver / 2G: keep the still images
+  var items = [];
+
+  document.querySelectorAll('.vbest-catbox[data-video]').forEach(function(box){
+    var media = box.querySelector('.cat-media');
+    var fallback = media.querySelector('img.cat-fallback');
+    var o = { box: box, url: box.getAttribute('data-video'), fallback: fallback, v: null };
+    items.push(o);
+  });
+
+  function showFallback(o){
+    if (o.v) o.v.style.display = 'none';
+    if (o.fallback) o.fallback.style.display = 'block';
+  }
+  function startVideo(o){
+    if (lowData) return;
+    if (!o.v){
+      var v = document.createElement('video');
+      v.className = 'cat-video';
+      v.muted = true; v.loop = true; v.playsInline = true;
+      v.setAttribute('muted',''); v.setAttribute('playsinline','');
+      v.preload = 'metadata';
+      v.setAttribute('poster', o.box.getAttribute('data-poster') || '');
+      v.style.display = 'none';
+      v.addEventListener('playing', function(){ v.style.display = 'block'; if (o.fallback) o.fallback.style.display = 'none'; });
+      v.addEventListener('error', function(){ showFallback(o); });
+      o.box.querySelector('.cat-media').appendChild(v);
+      o.v = v;
+    }
+    if (!o.v.getAttribute('src')) o.v.setAttribute('src', o.url);
+    var p = o.v.play(); if (p && p.catch) p.catch(function(){});
+  }
+  function pauseVideo(o){ if (o.v) { try { o.v.pause(); } catch(e){} } }
+
+  var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      var o = items.filter(function(i){ return i.box === entry.target; })[0];
+      if (!o) return;
+      if (entry.isIntersecting) startVideo(o); else pauseVideo(o);
+    });
+  }, { threshold: 0.25 }) : null;
+  if (io) items.forEach(function(o){ io.observe(o.box); });
+
+  function releaseAll(){
+    items.forEach(function(o){
+      if (!o.v) return;
+      try { o.v.pause(); o.v.removeAttribute('src'); o.v.load(); } catch(e){}
+      showFallback(o);
+    });
+    var hv = document.querySelector('video.header-video');
+    if (hv) { try { hv.pause(); } catch(e){} }
+  }
+  // Tap on any real navigation link / product card -> free the network immediately (does not block the navigation)
+  document.addEventListener('click', function(e){
+    var t = e.target && e.target.closest ? e.target.closest('a[href], [data-href]') : null;
+    if (!t) return;
+    var href = t.getAttribute('href') || '';
+    if (t.target === '_blank' || /^(#|javascript:|mailto:|tel:)/i.test(href)) return;
+    releaseAll();
+  }, true);
+  // Coming back via the Back button (page restored from memory): bring the videos back
+  window.addEventListener('pageshow', function(e){
+    if (!e.persisted || !io) return;
+    var hv = document.querySelector('video.header-video');
+    if (hv) { var p = hv.play(); if (p && p.catch) p.catch(function(){}); }
+    items.forEach(function(o){ io.unobserve(o.box); io.observe(o.box); });
+  });
+
+  document.querySelectorAll('.vbest-catbox[data-href]').forEach(function(box){
+    box.addEventListener('click', function(e){
+      if (e.target.closest('a.shop-now')) return;
+      location.href = box.getAttribute('data-href');
+    });
+  });
+
+  document.getElementById('shopByCatAllBtn').addEventListener('click', function(){
+    document.getElementById('megaMenuPanel').classList.add('show');
+  });
+})();
+</script>
+
+<style>
+.vbest-mini-card{ width:100%; background:#f8f8f8; border-radius:8px; overflow:hidden; text-align:left; }
+.vbest-mini-card img{ width:100%; height:130px; object-fit:cover; display:block; }
+.vbest-mini-card .vmb{ padding:6px 8px; }
+.vbest-mini-card{ cursor:pointer; }
+.vbest-mini-card a.vmc-link{ display:block; color:inherit; text-decoration:none; -webkit-tap-highlight-color:rgba(0,0,0,0.08); }
+.vbest-mini-card .vmb-info{ padding:6px 8px 0; }
+.vbest-mini-card .vmb-actions{ padding:0 8px 8px; }
+.vbest-mini-card h4{ margin:0 0 2px; font-size:11px; color:#111; font-weight:700; line-height:1.3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.vbest-mini-card .vmp{ font-size:11px; color:#27ae60; font-weight:800; }
+.vbest-view-all-btn{ display:block; margin:8px auto 0; width:calc(100% - 28px); max-width:300px; padding:8px; text-align:center; background:#f3f3f3; border:1px solid #ddd; border-radius:8px; font-weight:700; font-size:13px; color:#1f2937; cursor:pointer; }
+</style>
+
+<section id="hotSellingSection" style="display:none;padding:14px 0;text-align:left;">
+  <h2 style="font-size:17px;color:#1f2937;padding:0 14px;margin:0 0 8px;">🔥 Hot Selling Products <span style="font-size:12px;color:#777;font-weight:400;">— what other customers are loving right now</span></h2>
+  <div id="hotSellingRow" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px 6px;"></div>
+  <button class="vbest-view-all-btn" id="hotSellingViewAll">View All</button>
+</section>
+
+<section id="newArrivalSection" style="display:none;padding:14px 0;text-align:left;">
+  <h2 style="font-size:17px;color:#1f2937;padding:0 14px;margin:0 0 8px;">✨ New Arrivals <span style="font-size:12px;color:#777;font-weight:400;">— just added to our collection</span></h2>
+  <div id="newArrivalRow" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px 6px;"></div>
+  <button class="vbest-view-all-btn" id="newArrivalViewAll">View All</button>
+</section>
+
+<section id="mostViewedSection" style="display:none;padding:14px 0;text-align:left;">
+  <h2 style="font-size:17px;color:#1f2937;padding:0 14px;margin:0 0 8px;">👀 Most Viewed <span style="font-size:12px;color:#777;font-weight:400;">— this is what other customers are viewing the most</span></h2>
+  <div id="mostViewedRow" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px 6px;"></div>
+  <button class="vbest-view-all-btn" id="mostViewedViewAll">View All</button>
+</section>
+
+<script>
+(function(){
+  var K = 'vb_home_v2';
+  var st = null;                                  // {picks:{hot,neu,most}, shown:{...}, y:scrollY}
+  function readState(){ try{ var s = JSON.parse(VB.get(K)); if (s && s.picks) return s; }catch(e){} return null; }
+  function save(){ if (st) VB.set(K, JSON.stringify(st)); }
+  function shuffled(arr, n){ var c = arr.slice(); for (var i = c.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = c[i]; c[i] = c[j]; c[j] = t; } return c.slice(0, n); }
+
+  function buildCard(p){
+    var el = document.createElement("div");
+    el.className = "vbest-mini-card";
+    el.style.cursor = "pointer";
+    var link = VB.href(p);
+    var shownPrice = p.hasDiscount ? p.discStr : p.priceStr;
+    var inquiryMsg = (p.firstImage ? p.firstImage + "\n\n" : "") + "Hello, I'm interested in " + p.name + (shownPrice ? (" priced at " + shownPrice) : "");
+    var inquiryHref = "https://wa.me/2347080535579?text=" + encodeURIComponent(inquiryMsg);
+    el.innerHTML =
+      '<a class="vmc-link" href="' + VB.esc(link) + '">' +
+        '<img src="' + VB.esc(VB.fixImg(p.firstImage)) + '" alt="' + VB.esc(p.name) + '" loading="lazy" decoding="async">' +
+        '<div class="vmb-info"><h4>' + VB.esc(p.name) + '</h4><div class="vmp">' + VB.esc(shownPrice) + '</div></div>' +
+      '</a>' +
+      '<div class="vmb-actions">' +
+        '<button type="button" class="vmc-add" style="display:block;width:100%;box-sizing:border-box;background:#000;color:#fff;border:none;border-radius:6px;padding:7px 4px;font-size:11px;font-weight:700;cursor:pointer;margin-top:6px;">🛒 Add to Cart</button>' +
+        '<a class="vmc-inq" href="' + VB.esc(inquiryHref) + '" target="_blank" rel="noopener" style="display:block;width:100%;box-sizing:border-box;background:#25D366;color:#fff;text-align:center;border-radius:6px;padding:7px 4px;font-size:11px;font-weight:700;text-decoration:none;margin-top:5px;">📩 Inquiry</a>' +
+      '</div>';
+    el.querySelector('.vmc-add').addEventListener('click', function(){ VB.addToCart(p.name, shownPrice, p.firstImage); });
+    // tapping ANYWHERE on the card (picture, name, price, empty space) opens the product; buttons/links keep their own action
+    el.addEventListener('click', function(e){
+      if (e.target.closest('a, button')) return;
+      location.href = link;
+    });
+    return el;
+  }
+
+  function setupSection(rowId, btnId, sectionId, items, key){
+    var sec = document.getElementById(sectionId), row = document.getElementById(rowId), btn = document.getElementById(btnId);
+    sec.style.display = "block";
+    var shown = 0;
+    function renderMore(){
+      var batch = items.slice(shown, shown + 6);
+      batch.forEach(function(p){ row.appendChild(buildCard(p)); });
+      shown += batch.length;
+      st.shown[key] = shown;
+      if (shown >= items.length) btn.style.display = "none";
+    }
+    var target = Math.max(6, st.shown[key] || 0);       // Back button: re-open as many products as the customer had loaded
+    while (shown < target && shown < items.length) renderMore();
+    btn.addEventListener("click", function(){ renderMore(); save(); });
+  }
+
+  var isBack = false;
+  try{
+    var n = performance.getEntriesByType('navigation');
+    isBack = (n && n[0]) ? n[0].type === 'back_forward' : !!(performance.navigation && performance.navigation.type === 2);
+  }catch(e){}
+  try{ if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; }catch(e){}
+
+  VB.load().then(function(items){
+    var eligible = items.filter(function(p){
+      if (!p.id || p.dup) return false;                                 // must have a real, working product link
+      var priceNum = VB.parseNum(p.hasDiscount ? p.discStr : p.priceStr);
+      return p.name && p.firstImage && !isNaN(priceNum) && priceNum >= 50000;
+    });
+    if (!eligible.length) return;
+    st = readState();
+    if (!st){
+      st = { picks: {
+               hot:  shuffled(eligible, 12),
+               neu:  shuffled(eligible, 12),
+               most: shuffled(eligible, 12).map(function(p){ var c = Object.assign({}, p); c.name = "Customer Favorite"; return c; })
+             }, shown: {}, y: 0 };
+    }
+    setupSection("hotSellingRow", "hotSellingViewAll", "hotSellingSection", st.picks.hot, "hot");
+    setupSection("newArrivalRow", "newArrivalViewAll", "newArrivalSection", st.picks.neu, "neu");
+    setupSection("mostViewedRow", "mostViewedViewAll", "mostViewedSection", st.picks.most, "most");
+    save();
+
+    // remember where the customer is, so Back returns to the exact same spot.
+    // NOTE: on this page the <body> element is the scroller (html,body{height:100%}), so read/write both.
+    function getY(){ return Math.max(window.pageYOffset || 0, document.documentElement.scrollTop || 0, document.body.scrollTop || 0); }
+    function setY(y){ document.body.scrollTop = y; document.documentElement.scrollTop = y; window.scrollTo(0, y); }
+    var ready = !(isBack && st.y > 0), timer = null;
+    function saveNow(){ if (!ready) return; st.y = getY(); save(); }
+    document.addEventListener('scroll', function(){ if (!ready) return; clearTimeout(timer); timer = setTimeout(saveNow, 150); }, { capture: true, passive: true });
+    window.addEventListener('pagehide', saveNow);
+    document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'hidden') saveNow(); });
+
+    if (!ready){
+      // Keep the saved position for ~2s while images/video above settle (and switch off scroll-anchoring, which would nudge it)
+      var stop = false, t0 = Date.now(), target = st.y;
+      document.body.style.overflowAnchor = 'none';
+      ['touchstart', 'wheel', 'keydown', 'mousedown'].forEach(function(ev){ window.addEventListener(ev, function(){ stop = true; }, { passive: true, once: true }); });
+      (function go(){
+        if (stop || Date.now() - t0 > 2200){ ready = true; document.body.style.overflowAnchor = ''; return; }
+        if (Math.abs(getY() - target) > 2) setY(target);
+        setTimeout(go, 100);
+      })();
+    }
+  });
+})();
+</script>
+
   <footer class="shilpi-footer">
     <div class="shilpi-container" style="max-width:1150px;margin:0 auto;">
       <div class="footer-extra">
@@ -1652,19 +2218,20 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
     </div>
     
-      
+      <div class="footer-dark-zone">
        <p class="tagline">We're the best</p>
         <p class="about-text">Designed to elevate your home, our premium pieces combine comfort, durability, and style that speaks volumes.</p>
 
         <div class="social-icons" aria-label="social">
           <!-- Added WhatsApp, Facebook, YouTube (brand colored icons) -->
           <a href="https://wa.me/2347080535579" target="_blank" rel="noopener noreferrer" title="WhatsApp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-          <a href="https://www.facebook.com/share/179pLbZtXk/" target="_blank" rel="noopener noreferrer" title="Facebook"><i class="fab fa-facebook"></i> Facebook</a>
+          <a href="https://www.facebook.com/share/1D29ENJ92b/" target="_blank" rel="noopener noreferrer" title="Facebook"><i class="fab fa-facebook"></i> Facebook</a>
           <a href="https://youtube.com/@best-tm7bm?si=w23wMA5R7ii3gmfM" target="_blank" rel="noopener noreferrer" title="YouTube"><i class="fab fa-youtube"></i> YouTube</a>
-          <a href="https://x.com/V_Best_?s=09" target="_blank" rel="noopener noreferrer">𝕏 Twitter</a>
-          <a href="https://www.instagram.com/vbest_luxury_interiors?igsh=MWFxcmN4eTd6dndnNQ==" target="_blank" rel="noopener noreferrer">📸 Instagram</a>
-          <a href="https://www.tiktok.com/@vbestluxuryinterior?_t=ZS-90f23kWVIJh&_r=1" target="_blank" rel="noopener noreferrer">🎵 TikTok</a>
+          <a href="https://x.com/V_Best_" target="_blank" rel="noopener noreferrer">𝕏 Twitter</a>
+          <a href="https://www.instagram.com/vbest_luxury_interior?stkn=aTY0MGRnNjJ2enlt" target="_blank" rel="noopener noreferrer">📸 Instagram</a>
+          <a href="https://www.tiktok.com/@vbest_luxury_interior?_r=1&_d=elh2f5ef7ml7e0&sec_uid=MS4wLjABAAAAy8UQs2EhAeF__dkfm2xiVb-iReVs3Lmm4UTneuzzXfkkKPcvvLGWmEOsDfi0svZ6&share_author_id=7200817955289056261&sharer_language=en&source=h5_m&u_code=e6dab6jg2al2bm&timestamp=1788729750&user_id=7200817955289056261&sec_user_id=MS4wLjABAAAAy8UQs2EhAeF__dkfm2xiVb-iReVs3Lmm4UTneuzzXfkkKPcvvLGWmEOsDfi0svZ6&item_author_type=1&utm_source=copy&utm_campaign=client_share&utm_medium=android&share_iid=7674794423725164306&share_link_id=e2088467-4e56-4c7e-9243-80767c8dd57a&share_app_id=1233&ugbiz_name=ACCOUNT&ug_btm=b8727%2Cb9716&social_share_type=5&enable_checksum=1" target="_blank" rel="noopener noreferrer">🎵 TikTok</a>
         </div>
+      </div>
       </div>
 
       <div class="footer-bottom" style="margin-top:18px;">
@@ -1672,9 +2239,6 @@ document.addEventListener('DOMContentLoaded', function() {
           <h3>Categories</h3>
           <ul>
             <li>Living Room</li><li>Bedroom</li><li>Dining Room</li><li>Home Office</li><li>Kids & Baby</li><li>Outdoor & Patio</li><li>Storage & Organization</li><li>Accent & Decor</li>
-        
-        
-<p><p> bedroom door</p>
           </ul>
         </div>
 
@@ -1702,8 +2266,6 @@ document.addEventListener('DOMContentLoaded', function() {
           <h3>Customer Service</h3>
           <p>📞 2347080535579</p>
           <p>✉️ <a href="mailto:best28763@gmail.com">contactus@vbest.com</a></p>
-          <p>📍 
-          <strong> visit our showroom:</strong>156 Olojo Drive, Ojo Alaba International Market, Lagos</p>
           <p>🕑 24/7 Support</p>
           <section style="text-align:center;padding:30px 15px;background:#fff;">
   <h2 style="font-size:20px;font-weight:700;color:#111;margin-bottom:10px;">
@@ -1732,7 +2294,6 @@ document.addEventListener('DOMContentLoaded', function() {
 </iframe>
         </div>
       </div>
-    </div>
     </div>
     
   </footer>
@@ -2353,6 +2914,19 @@ send.onclick=()=>{
       const sJson = await sRes.json();
       const pJson = await pRes.json();
       sheetData = Array.isArray(sJson) ? sJson : [];
+      sheetData.forEach(function(r, i){ r.__row = i; });   // sheet row, used to open the product page
+      (function(){
+        var count = {};
+        sheetData.forEach(function(r){
+          var id = String(r.id || r.Id || r.ID || r.ProductID || '').trim();
+          if (id) count[id] = (count[id] || 0) + 1;
+        });
+        sheetData.forEach(function(r){
+          var id = String(r.id || r.Id || r.ID || r.ProductID || '').trim();
+          r.__id = id;
+          r.__dup = !!(id && count[id] > 1);
+        });
+      })();
       pageIndex = Array.isArray(pJson) ? pJson : [];
 
       // normalize and append sheet rows into window.fsProducts (avoid duplicates)
@@ -2442,9 +3016,14 @@ send.onclick=()=>{
   }
 
   // find product matches from sheet and return scored sorted list
+  function rowHref(p){
+    return p.__id ? 'product.html?id=' + encodeURIComponent(p.__id) : 'product.html?row=' + p.__row;
+  }
+
   function findProductMatches(tokens){
     const scored = [];
     for(const r of sheetData){
+      if(!r.__id || r.__dup) continue;      // only show products that will actually open
       const s = scoreRow(r, tokens);
       if(s > 0) scored.push({row:r, score:s});
     }
@@ -2493,8 +3072,9 @@ send.onclick=()=>{
       html += `<div id="searchNoResults">No matching products. Try fewer words or check pages above.</div>`;
     } else {
       html += `<div class="sr-count">Showing ${products.length} result(s)</div><div id="searchProductsGrid">` +
-        products.map(item => {
+        products.map((item, pi) => {
           const p = item.row;
+          const href = rowHref(p);
           const key = (p.ProductName||'') + '||' + (p.ImageLink||'');
           let idx = idxMap[key];
           if(idx === undefined){
@@ -2508,8 +3088,8 @@ send.onclick=()=>{
           const img = safeImg(p.ImageLink || '');
           const waLink = DEFAULT_WA + '?text=' + encodeURIComponent('Hello, I am interested in ' + (p.ProductName||''));
           return `
-            <div class="sr-card" data-idx="${idx}">
-              <a class="sr-thumb" href="javascript:void(0)" data-idx="${idx}" aria-label="Open ${nameEsc}"><img src="${esc(img)}" alt="${nameEsc}" loading="lazy"></a>
+            <div class="sr-card" data-idx="${idx}" data-href="${href}" style="cursor:pointer">
+              <a class="sr-thumb" href="${href}" data-idx="${idx}" aria-label="Open ${nameEsc}"><img src="${esc(img)}" alt="${nameEsc}" loading="lazy"></a>
               <div class="sr-meta">
                 <div class="sr-name" data-idx="${idx}" role="button">${ highlight(nameEsc, tokens) }</div>
                 <div class="sr-price-wrap">
@@ -2518,7 +3098,7 @@ send.onclick=()=>{
                 </div>
                 <div class="sr-actions">
                   <a class="sr-btn sr-inquiry" href="${waLink}" target="_blank" rel="noopener">📩 Inquiry</a>
-                  <button class="sr-btn sr-add" data-idx="${idx}">🛒 Add to Cart</button>
+                  <button class="sr-btn sr-add" data-idx="${idx}" data-pi="${pi}">🛒 Add to Cart</button>
                 </div>
               </div>
             </div>
@@ -2528,32 +3108,21 @@ send.onclick=()=>{
 
     resultsEl.innerHTML = html;
 
-    // interactions
-    resultsEl.querySelectorAll('.sr-thumb, .sr-name').forEach(el => {
-      el.addEventListener('click', function(){
-        const idx = parseInt(this.getAttribute('data-idx'), 10);
-        if(!isNaN(idx) && typeof window.fsOpenDetails === 'function'){
-          try{ window.fsOpenDetails(idx); } catch(e){ console.error('fsOpenDetails', e); }
-        }
-      }, { passive:true });
+    // interactions: picture, name, price or empty space on a result opens the product
+    resultsEl.querySelectorAll('.sr-card').forEach(el => {
+      el.addEventListener('click', function(e){
+        if (e.target.closest('a, button')) return;         // picture link / inquiry / add-to-cart act on their own
+        location.href = this.getAttribute('data-href');
+      });
     });
     resultsEl.querySelectorAll('.sr-add').forEach(btn => {
       btn.addEventListener('click', function(e){
         e.preventDefault();
-        const idx = parseInt(this.getAttribute('data-idx'), 10);
-        const p = window.fsProducts && window.fsProducts[idx];
+        const pr = products[parseInt(this.getAttribute('data-pi'), 10)];
+        const p = pr && pr.row;
         if(!p){ alert('Product data not available'); return; }
-        try{
-          if(typeof window.fsAddToCart === 'function'){
-            window.fsAddToCart(p.ProductName || '', p.DiscountPrice || p.Price || '', p.ImageLink || '');
-          } else {
-            const cart = JSON.parse(localStorage.getItem('cart')||'[]');
-            cart.push({ name: p.ProductName || '', price: p.DiscountPrice || p.Price || '', image: p.ImageLink || '', qty:1 });
-            localStorage.setItem('cart', JSON.stringify(cart));
-            alert('Added to cart (local)');
-          }
-        }catch(err){ console.error('AddToCart error', err); alert('Error adding to cart'); }
-      }, { passive:false });
+        VB.addToCart(p.ProductName || '', p.DiscountPrice || p.Price || '', p.ImageLink || '');
+      });
     });
   }
 
@@ -2573,52 +3142,47 @@ send.onclick=()=>{
 </script>
 
 
-<div id="loader" style="
-  position:fixed;inset:0;z-index:9999;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:white;font-family:system-ui,sans-serif;
-  color:#5b21b6;font-weight:600;font-size:18px;
-  transition:opacity .8s ease;">
-  <div id="loaderText" style="animation:zoom 2s ease-in-out infinite;">
-    Please wait<span id="dots">...</span>
-  </div>
-  <div id="loaderMsg" style="margin-top:8px;font-size:14px;color:#6b7280;animation:zoom 3s ease-in-out infinite;">
-    Loading your furniture experience ✨
-  </div>
-</div>
 
-<style>
-body{opacity:1;transition:opacity 1s ease;} /* visible by default */
-@keyframes blink{0%,100%{opacity:.2;}50%{opacity:1;}}
-#dots{display:inline-block;animation:blink 1.2s infinite;}
-@keyframes zoom{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+<style id="vb-footer-dark">
+/* Footer stays its normal light color through the reviews block.
+   Charcoal starts right after the reviews: tagline/social row + the columns below. */
+footer.shilpi-footer{ background:#f3f3f3; border-top:1px solid #e3e3e3; }
+
+.footer-dark-zone{ background:#2f3338; color:#e6e8eb; margin:18px -20px 0; padding:18px 20px 4px; }
+.footer-dark-zone .tagline,
+.footer-dark-zone .about-text{ color:#c5c9ce; }
+.footer-dark-zone .social-icons a{ color:#f1f3f4 !important; }
+
+footer.shilpi-footer > .footer-bottom{ background:#2f3338; color:#e6e8eb; margin:18px -20px 0; padding:18px 20px 30px; }
+footer.shilpi-footer > .footer-bottom .footer-col h3{ color:#ffffff; }
+footer.shilpi-footer > .footer-bottom .footer-col ul li,
+footer.shilpi-footer > .footer-bottom .footer-col p{ color:#c5c9ce; }
+footer.shilpi-footer > .footer-bottom .footer-col a{ color:#ffb74d; }
+footer.shilpi-footer > .footer-bottom .accordion-content,
+footer.shilpi-footer > .footer-bottom .accordion-content p{ color:#c5c9ce; }
+footer.shilpi-footer > .footer-bottom .accordion-content a{ color:#ffb74d; }
+footer.shilpi-footer > .footer-bottom section{ background:transparent !important; padding:18px 0 6px !important; }
+footer.shilpi-footer > .footer-bottom section h2{ color:#ffffff !important; }
+footer.shilpi-footer > .footer-bottom section p{ color:#c5c9ce !important; }
 </style>
-
-<script>
-(function(){
-  const loader=document.getElementById('loader');
-  const msg=document.getElementById('loaderMsg');
-
-  // Skip loader if returning via back/forward navigation
-  if (performance.getEntriesByType("navigation")[0].type === "back_forward") {
-    loader.remove();
-    return;
-  }
-
-  const lines=[
-    "Polishing visuals ✨",
-    "Arranging comfy chairs 🪑",
-    "Almost ready 💫"
-  ];
-  let i=0;
-  const rot=setInterval(()=>{i=(i+1)%lines.length;msg.textContent=lines[i];},1000);
-  setTimeout(()=>{
-    clearInterval(rot);
-    loader.style.opacity='0';
-    setTimeout(()=>{loader.remove();},800);
-  },4000); // loader visible 10 s
-})();
-</script>
 </body>
 
+<script>
+  // Force zero gap between the top bar and the page content, on every device,
+  // no matter how tall the bar actually renders there (fonts, icons, screen density, etc.)
+  (function(){
+    var bar = document.getElementById('vbTopBar');
+    if(!bar) return;
+    function fixGap(){
+      var h = bar.getBoundingClientRect().height;
+      if (h > 0) document.body.style.paddingTop = h + 'px';
+    }
+    fixGap();
+    window.addEventListener('load', fixGap);
+    window.addEventListener('resize', fixGap);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fixGap);
+    setTimeout(fixGap, 300);
+    setTimeout(fixGap, 1000);
+  })();
+</script>
 </html>
