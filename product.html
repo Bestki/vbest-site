@@ -32,6 +32,22 @@ body { margin:0; font-family:sans-serif; background:#f5f5f5; }
 .fs-btn.inquiry { background:#25D366; color:#fff; border:none; }
 
 .product-desc { margin-bottom:20px; }
+.product-desc h3 { margin:14px 0 6px; }
+.product-desc p { margin:0 0 8px; line-height:1.55; }
+.qty-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; flex-wrap:wrap; }
+.qty-label { font-weight:bold; }
+.qty-box { display:inline-flex; align-items:center; border:1px solid #ccc; border-radius:6px; background:#fff; overflow:hidden; }
+.qty-btn { width:40px; height:40px; border:none; background:#f0f0f0; font-size:1.3rem; font-weight:bold; cursor:pointer; }
+.qty-btn:active { background:#ddd; }
+.qty-num { min-width:44px; text-align:center; font-weight:bold; font-size:1.05rem; }
+.qty-total { font-weight:bold; color:#222; }
+.delivery-box { background:#fff; border-radius:8px; padding:15px; margin-bottom:20px; }
+.delivery-box h3 { margin:0 0 10px; }
+.delivery-box h4 { margin:12px 0 6px; }
+.delivery-box ul { margin:0 0 0 18px; padding:0; line-height:1.55; }
+.wa-help { background:#fff; border-radius:8px; padding:15px; margin-bottom:20px; }
+.wa-help p { margin:0 0 10px; }
+.wa-help a { display:inline-block; background:#25D366; color:#fff; text-decoration:none; font-weight:bold; padding:10px 16px; border-radius:6px; }
 .product-reviews { margin-top:20px; background:#fff; padding:15px; border-radius:8px; }
 .product-reviews h3 { margin:0 0 10px; }
 .review-item { border-top:1px solid #ddd; padding:8px 0; }
@@ -110,6 +126,43 @@ const sheetUrl = "https://opensheet.elk.sh/1FA4s21Je3ebeFXUXGu_xvqdo4gbM1v9Q9jOH
 
 function normKey(k){ return String(k||'').toLowerCase().replace(/[^a-z0-9]/g,''); }  
 function findField(it, names){ for(const n of names) for(const k in it) if(normKey(k)===normKey(n)) return it[k]; return ''; }  
+function renderDesc(raw){
+  const parts = String(raw||'').split(/\s*\|\s*|\r?\n+/).map(x=>x.trim()).filter(Boolean);
+  let about=[], feats=[], material='', size='', mode='about';
+  parts.forEach(t=>{
+    if(/^features:?$/i.test(t)){ mode='feat'; return; }
+    if(/^features:/i.test(t)){ mode='feat'; t=t.replace(/^features:\s*/i,''); if(!t) return; }
+    let m;
+    if((m=t.match(/^material:\s*(.*)$/i))){ material=m[1]; mode='other'; return; }
+    if((m=t.match(/^size:\s*(.*)$/i))){ size=m[1]; mode='other'; return; }
+    if(mode==='feat') feats.push(t.replace(/^\d+[\.\)]\s*/,''));
+    else if(mode==='about') about.push(t);
+  });
+  let h='<h3>Description</h3><p>'+escHtml(about.join(' '))+'</p>';
+  if(feats.length) h+='<h3>Features</h3><ul style="margin:0 0 12px 18px;padding:0">'+feats.map(f=>'<li>'+escHtml(f)+'</li>').join('')+'</ul>';
+  if(material) h+='<h3>Material</h3><p>'+escHtml(material)+'</p>';
+  if(size) h+='<h3>Size</h3><p>'+escHtml(size)+'</p>';
+  return h;
+}
+
+function renderDelivery(priceNum){
+  const high = priceNum >= 1000000;
+  const lagos = high
+    ? '<b>Lagos:</b> Same-day delivery. Payment is required before delivery.'
+    : '<b>Lagos:</b> Same-day delivery. Pay on delivery, after you have received and checked your item.';
+  const other = high
+    ? '<b>Other cities:</b> Delivery within 2 to 5 working days. Payment is required before delivery.'
+    : '<b>Other cities:</b> Delivery within 2 to 5 working days. Full or half payment is required before dispatch.';
+  return '<div class="delivery-box"><h3>Delivery Information</h3><ul><li>'+lagos+'</li><li>'+other+'</li></ul>'
+    + '<h4>Good to know</h4><ul>'
+    + '<li>Delivery fees depend on your location and will be confirmed before dispatch.</li>'
+    + '<li>Please inspect your item when it arrives.</li>'
+    + '<li>Someone should be available to receive the delivery.</li>'
+    + '<li>Colours may look slightly different from the photos, depending on your screen.</li>'
+    + '<li>For questions or to confirm your order, message us on WhatsApp.</li>'
+    + '</ul></div>';
+}
+
 function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }  
 function escJs(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"'); }  
 function safe(u){ return u && String(u).trim() ? String(u).trim() : ''; }  
@@ -181,11 +234,25 @@ function getRandomViews(){ return Math.floor(Math.random()*4801)+200; }
       <div class="fs-price">${escHtml(price||oldPrice)}</div>  
     </div>  
     <div class="fs-views"><span class="fs-dot"></span> <b>${viewsCount}</b> people viewing this now</div>  
+    <div class="qty-row">
+      <span class="qty-label">Quantity:</span>
+      <div class="qty-box">
+        <button type="button" class="qty-btn" onclick="changeQty(-1)" aria-label="Decrease quantity">&minus;</button>
+        <span class="qty-num" id="qtyNum">1</span>
+        <button type="button" class="qty-btn" onclick="changeQty(1)" aria-label="Increase quantity">+</button>
+      </div>
+      <span class="qty-total" id="qtyTotal"></span>
+    </div>
     <div class="fs-btns">  
-      <button class="fs-btn add" onclick="addToCart('${escJs(name)}','${escJs(price||oldPrice)}','${escJs(rawImg)}')">🛒 Add to Cart</button>  
-      <a class="fs-btn inquiry" href="${wa}?text=${encodeURIComponent('Hello, I am interested in ' + name)}" target="_blank">📩 Inquiry</a>  
+      <button class="fs-btn add" onclick="addToCart('${escJs(name)}','${escJs(price||oldPrice)}','${escJs(rawImg)}',getQty())">🛒 Add to Cart</button>  
+      <a class="fs-btn inquiry" id="inquiryBtn" href="${wa}?text=${encodeURIComponent('Hello, I am interested in ' + name)}" target="_blank">📩 Inquiry</a>  
     </div>  
-    <div class="product-desc"><h3>Description</h3><p>${escHtml(desc)}</p></div>  
+    <div class="product-desc">${renderDesc(desc)}</div>
+    ${renderDelivery(priceToNumber(price||oldPrice))}
+    <div class="wa-help">
+      <p>Need help? Chat with us on WhatsApp:</p>
+      <a href="https://wa.me/2347080535579" target="_blank">💬 07080535579</a>
+    </div>
     <div class="product-reviews">  
       <h3>Be the first to review</h3>  
       <div id="reviewsList"></div>  
@@ -204,9 +271,25 @@ function getRandomViews(){ return Math.floor(Math.random()*4801)+200; }
     </div>
   `;
 
-window.addToCart = function(name, price, img){
+let currentQty = 1;
+window.getQty = function(){ return currentQty; };
+window.changeQty = function(d){
+  currentQty = Math.max(1, Math.min(99, currentQty + d));
+  const n = document.getElementById('qtyNum');
+  if(n) n.textContent = currentQty;
+  const unit = priceToNumber(price||oldPrice);
+  const t = document.getElementById('qtyTotal');
+  if(t) t.textContent = (currentQty > 1 && unit) ? 'Total: \u20A6' + (unit*currentQty).toLocaleString('en-US') : '';
+  const inq = document.getElementById('inquiryBtn');
+  if(inq){
+    const msg = 'Hello, I am interested in ' + name + (currentQty > 1 ? ' (Quantity: ' + currentQty + ')' : '');
+    inq.href = wa + '?text=' + encodeURIComponent(msg);
+  }
+};
+
+window.addToCart = function(name, price, img, qty){
 const cart = JSON.parse(localStorage.getItem('cart')||'[]');
-cart.push({name, price, image:img, qty:1});
+cart.push({name, price, image:img, qty: Math.max(1, parseInt(qty)||1)});
 localStorage.setItem('cart', JSON.stringify(cart));
 const el = document.getElementById('cart-count');
 if(el){ el.textContent=cart.length; el.style.display='inline-block'; }
