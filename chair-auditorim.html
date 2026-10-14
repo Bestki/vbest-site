@@ -53,6 +53,8 @@
     h1{ margin:8px 0 4px; font-size:20px; color:var(--accent); }
     #count{ font-size:14px; color:var(--green); margin-bottom:8px; font-weight:700; }
     .loading-wrap{ display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 0; gap:12px; }
+    .vb-bar-track{width:160px;height:6px;border-radius:4px;background:#e5e7eb;overflow:hidden;}
+    .vb-bar-fill{height:100%;width:0%;background:#5b21b6;border-radius:4px;transition:width .2s ease;}
     .spinner{
       width:36px; height:36px;
       border:4px solid rgba(0,0,0,0.1);
@@ -692,11 +694,45 @@ var vbLast = +vbGet('vb_active') || 0;
 if(vbLast && Date.now()-vbLast > VB_TTL){ vbDel('vbpage_auditorium_csv_v1'); vbDel('vbpage_auditorium_picks_v1'); vbDel('vbpage_auditorium_page_v1'); }
 vbSet('vb_active', String(Date.now()));
 
-let csv = vbGet('vbpage_auditorium_csv_v1');
-if(!csv){
-  csv = await fetch(SHEET_CSV).then(r=>r.text());
-  vbSet('vbpage_auditorium_csv_v1', csv);
+function vbFetchWithProgress(url, onProgress){
+  return new Promise((resolve, reject)=>{
+    const x = new XMLHttpRequest();
+    x.open('GET', url, true);
+    x.onprogress = function(e){ if(onProgress) onProgress(e.loaded, e.lengthComputable ? e.total : 0); };
+    x.onload = function(){ (x.status>=200 && x.status<300) ? resolve(x.responseText) : reject(new Error('HTTP '+x.status)); };
+    x.onerror = function(){ reject(new Error('Network error')); };
+    x.send();
+  });
 }
+
+let csv = vbGet('vbpage_auditorium_csv_v1');
+let vbUsedBackup = false;
+if(!csv){
+  try {
+    csv = await vbFetchWithProgress(SHEET_CSV, function(loaded, total){
+      const fill = document.getElementById('vbBarFill');
+      if(!fill) return;
+      const pct = total ? Math.min(100, (loaded/total)*100) : Math.min(90, (loaded/50000)*100);
+      fill.style.width = pct + '%';
+    });
+    vbSet('vbpage_auditorium_csv_v1', csv);
+    try { localStorage.setItem('vbpage_auditorium_csv_v1_backup', csv); } catch(e){}
+  } catch(fetchErr) {
+    try { csv = localStorage.getItem('vbpage_auditorium_csv_v1_backup'); } catch(e){ csv = null; }
+    if (csv) {
+      vbUsedBackup = true;
+    } else {
+      const loaderEl = document.getElementById('loader');
+      if (loaderEl) loaderEl.innerHTML =
+        '<div style="text-align:center;padding:20px;">' +
+        '<div style="font-weight:600;margin-bottom:10px;">Could not load products — check your connection.</div>' +
+        '<button onclick="location.reload()" style="padding:8px 20px;border-radius:6px;background:#5b21b6;color:#fff;border:none;font-size:15px;">Retry</button>' +
+        '</div>';
+      throw fetchErr;
+    }
+  }
+}
+if (window.vbHideLoader) window.vbHideLoader();
 const lines=csv.replace(/^\uFEFF/,'').split(/\r?\n/).filter(l=>l.trim());
 const headers=parseCSVRow(lines[0]);
 
@@ -1051,14 +1087,10 @@ countEl.textContent='Failed to load products';
   position:fixed;inset:0;z-index:9999;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   background:white;font-family:system-ui,sans-serif;
-  color:#5b21b6;font-weight:600;font-size:18px;
-  transition:opacity .8s ease;">
-  <div id="loaderText" style="animation:zoom 2s ease-in-out infinite;">
-    Please wait<span id="dots">...</span>
-  </div>
-  <div id="loaderMsg" style="margin-top:8px;font-size:14px;color:#6b7280;animation:zoom 3s ease-in-out infinite;">
-    Preparing your Auditorium & Banquet Chairs 🛍️
-  </div>
+  color:#5b21b6;font-weight:600;font-size:16px;
+  transition:opacity .5s ease;">
+  <div style="margin-bottom:14px;">Preparing your Auditorium & Banquet Chairs 🛍️</div>
+  <div class="vb-bar-track"><div id="vbBarFill" class="vb-bar-fill"></div></div>
 </div>
 
 <style>
@@ -1071,35 +1103,24 @@ body{opacity:1;transition:opacity 1s ease;} /* visible by default */
 <script>
 (function(){
   const loader=document.getElementById('loader');
-  const msg=document.getElementById('loaderMsg');
+  if(!loader) return;
 
-  // Only show loader once per session
-  if(sessionStorage.getItem('loaderShown')){
+  var vbCached = null;
+  try { vbCached = sessionStorage.getItem('vbpage_auditorium_csv_v1'); } catch(e) {}
+  if (vbCached) {
     loader.remove();
     return;
   }
 
-  const lines=[
-    "Polishing visuals ✨",
-    "Arranging your Auditorium & Banquet Chairs 🛍️",
-    "Almost ready 💫"
-  ];
-  let i=0;
-  const rot=setInterval(()=>{
-    i=(i+1)%lines.length;
-    msg.textContent=lines[i];
-  },1000); // text rotates every 1 second
-
-  setTimeout(()=>{
-    clearInterval(rot);
-    loader.style.opacity='0';
-    setTimeout(()=>{loader.remove();},800);
-
-    // mark loader as shown for this session
-    sessionStorage.setItem('loaderShown','true');
-  },3000); // loader visible 3 seconds
-})();
-</script>
+  window.vbHideLoader = function(){
+    const fill = document.getElementById('vbBarFill');
+    if (fill) fill.style.width = '100%';
+    setTimeout(()=>{
+      loader.style.opacity='0';
+      setTimeout(()=>{ loader.remove(); }, 500);
+    }, 150);
+  };
+})();</script>
 <script>
 window.VBP = (function(){
   var TTL = 30 * 60 * 1000;

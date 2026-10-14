@@ -3,7 +3,12 @@
 <head>  
 <meta charset="UTF-8">  
 <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-<title>Product Page | V-Best Interiors</title>  
+<title id="pageTitle">Product Page | V-Best Interiors</title>  
+<meta id="ogTitle" property="og:title" content="V-Best Interiors">  
+<meta id="ogDescription" property="og:description" content="Luxury furniture, delivered.">  
+<meta id="ogImage" property="og:image" content="">  
+<meta id="ogUrl" property="og:url" content="">  
+<meta property="og:type" content="product">  
 <style>  
 body { margin:0; font-family:sans-serif; background:#f5f5f5; }  
 .top-cart-bar {  
@@ -16,6 +21,9 @@ body { margin:0; font-family:sans-serif; background:#f5f5f5; }
 .product-page { padding:80px 20px 40px; max-width:1200px; margin:0 auto; }
 .product-main { display:flex; gap:20px; flex-wrap:wrap; }
 .product-left img { width:100%; max-width:500px; border-radius:8px; }
+.product-left .thumbs { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; max-width:500px; }
+.product-left .thumbs img { width:64px; height:64px; object-fit:cover; border-radius:6px; border:2px solid transparent; cursor:pointer; }
+.product-left .thumbs img.active { border-color:#000; }
 .product-right { flex:1; min-width:280px; }
 .product-right h1 { margin:0 0 10px; color:#222; font-size:1.8rem; }
 .product-right .fs-price-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; flex-wrap:wrap; }
@@ -34,6 +42,13 @@ body { margin:0; font-family:sans-serif; background:#f5f5f5; }
 .product-desc { margin-bottom:20px; }
 .product-desc h3 { margin:14px 0 6px; }
 .product-desc p { margin:0 0 8px; line-height:1.55; }
+.color-row { margin-bottom:12px; }
+.color-label { font-weight:bold; display:block; margin-bottom:8px; }
+.color-opts { display:flex; flex-wrap:wrap; gap:8px; }
+.color-btn { padding:4px 10px; border:1px solid #ccc; border-radius:16px; background:#fff; color:#222; font-size:0.75rem; cursor:pointer; }
+.color-btn.active { background:#000; color:#fff; border-color:#000; }
+.color-sel { margin-top:8px; font-weight:bold; min-height:1.2em; }
+.color-note { margin-top:4px; font-size:0.8rem; color:#777; }
 .qty-row { display:flex; align-items:center; gap:12px; margin-bottom:12px; flex-wrap:wrap; }
 .qty-label { font-weight:bold; }
 .qty-box { display:inline-flex; align-items:center; border:1px solid #ccc; border-radius:6px; background:#fff; overflow:hidden; }
@@ -76,21 +91,37 @@ body { margin:0; font-family:sans-serif; background:#f5f5f5; }
 .site-footer h3,.site-footer h4{ color:#fff; }
 .site-footer a{ color:#ccc; text-decoration:none; display:block; margin:6px 0; }
 .footer-bottom{ text-align:center; padding:12px; border-top:1px solid #222; font-size:0.85rem; }
+@keyframes fsShimmer { 0%{background-position:200% 0;} 100%{background-position:-200% 0;} }
 </style>
 
 </head>  
 <body>  
 
 <div class="top-cart-bar">  
-  <span>V-Best Luxury Interior</span>  
+  <span id="topBannerText">V-Best Luxury Interior</span>  
   <a href="cart.html">🛒 Cart <span id="cart-count" class="cart-badge">0</span></a>  
 </div>  
 
 <div class="product-page">  
   <div class="product-main">  
-    <div class="product-left" id="productLeft"></div>  
-    <div class="product-right" id="productRight"></div>  
+    <div class="product-left" id="productLeft">
+      <div style="aspect-ratio:1/1;max-width:500px;border-radius:8px;background:linear-gradient(90deg,#eee 25%,#f5f5f5 50%,#eee 75%);background-size:200% 100%;animation:fsShimmer 1.2s infinite;display:flex;align-items:center;justify-content:center;color:#999;font-size:0.9rem">Loading photo…</div>
+    </div>  
+    <div class="product-right" id="productRight">
+      <div style="height:28px;width:70%;background:#eee;border-radius:4px;margin-bottom:14px"></div>
+      <div style="height:20px;width:40%;background:#eee;border-radius:4px;margin-bottom:20px"></div>
+      <div style="height:16px;width:90%;background:#eee;border-radius:4px;margin-bottom:8px"></div>
+      <div style="height:16px;width:80%;background:#eee;border-radius:4px"></div>
+    </div>  
   </div>  
+
+  <div id="similarWrap" style="display:none">
+    <h2>More designs like this</h2>
+    <div id="similarGrid" class="product-grid"></div>
+    <div style="text-align:center;margin:15px 0">
+      <button id="viewAllBtn" class="fs-btn add" style="flex:none;padding:10px 28px" onclick="toggleSimilar()">View all</button>
+    </div>
+  </div>
 
   <h2>You May Also Like</h2>  
   <div id="relatedGrid" class="product-grid"></div>  
@@ -165,7 +196,12 @@ function renderDelivery(priceNum){
 
 function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }  
 function escJs(s){ return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'\\"'); }  
+function imgList(raw){ return String(raw||'').split(/\s*,\s*|\r?\n+/).map(x=>x.trim()).filter(Boolean); }
+const DEFAULT_COLORS = ['Black','White','Grey','Brown','Beige','Gold'];
+function colorList(raw){ const l = String(raw||'').split(/\s*,\s*/).map(x=>x.trim()).filter(Boolean); return l.length ? l : DEFAULT_COLORS; }
+function isBigProduct(cat, name){ return /\b(sofas?|couch(es)?|sectionals?|beds?|wardrobes?)\b/i.test(String(cat||'')+' '+String(name||'')); }
 function safe(u){ return u && String(u).trim() ? String(u).trim() : ''; }  
+function absImg(u){ u = safe(u); if(!u) return ''; return /^https?:\/\//i.test(u) ? u : (window.location.origin + '/' + u.replace(/^\/+/, '')); }
 function priceToNumber(p){ return Number(String(p||'').replace(/[^\d]/g,'')); }  
 
 // Cart badge  
@@ -204,13 +240,45 @@ function getRandomViews(){ return Math.floor(Math.random()*4801)+200; }
   const viewsCount = getRandomViews();  
   product.Views = viewsCount;  
 
-  const rawImg = findField(product,['ImageLink','Image','imageurl']);  
+  const imgs = imgList(findField(product,['ImageLink','Image','imageurl']));
+  const rawImg = imgs[0] || '';  
   const hasImage = rawImg && String(rawImg).trim() !== '';  
   const name = findField(product,['ProductName','Product Name','product','name']);  
   const price = findField(product,['DiscountPrice','Discount Price','discount','Price','price']);  
   const oldPrice = findField(product,['Price','price','Amount','amount']);  
+
   const desc = findField(product,['Description','description','details']);  
+  const colors = colorList(findField(product,['Colors','Colours','Color','Colour']));
+  const category = String(findField(product,['Category','category'])||'').trim();
+  const isBig = isBigProduct(category, name);
   const wa = findField(product,['WhatsApp','WhatsApp Link','whatsapp']) || 'https://wa.me/2347080535579';  
+
+  // Swap the top banner to "Free Delivery" for anything under ₦700,000
+  const bannerPrice = priceToNumber(price || oldPrice);
+  const bannerEl = document.getElementById('topBannerText');
+  if (bannerEl) {
+    const isFreeDelivery = bannerPrice && bannerPrice < 700000;
+    bannerEl.textContent = isFreeDelivery ? '🚚 FREE DELIVERY' : 'V-Best Luxury Interior';
+    bannerEl.style.fontWeight = isFreeDelivery ? '900' : 'bold';
+    bannerEl.style.fontSize = isFreeDelivery ? '1.2rem' : '';
+    bannerEl.style.color = isFreeDelivery ? '#FFD700' : '';
+    bannerEl.style.letterSpacing = isFreeDelivery ? '0.5px' : '';
+  }
+
+  // Fill in per-product sharing info (WhatsApp/Facebook preview card).
+  // NOTE: set via JavaScript, so a crawler bot that does not run JS (most
+  // link-preview bots) may still show a plain preview on a brand-new link.
+  const shareTitle = (name || 'V-Best Interiors') + (price ? ' - ' + price : '');
+  const shareDesc = (desc || '').replace(/\s*\|\s*/g, ' ').slice(0, 160);
+  document.title = shareTitle;
+  const elT = document.getElementById('ogTitle'); if (elT) elT.setAttribute('content', shareTitle);
+  const elD = document.getElementById('ogDescription'); if (elD) elD.setAttribute('content', shareDesc);
+  const elI = document.getElementById('ogImage');
+  if (elI && rawImg) {
+    const absImg = /^https?:\/\//i.test(rawImg) ? rawImg : (window.location.origin + '/' + String(rawImg).replace(/^\/+/, ''));
+    elI.setAttribute('content', absImg);
+  }
+  const elU = document.getElementById('ogUrl'); if (elU) elU.setAttribute('content', window.location.href);
 
   // ✅ Out of stock if no image  
   if(!hasImage){  
@@ -225,7 +293,16 @@ function getRandomViews(){ return Math.floor(Math.random()*4801)+200; }
     return;  
   }  
 
-  document.getElementById('productLeft').innerHTML = `<img src="${escHtml(rawImg)}" alt="${escHtml(name)}">`;  
+  document.getElementById('productLeft').innerHTML =
+    `<img id="mainImg" src="${escHtml(rawImg)}" alt="${escHtml(name)}">` +
+    (imgs.length > 1
+      ? `<div class="thumbs">` + imgs.map((u,i)=>`<img src="${escHtml(u)}" alt="${escHtml(name)} ${i+1}" class="${i===0?'active':''}" onclick="setMainImg(${i})">`).join('') + `</div>`
+      : '');
+  window.setMainImg = function(i){
+    const m = document.getElementById('mainImg');
+    if(m) m.src = imgs[i];
+    document.querySelectorAll('.thumbs img').forEach((t,idx)=>t.classList.toggle('active', idx===i));
+  };
 
   document.getElementById('productRight').innerHTML = `  
     <h1>${escHtml(name)}</h1>  
@@ -234,6 +311,12 @@ function getRandomViews(){ return Math.floor(Math.random()*4801)+200; }
       <div class="fs-price">${escHtml(price||oldPrice)}</div>  
     </div>  
     <div class="fs-views"><span class="fs-dot"></span> <b>${viewsCount}</b> people viewing this now</div>  
+    ${isBig ? '' : `    <div class="color-row">
+      <span class="color-label">Preferred colour:</span>
+      <div class="color-opts">${colors.map((c,i)=>`<button type="button" class="color-btn" onclick="pickColor(${i})">${escHtml(c)}</button>`).join('')}</div>
+      <div class="color-sel" id="colorSel"></div>
+      <div class="color-note">Colour in the photo may differ. We'll confirm availability on WhatsApp.</div>
+    </div>`}
     <div class="qty-row">
       <span class="qty-label">Quantity:</span>
       <div class="qty-box">
@@ -244,8 +327,8 @@ function getRandomViews(){ return Math.floor(Math.random()*4801)+200; }
       <span class="qty-total" id="qtyTotal"></span>
     </div>
     <div class="fs-btns">  
-      <button class="fs-btn add" onclick="addToCart('${escJs(name)}','${escJs(price||oldPrice)}','${escJs(rawImg)}',getQty())">🛒 Add to Cart</button>  
-      <a class="fs-btn inquiry" id="inquiryBtn" href="${wa}?text=${encodeURIComponent('Hello, I am interested in ' + name)}" target="_blank">📩 Inquiry</a>  
+      <button class="fs-btn add" onclick="addToCart('${escJs(name)}','${escJs(price||oldPrice)}','${escJs(rawImg)}',getQty(),getColor())">🛒 Add to Cart</button>  
+      <a class="fs-btn inquiry" id="inquiryBtn" href="${wa}?text=${encodeURIComponent((rawImg?absImg(rawImg)+'\n\n':'')+'Hello, I am interested in ' + name)}" target="_blank">📩 Inquiry</a>  
     </div>  
     <div class="product-desc">${renderDesc(desc)}</div>
     ${renderDelivery(priceToNumber(price||oldPrice))}
@@ -272,7 +355,18 @@ function getRandomViews(){ return Math.floor(Math.random()*4801)+200; }
   `;
 
 let currentQty = 1;
+let selectedColor = '';
 window.getQty = function(){ return currentQty; };
+window.getColor = function(){ return selectedColor; };
+function updateInquiry(){
+  const inq = document.getElementById('inquiryBtn');
+  if(!inq) return;
+  const msg = (rawImg ? absImg(rawImg) + '\n\n' : '')
+    + 'Hello, I am interested in ' + name
+    + (selectedColor ? ' (Colour: ' + selectedColor + ')' : '')
+    + (currentQty > 1 ? ' (Quantity: ' + currentQty + ')' : '');
+  inq.href = wa + '?text=' + encodeURIComponent(msg);
+}
 window.changeQty = function(d){
   currentQty = Math.max(1, Math.min(99, currentQty + d));
   const n = document.getElementById('qtyNum');
@@ -280,16 +374,22 @@ window.changeQty = function(d){
   const unit = priceToNumber(price||oldPrice);
   const t = document.getElementById('qtyTotal');
   if(t) t.textContent = (currentQty > 1 && unit) ? 'Total: \u20A6' + (unit*currentQty).toLocaleString('en-US') : '';
-  const inq = document.getElementById('inquiryBtn');
-  if(inq){
-    const msg = 'Hello, I am interested in ' + name + (currentQty > 1 ? ' (Quantity: ' + currentQty + ')' : '');
-    inq.href = wa + '?text=' + encodeURIComponent(msg);
-  }
+  updateInquiry();
+};
+window.pickColor = function(i){
+  const c = colors[i];
+  selectedColor = (selectedColor === c) ? '' : c;
+  document.querySelectorAll('.color-btn').forEach((b,idx)=>b.classList.toggle('active', colors[idx] === selectedColor));
+  const sel = document.getElementById('colorSel');
+  if(sel) sel.textContent = selectedColor ? 'Selected: ' + selectedColor + ' \u2713' : '';
+  updateInquiry();
 };
 
-window.addToCart = function(name, price, img, qty){
+window.addToCart = function(name, price, img, qty, color){
 const cart = JSON.parse(localStorage.getItem('cart')||'[]');
-cart.push({name, price, image:img, qty: Math.max(1, parseInt(qty)||1)});
+const item = {name: color ? name + ' (Colour: ' + color + ')' : name, price, image:img, qty: Math.max(1, parseInt(qty)||1)};
+if(color) item.color = color;
+cart.push(item);
 localStorage.setItem('cart', JSON.stringify(cart));
 const el = document.getElementById('cart-count');
 if(el){ el.textContent=cart.length; el.style.display='inline-block'; }
@@ -326,7 +426,7 @@ return priceToNumber(pr)>=1000;
 });
 const shuffled = shuffleArray(filtered);
 grid.innerHTML = shuffled.slice(0,5).map(p=>{
-const img=safe(findField(p,['ImageLink','Image','imageurl']));
+const img=safe(imgList(findField(p,['ImageLink','Image','imageurl']))[0]);
 const name=findField(p,['ProductName','Product Name','product','name']);
 const price=findField(p,['DiscountPrice','Discount Price','discount','Price','price']);
 const id = findField(p,['id','ID']);
@@ -337,12 +437,55 @@ return    `<div class="fs-card" onclick="window.location='product.html?id=${id}'
    <div class="fs-price-row"><div class="fs-price">${escHtml(price)}</div></div>   
    <div class="fs-btns-card">   
    <button class="fs-btn add" onclick="addToCart('${escJs(name)}','${escJs(price)}','${escJs(img)}');event.stopPropagation();">🛒 Add to Cart</button>   
-   <a class="fs-btn inquiry" href="${wa}?text=${encodeURIComponent('Hello, I am interested in ' + name)}" target="_blank">📩 Inquiry</a>   
+   <a class="fs-btn inquiry" href="${wa}?text=${encodeURIComponent((img?absImg(img)+'\n\n':'')+'Hello, I am interested in ' + name)}" target="_blank">📩 Inquiry</a>   
    </div>   
    </div>   
    </div>`;
 }).join('');
 }
+
+// ---- More designs like this (same category, up to 6, View all shows the rest)
+(function(){
+  const myId = String(findField(product,['id','ID']));
+  const catKey = category.toLowerCase();
+  if(!catKey) return;
+  const pool = dataWithIndex.filter(p=>{
+    if(String(findField(p,['id','ID'])) === myId) return false;
+    if(String(findField(p,['Category','category'])||'').trim().toLowerCase() !== catKey) return false;
+    const pn = String(findField(p,['ProductName','Product Name','product','name'])||'').trim();
+    const pi = imgList(findField(p,['ImageLink','Image','imageurl']))[0];
+    return pn && pi;
+  });
+  if(!pool.length) return;
+  const similar = shuffleArray(pool);
+  let showAll = false;
+  function draw(){
+    const list = showAll ? similar : similar.slice(0,6);
+    document.getElementById('similarGrid').innerHTML = list.map(p=>{
+      const img = safe(imgList(findField(p,['ImageLink','Image','imageurl']))[0]);
+      const nm = findField(p,['ProductName','Product Name','product','name']);
+      const pr = findField(p,['DiscountPrice','Discount Price','discount','Price','price']);
+      const id = findField(p,['id','ID']);
+      return `<div class="fs-card" onclick="window.location='product.html?id=${encodeURIComponent(id)}'">
+        <span class="fs-thumb"><img loading="lazy" src="${escHtml(img)}" alt="${escHtml(nm)}"></span>
+        <div class="fs-body">
+          <h3>${escHtml(nm)}</h3>
+          <div class="fs-price-row"><div class="fs-price">${escHtml(pr)}</div></div>
+          <div class="fs-btns-card">
+            <button class="fs-btn add" onclick="addToCart('${escJs(nm)}','${escJs(pr)}','${escJs(img)}');event.stopPropagation();">🛒 Add to Cart</button>
+            <a class="fs-btn inquiry" href="${wa}?text=${encodeURIComponent((img?absImg(img)+'\n\n':'')+'Hello, I am interested in ' + nm)}" target="_blank" onclick="event.stopPropagation();">📩 Inquiry</a>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+    const btn = document.getElementById('viewAllBtn');
+    btn.style.display = similar.length > 6 ? '' : 'none';
+    btn.textContent = showAll ? 'Show less' : 'View all (' + similar.length + ')';
+  }
+  window.toggleSimilar = function(){ showAll = !showAll; draw(); };
+  draw();
+  document.getElementById('similarWrap').style.display = '';
+})();
 
 renderGrid(dataWithIndex,'relatedGrid');
 renderGrid(dataWithIndex,'topTrendingGrid');

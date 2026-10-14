@@ -481,11 +481,24 @@ window.VB = (function(){
     if (promise) return promise;
     promise = new Promise(function(resolve){
       try{ var c = JSON.parse(get(K_PRODUCTS)); if (c && c.items && c.items.length){ resolve(c.items); return; } }catch(e){}
-      fetch(SHEET_CSV).then(function(r){ return r.text(); }).then(function(t){
-        var items = build(t);
-        if (items.length) set(K_PRODUCTS, JSON.stringify({ items: items }));
-        resolve(items);
-      }).catch(function(){ resolve([]); });
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', SHEET_CSV, true);
+      xhr.onprogress = function(e){
+        if (window.vbUpdateProgress) {
+          var pct = e.lengthComputable ? Math.min(100, (e.loaded/e.total)*100) : Math.min(90, (e.loaded/50000)*100);
+          window.vbUpdateProgress(pct);
+        }
+      };
+      xhr.onload = function(){
+        if (xhr.status >= 200 && xhr.status < 300) {
+          var items = build(xhr.responseText);
+          if (items.length) set(K_PRODUCTS, JSON.stringify({ items: items }));
+          if (window.vbUpdateProgress) window.vbUpdateProgress(100);
+          resolve(items);
+        } else { resolve([]); }
+      };
+      xhr.onerror = function(){ if (window.vbUpdateProgress) window.vbUpdateProgress(100); resolve([]); };
+      xhr.send();
     });
     promise.then(debugPanel);
     return promise;
@@ -521,25 +534,19 @@ window.VB = (function(){
   position:fixed;inset:0;z-index:99990;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   background:white;font-family:system-ui,sans-serif;
-  color:#5b21b6;font-weight:600;font-size:18px;
+  color:#5b21b6;font-weight:600;font-size:16px;
   transition:opacity .45s ease;">
-  <div id="loaderText" style="animation:zoom 2s ease-in-out infinite;">
-    Please wait<span id="dots">...</span>
-  </div>
-  <div id="loaderMsg" style="margin-top:8px;font-size:14px;color:#6b7280;animation:zoom 3s ease-in-out infinite;">
-    Loading your furniture experience ✨
-  </div>
+  <div style="margin-bottom:14px;">Loading your furniture experience ✨</div>
+  <div class="vb-bar-track"><div id="vbMainBarFill" class="vb-bar-fill"></div></div>
 </div>
 <style>
-@keyframes blink{0%,100%{opacity:.2;}50%{opacity:1;}}
-#dots{display:inline-block;animation:blink 1.2s infinite;}
-@keyframes zoom{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+.vb-bar-track{width:160px;height:6px;border-radius:4px;background:#e5e7eb;overflow:hidden;}
+.vb-bar-fill{height:100%;width:0%;background:#5b21b6;border-radius:4px;transition:width .2s ease;}
 </style>
 <script>
 (function(){
   var loader = document.getElementById('loader');
   if (!loader) return;
-  var msg = document.getElementById('loaderMsg');
   var gone = false;
   function hide(){
     if (gone) return; gone = true;
@@ -548,8 +555,6 @@ window.VB = (function(){
     setTimeout(function(){ if (loader.parentNode) loader.parentNode.removeChild(loader); }, 500);
   }
   function killNow(){ gone = true; if (loader.parentNode) loader.parentNode.removeChild(loader); }
-
-  setTimeout(hide, 2500);                                   // hard failsafe: never longer than 2.5s
 
   // Splash only on the FIRST page of a visit. Home again / Back = no loader, no reload feeling.
   try{
@@ -564,14 +569,12 @@ window.VB = (function(){
   }catch(e){}
   window.addEventListener('pageshow', function(e){ if (e.persisted) killNow(); });
 
-  try{
-    var lines = ["Polishing visuals ✨", "Arranging comfy chairs 🪑", "Almost ready 💫"], i = 0;
-    var rot = setInterval(function(){ i = (i + 1) % lines.length; if (msg) msg.textContent = lines[i]; }, 800);
-    setTimeout(function(){ clearInterval(rot); }, 2600);
-  }catch(e){}
-  var t0 = Date.now();
-  function whenReady(){ setTimeout(hide, Math.max(0, 800 - (Date.now() - t0))); }
-  if (document.readyState === 'complete') whenReady(); else window.addEventListener('load', whenReady);
+  // Real progress — called from VB.load()'s actual data fetch, not a timer.
+  window.vbUpdateProgress = function(pct){
+    var fill = document.getElementById('vbMainBarFill');
+    if (fill) fill.style.width = pct + '%';
+    if (pct >= 100) hide();
+  };
 })();
 </script>
 <!-- Permanent cart + name bar above top category, no gap -->
@@ -890,11 +893,51 @@ body{
 })();
 </script>
 
-<!-- ===== Header Video ===== -->
-<video autoplay muted loop playsinline preload="metadata" poster="https://i.postimg.cc/5N0sgfBY/IMG-20250822-WA0005.jpg" class="header-video" style="width:100%; height:auto; object-fit:cover;">
+<!-- ===== Header Intro + Video ===== -->
+<div id="vbIntro" style="width:100%;min-height:220px;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;padding:24px 16px;text-align:center;font-family:system-ui,sans-serif;">
+  <div id="vbIntroText" style="font-size:15px;line-height:1.5;max-width:480px;white-space:pre-wrap;"></div>
+</div>
+<video id="vbHeaderVideo" muted loop playsinline preload="metadata" class="header-video" style="width:100%; height:auto; object-fit:cover; display:none;">
   <source src="videos/White.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
+<script>
+(function(){
+  var introEl = document.getElementById('vbIntroText');
+  var introBox = document.getElementById('vbIntro');
+  var video = document.getElementById('vbHeaderVideo');
+  if (!introEl || !video) return;
+
+  var messages = [
+    "FREE DELIVERY is available on some of our items.\nAlways read delivery info on any product — check below the product description to confirm.",
+    "PAYMENT ON DELIVERY is available in Lagos only, on some items.\nAlways read delivery info on any product — check below the product description to confirm."
+  ];
+
+  function typeMessage(text, onDone){
+    introEl.textContent = "";
+    var i = 0;
+    var t = setInterval(function(){
+      introEl.textContent += text.charAt(i);
+      i++;
+      if (i >= text.length) {
+        clearInterval(t);
+        setTimeout(onDone, 4000);   // hold 4 seconds after typing finishes
+      }
+    }, 25);
+  }
+
+  function startVideo(){
+    introBox.style.display = 'none';
+    video.style.display = 'block';
+    video.setAttribute('autoplay', '');
+    video.play().catch(function(){});
+  }
+
+  typeMessage(messages[0], function(){
+    typeMessage(messages[1], startVideo);
+  });
+})();
+</script>
 
 <style>
 /* ===== Top Category Banner ===== */
@@ -2019,21 +2062,21 @@ const inquiryHref = waBase + (waBase.includes('?') ? '&' : '?') + 'text=' + enco
 .vbest-view-all-btn{ display:block; margin:8px auto 0; width:calc(100% - 28px); max-width:300px; padding:8px; text-align:center; background:#f3f3f3; border:1px solid #ddd; border-radius:8px; font-weight:700; font-size:13px; color:#1f2937; cursor:pointer; }
 </style>
 
-<section id="hotSellingSection" style="display:none;padding:14px 0;text-align:left;">
+<section id="hotSellingSection" style="padding:14px 0;text-align:left;">
   <h2 style="font-size:17px;color:#1f2937;padding:0 14px;margin:0 0 8px;">🔥 Hot Selling Products <span style="font-size:12px;color:#777;font-weight:400;">— what other customers are loving right now</span></h2>
-  <div id="hotSellingRow" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px 6px;"></div>
+  <div id="hotSellingRow" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px 6px;"><div style="grid-column:1/-1;display:flex;flex-direction:column;align-items:center;padding:24px 0;gap:10px;color:#6b7280;font-size:13px;"><div>Loading top products&#8230;</div><div class="vb-bar-track"><div class="vb-bar-fill vb-section-fill"></div></div></div></div>
   <button class="vbest-view-all-btn" id="hotSellingViewAll">View All</button>
 </section>
 
-<section id="newArrivalSection" style="display:none;padding:14px 0;text-align:left;">
+<section id="newArrivalSection" style="padding:14px 0;text-align:left;">
   <h2 style="font-size:17px;color:#1f2937;padding:0 14px;margin:0 0 8px;">✨ New Arrivals <span style="font-size:12px;color:#777;font-weight:400;">— just added to our collection</span></h2>
-  <div id="newArrivalRow" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px 6px;"></div>
+  <div id="newArrivalRow" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px 6px;"><div style="grid-column:1/-1;display:flex;flex-direction:column;align-items:center;padding:24px 0;gap:10px;color:#6b7280;font-size:13px;"><div>Loading new arrivals&#8230;</div><div class="vb-bar-track"><div class="vb-bar-fill vb-section-fill"></div></div></div></div>
   <button class="vbest-view-all-btn" id="newArrivalViewAll">View All</button>
 </section>
 
-<section id="mostViewedSection" style="display:none;padding:14px 0;text-align:left;">
+<section id="mostViewedSection" style="padding:14px 0;text-align:left;">
   <h2 style="font-size:17px;color:#1f2937;padding:0 14px;margin:0 0 8px;">👀 Most Viewed <span style="font-size:12px;color:#777;font-weight:400;">— this is what other customers are viewing the most</span></h2>
-  <div id="mostViewedRow" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px 6px;"></div>
+  <div id="mostViewedRow" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px 6px;"><div style="grid-column:1/-1;display:flex;flex-direction:column;align-items:center;padding:24px 0;gap:10px;color:#6b7280;font-size:13px;"><div>Loading most viewed&#8230;</div><div class="vb-bar-track"><div class="vb-bar-fill vb-section-fill"></div></div></div></div>
   <button class="vbest-view-all-btn" id="mostViewedViewAll">View All</button>
 </section>
 
@@ -2074,6 +2117,7 @@ const inquiryHref = waBase + (waBase.includes('?') ? '&' : '?') + 'text=' + enco
   function setupSection(rowId, btnId, sectionId, items, key){
     var sec = document.getElementById(sectionId), row = document.getElementById(rowId), btn = document.getElementById(btnId);
     sec.style.display = "block";
+    row.innerHTML = "";   // clear the "Loading ..." placeholder before real cards go in
     var shown = 0;
     function renderMore(){
       var batch = items.slice(shown, shown + 6);
@@ -2100,7 +2144,13 @@ const inquiryHref = waBase + (waBase.includes('?') ? '&' : '?') + 'text=' + enco
       var priceNum = VB.parseNum(p.hasDiscount ? p.discStr : p.priceStr);
       return p.name && p.firstImage && !isNaN(priceNum) && priceNum >= 50000;
     });
-    if (!eligible.length) return;
+    if (!eligible.length) {
+      ["hotSellingRow","newArrivalRow","mostViewedRow"].forEach(function(id){
+        var el = document.getElementById(id);
+        if (el) el.innerHTML = "";
+      });
+      return;
+    }
     st = readState();
     if (!st){
       st = { picks: {
